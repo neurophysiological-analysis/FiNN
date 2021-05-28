@@ -1,0 +1,99 @@
+import os.path
+import numpy as np
+import pickle
+import warnings
+
+def save(data, path = "", var_name = "data", max_depth = 2, ending = None):
+	warnings.warn("The legacy version of the data manager will be removed in a future version")
+	
+	if (ending is not None and ending not in [".npy", ".pkl", ".hdr"]):
+		warnings.warn("Unknown file-ending, changing to .pkl or .npy depending on data-type")
+		ending = None
+	
+	if (path[-1] != "/"):
+		path += "/"
+		
+	locPath = path + var_name
+	if (type(data) == np.ndarray):
+		if (ending is None or ending == ".pkl" or ending == ".hdr"):
+			ending = ".npy"
+		np.save(locPath + ending, data)
+	elif(type(data) == dict):
+		if (ending is None or ending == ".npy"):
+			ending = ".hdr"
+		file = open(locPath + ending, "wb")
+		pickle.dump(data, file)
+		file.close()
+	elif(type(data) == list):
+		__save(data, locPath, 1, max_depth, ending)
+	
+def __save(data, path, curr_depth, max_depth = 2, ending = None):
+	if (path[-1] != "/"):
+		path += "/"
+	
+	if (curr_depth == max_depth):
+		if (os.path.exists(path) == False):
+			os.makedirs(path, exist_ok = True)
+		file = open(path + "data.pkl", "wb")
+		pickle.dump(data, file)
+		file.close()
+	elif(type(data) == np.ndarray):
+		if (os.path.exists(path) == False):
+			os.makedirs(path, exist_ok = True)
+		if (ending is None or ending == ".pkl" or ending == ".hdr"):
+			ending = ".npy"
+		np.save(path + "data" + ending, data)
+	elif(type(data) == dict):
+		if (os.path.exists(path) == False):
+			os.makedirs(path, exist_ok = True)
+		if (ending is None or ending == ".npy"):
+			ending = ".hdr"
+		file = open(path + "data.hdr", "wb")
+		pickle.dump(data, file)
+		file.close()
+	elif(type(data) == list):
+		if (os.path.exists(path) == False):
+			os.makedirs(path, exist_ok = True)
+		for (sub_data_idx, sub_data) in enumerate(data):
+			__save(sub_data, path + str(sub_data_idx), curr_depth + 1, max_depth)
+
+def load(path, verbose = False):
+	warnings.warn("The legacy version of the data manager will be removed in a future version")
+	
+	if (os.path.isfile(path) == True):
+		if (path[-4:] == ".npy"):
+			return np.load(path, allow_pickle = True)
+		elif(path[-4:] == ".hdr" or path[-4:] == ".pkl"):
+			file = open(path, "rb")
+			data = pickle.load(file)
+			file.close()
+			return data
+		else:
+			raise AssertionError("Error: File ending must be either *.npy, *.hdr, or *.pkl")
+	elif(os.path.isfile(path) == False):
+		return __load(path, verbose)
+
+def __load(path, is_top_level = False):
+	if (path[-1] != "/"):
+		path += "/"
+	if (os.path.isdir(path + os.listdir(path)[0]) == False):
+		if(os.listdir(path)[0][-4:] == ".pkl"):
+			file = open(path + os.listdir(path)[0], "rb")
+			data = pickle.load(file)
+			file.close()
+			return data
+		elif(os.listdir(path)[0][-4:] == ".npy"):
+			return np.load(path + os.listdir(path)[0], allow_pickle = True)
+		elif(os.listdir(path)[0][-4:] == ".hdr"):
+			file = open(path + os.listdir(path)[0], "rb")
+			data = pickle.load(file)
+			file.close()
+			return data
+	else:
+		sublist = list()
+		for (folder_idx, folder) in enumerate(list(map(str, np.sort(list(map(int, os.listdir(path))))))):
+			if (is_top_level == True):
+				print("Progress: %f" % (folder_idx/len(os.listdir(path))))
+			sub_path = path + folder
+			sublist.append(__load(sub_path))
+		return sublist

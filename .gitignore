@@ -1,0 +1,10 @@
+.project
+.pydevproject
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+/.metadata/
+*.svg
+*.pkl
