@@ -1,8 +1,13 @@
 cleansing package
 =================
 
-Submodules
-----------
+Module contents
+---------------
+
+.. automodule:: cleansing
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 cleansing.bad\_channel\_identification module
 ---------------------------------------------
@@ -24,14 +29,6 @@ cleansing.outlier\_removal module
 ---------------------------------
 
 .. automodule:: cleansing.outlier_removal
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: cleansing
    :members:
    :undoc-members:
    :show-inheritance:

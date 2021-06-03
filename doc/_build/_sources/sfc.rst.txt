@@ -1,8 +1,13 @@
 sfc package
 ===========
 
-Submodules
-----------
+Module contents
+---------------
+
+.. automodule:: sfc
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 sfc.cd module
 -------------
@@ -24,14 +29,6 @@ sfc.td module
 -------------
 
 .. automodule:: sfc.td
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: sfc
    :members:
    :undoc-members:
    :show-inheritance:

@@ -1,8 +1,13 @@
 file\_io package
 ================
 
-Submodules
-----------
+Module contents
+---------------
+
+.. automodule:: file_io
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 file\_io.data\_manager module
 -----------------------------
@@ -24,14 +29,6 @@ file\_io.load\_brain\_vision\_data module
 -----------------------------------------
 
 .. automodule:: file_io.load_brain_vision_data
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: file_io
    :members:
    :undoc-members:
    :show-inheritance:

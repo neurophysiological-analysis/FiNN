@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to FiNN’s documentation! &#8212; FiNN  documentation</title>
+    <title>Welcome to FiNN &#8212; FiNN  documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -16,7 +16,8 @@
     <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="basic package" href="basic.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -27,8 +28,11 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="basic package"
+             accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">FiNN  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Welcome to FiNN’s documentation!</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Welcome to FiNN</a></li> 
       </ul>
     </div>  
 
@@ -37,18 +41,68 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-finn-s-documentation">
-<h1>Welcome to FiNN’s documentation!<a class="headerlink" href="#welcome-to-finn-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="welcome-to-finn">
+<h1>Welcome to FiNN<a class="headerlink" href="#welcome-to-finn" title="Permalink to this headline">¶</a></h1>
+<p>FiNN is a (soon to be open source) toolbox for the analysis of electrophysiological to <em>Fi</em>nd <em>N</em>europhysiological <em>N</em>etworks.
+To this end, FiNN provides a number of methods which support the analysis of electrophysiological data. This support is expanded to a broad scope from basic digital signal processing, to file IO, statistical analysis, visualization &amp; most importantly, a number of different metrics to evaluate same frequency connectivity and cross frequency connectivity.</p>
+<p>FiNN was designed with primarily EEG, EMG &amp; MEG data in mind, but can easily utilized for the analysis of related electrophysiological data.</p>
 <div class="toctree-wrapper compound">
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<p class="caption"><span class="caption-text">Provided functionality:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">basic package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="basic.html#module-basic">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic.html#module-basic.common_average_rereferncing">basic.common_average_rereferncing module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="basic.html#module-basic.downsampling">basic.downsampling module</a></li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cfc.html">cfc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cfc.html#module-cfc">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cfc.html#module-cfc.pac">cfc.pac</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cleansing.html">cleansing package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cleansing.html#module-cleansing">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cleansing.html#module-cleansing.bad_channel_identification">cleansing.bad_channel_identification module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cleansing.html#module-cleansing.channel_restoration">cleansing.channel_restoration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cleansing.html#module-cleansing.outlier_removal">cleansing.outlier_removal module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="file_io.html">file_io package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_io.html#module-file_io">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_io.html#module-file_io.data_manager">file_io.data_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_io.html#module-file_io.data_manager_legacy">file_io.data_manager_legacy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_io.html#module-file_io.load_brain_vision_data">file_io.load_brain_vision_data module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">filters package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="filters.html#module-filters">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters.html#module-filters.frequency">filters.frequency module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">misc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#module-misc">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#module-misc.timed_pool">misc.timed_pool module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sfc.html">sfc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sfc.html#module-sfc">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sfc.html#module-sfc.cd">sfc.cd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sfc.html#module-sfc.fd">sfc.fd module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sfc.html#module-sfc.td">sfc.td module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="statistical.html">statistical package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="statistical.html#module-statistical">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical.html#module-statistical.glmm">statistical.glmm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visualization.html">visualization package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html#module-visualization">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html#module-visualization.topoplot">visualization.topoplot module</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 
 
@@ -58,12 +112,9 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to FiNN’s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
-
+  <h4>Next topic</h4>
+  <p class="topless"><a href="basic.html"
+                        title="next chapter">basic package</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -94,8 +145,11 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="basic.html" title="basic package"
+             >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">FiNN  documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Welcome to FiNN’s documentation!</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Welcome to FiNN</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

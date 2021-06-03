@@ -1,21 +1,18 @@
 statistical package
 ===================
 
-Submodules
-----------
+Module contents
+---------------
+
+.. automodule:: statistical
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 statistical.glmm
 ----------------------------------------------
 
 .. automodule:: statistical.glmm
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: statistical
    :members:
    :undoc-members:
    :show-inheritance:

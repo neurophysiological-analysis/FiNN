@@ -1,8 +1,13 @@
 basic package
 =============
 
-Submodules
-----------
+Module contents
+---------------
+
+.. automodule:: basic
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 basic.common\_average\_rereferncing module
 ------------------------------------------
@@ -16,14 +21,6 @@ basic.downsampling module
 -------------------------
 
 .. automodule:: basic.downsampling
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: basic
    :members:
    :undoc-members:
    :show-inheritance:
