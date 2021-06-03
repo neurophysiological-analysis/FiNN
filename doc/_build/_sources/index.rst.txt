@@ -11,6 +11,8 @@ To this end, FiNN provides a number of methods which support the analysis of ele
 
 FiNN was designed with primarily EEG, EMG & MEG data in mind, but can easily utilized for the analysis of related electrophysiological data. 
 
+Demo applications of the included modules are available in the finn_demo folder.
+
 .. toctree::
    :maxdepth: 2
    :caption: Provided functionality:
