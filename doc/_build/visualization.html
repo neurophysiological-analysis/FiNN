@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>visualization package &#8212; FiNN  documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FiNN  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">visualization package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="visualization-package">
+<h1>visualization package<a class="headerlink" href="#visualization-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-visualization.topoplot">
+<span id="visualization-topoplot-module"></span><h2>visualization.topoplot module<a class="headerlink" href="#module-visualization.topoplot" title="Permalink to this headline">¶</a></h2>
+<p>Created on Jun 12, 2018</p>
+<dl class="field-list simple">
+<dt class="field-odd">author</dt>
+<dd class="field-odd"><p>voodoocode</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt id="visualization.topoplot.topoplot">
+<em class="property">class </em><code class="sig-prename descclassname">visualization.topoplot.</code><code class="sig-name descname">topoplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.topoplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>topoplot generation class. Initialition costs a couple of seconds due to mask generation.
+Performance advice: if possible, only generate a single topoplot object.</p>
+<dl class="py attribute">
+<dt id="visualization.topoplot.topoplot.default_v_diff">
+<code class="sig-name descname">default_v_diff</code><em class="property"> = 50</em><a class="headerlink" href="#visualization.topoplot.topoplot.default_v_diff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="visualization.topoplot.topoplot.get_eeg_ch_coords">
+<code class="sig-name descname">get_eeg_ch_coords</code><em class="property"> = None</em><a class="headerlink" href="#visualization.topoplot.topoplot.get_eeg_ch_coords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="visualization.topoplot.topoplot.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em>, <em class="sig-param"><span class="n">ch_name_list</span></em>, <em class="sig-param"><span class="n">omit_channels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">substitute_channels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_border_values</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">v_border_labels</span><span class="o">=</span><span class="default_value">['']</span></em>, <em class="sig-param"><span class="n">file_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">screen_channels</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">annotate_ch_names</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.topoplot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a 2D topomap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – May either be a N x 3 or N x 1 matrix. Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.</p></li>
+<li><p><strong>ch_names</strong> – Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.</p></li>
+<li><p><strong>omit_channels</strong> – A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.</p></li>
+<li><p><strong>substitute_channels</strong> – A list of dictionaries. Each dictionary contains a ‘tgt’ section with a single string defining the channel to be substituted and a second ‘src’ section which contains a list of strings, defining channel names which are used to substitute the ‘tgt’ channel.</p></li>
+<li><p><strong>v_min</strong> – Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.</p></li>
+<li><p><strong>v_max</strong> – Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.</p></li>
+<li><p><strong>v_border_values</strong> – Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.</p></li>
+<li><p><strong>v_border_labels</strong> – Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.</p></li>
+<li><p><strong>file_path</strong> – Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.</p></li>
+<li><p><strong>screen_channels</strong> – If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.</p></li>
+<li><p><strong>annotate_ch_names</strong> – If true, channels get annotate with their individual names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The figure and the axes object to easen the inclusion of a plot into a larger picture.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="visualization.topoplot.topoplot.topoplot_mask_data">
+<code class="sig-name descname">topoplot_mask_data</code><em class="property"> = None</em><a class="headerlink" href="#visualization.topoplot.topoplot.topoplot_mask_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="visualization.topoplot.topoplot.win_sz">
+<code class="sig-name descname">win_sz</code><em class="property"> = 1.3</em><a class="headerlink" href="#visualization.topoplot.topoplot.win_sz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-visualization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-visualization" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">visualization package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-visualization.topoplot">visualization.topoplot module</a></li>
+<li><a class="reference internal" href="#module-visualization">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/visualization.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">FiNN  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">visualization package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, VoodooCode.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 '''
 Created on Jun 11, 2018
 
-@author: voodoocode
+:author: voodoocode
 '''
 
 import scipy.signal
@@ -13,15 +13,15 @@ def butter(data, f_low, f_high, fs, order, zero_phase = True):
     """
     Creates a butterworth filter and applies it to the input data.
     
-    @param data: Single vector of input data
+    :param data: Single vector of input data
     
-    @param f_low: Start of filters's pass band.
-    @param f_high: End of the filters's pass band.
-    @param fs: Sampling frequency
-    @param order: Order of the filters.
-    @param zero_phase: If 'true' the filters is applied forwards and backwards resulting in zero phase distortion.
+    :param f_low: Start of filters's pass band.
+    :param f_high: End of the filters's pass band.
+    :param fs: Sampling frequency
+    :param order: Order of the filters.
+    :param zero_phase: If 'true' the filters is applied forwards and backwards resulting in zero phase distortion.
         
-    @return: Filtered data.
+    :return: Filtered data.
     """
     
     nyq = 0.5 * fs
@@ -36,11 +36,11 @@ def __apply_zero_phase(b, a, data):
     """
     Applies the filters twice resulting in zero phase distortion
     
-    @param b: Numerator of the filters's coefficient vector
-    @param a: Denominator of the filters's coefficient vector
-    @param data: The data array
+    :param b: Numerator of the filters's coefficient vector
+    :param a: Denominator of the filters's coefficient vector
+    :param data: The data array
     
-    @return: The filtered data array
+    :return: The filtered data array
     """
     
     return scipy.signal.filtfilt(b, a, data)
@@ -49,11 +49,11 @@ def __apply_nonzero_phase(b, a, data):
     """
     Applies scipy's lfilter function.
     
-    @param b: Numerator of the filters's coefficient vector
-    @param a: Denominator of the filters's coefficient vector
-    @param data: The data array
+    :param b: Numerator of the filters's coefficient vector
+    :param a: Denominator of the filters's coefficient vector
+    :param data: The data array
     
-    @return: The filtered data array
+    :return: The filtered data array
     """    
      
     return scipy.signal.lfilter(b, a, data)
@@ -61,7 +61,7 @@ def __apply_nonzero_phase(b, a, data):
 def fir(data, f_low, f_high, trans_width, fs, ripple_pass_band = 10e-5, stop_band_suppression = 10e-7, fft_win_sz = 2, pad_type = "zero", 
         mode = "fast"):
     """
-    Constructs an FIR filter and applies it to 'data.
+    Constructs an FIR filter and applies it to data.
     
     f_low = None and f_high = value creates a lowpass filter
     f_low = value and f_high = None creates a highpass filter
@@ -70,18 +70,18 @@ def fir(data, f_low, f_high, trans_width, fs, ripple_pass_band = 10e-5, stop_ban
     
     This filter is always a zero-phase filter.
     
-    @param data: Data to be filtered. Single vector of data.
-    @param f_low: Start of the pass band.
-    @param f_high: End of the pass band.
-    @param trans_width: Width of the transition band.
-    @param fs: Sampling frequency.
-    @param ripple_pass_band: Suppression of the ripple in the pass band.
-    @param stop_band_suppression: Suppression of the stop band.
-    @param fft_win_sz: Size of the fft window.
-    @param pad_type: Type of padding. Supported types are: "zero" and "mirror"
-    @param mode: Defines whether the FIR filter is executed in "fast" or "precise" mode (32 vs 64 bit floats)
+    :param data: Data to be filtered. Single vector of data.
+    :param f_low: Start of the pass band.
+    :param f_high: End of the pass band.
+    :param trans_width: Width of the transition band.
+    :param fs: Sampling frequency.
+    :param ripple_pass_band: Suppression of the ripple in the pass band.
+    :param stop_band_suppression: Suppression of the stop band.
+    :param fft_win_sz: Size of the fft window.
+    :param pad_type: Type of padding. Supported types are: "zero" and "mirror"
+    :param mode: Defines whether the FIR filter is executed in "fast" or "precise" mode (32 vs 64 bit floats)
     
-    @return: Filtered data.
+    :return: Filtered data.
     """
     
     
@@ -121,12 +121,12 @@ def __estimate_FIR_coeff_num(fs, trans_width, ripple_pass_band = 10e-5, stop_ban
     Estimates the FIR filters coefficients base on the given parameters. Note, the sharper the 'edges' of the filters are, 
     the wider becomes the filters
     
-    @param fs: Samling frequency
-    @param trans_width: Width of the transition band
-    @param ripple_pass_band: Factor for suppression of the ripple in the pass band
-    @param stop_band_suppression: Factor for suppression of the ripple in the stop band
+    :param fs: Samling frequency
+    :param trans_width: Width of the transition band
+    :param ripple_pass_band: Factor for suppression of the ripple in the pass band
+    :param stop_band_suppression: Factor for suppression of the ripple in the stop band
     
-    @return: FIR filters coefficients
+    :return: FIR filters coefficients
     
     Source of the algorithm is: 
     Digital Processing of Signals – Theory and Practice, Bellanger 1984
@@ -139,12 +139,12 @@ def __calc_FIR_freq_and_gain_two_sided(nyq, f_low, f_high, trans_width):
     """
     Calculates the two-sided frequency window and the gain for a FIR filters 
     
-    @param nyq: Nyquist frequency of the signal
-    @param f_low: Low pass frequency of the filters
-    @param f_high: High pass frequency of the filters
-    @param trans_width: Width of the transition band
+    :param nyq: Nyquist frequency of the signal
+    :param f_low: Low pass frequency of the filters
+    :param f_high: High pass frequency of the filters
+    :param trans_width: Width of the transition band
     
-    @return: (Frequency window, Gain window) for the FIR filters
+    :return: (Frequency window, Gain window) for the FIR filters
     """
     
     freq = [max(f_low - trans_width, 0), f_low, f_high, min(f_high + trans_width, nyq)]
@@ -167,12 +167,12 @@ def __calc_FIR_freq_and_gain_left_sided(nyq, f_low, trans_width):
     """
     Calculates the left-sided frequency window and the gain for a FIR filters 
     
-    @param nyq: Nyquist frequency of the signal
-    @param f_low: Low pass frequency of the filters
-    @param f_high: High pass frequency of the filters
-    @param trans_width: Width of the transition band
+    :param nyq: Nyquist frequency of the signal
+    :param f_low: Low pass frequency of the filters
+    :param f_high: High pass frequency of the filters
+    :param trans_width: Width of the transition band
     
-    @return: (Frequency window, Gain window) for the FIR filters
+    :return: (Frequency window, Gain window) for the FIR filters
     """
     
     freq = [0, f_low, min(f_low + trans_width, nyq), nyq]
@@ -187,12 +187,12 @@ def __calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width):
     """
     Calculates the right-sided frequency window and the gain for a FIR filters 
     
-    @param nyq: Nyquist frequency of the signal
-    @param f_low: Low pass frequency of the filters
-    @param f_high: High pass frequency of the filters
-    @param trans_width: Width of the transition band
+    :param nyq: Nyquist frequency of the signal
+    :param f_low: Low pass frequency of the filters
+    :param f_high: High pass frequency of the filters
+    :param trans_width: Width of the transition band
     
-    @return: (Frequency window, Gain window) for the FIR filters
+    :return: (Frequency window, Gain window) for the FIR filters
     """
     
     freq = [0, f_high, min(f_high + trans_width, nyq), nyq]
@@ -270,14 +270,14 @@ def __overlap_add_sanity_check(fs, trans_width, data_length, filter_length, shif
     """
     Checks whether designed filters can be applied to the data
     
-    @param fs: Sampling frequency.
-    @param trans_width: Width of the transition band.
-    @param data_length: Length of the data in samples.
-    @param filter_length: Length of the filters in samples.
-    @param shift: Size of the filters induced shift.
-    @param fft_win_sz: Size of the fft window. 
+    :param fs: Sampling frequency.
+    :param trans_width: Width of the transition band.
+    :param data_length: Length of the data in samples.
+    :param filter_length: Length of the filters in samples.
+    :param shift: Size of the filters induced shift.
+    :param fft_win_sz: Size of the fft window. 
     
-    @return: Valid size of the fft window.
+    :return: Valid size of the fft window.
     """
     minfft_win_sz = max(filter_length, shift) #FFT window has to be at least as large as the filters including the shifted amount
     maxfft_win_sz = data_length #FFT window cannot be longer than the entire data
@@ -299,12 +299,12 @@ def __estimate_overlap_add_segments(data_length, pad_edge_width, filter_length, 
     """
     Estimates the size and the number of segments used in the overlap add approach.
     
-    @param data_length: Lenght of the data in samples.
-    @param pad_edge_width: Length of the padding on the left and right side of the data.
-    @param filter_length: Length of the filters in samples.
-    @param fft_win_sz: Size of the fft window.
+    :param data_length: Lenght of the data in samples.
+    :param pad_edge_width: Length of the padding on the left and right side of the data.
+    :param filter_length: Length of the filters in samples.
+    :param fft_win_sz: Size of the fft window.
     
-    @return: (Segment size, segment number) for overlap adding.
+    :return: (Segment size, segment number) for overlap adding.
 
     Formular for optimal filters length, not the best source but a source at least:
     https://en.wikipedia.org/wiki/Overlap%E2%80%93add_method
@@ -320,10 +320,10 @@ def __pad_overlap_add_data(data, pad_width, pad_type = "zero"):
     """
     Pads the individual segments of the overlap add function. 
     
-    @param data: Input data.
-    @param pad_width: Size of the padding.
+    :param data: Input data.
+    :param pad_width: Size of the padding.
     
-    @return: Padded data. 
+    :return: Padded data. 
     """
 
     if (pad_type == "zero"):

@@ -1,7 +1,7 @@
 '''
 Created on Jan 30, 2019
 
-@author: voodoocode
+:author: voodoocode
 '''
 
 import multiprocessing
@@ -64,17 +64,16 @@ def run(max_child_proc_cnt = 4, func = None, args = None, max_time = None, delet
     Creates a subprocess loop to work the issue task defined by func and it's arguments. This subprocess loop is different in two key elements from the
     default python processpool.
     
-    1) Only a single subprocess can return data at a time. This drastically decreases the odds of a memory utilization spikes which otherwise would cause a crash.
-    This is linked to how pickle handles data transfer via pipes.
-    2)  A maximum time can be set after which a subprocess is terminated and restarted.
+    #. Only a single subprocess can return data at a time. This drastically decreases the odds of a memory utilization spikes which otherwise would cause a crash. This is linked to how pickle handles data transfer via pipes.
+    #. A maximum time can be set after which a subprocess is terminated and restarted.
     
-    @param max_child_proc_cnt: Number of child processes.
-    @param func: The function to be processed.
-    @param args: List of arguments. Every element in the list is handled by a separate process.
-    @param max_time: Maximum time to wait for a processe prior to cancellation.
-    @param verbose: Increase information output.
+    :param max_child_proc_cnt: Number of child processes.
+    :param func: The function to be processed.
+    :param args: List of arguments. Every element in the list is handled by a separate process.
+    :param max_time: Maximum time to wait for a processe prior to cancellation.
+    :param verbose: Increase information output.
     
-    @return The processed information from func and args as a list. The order is identical to the order in which the argument blocks were given.
+    :return The processed information from func and args as a list. The order is identical to the order in which the argument blocks were given.
     
     """
     

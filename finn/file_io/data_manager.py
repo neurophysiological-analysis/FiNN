@@ -8,9 +8,18 @@ import numpy as np
 import pickle
 import os
 
-import finn.file_io.data_manager_legacy as legacy
+import file_io.data_manager_legacy as legacy
 
 def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
+    """
+    Saves data using the data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
+   
+    :param data: The data to be stored.
+    :param path: Location for data storage.
+    :param max_depth: The depth to which folders are created prior to storing data via pickle.
+    :param legacy_mode: *depricated* Will be removed in a future version.
+    :param legacy_params: *depricated* Will be removed in a future version.
+    """
     
     if (legacy_mode == True):
         return legacy.save(data, path, legacy_params["var_name"], max_depth, legacy_params["ending"])
@@ -58,6 +67,12 @@ def __save(data, path, current_depth, max_depth, structure = None):
     return structure
 
 def load(path, legacy_mode = False):
+    """
+    Loads data stored via the data_manager.
+    
+    :param path: Location from which the data is to be read.
+    :param legacy_mode: *deprecated* Will be removed in a future version.
+    """
     
     if (legacy_mode == True):
         return legacy.load(path)

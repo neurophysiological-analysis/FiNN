@@ -4,6 +4,17 @@ import pickle
 import warnings
 
 def save(data, path = "", var_name = "data", max_depth = 2, ending = None):
+	"""
+	*Depricated*. Will be removed in a future version. Saves data using the legacy data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
+   
+	:param data: The data to be stored.
+	:param path: Location for data storage.
+	:param var_name: Name of the lwo level data containers.
+	:param max_depth: The depth to which folders are created prior to storing data via pickle.
+	:param ending: To be stored data type.
+	:param legacy_mode: *depricated* Will be removed in a future version.
+	:param legacy_params: *depricated* Will be removed in a future version.
+	"""
 	warnings.warn("The legacy version of the data manager will be removed in a future version")
 	
 	if (ending is not None and ending not in [".npy", ".pkl", ".hdr"]):
@@ -58,6 +69,12 @@ def __save(data, path, curr_depth, max_depth = 2, ending = None):
 			__save(sub_data, path + str(sub_data_idx), curr_depth + 1, max_depth)
 
 def load(path, verbose = False):
+	"""
+	Loads data stored via the data_manager.
+	
+	:param path: Location from which the data is to be read.
+	:param legacy_mode: *deprecated* Will be removed in a future version.
+	"""
 	warnings.warn("The legacy version of the data manager will be removed in a future version")
 	
 	if (os.path.isfile(path) == True):

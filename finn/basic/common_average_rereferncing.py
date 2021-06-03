@@ -1,7 +1,7 @@
 '''
 Created on Jun 2, 2020
 
-@author: voodoocode
+:author: voodoocode
 '''
 
 import numpy as np
@@ -10,9 +10,9 @@ def run(data):
     """
     Applies common average re-referencing.
     
-    @param data: Input data: Channels x samples.
+    :param data: Channels x samples.
     
-    @return: Common average re-referenced data.
+    :return: Common average re-referenced data.
     """
     I = np.identity(n = len(data))
     v = np.ones((len(data))) / len(data)

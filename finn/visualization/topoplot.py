@@ -1,7 +1,7 @@
 '''
 Created on Jun 12, 2018
 
-@author: voodoocode
+:author: voodoocode
 '''
 
 import numpy as np
@@ -29,12 +29,12 @@ class topoplot():
         """
         Constructor
         
-        @param mode: EEG montage setup
+        :param mode: EEG montage setup
         Currently supports: The extended 10-20 system for 64 channels - ext_10_20_64_ch
         """
         
         if (mode == "ext_10_20_64_ch"):
-            self.get_eeg_ch_coords = self.get_eeg_ch_coords_10_20_ext_64
+            self.get_eeg_ch_coords = self.__get_eeg_ch_coords_10_20_ext_64
         else:
             raise NotImplementedError("This setup has not yet been implemented")
         
@@ -48,23 +48,18 @@ class topoplot():
         """
         Plots a 2D topomap
         
-        @param values: May either be a N x 3 or N x 1 matrix. Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison correction
-        and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
-        @param ch_names: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        @param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
-        @param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
-        a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
-        @param v_min: Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.
-        @param v_max: Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.
-        @param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly 
-        one element larger than the number of elements in v_border_values.
-        @param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly 
-        one element larger than the number of elements in v_border_values.
-        @param  file_path: Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
-        @param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
-        @param annotate_ch_names: If true, channels get annotate with their individual names.
-        
-        @return: The figure and the axes object to easen the inclusion of a plot into a larger picture.
+        :param values: May either be a N x 3 or N x 1 matrix. Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
+        :param ch_names: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        :param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
+        :param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
+        :param v_min: Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.
+        :param v_max: Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.
+        :param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.
+        :param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.
+        :param  file_path: Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
+        :param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
+        :param annotate_ch_names: If true, channels get annotate with their individual names.
+        :return: The figure and the axes object to easen the inclusion of a plot into a larger picture.
         """
         
         coords = list()
@@ -106,11 +101,11 @@ class topoplot():
         """
         Adds a color bar to the topoplot.
         
-        @param v_min: The minimal value on the color bar.
-        @param v_max: The maximimal value on the color bar.
-        @param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly 
+        :param v_min: The minimal value on the color bar.
+        :param v_max: The maximimal value on the color bar.
+        :param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly 
         one element larger than the number of elements in v_border_values.
-        @param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly 
+        :param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly 
         one element larger than the number of elements in v_border_values. 
         """
         sm      = plt.cm.ScalarMappable(cmap = plt.get_cmap("jet"), norm = matplotlib.colors.Normalize(vmin=v_min, vmax=v_max))
@@ -136,7 +131,7 @@ class topoplot():
         """
         Adds additional elements to the topoplot to make it visually more appealing.
         
-        @param ax: The axes object of the topoplot
+        :param ax: The axes object of the topoplot
         """
         #Add border of face
         circ = plt.Circle((0, 0), 1, color = "black", zorder = 11, linewidth = 1, fill = False)
@@ -160,13 +155,13 @@ class topoplot():
         """
         Substitutes and omits channels which are marked respectively.
         
-        @param values: The original values to be plotted
-        @param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        @param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
-        @param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
+        :param values: The original values to be plotted
+        :param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        :param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
+        :param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
         a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
         
-        @return: The corrected values
+        :return: The corrected values
         """    
         
         if ((substitute_channels is None or substitute_channels == False) == False):
@@ -180,12 +175,12 @@ class topoplot():
         """
         Substitutes channels by overwriting each 'tgt' channel with the average of the respective 'src' channels
         
-        @param values: The original values to be plotted
-        @param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        @param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
+        :param values: The original values to be plotted
+        :param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        :param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
         a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
         
-        @return: The corrected values
+        :return: The corrected values
         """
         mod_ch_name_list = [ch_name for ch_name in ch_name_list]
         
@@ -207,11 +202,11 @@ class topoplot():
         """
         Omits channels by setting them to zero.
         
-        @param values: The original values to be plotted
-        @param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        @param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
+        :param values: The original values to be plotted
+        :param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        :param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
         
-        @return: The corrected values    
+        :return: The corrected values    
         """
         
         mod_ch_name_list = [ch_name for ch_name in ch_name_list]
@@ -241,11 +236,11 @@ class topoplot():
         """
         Interpolates the individual data points and hides anything 'outside' the head
         
-        @param coords: Coordinates of the individual points
-        @param values: Color values of the individual points
-        @param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
+        :param coords: Coordinates of the individual points
+        :param values: Color values of the individual points
+        :param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
         
-        @return mesh grid values, x coordinates and y coordinates
+        :return mesh grid values, x coordinates and y coordinates
         """
         x = np.linspace(-self.win_sz, self.win_sz, 1000)
         y = np.linspace(-self.win_sz, self.win_sz, 1000)
@@ -264,13 +259,13 @@ class topoplot():
         """
         Normalizes the topoplot data
         
-        @param data: Color values
-        @param X: x coordinates
-        @param Y: y coordinates
-        @param v_min: Minimal color value. If None, v_min is chosen as the minimum value within the data.
-        @param v_max: Maximimal color value. If None, v_max is chosen as the maximum value within the data.
+        :param data: Color values
+        :param X: x coordinates
+        :param Y: y coordinates
+        :param v_min: Minimal color value. If None, v_min is chosen as the minimum value within the data.
+        :param v_max: Maximimal color value. If None, v_max is chosen as the maximum value within the data.
         
-        @return: normalized data, v_min, v_max and v_diff
+        :return: normalized data, v_min, v_max and v_diff
         """
         
         if (type(data) is not np.ndarray):
@@ -309,13 +304,13 @@ class topoplot():
         """
         Draws the contour of the topoplot.
         
-        @param ax: Axes object of the topoplot
-        @param X: x coordinates
-        @param Y: y coordinates
-        @param norm_data: normalized color values.
-        @param v_min: Minimal color value. If None, v_min is chosen as the minimum value within the data.
-        @param v_max: Maximimal color value. If None, v_max is chosen as the maximum value within the data.
-        @param v_diff: Step size between individual color steps
+        :param ax: Axes object of the topoplot
+        :param X: x coordinates
+        :param Y: y coordinates
+        :param norm_data: normalized color values.
+        :param v_min: Minimal color value. If None, v_min is chosen as the minimum value within the data.
+        :param v_max: Maximimal color value. If None, v_max is chosen as the maximum value within the data.
+        :param v_diff: Step size between individual color steps
         """
         
         levels = np.arange(v_min, v_max, v_diff)
@@ -326,12 +321,12 @@ class topoplot():
         """
         Adds channel positions and respective significance (if supplied)
         
-        @param coords: Coordinates of the individual points.
-        @param ch_name_list: Names of the individual channels.
-        @param ax: axes object to draw onto.
-        @param signValues: significance values.
-        @param omit_channels: Channels omitted from visualization
-        @param substitute_channels: Channels substituted in the visualization
+        :param coords: Coordinates of the individual points.
+        :param ch_name_list: Names of the individual channels.
+        :param ax: axes object to draw onto.
+        :param signValues: significance values.
+        :param omit_channels: Channels omitted from visualization
+        :param substitute_channels: Channels substituted in the visualization
         """
         
         if (type(signValues) is not np.ndarray):
@@ -369,16 +364,16 @@ class topoplot():
         """
         Annotates the individual channels with their names
         
-        @param coords: Coordinates of the individual channels.
-        @param ch_name_list: Names of the individual channels.
-        @param ax: axis object to be annotated
+        :param coords: Coordinates of the individual channels.
+        :param ch_name_list: Names of the individual channels.
+        :param ax: axis object to be annotated
         """
         
         for chIdx in range(0, len(ch_name_list)):
             text = ch_name_list[chIdx]
             ax.annotate(text, [coords[0, chIdx], coords[1, chIdx]], zorder = 3)
             
-    def get_eeg_ch_coords_10_20_ext_64(self):
+    def __get_eeg_ch_coords_10_20_ext_64(self):
         coords = {
             "Cz" : [0, 0],
             "C1" : [-0.201729106628242, 0],
