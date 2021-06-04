@@ -1,5 +1,5 @@
-cleansing package
-=================
+(data) cleansing package
+========================
 
 Module contents
 ---------------

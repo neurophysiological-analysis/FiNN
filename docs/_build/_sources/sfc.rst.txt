@@ -1,5 +1,5 @@
-sfc package
-===========
+sfc (same frequency connectivity) package
+=========================================
 
 Module contents
 ---------------

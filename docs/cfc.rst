@@ -1,5 +1,5 @@
-cfc package
-===========
+cfc (cross frequency connectivity) package
+==========================================
 
 Module contents
 ---------------
