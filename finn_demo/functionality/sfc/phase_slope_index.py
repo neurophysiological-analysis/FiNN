@@ -10,15 +10,15 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.same_frequency_coupling.time_domain.phase_slope_index as td_psi
-import finn.same_frequency_coupling.frequency_domain.phase_slope_index as fd_psi
-import finn.same_frequency_coupling.coherency_domain.phase_slope_index as coh_psi
+import finn.sfc.td as td
+import finn.sfc.fd as fd
+import finn.sfc.cd as cohd
 
-import finn.same_frequency_coupling.time_domain.complex_coherency as td_cc
-import finn.same_frequency_coupling.__misc as misc
+import finn.sfc.__misc as misc
+import finn_demo.demo_data.demo_data_paths as paths
 
 def main():
-    data = np.load("/mnt/data/AnalysisFramework/beta2/demo_data/dac/demo_data.npy")
+    data = np.load(paths.fct_sfc_data)
     frequency_sampling = 5500
     frequency_peak = 30
     
@@ -75,7 +75,7 @@ def calc_from_time_domain(signal_1, signal_2, frequency_sampling, f_min, f_max):
     nperseg_inner = frequency_sampling
     nfft = frequency_sampling
     
-    return td_psi.run(signal_1, signal_2, nperseg_outer, frequency_sampling, nperseg_inner, nfft, "hanning", "zero", f_min, f_max, f_step_sz = 1) 
+    return td.run_psi(signal_1, signal_2, nperseg_outer, frequency_sampling, nperseg_inner, nfft, "hanning", "zero", f_min, f_max, f_step_sz = 1) 
 
 def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, f_min, f_max):
     nperseg_outer = int(frequency_sampling * 3)
@@ -96,7 +96,7 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, f_min, f_
         fd_signals_1.append(fd_signal_1)
         fd_signals_2.append(fd_signal_2)
     
-    return fd_psi.run(fd_signals_1, fd_signals_2, bins, f_min, f_max, 1)
+    return fd.run_psi(fd_signals_1, fd_signals_2, bins, f_min, f_max, 1)
         
 def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, f_min, f_max):
     
@@ -108,10 +108,10 @@ def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, f_min, f_
     
     for idx_start in np.arange(0, len(signal_1), nperseg_outer):
         
-        (bins, cc) = td_cc.run(signal_1[idx_start:(idx_start + nperseg_outer)], signal_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero",
+        (bins, cc) = td.run_cc(signal_1[idx_start:(idx_start + nperseg_outer)], signal_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero", 
                                fs = frequency_sampling, nfft = nfft, window = "hanning")
         data_coh.append(cc)
     
-    return coh_psi.run(data_coh, bins, f_min, f_max)
+    return cohd.run_psi(data_coh, bins, f_min, f_max)
     
 main()

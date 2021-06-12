@@ -6,28 +6,25 @@ Created on Jun 2, 2020
 
 import numpy as np
 
-import finn.same_frequency_coupling.__misc as misc
-import finn.same_frequency_coupling.time_domain.complex_coherency as td_cc
-import finn.same_frequency_coupling.coherency_domain.magnitude_squared_coherency as msc
-import finn.same_frequency_coupling.coherency_domain.imaginary_coherency as ic
-import finn.same_frequency_coupling.coherency_domain.directional_absolute_coherency as dac
-
-import finn.same_frequency_coupling.coherency_domain.weighted_phase_lag_index as wpli
-import finn.same_frequency_coupling.coherency_domain.phase_slope_index as psi
+import finn.sfc.__misc as misc
+import finn.sfc.td as td
+import finn.sfc.cd as cohd
 
 import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
+import finn_demo.demo_data.demo_data_paths as paths
+
 def mag_sq_coh(data, _0, _1, frequency_tgt, _2, _3):
-    return msc.run(data)[frequency_tgt]
+    return cohd.run_msc(data)[frequency_tgt]
 def img_coh(data, _0, _1, frequency_tgt, _2, _3):
-    return ic.run(data)[frequency_tgt]
+    return cohd.run_ic(data)[frequency_tgt]
 def dac_coh(data, _0, bins, frequency_tgt, _1, _2, freq_range = 2, min_phase_diff = 5):
-    dac_range = dac.run(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1, return_signed_conn = True, minimal_angle_thresh = min_phase_diff)    
+    dac_range = cohd.run_dac(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1, return_signed_conn = True, minimal_angle_thresh = min_phase_diff)    
     return (0 if (np.isnan(dac_range)) else dac_range)
 def psi_coh(_0, data, bins, frequency_tgt, _1, _2, freq_range = 2):
-    return psi.run(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1)
+    return cohd.run_psi(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1)
 def wpli_coh(_0, _1, _2, frequency_tgt, data1, data2):
     win_sz = 5500
     
@@ -46,7 +43,7 @@ def wpli_coh(_0, _1, _2, frequency_tgt, data1, data2):
 
     s_xy = np.asarray(s_xy)
     
-    return wpli.run(s_xy)[frequency_tgt]
+    return cohd.run_wpli(s_xy)[frequency_tgt]
 
 def main():
     #Signal configuration
@@ -88,14 +85,14 @@ def main():
         ax.set_ylabel(row, rotation=90, size='small')
         
     #demo file
-    demo_file = "/mnt/data/AnalysisFramework/beta2/demo_data/sfc/data_0.npy"
+    demo_file = paths.per_sfc_data_0
     frequency_tgt = 30
     single_channel_shift(noise_weight, phase_min, phase_max, phase_step, pad_type, window, axes0, axes1, methods, frequency_peak = frequency_tgt, path = demo_file, axes_idx = 0)
     
-    demo_file = "/mnt/data/AnalysisFramework/beta2/demo_data/sfc/data_1.npy"
+    demo_file = paths.per_sfc_data_1
     frequency_tgt = 20
     single_channel_shift(noise_weight, phase_min, phase_max, phase_step, pad_type, window, axes0, axes1, methods, frequency_peak = frequency_tgt, path = demo_file, axes_idx = 1)
-    demo_file = "/mnt/data/AnalysisFramework/beta2/demo_data/sfc/data_2.npy"
+    demo_file = paths.per_sfc_data_2
     frequency_tgt = 29
     single_channel_shift(noise_weight, phase_min, phase_max, phase_step, pad_type, window, axes0, axes1, methods, frequency_peak = frequency_tgt, path = demo_file, axes_idx = 2)
 
@@ -106,7 +103,7 @@ def main():
 
 def multi_channel_shift(methods, phase_min, phase_max, phase_step, axes0, axes1, frequency_peak, frequency_sampling = 5500, noise_weight = 0.2, axes_idx = None):
     
-    path = "/mnt/data/AnalysisFramework/beta2/demo_data/sfc/data_0.npy"
+    path = paths.per_sfc_data_0
     data1 = np.load(path)[3, :]
     data2 = np.load(path)[2, :]
     
@@ -127,11 +124,11 @@ def multi_channel_shift(methods, phase_min, phase_max, phase_step, axes0, axes1,
         data22 += loc_data
         data22 += np.random.random(len(loc_data)) * noise_weight
         
-        (bins, comp_coh) = td_cc.run(data1, data22, nperseg = nfft, pad_type = "zero", fs = 5500, nfft = nfft, window = "hann")
+        (bins, comp_coh) = td.run_cc(data1, data22, nperseg = nfft, pad_type = "zero", fs = 5500, nfft = nfft, window = "hann")
         
         signal_1_step_sz = len(data1)/10
         signal_2_step_sz = len(data22)/10
-        comp_coh2 = [td_cc.run(data1[int(idx * signal_1_step_sz):int((idx + 1) * signal_1_step_sz)],
+        comp_coh2 = [td.run_cc(data1[int(idx * signal_1_step_sz):int((idx + 1) * signal_1_step_sz)],
                                data22[int(idx * signal_2_step_sz):int((idx + 1) * signal_2_step_sz)],
                                nfft, "zero", 5500, nfft, "hann")[1] for idx in range(10)]
         
@@ -206,11 +203,11 @@ def single_channel_shift(noise_weight,
             plt.show(block = False)
             plt.pause(0.01)
         
-        (bins, comp_coh) = td_cc.run(signal_1, signal_2, nperseg, pad_type, fs, nfft, window)
+        (bins, comp_coh) = td.run_cc(signal_1, signal_2, nperseg, pad_type, fs, nfft, window)
         
         signal_1_step_sz = len(signal_1)/10
         signal_2_step_sz = len(signal_2)/10
-        comp_coh2 = [td_cc.run(signal_1[int(idx * signal_1_step_sz):int((idx + 1) * signal_1_step_sz)],
+        comp_coh2 = [td.run_cc(signal_1[int(idx * signal_1_step_sz):int((idx + 1) * signal_1_step_sz)],
                                signal_2[int(idx * signal_2_step_sz):int((idx + 1) * signal_2_step_sz)],
                                nperseg, pad_type, fs, nfft, window)[1] for idx in range(10)]
         

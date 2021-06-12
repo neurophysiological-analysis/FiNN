@@ -6,7 +6,7 @@ Created on Jan 5, 2021
 
 import numpy as np
 
-import finn.cross_frequency_coupling.modulation_index as mi
+import finn.cfc.pac as pac
 
 def generate_high_frequency_signal(n, frequency_sampling, frequency_within_bursts, random_noise_strength, 
                                    offset, burst_count, burst_length):
@@ -28,7 +28,7 @@ def main():
     high_freq_frame_offsets = [0, 20, 40]
     
     #Configure noise data
-    random_noise_strength = 0.3
+    random_noise_strength = 1
     
     #Generate sample data
     burst_length = frequency_sampling / tgt_frequency_between_bursts
@@ -41,11 +41,18 @@ def main():
     scores = np.zeros((len(high_freq_signals), len(low_freq_signals)));
     for (high_freq_idx, high_freq_signal) in enumerate(high_freq_signals):
         for (low_freq_idx, low_freq_signal) in enumerate(low_freq_signals):
-            scores[high_freq_idx, low_freq_idx] = mi.run(low_freq_signal, high_freq_signal, frequency_window_half_size = 20, frequency_step_width = 5)
-    print(scores)
+            scores[high_freq_idx, low_freq_idx] = pac.run_mvl(low_freq_signal, high_freq_signal)
+            
+    print("target frequency: ", tgt_frequency_between_bursts)
+    for x in range(len(frequencies_between_bursts)):
+        print("%.3f" % (frequencies_between_bursts[x]), end = "\t")
+    print("")
+    for y in range(len(high_freq_frame_offsets)):
+        for x in range(len(frequencies_between_bursts)):
+            print("%.3f" % (scores[y][x],), end = "\t")
+        print("")
 
 main()
-
 
 
 

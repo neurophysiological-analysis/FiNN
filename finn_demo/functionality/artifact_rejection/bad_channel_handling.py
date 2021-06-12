@@ -11,8 +11,8 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.artifact_rejection.bad_channel_identification as bci
-import finn.artifact_rejection.channel_restoration as cr
+import finn.cleansing.bad_channel_identification as bci
+import finn.cleansing.channel_restoration as cr
 
 def main():
     #Configure sample data

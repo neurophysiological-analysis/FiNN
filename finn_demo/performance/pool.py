@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 import finn.filters.frequency as ff
 
-
+import finn_demo.demo_data.demo_data_paths as paths
 
 def demo_fnct2(data):
     data2 = ff.fir(data, 10, 20, 0.1, 5500, 10e-5, 10e-7, 5500, "zero")
@@ -37,7 +37,7 @@ import gc
 
 def sub_process_work2_0(time_stamps, duration_times):
     print("framework")
-    path = "/mnt/data/AnalysisFramework/beta2/demo_data/pool/data_0.npy"
+    path = paths.per_pool_data
     data = np.load(path)
     data = np.repeat(data, repeat_size, axis = 1)
     data = np.expand_dims(data, axis = 1)
@@ -52,7 +52,7 @@ def sub_process_work2_0(time_stamps, duration_times):
     
 def sub_process_work2_1(time_stamps, duration_times):
     print("loky")
-    path = "/mnt/data/AnalysisFramework/beta2/demo_data/pool/data_0.npy"
+    path = paths.per_pool_data
     data = np.load(path)
     data = np.repeat(data, repeat_size, axis = 1)
     
@@ -64,7 +64,7 @@ def sub_process_work2_1(time_stamps, duration_times):
     
 def sub_process_work2_2(time_stamps, duration_times):
     print("multiprocessing")
-    path = "/mnt/data/AnalysisFramework/beta2/demo_data/pool/data_0.npy"
+    path = paths.per_pool_data
     data = np.load(path)
     data = np.repeat(data, repeat_size, axis = 1)
     
@@ -75,7 +75,7 @@ def sub_process_work2_2(time_stamps, duration_times):
     time_stamps.append(time.time_ns())
     
 def sub_process_work2_3(time_stamps, duration_times):
-    path = "/mnt/data/AnalysisFramework/beta2/demo_data/pool/data_0.npy"
+    path = paths.per_pool_data
     data = np.load(path)
     data = np.repeat(data, repeat_size, axis = 1)
     
@@ -199,7 +199,7 @@ def main(save_results = False, overwrite = True):
     plt.plot(virt_memory_usage_value)
     plt.show(block = True)
 
-config = "demo2"
+config = "demo3"
 parallel_processes = 12
 if (config == "demo1"):
     job_cnt = 24
@@ -207,6 +207,9 @@ if (config == "demo1"):
 elif(config == "demo2"):
     job_cnt = 48
     repeat_size = 50
+elif(config == "demo3"):
+    job_cnt = 24
+    repeat_size = 25
 
 main()
 print("terminated")

@@ -6,7 +6,7 @@ Created on Jun 2, 2020
 
 import numpy as np
 
-import finn.statistical.generalized_linear_models as glm
+import finn.statistical.glmm as glmm
 
 data_size = 100000
 random_factor_count = 20
@@ -27,7 +27,7 @@ glm_factor_types = ["continuous", "categorical",  "categorical",   "continuous",
 glm_contrasts = "list(categorical_factor_A = contr.sum, categorical_factor_B = contr.sum, continous_factor_A = contr.sum, random_effect_A = contr.sum, nested_random_effect_A = contr.sum)"
 glm_model_type = "gaussian"
 
-stat_results = glm.run(data = data, label_name= data_label, factor_type = glm_factor_types, formula = glm_formula, contrasts = glm_contrasts, data_type = glm_model_type)
+stat_results = glmm.run(data = data, label_name= data_label, factor_type = glm_factor_types, formula = glm_formula, contrasts = glm_contrasts, data_type = glm_model_type)
 
 print("Demo may return a singular fit since the naive applied data generation of this example\n does not guarantee sufficient observations for any random factor/nested random factor.\n")
 

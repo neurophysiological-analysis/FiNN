@@ -9,7 +9,6 @@ import scipy.signal
 import scipy.stats
 import lmfit
 
-
 def run_dmi(low_freq_data, high_freq_data,
          frequency_window_half_size = 10, frequency_step_width = 1,
          max_model_fit_iterations = 200):
@@ -46,7 +45,8 @@ def run_dmi(low_freq_data, high_freq_data,
     params.add("phase", value = 0, min = -180, max = 180, vary = True)
     params.add("amp", value = 1, min = 0.95, max = 1.05, vary = True)
     model = lmfit.Model(__sine, nan_policy = "omit")
-    result = model.fit(amplitude_signal, x = np.arange(0, 1, 1/len(amplitude_signal)), params = params, fit_kws = {"maxfev" : max_model_fit_iterations})
+    result = model.fit(amplitude_signal, x = np.arange(0, 1, 1/len(amplitude_signal)),
+                       params = params, max_nfev = max_model_fit_iterations)
 
     if (np.isnan(amplitude_signal).any() == True):
         amplitude_signal = np.where(np.isnan(amplitude_signal) == False)[0]

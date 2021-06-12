@@ -5,9 +5,9 @@ Created on Dec 29, 2020
 '''
 
 import numpy as np
-import sfc.__psi as calc_psi
-import sfc.__wpli as calc_wpli
-import sfc.__dac as calc_dac
+import finn.sfc.__psi as calc_psi
+import finn.sfc.__wpli as calc_wpli
+import finn.sfc.__dac as calc_dac
 
 def run_dac(data_1, data_2, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 2):
     """

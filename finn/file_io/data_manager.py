@@ -8,7 +8,7 @@ import numpy as np
 import pickle
 import os
 
-import file_io.data_manager_legacy as legacy
+import finn.file_io.data_manager_legacy as legacy
 
 def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
     """

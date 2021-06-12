@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.artifact_rejection.outlier_removal as om
+import finn.cleansing.outlier_removal as om
 
 def main():
     #Configure sample data

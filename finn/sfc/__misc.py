@@ -42,6 +42,7 @@ def __calc_FFT(data, fs, nfft, window = "hanning"):
     @return: (bins, f_data) - frequency bins and corresponding complex fft information.
     """
     m_data = data - np.mean(data)
+    m_data = data - np.repeat(np.expand_dims(np.mean(data, axis = 1), axis = 1), data.shape[1], axis = 1)
 
     if (window == "hanning" or window == "hann"):
         win = np.hanning(data.shape[1])

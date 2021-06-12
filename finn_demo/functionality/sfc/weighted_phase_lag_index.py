@@ -10,21 +10,21 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.same_frequency_coupling.time_domain.magnitude_squared_coherency as td_msc
-import finn.same_frequency_coupling.frequency_domain.magnitude_squared_coherency as fd_msc
-import finn.same_frequency_coupling.coherency_domain.magnitude_squared_coherency as coh_msc
+import finn.sfc.td as td
+import finn.sfc.fd as fd
+import finn.sfc.cd as cohd
 
-import finn.same_frequency_coupling.time_domain.complex_coherency as td_cc
-import finn.same_frequency_coupling.__misc as misc
+import finn.sfc.__misc as misc
+import finn_demo.demo_data.demo_data_paths as paths
 
 def main():
-    data = np.load("/mnt/data/AnalysisFramework/beta2/demo_data/dac/demo_data.npy")
+    data = np.load(paths.fct_sfc_data)
     frequency_sampling = 5500
     frequency_peak = 30
     
     noise_weight = 0.2
     
-    phase_min = -90
+    phase_min = -270
     phase_max = 270
     phase_step = 4
     
@@ -73,30 +73,45 @@ def main():
     
     
 def calc_from_time_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    return td_msc.run(signal_1, signal_2, frequency_sampling, nperseg, nfft)[1][frequency_target]
+    return td.run_wpli(signal_1, signal_2, frequency_sampling, nperseg, nfft)[1][frequency_target]
 
 def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    seg_data_X = misc.__segment_data(signal_1, nperseg, pad_type = "zero")
-    seg_data_Y = misc.__segment_data(signal_2, nperseg, pad_type = "zero")
-
-    (bins, fd_signal_1) = misc.__calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hanning")
-    (_,    fd_signal_2) = misc.__calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hanning")
     
-    return fd_msc.run(fd_signal_1, fd_signal_2, bins)[1][[np.argmin(np.abs(bins - frequency_target))]]
+    fd_signals_X = list()
+    fd_signals_Y = list()
+    
+    for block_start in np.arange(0, np.min([len(signal_1), len(signal_2)]) - nperseg, nperseg):
+        loc_signal_1 = signal_1[block_start:(block_start + nperseg)]
+        loc_signal_2 = signal_2[block_start:(block_start + nperseg)]
+        
+        seg_signal_X = misc.__segment_data(loc_signal_1, nperseg, pad_type = "zero")
+        seg_signal_Y = misc.__segment_data(loc_signal_2, nperseg, pad_type = "zero")
+    
+        (bins, fd_signal_X) = misc.__calc_FFT(seg_signal_X, frequency_sampling, nfft, window = "hann")
+        (_, fd_signal_Y) = misc.__calc_FFT(seg_signal_Y, frequency_sampling, nfft, window = "hanning")
+        
+        fd_signals_X.append(fd_signal_X[0, :])
+        fd_signals_Y.append(fd_signal_Y[0, :])
+    
+    return fd.run_wpli(fd_signals_X, fd_signals_Y)[np.argmin(np.abs(bins - frequency_target))]
         
 def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    (bins, coh) = td_cc.run(signal_1, signal_2, nperseg, "zero", frequency_sampling, nfft, "hanning")
+    s_xy = list()
+    for block_start in np.arange(0, np.min([len(signal_1), len(signal_2)]) - nperseg, nperseg):
+        loc_data1 = signal_1[block_start:(block_start + nperseg)]
+        loc_data2 = signal_2[block_start:(block_start + nperseg)]
+        
+        seg_data_X = misc.__segment_data(loc_data1, nperseg, pad_type = "zero")
+        seg_data_Y = misc.__segment_data(loc_data2, nperseg, pad_type = "zero")
     
-    return coh_msc.run(coh)[np.argmin(np.abs(bins - frequency_target))]
+        (_, f_data_X) = misc.__calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hann")
+        (_,    f_data_Y) = misc.__calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hann")
     
+        s_xy.append((np.conjugate(f_data_X[0, :]) * f_data_Y[0, :] * 2))
+
+    s_xy = np.asarray(s_xy)
+    
+    return cohd.run_wpli(s_xy)[frequency_target]
     
 main()
-
-
-
-
-
-
-
-
 

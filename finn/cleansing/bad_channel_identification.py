@@ -14,7 +14,7 @@ import scipy.signal
 import multiprocessing
 import warnings
 
-import cleansing.outlier_removal
+import finn.cleansing.outlier_removal
 
 
 idenfity_faulty_visual_inspection_lock = multiprocessing.Lock()
@@ -46,9 +46,11 @@ def run(data, ch_names, fs, ref_areas = [[105, 120], [135, 145], [155, 195]], br
     ref_list = np.zeros((int(np.max(fs))))
     for ref_area in ref_areas:
         for refIdx in range(ref_area[0], ref_area[1]):
-            ref_list[refIdx] = np.median(finn.artifact_rejection.outlier_removal.run(pow_oi[:, refIdx], pow_oi[:, refIdx]))
+            ref_list[refIdx] = np.median(finn.cleansing.outlier_removal.run(pow_oi[:, refIdx], pow_oi[:, refIdx]))
             
     pow_oi = np.log10(pow_oi)
+    ref_list[ref_list == 0] = np.nan #Avoid divide by zero warning/error and ignore 'bad' values.
+    #These may occure accidentially and are no reason for concern if they appear sparsely. 
     ref_list = np.log10(ref_list)
     
     #Compare the median power of non-outlier (harshly filtered) channels vs the power of each channel and determine distance
@@ -60,7 +62,7 @@ def run(data, ch_names, fs, ref_areas = [[105, 120], [135, 145], [155, 195]], br
          
     diff = np.nanmean(diff, axis = 1)
     
-    corr_diff = finn.artifact_rejection.outlier_removal.run(diff, diff, broadness)
+    corr_diff = finn.cleansing.outlier_removal.run(diff, diff, broadness)
     
     corr_diff_mean = np.mean(corr_diff)
 

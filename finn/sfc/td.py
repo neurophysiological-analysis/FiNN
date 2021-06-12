@@ -1,9 +1,9 @@
 import numpy as np
-import sfc.__misc as misc
-import sfc.fd as fd
-import sfc.__wpli as calc_wpli
-import sfc.__psi as calc_psi
-import sfc.__dac as calc_dac
+import finn.sfc.__misc as misc
+import finn.sfc.fd as fd
+import finn.sfc.__wpli as calc_wpli
+import finn.sfc.__psi as calc_psi
+import finn.sfc.__dac as calc_dac
 
 def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = True, minimal_angle_thresh = 2):
     """

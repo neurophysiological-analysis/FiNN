@@ -10,10 +10,7 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.cross_frequency_coupling.direct_modulation_index as dmi
-import finn.cross_frequency_coupling.modulation_index as mi
-import finn.cross_frequency_coupling.phase_lock_value as plv
-import finn.cross_frequency_coupling.mean_vector_length as mvl
+import finn.cfc.pac as pac
 
 import csv
 
@@ -39,12 +36,11 @@ def draw_figure(scores, best_fits, amplitude_signals, frequencies_between_bursts
     for (ax_idx, _) in enumerate(amplitude_signals):
         axes[ax_idx].plot(np.arange(0, 1, 1/len(amplitude_signals[ax_idx])), amplitude_signals[ax_idx], label = "original data")
         axes[ax_idx].plot(np.arange(0, 1, 1/len(amplitude_signals[ax_idx])), best_fits[ax_idx], label = "fitted curve")
-        axes[ax_idx].set_title("%2.2f|%2.2f|%2.2f|%2.2f" % (scores[ax_idx][0], scores[ax_idx][1], scores[ax_idx][2], scores[ax_idx][3]))
+        axes[ax_idx].set_title("DMI| PLV| MVL| MI  \n%2.2f|%2.2f|%2.2f|%2.2f" % (scores[ax_idx][0], scores[ax_idx][1], scores[ax_idx][2], scores[ax_idx][3]))
 
 def main(write_csv = False, visualize = True):
 
     for repetition in range(5):
-    
         data_range = np.arange(0, 30000) #previously noise strength = 0.5
         #data_range = np.arange(0, 500)
         #data_range = np.arange(0, 300000)
@@ -61,7 +57,6 @@ def main(write_csv = False, visualize = True):
         #data_range = np.arange(0, 300000)
         
         frequency_sampling = 1000
-        frequencies_between_bursts = [1, 5, 10, 15, 20, 25, 30]
         frequencies_between_bursts = [2, 5, 10, 15, 20, 25, 30]
         #frequencies_between_bursts = [10, 20]
         tgt_frequency_between_bursts = 10
@@ -94,11 +89,11 @@ def main(write_csv = False, visualize = True):
             scores = list(); best_fits = list(); amplitude_signals = list()
             for high_freq_signal in high_freq_signals:
                 for low_freq_signal in low_freq_signals:
-                    tmp = dmi.run(low_freq_signal, high_freq_signal, frequency_window_half_size = 4, frequency_step_width = 2)
+                    tmp = pac.run_dmi(low_freq_signal, high_freq_signal, frequency_window_half_size = 4, frequency_step_width = 2)
                     d_mi_score = tmp[0]
-                    plv_score = plv.run(low_freq_signal, high_freq_signal)
-                    mvl_score = mvl.run(low_freq_signal, high_freq_signal)
-                    mi_score = mi.run(low_freq_signal, high_freq_signal) * 100
+                    plv_score = pac.run_plv(low_freq_signal, high_freq_signal)
+                    mvl_score = pac.run_mvl(low_freq_signal, high_freq_signal)
+                    mi_score = pac.run_mi(low_freq_signal, high_freq_signal) * 100
                     scores.append([d_mi_score, plv_score, mvl_score, mi_score]); best_fits.append(tmp[1]); amplitude_signals.append(tmp[2])
             
             #visualization

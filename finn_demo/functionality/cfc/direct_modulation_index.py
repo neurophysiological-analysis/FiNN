@@ -10,7 +10,7 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.cross_frequency_coupling.direct_modulation_index as dmi
+import finn.cfc.pac as pac
 
 def generate_high_frequency_signal(n, frequency_sampling, frequency_within_bursts, random_noise_strength, 
                                    offset, burst_count, burst_length):
@@ -69,7 +69,7 @@ def main():
     scores = list(); best_fits = list(); amplitude_signals = list()
     for high_freq_signal in high_freq_signals:
         for low_freq_signal in low_freq_signals:
-            tmp = dmi.run(low_freq_signal, high_freq_signal, frequency_window_half_size = 20, frequency_step_width = 5)
+            tmp = pac.run_dmi(low_freq_signal, high_freq_signal, frequency_window_half_size = 20, frequency_step_width = 5)
             scores.append(tmp[0]); best_fits.append(tmp[1]); amplitude_signals.append(tmp[2])
     
     #visualization

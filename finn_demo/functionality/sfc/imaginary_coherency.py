@@ -10,15 +10,15 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn.same_frequency_coupling.time_domain.imaginary_coherency as td_ic
-import finn.same_frequency_coupling.frequency_domain.imaginary_coherency as fd_ic
-import finn.same_frequency_coupling.coherency_domain.imaginary_coherency as coh_ic
+import finn.sfc.td as td
+import finn.sfc.fd as fd
+import finn.sfc.cd as cohd
 
-import finn.same_frequency_coupling.time_domain.complex_coherency as td_cc
-import finn.same_frequency_coupling.__misc as misc
+import finn.sfc.__misc as misc
+import finn_demo.demo_data.demo_data_paths as paths
 
 def main():
-    data = np.load("/mnt/data/AnalysisFramework/beta2/demo_data/dac/demo_data.npy")
+    data = np.load(paths.fct_sfc_data)
     frequency_sampling = 5500
     frequency_peak = 30
     
@@ -73,7 +73,7 @@ def main():
     
     
 def calc_from_time_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    return td_ic.run(signal_1, signal_2, frequency_sampling, nperseg, nfft)[1][frequency_target]
+    return td.run_ic(signal_1, signal_2, frequency_sampling, nperseg, nfft)[1][frequency_target]
 
 def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
     seg_data_X = misc.__segment_data(signal_1, nperseg, pad_type = "zero")
@@ -82,12 +82,12 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, 
     (bins, fd_signal_1) = misc.__calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hanning")
     (_,    fd_signal_2) = misc.__calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hanning")
     
-    return fd_ic.run(fd_signal_1, fd_signal_2)[1][[np.argmin(np.abs(bins - frequency_target))]]
+    return fd.run_ic(fd_signal_1, fd_signal_2)[1][[np.argmin(np.abs(bins - frequency_target))]]
         
 def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    (bins, coh) = td_cc.run(signal_1, signal_2, nperseg, "zero", frequency_sampling, nfft, "hanning")
+    (bins, coh) = td.run_cc.run(signal_1, signal_2, nperseg, "zero", frequency_sampling, nfft, "hanning")
     
-    return coh_ic.run(coh)[np.argmin(np.abs(bins - frequency_target))]
+    return cohd.run_ic(coh)[np.argmin(np.abs(bins - frequency_target))]
     
     
 main()

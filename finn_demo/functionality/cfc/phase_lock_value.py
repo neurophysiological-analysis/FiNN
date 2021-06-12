@@ -6,7 +6,7 @@ Created on Jan 5, 2021
 
 import numpy as np
 
-import finn.cross_frequency_coupling.phase_lock_value as plv
+import finn.cfc.pac as pac
 
 def generate_high_frequency_signal(n, frequency_sampling, frequency_within_bursts, random_noise_strength, 
                                    offset, burst_count, burst_length):
@@ -41,8 +41,16 @@ def main():
     scores = np.zeros((len(high_freq_signals), len(low_freq_signals)));
     for (high_freq_idx, high_freq_signal) in enumerate(high_freq_signals):
         for (low_freq_idx, low_freq_signal) in enumerate(low_freq_signals):
-            scores[high_freq_idx, low_freq_idx] = plv.run(low_freq_signal, high_freq_signal)
-    print(scores)
+            scores[high_freq_idx, low_freq_idx] = pac.run_plv(low_freq_signal, high_freq_signal)
+            
+    print("target frequency: ", tgt_frequency_between_bursts)
+    for x in range(len(frequencies_between_bursts)):
+        print("%.3f" % (frequencies_between_bursts[x]), end = "\t")
+    print("")
+    for y in range(len(high_freq_frame_offsets)):
+        for x in range(len(frequencies_between_bursts)):
+            print("%.3f" % (scores[y][x],), end = "\t")
+        print("")
 
 main()
 

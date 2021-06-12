@@ -5,7 +5,7 @@ Created on Jun 2, 2020
 '''
 
 import numpy as np
-import cleansing.neighboring_channels as nc
+import finn.cleansing.neighboring_channels as nc
 
 def __get_neighbor_channel_ids(ch_names):
     neigh_list = nc.neighbor_channels
