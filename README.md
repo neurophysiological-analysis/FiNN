@@ -5,12 +5,15 @@ A Python Toolbox for the analysis of electrophysiological data
 The main directory *finn* contains the toolbox itself, while *finn_demo* contains a number of demo files describing end-point functionality of the toolbox. *finn_tests* contains automated tests to perform unit tests in order to evaluate the state of the toolbox.
 
 
+## Branches
+
+FiNN offers two branches:
+- Stable: Contains only stable releases (passed all unit tests)
+- Develop: Contains all latest changes and may be unstable (not unit tested)
 
 ## Features
 
-----------
-
-Currently implemented features in this toolbox: 
+Currently implemented features in this toolbox. Full documentation is accessible in doc/\_build/index.html. Documentation of the development branch is available at https://neurophysiological-analysis.github.io/FiNN/.
 
    - Artifact rejection
         - Identification of bad channels and (optional) restoration of those from neighboring channels
@@ -39,8 +42,6 @@ Currently implemented features in this toolbox:
 
 
 ## Requirements
-
-----
 
 - Python 3.6 or above.
 - R and R packages
