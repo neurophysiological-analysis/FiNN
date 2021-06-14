@@ -1,8 +1,11 @@
 import setuptools
 
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 setuptools.setup(
     name='finn',
-    version='0.1.0',
+    version='0.1.1',
     description='Toolbox for the analysis of electrophysiological data',
     long_description='A Python Toolbox for the analysis of electrophysiological data',
     author='Maximilian Scherer',
@@ -10,7 +13,8 @@ setuptools.setup(
     url='https://github.com/VoodooCode14/FiNN',
     download_url='https://github.com/VoodooCode14/FiNN',
     license='GPLv3',
-    packages=setuptools.find_packages(),
+    packages=['finn.basic','finn.cfc','finn.cleansing','finn.file_io','finn.filters',
+    'finn.misc', 'finn.sfc', 'finn.statistical', 'finn.visualization'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -28,4 +32,15 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries',
         ],
     python_requires='>=3.8',
+    install_requires=[
+    	'numpy',
+    	'scipy',
+    	'lmfit',
+    	'PyQt5',
+    	'matplotlib',
+    	'matplotlib',
+    	'mne',
+    	'rpy2',
+    	'scikit-image',
+    ]
 )
