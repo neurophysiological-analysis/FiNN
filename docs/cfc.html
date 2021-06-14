@@ -49,10 +49,12 @@
 <h1>cfc (cross frequency connectivity) package<a class="headerlink" href="#cfc-cross-frequency-connectivity-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-cfc">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cfc" title="Permalink to this headline">¶</a></h2>
+<p>This package implements a number of different cross frequency coupling methods. These metrics may be used to measure similarity between a low frequency component of a signal and a high frequency component of the same or another signal.</p>
 </div>
 <div class="section" id="module-cfc.pac">
 <span id="cfc-pac"></span><h2>cfc.pac<a class="headerlink" href="#module-cfc.pac" title="Permalink to this headline">¶</a></h2>
 <p>Created on Dec 29, 2020</p>
+<p>This module implements different phase amplitude coupling metrics.</p>
 <p>&#64;author: voodoocode</p>
 <dl class="py function">
 <dt id="cfc.pac.run_dmi">
@@ -63,8 +65,8 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>low_freq_data</strong> – Single array of low frequency data.</p></li>
 <li><p><strong>high_freq_data</strong> – Single array of high frequency data.</p></li>
-<li><p><strong>phase_window_half_size</strong> – Width of the phase window used for calculation of frequency/phase histogram. Amplitude gets added to every phase bin within the window size. Larger windows result in more smooth/increased PAC estimates.</p></li>
-<li><p><strong>phase_step_width</strong> – Step width/shift of the phase window used for calculation of frequency/phase histogram.</p></li>
+<li><p><strong>phase_window_half_size</strong> – Width of the phase window used for calculation of frequency/phase histogram. Amplitude gets added to every phase bin within the window size. Larger windows result in more smooth, but also potentially increased PAC estimates.</p></li>
+<li><p><strong>phase_step_width</strong> – Step width of the phase window used for calculation of frequency/phase histogram.</p></li>
 <li><p><strong>max_model_fit_iterations</strong> – Maximum number of iterations applied during sine fitting.</p></li>
 </ul>
 </dd>

@@ -1,6 +1,8 @@
 '''
 Created on Jun 2, 2020
 
+This module implements a function to identify bad channels based on increased/decreased power within a channel compared to the majority of other channels. 
+
 :author: voodoocode
 '''
 
@@ -21,15 +23,15 @@ idenfity_faulty_visual_inspection_lock = multiprocessing.Lock()
 
 def run(data, ch_names, fs, ref_areas = [[105, 120], [135, 145], [155, 195]], broadness = 3, visual_inspection = True):
     """
-    Identifices which channel have substantially more or less power in frequency ranges defined by ref_areas. Channels whose power is more different than broadness (default: 3) standard deviations will be primed as faulty channels. In case visual inspection is active (default: True), the automatic results can be further refined via manual selection.
+    Identifies which channels have substantially more or less power in the frequency ranges defined by ref_areas. Channels whose power is more different than *broadness* (default: 3) standard deviations will be primed as faulty channels. In case visual inspection is *active* (default: True), the automatic results can be further refined via manual selection.
     
-    Attention: Function is parallelized. Outside parallelization may result in expected behaviour. 
+    Attention: Function is parallelized. Sensitive parts are placed within a locked area to avoid unexpected behaviour. 
     
-    :param data: input data in the format channel x samples
-    :param ch_names: names of the channels. Used for visualization purposes only. Order has to match the channel order of data
-    :param fs: list of sampling frequencies for each channel
-    :param ref_areas: spectral reference areas used for power estimation. Only power within these ranges is defined. It is recommended to choose ranges, which are not part of any evaluation to decrease the chances of pre-processing induced biases.
-    :param broadness: Number of standard deviations threshold by which channels are categorized as faulty.
+    :param data: Input data in the format channel x samples.
+    :param ch_names: Names of the channels. Used for visualization purposes only. Order has to match the channel order of data.
+    :param fs: List of sampling frequencies for each channel.
+    :param ref_areas: Spectral reference areas used for power estimation. Only power within these ranges is defined. It is recommended to choose ranges, which are not part of any evaluation to decrease the chances of pre-processing induced biases.
+    :param broadness: Number of standard deviations threshold by which channels are automatically categorized as faulty. In case visual inspection is enabled (recommended) this only results in priming the channels.
     :param visual_inspection: Toggles visual inspection on and off.
     
     :return: (valid_list, invalid_list, score). List of valid channels, invalid channels and their respective z-scores.
@@ -88,9 +90,22 @@ def run(data, ch_names, fs, ref_areas = [[105, 120], [135, 145], [155, 195]], br
     return (valid_list.tolist(), invalid_list.tolist(), np.asarray(score_list))
 
 def __manual_check(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list):
+    """
+    Visualizes the z-score of each channel and annotates all channels. Afterwards bad channel selection may be manually adjusted. Internally parallelized to speed up the drawing process.
+    
+    :param ch_cnt: Number of channels.
+    :param ch_names: Number of channels.
+    :param score: Z-score of each channel.
+    :param min_ref: Minimum value for a valid z-score.
+    :param max_ref: Maximum value for a valid z-score.
+    :param valid_list: List of valid channels.
+    :param invalid_list: List of invalid channels.
+    
+    :return: (valid_list, invalid_list). List of valid and invalid channels, may be different from the input due to performed manual adjustments.
+    """
     shared_valid_list = multiprocessing.Array('i', ch_cnt)
     
-    #Need to run as a subproces to enable the starting of multiple qapplications
+    #Need to run as a subproces to enable the starting of multiple Qapplications
     vis_sub_process = multiprocessing.Process(target = __manual_check_mp, args = [ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list])
     vis_sub_process.start()
     vis_sub_process.join()
@@ -100,7 +115,23 @@ def __manual_check(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invali
     
     return(valid_list, invalid_list)
 
-def __manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list):    
+def __manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list):
+    """
+    
+    Parallized part of __manual_check.
+    
+    :param ch_cnt: Number of channels.
+    :param ch_names: Number of channels.
+    :param score: Z-score of each channel.
+    :param min_ref: Minimum value for a valid z-score.
+    :param max_ref: Maximum value for a valid z-score.
+    :param valid_list: List of valid channels.
+    :param invalid_list: List of invalid channels.
+    :param shared_valid_list: Used to return information from the sub-process after its termination.
+    
+    :return: (valid_list, invalid_list). List of valid and invalid channels, may be different from the input due to performed manual adjustments.
+    
+    """   
     app = PyQt5.QtWidgets.QApplication([])
     
     if (type(valid_list) == np.ndarray):
@@ -130,6 +161,11 @@ def __manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, inv
     return (valid_list, invalid_list)
 
 class __Qt_win(PyQt5.QtWidgets.QWidget):
+    """
+
+    Window visualizing the z-score distribution of the provided channels.
+
+    """
     
     button_list = list()
     valid_list = list()
@@ -144,6 +180,20 @@ class __Qt_win(PyQt5.QtWidgets.QWidget):
     ch_names = None
         
     def __init__(self, app, ch_cnt, ch_names, min_ref, max_ref, diff, valid_list, invalid_list, maxX = 8):
+        """
+        
+        Constructs the window.
+        
+        :param app: Reference to the primary Qapplication.
+        :param ch_cnt: Number of channels.
+        :param ch_names: Number of channels.
+        :param score: Z-score of each channel.
+        :param min_ref: Minimum value for a valid z-score.
+        :param max_ref: Maximum value for a valid z-score.
+        :param valid_list: List of valid channels.
+        :param invalid_list: List of invalid channels.
+        
+        """
         super().__init__()
         
         self.ch_cnt = ch_cnt
@@ -221,6 +271,11 @@ class __Qt_win(PyQt5.QtWidgets.QWidget):
         self.show()
     
     def init_canvas(self):
+        """
+        
+        Creates the canvas for data visualization.
+        
+        """
         self.fig.axes[0].cla()
         loc_valid_list = np.asarray(self.valid_list)
         self.fig.axes[0].scatter([-1, self.ch_cnt + 1], [1, 1], color = "white")
@@ -238,6 +293,13 @@ class __Qt_win(PyQt5.QtWidgets.QWidget):
         self.fig.canvas.draw()
     
     def update_canvas(self, ch_idx):
+        """
+        
+        Populates the canvas with data points.
+        
+        :param ch_idx: channel to be toggled.
+        
+        """
         if (ch_idx in self.valid_list):
             self.fig.axes[0].scatter(ch_idx, np.asarray(self.diff)[ch_idx], color = "green")
         else:
@@ -246,6 +308,14 @@ class __Qt_win(PyQt5.QtWidgets.QWidget):
         self.fig.canvas.draw()
     
     def change_state(self, ch_idx):
+        """
+        
+        Toggles a data point from valid (green) to invalid (red) and back.
+        
+        :param ch_idx: channel to be toggled.
+        
+        """
+        
         if (ch_idx in self.invalid_list):
             self.invalid_list.remove(ch_idx)
             self.valid_list.append(ch_idx) 
@@ -259,6 +329,12 @@ class __Qt_win(PyQt5.QtWidgets.QWidget):
         self.update_canvas(ch_idx)
         
     def on_click(self, event):
+        """
+        
+        Catches a mouse click event to toggle a data point from valid (green) to invalid (red) and back.
+        
+        """
+        
         distPts = list()
         xVar = np.abs(self.canvas.figure.axes[0].get_xlim()[0] - self.canvas.figure.axes[0].get_xlim()[1])
         yVar = np.abs(self.canvas.figure.axes[0].get_ylim()[0] - self.canvas.figure.axes[0].get_ylim()[1])
@@ -270,11 +346,24 @@ class __Qt_win(PyQt5.QtWidgets.QWidget):
         self.change_state(closestPt)
         
     def key_pressed(self, event):
-        if (event.key() == PyQt5.QtCore.Qt.Key_Space):
-            print("Hello World")
-            #self.clickedClose()
+        """
+        
+        Additional functionality in response to pressed keys may be added here.
+        
+        """
+        
+        pass
+        #------------------------ if (event.key() == PyQt5.QtCore.Qt.Key_Space):
+            #---------------------------------------------- print("Hello World")
+            #---------------------------------------------- #self.clickedClose()
         
     def clicked_close(self):
+        """
+        
+        Closes the window when order to do so.
+        
+        """
+        
         self.close()
 
 

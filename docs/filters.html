@@ -49,10 +49,12 @@
 <h1>filters package<a class="headerlink" href="#filters-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-filters">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-filters" title="Permalink to this headline">¶</a></h2>
+<p>This package provides different means to filter data.</p>
 </div>
 <div class="section" id="module-filters.frequency">
 <span id="filters-frequency-module"></span><h2>filters.frequency module<a class="headerlink" href="#module-filters.frequency" title="Permalink to this headline">¶</a></h2>
 <p>Created on Jun 11, 2018</p>
+<p>Provides different methods for frequency filtering of provided signals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -99,8 +101,8 @@ In case f_low &lt; f_high, a bandpass is created; if f_low &gt; f_high a bandsto
 <li><p><strong>ripple_pass_band</strong> – Suppression of the ripple in the pass band.</p></li>
 <li><p><strong>stop_band_suppression</strong> – Suppression of the stop band.</p></li>
 <li><p><strong>fft_win_sz</strong> – Size of the fft window.</p></li>
-<li><p><strong>pad_type</strong> – Type of padding. Supported types are: “zero” and “mirror”</p></li>
-<li><p><strong>mode</strong> – Defines whether the FIR filter is executed in “fast” or “precise” mode (32 vs 64 bit floats)</p></li>
+<li><p><strong>pad_type</strong> – Type of padding. Supported types are: <em>zero</em> and <em>mirror</em></p></li>
+<li><p><strong>mode</strong> – Defines whether the FIR filter is executed in <em>fast</em> or <em>precise</em> mode (32 vs 64 bit floats)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

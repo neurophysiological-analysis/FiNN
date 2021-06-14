@@ -1,6 +1,8 @@
 '''
 Created on Jun 11, 2018
 
+Provides different methods for frequency filtering of provided signals.
+
 :author: voodoocode
 '''
 
@@ -13,8 +15,7 @@ def butter(data, f_low, f_high, fs, order, zero_phase = True):
     """
     Creates a butterworth filter and applies it to the input data.
     
-    :param data: Single vector of input data
-    
+    :param data: Single vector of input data    
     :param f_low: Start of filters's pass band.
     :param f_high: End of the filters's pass band.
     :param fs: Sampling frequency
@@ -78,8 +79,8 @@ def fir(data, f_low, f_high, trans_width, fs, ripple_pass_band = 10e-5, stop_ban
     :param ripple_pass_band: Suppression of the ripple in the pass band.
     :param stop_band_suppression: Suppression of the stop band.
     :param fft_win_sz: Size of the fft window.
-    :param pad_type: Type of padding. Supported types are: "zero" and "mirror"
-    :param mode: Defines whether the FIR filter is executed in "fast" or "precise" mode (32 vs 64 bit floats)
+    :param pad_type: Type of padding. Supported types are: *zero* and *mirror*
+    :param mode: Defines whether the FIR filter is executed in *fast* or *precise* mode (32 vs 64 bit floats)
     
     :return: Filtered data.
     """

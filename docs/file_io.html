@@ -49,10 +49,12 @@
 <h1>file_io package<a class="headerlink" href="#file-io-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-file_io">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-file_io" title="Permalink to this headline">¶</a></h2>
+<p>This package provides tools for data loading and saving.</p>
 </div>
 <div class="section" id="module-file_io.data_manager">
 <span id="file-io-data-manager-module"></span><h2>file_io.data_manager module<a class="headerlink" href="#module-file_io.data_manager" title="Permalink to this headline">¶</a></h2>
 <p>Created on Dec 30, 2020</p>
+<p>Implements a convenient data handler for large, unbalanced data sets. The data manager is to be provided with either a list, a dictionary, or a numpy array. These are traverse in order to save unbalanced data in smaller individual data junks. This avoids excessive memory consumption as observed when using pickle to storge large data containers (&gt;2GB).</p>
 <p>&#64;author: voodoocode</p>
 <dl class="py function">
 <dt id="file_io.data_manager.load">
@@ -64,6 +66,9 @@
 <li><p><strong>path</strong> – Location from which the data is to be read.</p></li>
 <li><p><strong>legacy_mode</strong> – <em>deprecated</em> Will be removed in a future version.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The read data.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -88,10 +93,11 @@
 </div>
 <div class="section" id="module-file_io.data_manager_legacy">
 <span id="file-io-data-manager-legacy-module"></span><h2>file_io.data_manager_legacy module<a class="headerlink" href="#module-file_io.data_manager_legacy" title="Permalink to this headline">¶</a></h2>
+<p><strong>Depricated</strong>. Will be removed in a future version.</p>
 <dl class="py function">
 <dt id="file_io.data_manager_legacy.load">
 <code class="sig-prename descclassname">file_io.data_manager_legacy.</code><code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.data_manager_legacy.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads data stored via the data_manager.</p>
+<dd><p><strong>Depricated</strong>. Will be removed in a future version. Loads data stored via the data_manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -105,7 +111,7 @@
 <dl class="py function">
 <dt id="file_io.data_manager_legacy.save">
 <code class="sig-prename descclassname">file_io.data_manager_legacy.</code><code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">var_name</span><span class="o">=</span><span class="default_value">'data'</span></em>, <em class="sig-param"><span class="n">max_depth</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">ending</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.data_manager_legacy.save" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>Depricated</em>. Will be removed in a future version. Saves data using the legacy data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.</p>
+<dd><p><strong>Depricated</strong>. Will be removed in a future version. Saves data using the legacy data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -125,6 +131,7 @@
 <div class="section" id="module-file_io.load_brain_vision_data">
 <span id="file-io-load-brain-vision-data-module"></span><h2>file_io.load_brain_vision_data module<a class="headerlink" href="#module-file_io.load_brain_vision_data" title="Permalink to this headline">¶</a></h2>
 <p>Created on Jun 28, 2017</p>
+<p>Reads data from the brain-vision format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>maximilianscherer</p>
@@ -147,7 +154,7 @@
 <dl class="py function">
 <dt id="file_io.load_brain_vision_data.run">
 <code class="sig-prename descclassname">file_io.load_brain_vision_data.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vhdr_path</span></em>, <em class="sig-param"><span class="n">badChList</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">montage_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">montage_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preload</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.load_brain_vision_data.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load data recorded via the brain vision software.</p>
+<dd><p>Load data recorded via the brain vision software wrapping mne calls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -155,9 +162,9 @@
 <li><p><strong>misc_ch</strong> – MISC - channels.</p></li>
 <li><p><strong>montage_file</strong> – File name of the montage file.</p></li>
 <li><p><strong>montage_path</strong> – Path to the montage file.</p></li>
+<li><p><strong>preload</strong> – If ‘true’ the data is loaded directly in this function. If ‘false’ only a container is created.</p></li>
 <li><p><strong>tmin</strong> – Start of the returned recording segment in seconds.</p></li>
 <li><p><strong>tmax</strong> – End of the returned recording segment in seconds.</p></li>
-<li><p><strong>preload</strong> – If ‘true’ the data is loaded directly in this function. If ‘false’ only a container is created.</p></li>
 <li><p><strong>verbose</strong> – Verbose the command line output.</p></li>
 </ul>
 </dd>

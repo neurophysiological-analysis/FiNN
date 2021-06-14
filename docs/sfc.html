@@ -49,10 +49,12 @@
 <h1>sfc (same frequency connectivity) package<a class="headerlink" href="#sfc-same-frequency-connectivity-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-sfc">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sfc" title="Permalink to this headline">¶</a></h2>
+<p>This package provides a number of different same frequency connectivity metrics.</p>
 </div>
 <div class="section" id="module-sfc.cd">
 <span id="sfc-cd-module"></span><h2>sfc.cd module<a class="headerlink" href="#module-sfc.cd" title="Permalink to this headline">¶</a></h2>
 <p>Created on Dec 29, 2020</p>
+<p>This module provides different functions to estimate sfc between two signals from data presented in the coherency domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -61,25 +63,19 @@
 <dl class="py function">
 <dt id="sfc.cd.run_dac">
 <code class="sig-prename descclassname">sfc.cd.</code><code class="sig-name descname">run_dac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">bins</span></em>, <em class="sig-param"><span class="n">fmin</span></em>, <em class="sig-param"><span class="n">fmax</span></em>, <em class="sig-param"><span class="n">return_signed_conn</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">minimal_angle_thresh</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.cd.run_dac" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>Calculates the directional absolute coherence from complex coherency.</p>
-</div></blockquote>
-<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient,
-the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
+<dd><p>Calculates the directional absolute coherence from complex coherency.</p>
+<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
 <p>Important design decision: 
 - In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
 - In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.</p>
-<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°].
-Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these
-root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. 
-Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. 
-Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume
-conduction effects.</p>
+<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Complex coherency data</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples</p></li>
+<li><p><strong>data</strong> – List of outer window complex coherency estimates calculated from two signals.</p></li>
+<li><p><strong>bins</strong> – Frequency bins of the complex coherency data.</p></li>
+<li><p><strong>fmin</strong> – Minimum frequency of the frequency range on which coherency gets evaluated.</p></li>
+<li><p><strong>fmax</strong> – Maximum frequency of the frequency range on which coherency gets evaluated.</p></li>
 <li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information</p></li>
 <li><p><strong>minimal_angle_thresh</strong> – The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan.</p></li>
 </ul>
@@ -96,7 +92,7 @@ conduction effects.</p>
 <dd><p>Calculates the imaginary coherency between two signals. Assumes data_1 and data_2 to be from the complex frequency domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – Complex coherency values; vector of samples</p>
+<dd class="field-odd"><p><strong>data</strong> – Complex coherency values; vector of samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Connectivity estimated based on the provided complex coherency measured via the imaginary coherence.</p>
@@ -110,7 +106,7 @@ conduction effects.</p>
 <dd><p>Calculates the magnitude squared coherency between two signals. Assumes data_1 and data_2 to be from the complex frequency domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> – Complex coherency values; vector of samples</p>
+<dd class="field-odd"><p><strong>data</strong> – Complex coherency values; vector of samples.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Connectivity estimated based on the provided complex coherency measured via the magnitude squared coherence.</p>
@@ -125,8 +121,8 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – List of outer window estimates calculated from two signals</p></li>
-<li><p><strong>bins</strong> – Frequency bins of the sample data</p></li>
+<li><p><strong>data</strong> – List of outer window complex coherency estimates calculated from two signals.</p></li>
+<li><p><strong>bins</strong> – Frequency bins of the sample data.</p></li>
 <li><p><strong>f_min</strong> – Minimum frequence for the evaluated interval.</p></li>
 <li><p><strong>f_max</strong> – Maximum frequence for the evaluated interval.</p></li>
 <li><p><strong>f_step_sz</strong> – Frequency step size in the evaluated interval.</p></li>
@@ -144,7 +140,7 @@ conduction effects.</p>
 <dd><p>This function calculates the weighted phase lag index between two signals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>s_xy</strong> – List of complex coherency estimates calculated from two signals</p>
+<dd class="field-odd"><p><strong>s_xy</strong> – List of complex coherency estimates calculated from two signals.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Connectivity estimated based on the provided complex coherency measured using the weighted lag slope index.</p>
@@ -156,6 +152,7 @@ conduction effects.</p>
 <div class="section" id="module-sfc.fd">
 <span id="sfc-fd-module"></span><h2>sfc.fd module<a class="headerlink" href="#module-sfc.fd" title="Permalink to this headline">¶</a></h2>
 <p>Created on Dec 29, 2020</p>
+<p>This module provides different functions to estimate sfc between two signals from data presented in the frequency domain.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -184,22 +181,16 @@ conduction effects.</p>
 <dd><blockquote>
 <div><p>Calculates the directional absolute coherence between two signals. Assumes data_1 and data_2 to be from the complex frequency domain.</p>
 </div></blockquote>
-<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient,
-the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
+<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
 <p>Important design decision: 
 - In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
 - In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.</p>
-<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°].
-Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these
-root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. 
-Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. 
-Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume
-conduction effects.</p>
+<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples</p></li>
+<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples.</p></li>
 <li><p><strong>fmin</strong> – Minimum frequency of the frequency range on which coherency gets evaluated.</p></li>
 <li><p><strong>fmax</strong> – Maximum frequency of the frequency range on which coherency gets evaluated.</p></li>
 <li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information</p></li>
@@ -219,8 +210,8 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples</p></li>
+<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -236,8 +227,8 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples</p></li>
+<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -253,9 +244,9 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> – First dataset from the frequency domain domain; vector of frequency domain samples</p></li>
-<li><p><strong>data2</strong> – Second dataset from the frequency domain; vector of frequency domain samples</p></li>
-<li><p><strong>bins</strong> – Frequency bins of the sample data</p></li>
+<li><p><strong>data1</strong> – First dataset from the frequency domain domain; vector of frequency domain samples.</p></li>
+<li><p><strong>data2</strong> – Second dataset from the frequency domain; vector of frequency domain samples.</p></li>
+<li><p><strong>bins</strong> – Frequency bins of the sample data.</p></li>
 <li><p><strong>f_min</strong> – Minimum frequence for the evaluated interval.</p></li>
 <li><p><strong>f_max</strong> – Maximum frequence for the evaluated interval.</p></li>
 <li><p><strong>f_step_sz</strong> – Frequency step size in the evaluated interval.</p></li>
@@ -274,8 +265,8 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from the frequency domain domain; vector of frequency domain samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the frequency domain; vector of frequency domain samples</p></li>
+<li><p><strong>data_1</strong> – First dataset from the frequency domain domain; vector of frequency domain samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from the frequency domain; vector of frequency domain samples.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -287,6 +278,9 @@ conduction effects.</p>
 </div>
 <div class="section" id="module-sfc.td">
 <span id="sfc-td-module"></span><h2>sfc.td module<a class="headerlink" href="#module-sfc.td" title="Permalink to this headline">¶</a></h2>
+<p>Created on Dec 29, 2020</p>
+<p>This module provides different functions to estimate sfc between two signals from the time domain.</p>
+<p>&#64;author: voodoocode</p>
 <dl class="py function">
 <dt id="sfc.td.run_cc">
 <code class="sig-prename descclassname">sfc.td.</code><code class="sig-name descname">run_cc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_X</span></em>, <em class="sig-param"><span class="n">data_Y</span></em>, <em class="sig-param"><span class="n">nperseg</span></em>, <em class="sig-param"><span class="n">pad_type</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">nfft</span></em>, <em class="sig-param"><span class="n">window</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.td.run_cc" title="Permalink to this definition">¶</a></dt>
@@ -300,11 +294,11 @@ conduction effects.</p>
 <li><p><strong>pad_type</strong> – padding type to be applied.</p></li>
 <li><p><strong>fs</strong> – Sampling frequency.</p></li>
 <li><p><strong>nfft</strong> – Size of fft window.</p></li>
-<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a></p></li>
+<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Complex coherency</p>
+<dd class="field-even"><p>Complex coherency.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -313,33 +307,27 @@ conduction effects.</p>
 <dt id="sfc.td.run_dac">
 <code class="sig-prename descclassname">sfc.td.</code><code class="sig-name descname">run_dac</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_1</span></em>, <em class="sig-param"><span class="n">data_2</span></em>, <em class="sig-param"><span class="n">fmin</span></em>, <em class="sig-param"><span class="n">fmax</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">nperseg</span></em>, <em class="sig-param"><span class="n">nfft</span></em>, <em class="sig-param"><span class="n">return_signed_conn</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">minimal_angle_thresh</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.td.run_dac" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the directional absolute coherence between two signals. Assumes data_1 and data_2 to be from time domain.</p>
-<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient,
-the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
+<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
 <p>Important design decision:
 - In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
 - In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.</p>
-<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°].
-Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these
-root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. 
-Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. 
-Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume
-conduction effects.</p>
+<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples</p></li>
+<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples.</p></li>
 <li><p><strong>fmin</strong> – Minimum frequency of the frequency range on which coherency gets evaluated.</p></li>
 <li><p><strong>fmax</strong> – Maximum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>fs</strong> – Sampling frequency</p></li>
-<li><p><strong>nperseg</strong> – Size of individual segments in fft</p></li>
-<li><p><strong>nfft</strong> – fft window size</p></li>
-<li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>nperseg</strong> – Size of individual segments in fft.</p></li>
+<li><p><strong>nfft</strong> – fft window size.</p></li>
+<li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information.</p></li>
 <li><p><strong>minimal_angle_thresh</strong> – The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding same_frequency_coupling values</p>
+<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding same_frequency_coupling values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,15 +339,15 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples</p></li>
-<li><p><strong>fs</strong> – Sampling frequency</p></li>
-<li><p><strong>nperseg</strong> – Size of individual segments in fft</p></li>
-<li><p><strong>nfft</strong> – fft window size</p></li>
+<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples.</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>nperseg</strong> – Size of individual segments in fft.</p></li>
+<li><p><strong>nfft</strong> – fft window size.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding imaginary coherency values</p>
+<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding imaginary coherency values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -371,15 +359,15 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples</p></li>
-<li><p><strong>fs</strong> – Sampling frequency</p></li>
-<li><p><strong>nperseg</strong> – Size of individual segments in fft</p></li>
-<li><p><strong>nfft</strong> – fft window size</p></li>
+<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples.</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>nperseg</strong> – Size of individual segments in fft.</p></li>
+<li><p><strong>nfft</strong> – fft window size.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding magnitude squared coherence values</p>
+<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding magnitude squared coherence values.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -391,13 +379,13 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples</p></li>
-<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples</p></li>
-<li><p><strong>nperseg_outer</strong> – Outer window size</p></li>
-<li><p><strong>fs</strong> – Sampling frequency</p></li>
-<li><p><strong>nperseg_inner</strong> – Inner window size</p></li>
-<li><p><strong>nfft</strong> – fft window size</p></li>
-<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a></p></li>
+<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples.</p></li>
+<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples.</p></li>
+<li><p><strong>nperseg_outer</strong> – Outer window size.</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>nperseg_inner</strong> – Inner window size.</p></li>
+<li><p><strong>nfft</strong> – fft window size.</p></li>
+<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a>.</p></li>
 <li><p><strong>pad_type</strong> – Padding type, currently only “zero” padding is supported.</p></li>
 <li><p><strong>f_min</strong> – Minimum frequence for the evaluated interval.</p></li>
 <li><p><strong>f_max</strong> – Maximum frequence for the evaluated interval.</p></li>
@@ -417,17 +405,17 @@ conduction effects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> – First dataset from time domain; vector of samples</p></li>
-<li><p><strong>data2</strong> – Second dataset from time domain; vector of samples</p></li>
-<li><p><strong>fs</strong> – Sampling frequency</p></li>
-<li><p><strong>nperseg</strong> – Number of data points per segment</p></li>
-<li><p><strong>nfft</strong> – FFT window size</p></li>
-<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a></p></li>
+<li><p><strong>data1</strong> – First dataset from time domain; vector of samples.</p></li>
+<li><p><strong>data2</strong> – Second dataset from time domain; vector of samples.</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>nperseg</strong> – Number of data points per segment.</p></li>
+<li><p><strong>nfft</strong> – FFT window size.</p></li>
+<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a>.</p></li>
 <li><p><strong>pad_type</strong> – Padding type, currently only “zero” padding is supported.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding weighted phase lag index values</p>
+<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding weighted phase lag index values.</p>
 </dd>
 </dl>
 </dd></dl>

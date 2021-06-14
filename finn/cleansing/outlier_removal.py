@@ -1,6 +1,8 @@
 '''
 Created on Jun 12, 2018
 
+This module implements code to identify (and remove) outliers in a data-set.
+
 :author: voodoocode
 '''
 
@@ -10,11 +12,10 @@ import numpy as np
 
 def run(data, ref, max_std_dist = 2, min_samp_cnt = 5):
     """
-    Removes any sample more distant from the mean than max_std_dist standard deviations. Terminates if either all samples are within
-    the threshold or if the minimal sample count defined by min_samp_cnt is reached.
+    Removes any sample more distant from the mean than max_std_dist standard deviations. Terminates if either all samples are within the threshold or if the minimal sample count defined by min_samp_cnt is reached.
     
-    :param data: Input data 
-    :param ref: Single dimensional reference data
+    :param data: Input data. 
+    :param ref: Single dimensional reference data.
     :param maxStdDist: Threshold for outlier detection. Number of standard deviations permissible.
     :param min_samp_cnt: Minimal viable sample count. Terminates if reduced below this number or the current iteration would reduce below this number. 
     

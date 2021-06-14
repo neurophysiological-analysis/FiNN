@@ -1,12 +1,27 @@
 '''
 Created on Dec 29, 2020
 
+This module implements the phase slope index.
+
 @author: voodoocode
 '''
 
 import numpy as np
 
 def run(data, bins, f_min, f_max, f_step_sz = 1):
+    """
+    
+    Calculates the phase slope index (psi) from a list of complex coherency data.
+    
+    :param data: List of complex coherency data.
+    :param bins: Frequency bins of the complex coherency data.
+    :param f_min: Minimum frequency of interest.
+    :param f_max: Maximum frequency of interest.
+    :param f_step_size: Frequency step size.
+    
+    :return: Returns the sfc measured as psi computed from data.
+    
+    """
     
     f_min_idx = np.argmin(np.abs(bins - f_min))
     f_max_idx = np.argmin(np.abs(bins - f_max))
@@ -24,3 +39,9 @@ def run(data, bins, f_min, f_max, f_step_sz = 1):
     var /= len(data)
     
     return np.mean(psi)/(np.sqrt(var) * 2)
+
+
+
+
+
+

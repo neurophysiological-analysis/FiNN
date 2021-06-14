@@ -1,6 +1,8 @@
 '''
 Created on Dec 29, 2020
 
+This module implements a number of functions used in across several sfc metrics.
+
 @author: voodoocode
 '''
 

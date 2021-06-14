@@ -49,10 +49,12 @@
 <h1>misc package<a class="headerlink" href="#misc-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-misc">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-misc" title="Permalink to this headline">¶</a></h2>
+<p>Back of tools to increase quality of life.</p>
 </div>
 <div class="section" id="module-misc.timed_pool">
 <span id="misc-timed-pool-module"></span><h2>misc.timed_pool module<a class="headerlink" href="#module-misc.timed_pool" title="Permalink to this headline">¶</a></h2>
 <p>Created on Jan 30, 2019</p>
+<p>Provides a memory and cpu sensitive version of the multiprocessing tool.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -74,7 +76,7 @@ default python processpool.</p>
 <li><p><strong>func</strong> – The function to be processed.</p></li>
 <li><p><strong>args</strong> – List of arguments. Every element in the list is handled by a separate process.</p></li>
 <li><p><strong>max_time</strong> – Maximum time to wait for a processe prior to cancellation.</p></li>
-<li><p><strong>verbose</strong> – Increase information output.</p></li>
+<li><p><strong>delete_data</strong> – Flag on whether input data is deleted after successful computation of it’s results.</p></li>
 </ul>
 </dd>
 </dl>

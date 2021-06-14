@@ -1,6 +1,8 @@
 '''
 Created on Jun 12, 2018
 
+This module implements generalized linear mixed model via encapsulating R. 
+
 @author: voodoocode
 '''
 
@@ -15,36 +17,32 @@ import rpy2.rinterface_lib.embedded
 
 def check_formula(formula):
     """
-    Extracts fixed and random factors for the purpose of validating these prior to analysis
+    Extracts fixed and random factors for the purpose of validating these prior to analysis.
     
-    :param formula: The formula to be applied
-    :return: fixed factors, random factors formatted as lists
+    :param formula: The formula to be applied.
+
+    :return: fixed factors, random factors formatted as lists.
      """
     
     return __get_factors(formula)
 
 def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian"):
     """
-    Applies generalized linear mixed models (GLM). As the formula needs to be parsed in order to align significances
-    with effect sizes, it is highly recommended to check prior to execution once whether the formula is understood correctly
-    via running check_formula(formula). The formula will be parsed (scrubbed and unpacked), and fixed and random factors extracted. 
+    Applies generalized linear mixed models (GLMM). As the formula needs to be parsed in order to align significances with model coefficients, it is highly recommended to check prior to execution once whether the formula is understood correctly via running check_formula(formula). The formula will be parsed (scrubbed and unpacked), and fixed and random factors extracted. 
     
     :param data: Input data as a single matrix (Axis 0 => samples; Axis 1 data per sample). (Samples x Values).
     :param label_name: Names of the individual columns; have to align with the names specified in the formula.
     :param factor_type: Categorical vs. continuous factors.
-    :param formula: Formula to be applied by the GLM. The formula must not contain a digit within the factor names.
-    :param contrasts: Contrast values for the GLM. Contrast names have to align with the names specified in the formula.
-    :param data_type: Model type for the glm, default is gaussian.
+    :param formula: Formula to be applied by the GLMM. The formula must not contain a digit within the factor names.
+    :param contrasts: Contrast values for the GLMM. Contrast names have to align with the names specified in the formula.
+    :param data_type: Model type for the GLMM, default is gaussian.
     
     :return: (scores, df, p-values, coefficients, std_error, factor names)
     
     Be aware:
     * Categorical variables: These get ordered and the lowest value becomes the reference. 
-    The returned effect size is the average effect size of all levels vs. the reference effect size, i.e. the levels are '0' and '1'.
-    In this case does '0' determine the point of reference whereas '1' determines the target value. Any effect size will correspond to the effect of changing 
-    said factor from '0' to '1', not the other way around.
-    * Continuous variables: Effect sizes for this kind of variable are scaled towards 1 functionality of this factor.
-    Therefore the effect size corresponds to the effect of changing said factor from '0' to '1'.
+    The returned model coefficients are the average coefficients of all levels vs. the reference coefficient, i.e. the levels are '0' and '1'. In this case does '0' determine the point of reference whereas '1' determines the target value. Any coefficient value will correspond to the effect of changing said factor from '0' to '1', not the other way around.
+    * Continuous variables: Effect sizes for this kind of variable are scaled towards 1 functionality of this factor. Therefore the coefficient value corresponds to the effect of changing said factor from '0' to '1'.
     
     How to write lmer models:
     
@@ -75,10 +73,10 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     #Check if R dependencies are installed
     __check_r_dependencies()
 
-    #Copy glm data to R
-    __process_glm_data(data, label_name, factor_type)
+    #Copy GLMM data to R
+    __process_glmm_data(data, label_name, factor_type)
     
-    execution_successful = __execute_glm(data_type, formula, random_effect)
+    execution_successful = __execute_glmm(data_type, formula, random_effect)
     if (execution_successful[0] == False):
         return execution_successful[1]
     try:
@@ -89,9 +87,9 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
         data[:, 0] -= np.nanmin(data[:, 0])
         data[:, 0] /= np.nanmax(data[:, 0])
         
-        __process_glm_data(data, label_name, factor_type)
+        __process_glmm_data(data, label_name, factor_type)
         
-        execution_successful = __execute_glm(data_type, formula, random_effect)
+        execution_successful = __execute_glmm(data_type, formula, random_effect)
         if (execution_successful[0] == False):
             return execution_successful[1]
         
@@ -141,30 +139,30 @@ def __pre_sanity_checks(data, formula):
     """
     Checks whether the input data is all zeros or all equal.
     
-    @param data: Input data samples x values
+    @param data: Input data samples x values.
     @param formula: Used to generate a negative result in case of an unexploreable data set.
     
-    @return: Returns all negative results in case of a failed check, True otherwise
+    @return: Returns all negative results in case of a failed check, True otherwise.
     """
     
     if (len(data) == 0):
         return __overwrite_negative_result(formula, "No samples within matrix")
     
-    # In case all values are equal, the R-based GLM will crash.
+    # In case all values are equal, the R-based GLMM will crash.
     # Therefore, this is caught here, returning P = 1 and matching values.
     if ((data[:, 0] == data[0, 0]).all()):
-        return __overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLM")
+        return __overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLMM")
     
     return True
 
 def __overwrite_negative_result(formula, error_msg):
     """
-    Returns negative results in case of an error
+    Returns negative results in case of an error.
     
-    @param formula: The formula applied is used to generate the correct amount of negative results (deducing the number and type of factors)
-    @param error_msg: The error message to be communicated
+    @param formula: The formula applied is used to generate the correct amount of negative results (deducing the number and type of factors).
+    @param error_msg: The error message to be communicated.
     
-    @return: A all negative result for any evaluated fixed factor
+    @return: A all negative result for any evaluated fixed factor.
     """
     
     fixed_factors = __get_factors(formula)[0] + ["(Intercept)"]
@@ -173,15 +171,15 @@ def __overwrite_negative_result(formula, error_msg):
     warnings.warn(error_msg, UserWarning)
     return negative_result
 
-def __execute_glm(data_type, formula, random_effect):
+def __execute_glmm(data_type, formula, random_effect):
     """
-    Estimates the glm defined in formula using the data already copied to R (variable name 'data').
+    Estimates the GLMM defined in formula using the data already copied to R (variable name 'data').
     
     @param data_type: The distribution of the observed variable. Either gaussian, binomial or poisson.
-    @param formula: The formula to be applied to the glm.
-    @param random_effect: Flag whether or not the formula includes random effects
+    @param formula: The formula to be applied to the GLMM.
+    @param random_effect: Flag whether or not the formula includes random effects.
     
-    @return True in case of success, False and a negative result otherwise
+    @return True in case of success, False and a negative result otherwise.
     """
     
     try:
@@ -206,18 +204,18 @@ def __execute_glm(data_type, formula, random_effect):
             else:
                 return (False, overwrite_negative_result(formula, "Unknown error in input data matrix"))
 
-def __process_glm_data(data, label_name, factor_type):
-    glm_data = __anova_container(data, label_name, factor_type)
+def __process_glmm_data(data, label_name, factor_type):
+    glmm_data = __anova_container(data, label_name, factor_type)
     
-    for idx in range(0, len(glm_data.label_name)):
-        tmp = ro.r.matrix(glm_data.data[:, idx], nrow = len(glm_data.data[:, idx]), ncol = 1)
-        ro.r.assign(glm_data.label_name[idx], tmp)
+    for idx in range(0, len(glmm_data.label_name)):
+        tmp = ro.r.matrix(glmm_data.data[:, idx], nrow = len(glmm_data.data[:, idx]), ncol = 1)
+        ro.r.assign(glmm_data.label_name[idx], tmp)
         
-    glm_data.send_labels()
+    glmm_data.send_labels()
 
 def __check_r_dependencies():
     """
-    Checks whether all R dependncies for the glm are installied, raises an exception otherwise
+    Checks whether all R dependncies for the GLMM are installied, raises an exception otherwise
     """
     
     r_dependencies = ["Matrix", "lme4", "carData", "car"]
@@ -228,11 +226,9 @@ def __check_r_dependencies():
 
 def __collect_results():
     """
-    Collects the results from R and transfers them back to python. As the anova call and the glm call
-    may return the factors with slightly different names and in different order, the results are
-    synchronized for a coherent return.
+    Collects the results from R and transfers them back to python. As the anova call and the GLMM call may return the factors with slightly different names and in different order, the results are synchronized for a coherent return.
     
-    @return: scores, p-values, degrees of freedom, anova factor names, coefficients, coefficient names and standard errors of the coefficients
+    @return: scores, p-values, degrees of freedom, anova factor names, coefficients, coefficient names and standard errors of the coefficients.
     """
     scores        = list()
     p_values      = list()
@@ -269,17 +265,15 @@ def __collect_results():
 def __result_sanity_check(final_coeff_names, final_coefficients, final_std_error,
                         final_df, final_anova_factors, final_scores, final_p_values):
     """
-    Checks whether the results from the anova and the glm call returned the same number of arguments.
-    This should *theoretically* always be the case.
-    Raises an error in case the sanity check fails.
+    Checks whether the results from the anova and the GLMM call returned the same number of arguments. This should *theoretically* always be the case. Raises an error in case the sanity check fails.
     
-    @param final_coeff_names: Names of the coefficients
-    @param final_coefficients: Coefficients from the glm call
-    @param final_std_error: Standard errors from the glm call
-    @param final_df: Degrees of freedom from the anova call
-    @param final_anova_factors: Name of factors from the anova call
-    @param final_scores: Scores from the anova call
-    @param final_p_values: P-values from the anova call
+    @param final_coeff_names: Names of the coefficients.
+    @param final_coefficients: Coefficients from the GLMM call.
+    @param final_std_error: Standard errors from the GLMM call.
+    @param final_df: Degrees of freedom from the anova call.
+    @param final_anova_factors: Name of factors from the anova call.
+    @param final_scores: Scores from the anova call.
+    @param final_p_values: P-values from the anova call.
     
     """    
     
@@ -301,7 +295,7 @@ def __sync_meta_info(names, values, values_2, formula, skip_missing = False):
     @param formula: A reference for the order of the factors named in names.
     @param skip_missing: If flagged, missing values can be skipped.
     
-    @return: names, values, values_2 as consistently sorted variants
+    @return: names, values, values_2 as consistently sorted variants.
     """
     
     #formula_names = get_fixed_factors(formula) + ["(Intercept)"]
@@ -345,15 +339,15 @@ def __sync_meta_info(names, values, values_2, formula, skip_missing = False):
     
 def __sync_anova_info(anova_factors, scores, df, p_values, formula):
     """
-    Synchronizes the order of factors to the order defined in the formula
+    Synchronizes the order of factors to the order defined in the formula.
+    
     @param anova_factors: Names of the factors.
     @param scores: Scores of the factors.
     @param df: Degrees of freedom of the factors.
     @param p_values: P-values of the factors.
     @param formula: Formula which is used as a reference order for the factors.
     
-    @return: Names of the anova factors, scores, degrees of freedom, p-values, all ordered according
-    to the order reference in the formula.
+    @return: Names of the anova factors, scores, degrees of freedom, p-values, all ordered according to the order reference in the formula.
     """
     
     #formula_names = get_fixed_factors(formula) + ["(Intercept)"]
@@ -400,11 +394,11 @@ def __get_factors(formula):
 
 def __split_effects(formula):
     """
-    Splits the effects specified in the formula into fixed effects and random effects
+    Splits the effects specified in the formula into fixed effects and random effects.
     
     @param formula: The formula to be parsed.
     
-    @return: (fixed effects, random effects) - as two lists
+    @return: (fixed effects, random effects) - as two lists.
     """
  
     fixed_effects = list()
@@ -447,7 +441,7 @@ def __clean_formula(formula):
     
     @param formula: The formula to be preprocessed for parsing.
     
-    @return: The refined formula
+    @return: The refined formula.
     """
     formula = __rm_empty_space(formula)
     formula = __replace_operator(formula)
@@ -477,7 +471,7 @@ def __replace_operator(formula):
     Replaces convoluted operators in formulas with their elongated versions for parsing. The operators
     '*' (crossed) and '/' (nested) get replaced with A*B -> A+B+A:B and A/B -> A+A:B respectively.
     
-    @param formula: The formula to be parsed
+    @param formula: The formula to be parsed.
     
     @return: formula without the operators '*' (crossed) and '/' (nested).
     """
@@ -506,8 +500,7 @@ def __replace_operator(formula):
 
 def __find_idx(formula):
     """
-    Finds the next occurance of the '*' (cross) or '/' (nested) operator in
-    a given formula.
+    Finds the next occurance of the '*' (cross) or '/' (nested) operator in a given formula.
     
     @param formula: The formula to be parsed.
     
@@ -522,12 +515,10 @@ def __find_idx(formula):
 
 def __find_left_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
     """
-    In case an operator is part of a bracketed equation, the left bracket is looked for. In case a
-    closeing right side bracked is found, it is recognized and a left bracket is skipped for each additional
-    right side bracket.
+    In case an operator is part of a bracketed equation, the left bracket is looked for. In case a closeing right side bracked is found, it is recognized and a left bracket is skipped for each additional right side bracket.
     
     @param formula: The formula to be parsed.
-    @param idx: The index within the formula string on where to start the search for the left side bracket
+    @param idx: The index within the formula string on where to start the search for the left side bracket.
     @param operators: List of operators to be distinguished from brackets (aka. factor name terminating objects).
     
     @return index of the corresponding closing left bracket.
@@ -553,9 +544,7 @@ def __find_left_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
         
 def __find_right_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
     """
-    In case an operator is part of a bracketed equation, the right bracket is looked for. In case a
-    closeing left side bracked is found, it is recognized and a right bracket is skipped for each additional
-    left side bracket.
+    In case an operator is part of a bracketed equation, the right bracket is looked for. In case a closeing left side bracked is found, it is recognized and a right bracket is skipped for each additional left side bracket.
     
     @param formula: The formula to be parsed.
     @param idx: The index within the formula string on where to start the search for the right side bracket
