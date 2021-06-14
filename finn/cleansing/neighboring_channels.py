@@ -3,7 +3,7 @@ Created on May 27, 2019
 
 @author: voodoocode
 
-This module contains a list of neighboring EEG channels.
+This module contains a list of neighboring EEG channels. This file is to be moved into an external *.csv file in the future.
 
 '''
 

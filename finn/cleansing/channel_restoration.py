@@ -1,6 +1,8 @@
 '''
 Created on Jun 2, 2020
 
+This module implements functions to restore channels as an approach to deal with missing and/or bad channels.
+
 :author: voodoocode
 '''
 
@@ -8,6 +10,15 @@ import numpy as np
 import finn.cleansing.neighboring_channels as nc
 
 def __get_neighbor_channel_ids(ch_names):
+    """
+    
+    Determines the neighboring channels of a specific channel
+    
+    :param ch_names: Channel list whose neighbors are to be identified.
+    
+    :return: List of neighboring channels (between two and four per channel of interest).
+    
+    """
     neigh_list = nc.neighbor_channels
     
     neigh_idx_list = dict()
@@ -22,7 +33,7 @@ def run(data, ch_names, bad_ch_idx_list):
     """
     Restores channel by averaging signals from their respective neighbors. In case neighboring channels are flagged as bad, channels get iteratively restored, from the channel with the most valid neighbors to the channel with the least. Restored channels are considered valid candidates for channel reconstruction.
     
-    :param data: input data in the format channels x samples
+    :param data: Input data in the format channels x samples.
     :param ch_names: Names of the channles from the input data. Order needs to be aligned with the channel order of ch_names.
     :param bad_ch_idx_list: List of bad channels with are selected for substitution by their neighbors.
     

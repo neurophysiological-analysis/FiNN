@@ -49,10 +49,12 @@
 <h1>(data) cleansing package<a class="headerlink" href="#data-cleansing-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-cleansing">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cleansing" title="Permalink to this headline">¶</a></h2>
+<p>This package implements a number of different tools for data cleansing. Overall data quality may be increased at the cost of a reduced sample count.</p>
 </div>
 <div class="section" id="module-cleansing.bad_channel_identification">
 <span id="cleansing-bad-channel-identification-module"></span><h2>cleansing.bad_channel_identification module<a class="headerlink" href="#module-cleansing.bad_channel_identification" title="Permalink to this headline">¶</a></h2>
 <p>Created on Jun 2, 2020</p>
+<p>This module implements a function to identify bad channels based on increased/decreased power within a channel compared to the majority of other channels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -61,16 +63,16 @@
 <dl class="py function">
 <dt id="cleansing.bad_channel_identification.run">
 <code class="sig-prename descclassname">cleansing.bad_channel_identification.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">ch_names</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">ref_areas</span><span class="o">=</span><span class="default_value">[[105, 120], [135, 145], [155, 195]]</span></em>, <em class="sig-param"><span class="n">broadness</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">visual_inspection</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cleansing.bad_channel_identification.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Identifices which channel have substantially more or less power in frequency ranges defined by ref_areas. Channels whose power is more different than broadness (default: 3) standard deviations will be primed as faulty channels. In case visual inspection is active (default: True), the automatic results can be further refined via manual selection.</p>
-<p>Attention: Function is parallelized. Outside parallelization may result in expected behaviour.</p>
+<dd><p>Identifies which channels have substantially more or less power in the frequency ranges defined by ref_areas. Channels whose power is more different than <em>broadness</em> (default: 3) standard deviations will be primed as faulty channels. In case visual inspection is <em>active</em> (default: True), the automatic results can be further refined via manual selection.</p>
+<p>Attention: Function is parallelized. Sensitive parts are placed within a locked area to avoid unexpected behaviour.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – input data in the format channel x samples</p></li>
-<li><p><strong>ch_names</strong> – names of the channels. Used for visualization purposes only. Order has to match the channel order of data</p></li>
-<li><p><strong>fs</strong> – list of sampling frequencies for each channel</p></li>
-<li><p><strong>ref_areas</strong> – spectral reference areas used for power estimation. Only power within these ranges is defined. It is recommended to choose ranges, which are not part of any evaluation to decrease the chances of pre-processing induced biases.</p></li>
-<li><p><strong>broadness</strong> – Number of standard deviations threshold by which channels are categorized as faulty.</p></li>
+<li><p><strong>data</strong> – Input data in the format channel x samples.</p></li>
+<li><p><strong>ch_names</strong> – Names of the channels. Used for visualization purposes only. Order has to match the channel order of data.</p></li>
+<li><p><strong>fs</strong> – List of sampling frequencies for each channel.</p></li>
+<li><p><strong>ref_areas</strong> – Spectral reference areas used for power estimation. Only power within these ranges is defined. It is recommended to choose ranges, which are not part of any evaluation to decrease the chances of pre-processing induced biases.</p></li>
+<li><p><strong>broadness</strong> – Number of standard deviations threshold by which channels are automatically categorized as faulty. In case visual inspection is enabled (recommended) this only results in priming the channels.</p></li>
 <li><p><strong>visual_inspection</strong> – Toggles visual inspection on and off.</p></li>
 </ul>
 </dd>
@@ -84,6 +86,7 @@
 <div class="section" id="module-cleansing.channel_restoration">
 <span id="cleansing-channel-restoration-module"></span><h2>cleansing.channel_restoration module<a class="headerlink" href="#module-cleansing.channel_restoration" title="Permalink to this headline">¶</a></h2>
 <p>Created on Jun 2, 2020</p>
+<p>This module implements functions to restore channels as an approach to deal with missing and/or bad channels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -96,7 +99,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – input data in the format channels x samples</p></li>
+<li><p><strong>data</strong> – Input data in the format channels x samples.</p></li>
 <li><p><strong>ch_names</strong> – Names of the channles from the input data. Order needs to be aligned with the channel order of ch_names.</p></li>
 <li><p><strong>bad_ch_idx_list</strong> – List of bad channels with are selected for substitution by their neighbors.</p></li>
 </ul>
@@ -111,6 +114,7 @@
 <div class="section" id="module-cleansing.outlier_removal">
 <span id="cleansing-outlier-removal-module"></span><h2>cleansing.outlier_removal module<a class="headerlink" href="#module-cleansing.outlier_removal" title="Permalink to this headline">¶</a></h2>
 <p>Created on Jun 12, 2018</p>
+<p>This module implements code to identify (and remove) outliers in a data-set.</p>
 <dl class="field-list simple">
 <dt class="field-odd">author</dt>
 <dd class="field-odd"><p>voodoocode</p>
@@ -119,13 +123,12 @@
 <dl class="py function">
 <dt id="cleansing.outlier_removal.run">
 <code class="sig-prename descclassname">cleansing.outlier_removal.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">ref</span></em>, <em class="sig-param"><span class="n">max_std_dist</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">min_samp_cnt</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cleansing.outlier_removal.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes any sample more distant from the mean than max_std_dist standard deviations. Terminates if either all samples are within
-the threshold or if the minimal sample count defined by min_samp_cnt is reached.</p>
+<dd><p>Removes any sample more distant from the mean than max_std_dist standard deviations. Terminates if either all samples are within the threshold or if the minimal sample count defined by min_samp_cnt is reached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Input data</p></li>
-<li><p><strong>ref</strong> – Single dimensional reference data</p></li>
+<li><p><strong>data</strong> – Input data.</p></li>
+<li><p><strong>ref</strong> – Single dimensional reference data.</p></li>
 <li><p><strong>maxStdDist</strong> – Threshold for outlier detection. Number of standard deviations permissible.</p></li>
 <li><p><strong>min_samp_cnt</strong> – Minimal viable sample count. Terminates if reduced below this number or the current iteration would reduce below this number.</p></li>
 </ul>

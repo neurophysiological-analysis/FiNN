@@ -1,3 +1,12 @@
+"""
+Created on Dec 29, 2020
+
+This module provides different functions to estimate sfc between two signals from the time domain.
+
+@author: voodoocode
+
+"""
+
 import numpy as np
 import finn.sfc.__misc as misc
 import finn.sfc.fd as fd
@@ -9,30 +18,25 @@ def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = 
     """
     Calculates the directional absolute coherence between two signals. Assumes data_1 and data_2 to be from time domain.
     
-    As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient,
-    the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.
+    As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.
     
     Important design decision:
     - In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
     - In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.
     
-    The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°].
-    Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these
-    root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. 
-    Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. 
-    Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume
-    conduction effects.
+    The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.
     
-    :param data_1: First dataset from time domain; vector of samples
-    :param data_2: Second dataset from time domain; vector of samples
+    :param data_1: First dataset from time domain; vector of samples.
+    :param data_2: Second dataset from time domain; vector of samples.
     :param fmin: Minimum frequency of the frequency range on which coherency gets evaluated.
     :param fmax: Maximum frequency of the frequency range on which coherency gets evaluated.
-    :param fs: Sampling frequency
-    :param nperseg: Size of individual segments in fft
-    :param nfft: fft window size
-    :param return_signed_conn: Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information
+    :param fs: Sampling frequency.
+    :param nperseg: Size of individual segments in fft.
+    :param nfft: fft window size.
+    :param return_signed_conn: Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information.
     :param minimal_angle_thresh: The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan. 
-    :return: (bins, conn) - Frequency bins and corresponding same_frequency_coupling values
+    
+    :return: (bins, conn) - Frequency bins and corresponding same_frequency_coupling values.
     """
     
     (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hanning")
@@ -43,14 +47,15 @@ def run_wpli(data1, data2, fs, nperseg, nfft, window = "hann", pad_type = "zero"
     """
     This function calculates the weighted phase lag index between two signals. 
     
-    :param data1: First dataset from time domain; vector of samples
-    :param data2: Second dataset from time domain; vector of samples
-    :param fs: Sampling frequency
-    :param nperseg: Number of data points per segment
-    :param nfft: FFT window size
-    :param window: FFT window type. Supported window types are listed at https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html
+    :param data1: First dataset from time domain; vector of samples.
+    :param data2: Second dataset from time domain; vector of samples.
+    :param fs: Sampling frequency.
+    :param nperseg: Number of data points per segment.
+    :param nfft: FFT window size.
+    :param window: FFT window type. Supported window types are listed at https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html.
     :param pad_type: Padding type, currently only "zero" padding is supported.
-    :return: (bins, conn) - Frequency bins and corresponding weighted phase lag index values
+    
+    :return: (bins, conn) - Frequency bins and corresponding weighted phase lag index values.
     """
     s_xy = list()
     for block_start in np.arange(0, np.min([len(data1), len(data2)]) - nperseg, nperseg):
@@ -73,17 +78,18 @@ def run_psi(data_X, data_Y, nperseg_outer, fs, nperseg_inner, nfft, window, pad_
     """
     Calculates the phase slope index between two signals. Assumes data_1 and data_2 to be from time domain.
   
-    :param data_1: First dataset from time domain; vector of samples
-    :param data_2: Second dataset from time domain; vector of samples
-    :param nperseg_outer: Outer window size
-    :param fs: Sampling frequency
-    :param nperseg_inner: Inner window size
-    :param nfft: fft window size
-    :param window: FFT window type. Supported window types are listed at https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html
+    :param data_1: First dataset from time domain; vector of samples.
+    :param data_2: Second dataset from time domain; vector of samples.
+    :param nperseg_outer: Outer window size.
+    :param fs: Sampling frequency.
+    :param nperseg_inner: Inner window size.
+    :param nfft: fft window size.
+    :param window: FFT window type. Supported window types are listed at https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html.
     :param pad_type: Padding type, currently only "zero" padding is supported.
     :param f_min: Minimum frequence for the evaluated interval.
     :param f_max: Maximum frequence for the evaluated interval.
     :param f_step_sz: Frequency step size in the evaluated interval.
+    
     :return: Connectivity between data1 and data 2 measured using the phase slope index.
     """
   
@@ -101,13 +107,13 @@ def run_ic(data_1, data_2, fs, nperseg, nfft):
     """
     Calculates the imaginary coherency between two signals. Assumes data_1 and data_2 to be from time domain.
   
-    :param data_1: First dataset from time domain; vector of samples
-    :param data_2: Second dataset from time domain; vector of samples
-    :param fs: Sampling frequency
-    :param nperseg: Size of individual segments in fft
-    :param nfft: fft window size
+    :param data_1: First dataset from time domain; vector of samples.
+    :param data_2: Second dataset from time domain; vector of samples.
+    :param fs: Sampling frequency.
+    :param nperseg: Size of individual segments in fft.
+    :param nfft: fft window size.
     
-    :return: (bins, conn) - Frequency bins and corresponding imaginary coherency values
+    :return: (bins, conn) - Frequency bins and corresponding imaginary coherency values.
     """
     
     (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hanning")
@@ -118,13 +124,13 @@ def run_msc(data_1, data_2, fs, nperseg, nfft):
     """
     Calculates the magnitude squared coherency between two signals. Assumes data_1 and data_2 to be from time domain.
   
-    :param data_1: First dataset from time domain; vector of samples
-    :param data_2: Second dataset from time domain; vector of samples
-    :param fs: Sampling frequency
-    :param nperseg: Size of individual segments in fft
-    :param nfft: fft window size
+    :param data_1: First dataset from time domain; vector of samples.
+    :param data_2: Second dataset from time domain; vector of samples.
+    :param fs: Sampling frequency.
+    :param nperseg: Size of individual segments in fft.
+    :param nfft: fft window size.
     
-    :return: (bins, conn) - Frequency bins and corresponding magnitude squared coherence values
+    :return: (bins, conn) - Frequency bins and corresponding magnitude squared coherence values.
     """
     
     (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hanning")
@@ -141,9 +147,9 @@ def run_cc(data_X, data_Y, nperseg, pad_type, fs, nfft, window):
     :param pad_type: padding type to be applied.
     :param fs: Sampling frequency.
     :param nfft: Size of fft window.
-    :param window: FFT window type. Supported window types are listed at https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html
+    :param window: FFT window type. Supported window types are listed at https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html.
     
-    :return: Complex coherency
+    :return: Complex coherency.
     """
 
     seg_data_X = misc.__segment_data(data_X, nperseg, pad_type)

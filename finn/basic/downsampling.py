@@ -37,7 +37,7 @@ def __nextPowerTwo(value):
     
     :param value: The value to start the search.
     
-    :return: A power of two >= value
+    :return: A power of two >= value.
     
     Source: https://stackoverflow.com/questions/14267555/find-the-smallest-power-of-2-greater-than-n-in-python
     """

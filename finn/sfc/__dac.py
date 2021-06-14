@@ -1,6 +1,8 @@
 '''
 Created on Dec 29, 2020
 
+This module implements the DAC metric.
+
 @author: voodoocode
 '''
 
@@ -40,3 +42,12 @@ def run(coh, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh =
         return np.sign(np.imag(psi)) * np.mean(np.square(np.abs(coh))[f_min_idx:f_max_idx])
     else:
         return np.mean(np.square(np.abs(coh))[f_min_idx:f_max_idx])
+    
+    
+    
+    
+    
+    
+    
+    
+    

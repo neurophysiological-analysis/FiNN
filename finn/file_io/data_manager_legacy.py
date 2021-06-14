@@ -1,3 +1,10 @@
+"""
+
+**Depricated**. Will be removed in a future version. 
+
+"""
+
+
 import os.path
 import numpy as np
 import pickle
@@ -5,7 +12,7 @@ import warnings
 
 def save(data, path = "", var_name = "data", max_depth = 2, ending = None):
 	"""
-	*Depricated*. Will be removed in a future version. Saves data using the legacy data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
+	**Depricated**. Will be removed in a future version. Saves data using the legacy data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
    
 	:param data: The data to be stored.
 	:param path: Location for data storage.
@@ -70,7 +77,7 @@ def __save(data, path, curr_depth, max_depth = 2, ending = None):
 
 def load(path, verbose = False):
 	"""
-	Loads data stored via the data_manager.
+	**Depricated**. Will be removed in a future version. Loads data stored via the data_manager.
 	
 	:param path: Location from which the data is to be read.
 	:param legacy_mode: *deprecated* Will be removed in a future version.

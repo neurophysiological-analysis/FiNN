@@ -1,6 +1,8 @@
 '''
 Created on Dec 29, 2020
 
+This module implements different phase amplitude coupling metrics. 
+
 @author: voodoocode
 '''
 
@@ -17,8 +19,8 @@ def run_dmi(low_freq_data, high_freq_data,
     
     :param low_freq_data: Single array of low frequency data.
     :param high_freq_data: Single array of high frequency data.
-    :param phase_window_half_size: Width of the phase window used for calculation of frequency/phase histogram. Amplitude gets added to every phase bin within the window size. Larger windows result in more smooth/increased PAC estimates.
-    :param phase_step_width: Step width/shift of the phase window used for calculation of frequency/phase histogram.
+    :param phase_window_half_size: Width of the phase window used for calculation of frequency/phase histogram. Amplitude gets added to every phase bin within the window size. Larger windows result in more smooth, but also potentially increased PAC estimates.
+    :param phase_step_width: Step width of the phase window used for calculation of frequency/phase histogram.
     :param max_model_fit_iterations: Maximum number of iterations applied during sine fitting.
     
     :return: Amount of phase amplitude coupling measured using the modulation index.
@@ -61,6 +63,15 @@ def run_dmi(low_freq_data, high_freq_data,
     return (score, result.best_fit, amplitude_signal)
 
 def __sine(x, phase, amp):
+    """
+    Internal method. Used in run_dmi to estimate the direct modulation index. The amount of PAC is quantified via a sine fit. This sine is defined by the following paramters:
+    
+    :param x: Samples
+    :param phase: Phase shift of the sine.
+    :param amp: Amplitude of the sine.
+    
+    :return: Returns the fitted sine at the locations indicated by x.
+    """
     freq = 1
     fs = 1
     return amp * (np.sin(2 * np.pi * freq * (x - phase) / fs))

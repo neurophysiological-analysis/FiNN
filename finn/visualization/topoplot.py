@@ -1,6 +1,8 @@
 '''
 Created on Jun 12, 2018
 
+Creates a topoplot from provided data, indicating either size of change or size of change and significance.
+
 :author: voodoocode
 '''
 
@@ -56,9 +58,10 @@ class topoplot():
         :param v_max: Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.
         :param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.
         :param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.
-        :param  file_path: Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
+        :param file_path: Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
         :param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
         :param annotate_ch_names: If true, channels get annotate with their individual names.
+        
         :return: The figure and the axes object to easen the inclusion of a plot into a larger picture.
         """
         
@@ -374,6 +377,11 @@ class topoplot():
             ax.annotate(text, [coords[0, chIdx], coords[1, chIdx]], zorder = 3)
             
     def __get_eeg_ch_coords_10_20_ext_64(self):
+        """
+        
+        To be removed into a separate csv file at a later point.
+        
+        """
         coords = {
             "Cz" : [0, 0],
             "C1" : [-0.201729106628242, 0],

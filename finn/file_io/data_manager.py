@@ -1,6 +1,8 @@
 '''
 Created on Dec 30, 2020
 
+Implements a convenient data handler for large, unbalanced data sets. The data manager is to be provided with either a list, a dictionary, or a numpy array. These are traverse in order to save unbalanced data in smaller individual data junks. This avoids excessive memory consumption as observed when using pickle to storge large data containers (>2GB). 
+
 @author: voodoocode
 '''
 
@@ -33,6 +35,19 @@ def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
     pickle.dump(structure, open(path + "/meta.nfo", "wb"))
     
 def __save(data, path, current_depth, max_depth, structure = None):
+    """
+    
+    Internally recursively called until either an incompatible data type is discovered or the max_depth is reached.
+    
+    :param data: The data to be stored.
+    :param path: Location for data storage.
+    :param current_depth: The current depth of the tree.
+    :param max_depth: The depth to which folders are created prior to storing data via pickle.
+    :param structure: Data structure used for data storage.
+    
+    returns the data structure used for data storage.
+    
+    """
         
     if (type(data) == np.ndarray and current_depth < max_depth):
         structure = list(); structure.append("np.ndarray")
@@ -72,6 +87,8 @@ def load(path, legacy_mode = False):
     
     :param path: Location from which the data is to be read.
     :param legacy_mode: *deprecated* Will be removed in a future version.
+    
+    :return: The read data.
     """
     
     if (legacy_mode == True):
@@ -81,6 +98,16 @@ def load(path, legacy_mode = False):
     return __load(structure, path)
 
 def __load(structure, path):
+    """
+    
+    Internally recursively called to load data
+    
+    :param structure: Data format of the data. 
+    :param path: Current path.
+    
+    :return: Read data.
+    
+    """
     
     data = None
     

@@ -1,6 +1,8 @@
 '''
 Created on Jun 28, 2017
 
+Reads data from the brain-vision format.
+
 :author: maximilianscherer
 '''
 
@@ -9,15 +11,15 @@ import numpy as np
 
 def run(vhdr_path, badChList = [], montage_file = None, montage_path = None, preload = False, tmin = None, tmax = None, verbose = None):
     """
-    Load data recorded via the brain vision software.
+    Load data recorded via the brain vision software wrapping mne calls.
     
     :param vhdr: Path to the vhdr file.
     :param misc_ch: MISC - channels.
     :param montage_file: File name of the montage file. 
     :param montage_path: Path to the montage file. 
+    :param preload: If 'true' the data is loaded directly in this function. If 'false' only a container is created.
     :param tmin: Start of the returned recording segment in seconds.
     :param tmax: End of the returned recording segment in seconds.
-    :param preload: If 'true' the data is loaded directly in this function. If 'false' only a container is created.
     :param verbose: Verbose the command line output.
     
     :return: A raw data object containing either the data or a dummy container and the address of the 'to be loaded' data.
@@ -49,6 +51,7 @@ def readMarker(vmrkPath):
     Extracts the markers from a brain vision recording.
     
     :param vmrk_path: Path to the marker file.
+    
     :return: Returns a list of markers. Every marker is a dictionary with a type and an index.
     """
     mrkFile = open(vmrkPath, "r")
