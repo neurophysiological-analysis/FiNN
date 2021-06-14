@@ -12,8 +12,9 @@ def run(data, src_freq, tgt_freq):
     """
     Downsamples a signal (data) from src_freq to tgt_freq.
     
+    :param data: The data to be downsampled. 
     :param src_freq: The original frequency of the signal.
-    :param tgt_freq: the new frequency of the signal.
+    :param tgt_freq: The new frequency of the signal.
     :return: Downsampled data
     """
     
