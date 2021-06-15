@@ -14,7 +14,7 @@ import matplotlib
 matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
-import finn_demo.demo_data.demo_data_paths as paths
+import demo_data.demo_data_paths as paths
 
 def mag_sq_coh(data, _0, _1, frequency_tgt, _2, _3):
     return cohd.run_msc(data)[frequency_tgt]

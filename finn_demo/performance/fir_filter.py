@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import time
 import os
 
-import finn_demo.demo_data.demo_data_paths as paths
+import demo_data.demo_data_paths as paths
 
 def main(mode = "fast", save_results = False, overwrite = True):
     repetitions = [1, 2, 10, 20, 120, 240, 720]

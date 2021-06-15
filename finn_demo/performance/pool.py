@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 import finn.filters.frequency as ff
 
-import finn_demo.demo_data.demo_data_paths as paths
+import demo_data.demo_data_paths as paths
 
 def demo_fnct2(data):
     data2 = ff.fir(data, 10, 20, 0.1, 5500, 10e-5, 10e-7, 5500, "zero")

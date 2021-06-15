@@ -15,7 +15,7 @@ import finn.sfc.fd as fd
 import finn.sfc.cd as cohd
 
 import finn.sfc.__misc as misc
-import finn_demo.demo_data.demo_data_paths as paths
+import demo_data.demo_data_paths as paths
 
 def main():
     data = np.load(paths.fct_sfc_data)
@@ -85,7 +85,7 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, 
     return fd.run_ic(fd_signal_1, fd_signal_2)[1][[np.argmin(np.abs(bins - frequency_target))]]
         
 def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    (bins, coh) = td.run_cc.run(signal_1, signal_2, nperseg, "zero", frequency_sampling, nfft, "hanning")
+    (bins, coh) = td.run_cc(signal_1, signal_2, nperseg, "zero", frequency_sampling, nfft, "hanning")
     
     return cohd.run_ic(coh)[np.argmin(np.abs(bins - frequency_target))]
     
