@@ -33,7 +33,7 @@ def run_dac(data_1, data_2, bins, fmin, fmax, return_signed_conn = True, minimal
     :return: Connectivity between data_1 and data_2 measured using the directionalized absolute coherence.
     """
     
-    coh = fd.run_cc(data_1, data_2)
+    coh = run_cc(data_1, data_2)
     
     return calc_dac.run(coh, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh)
 
