@@ -10,7 +10,7 @@ import finn.sfc.td as td
 import finn.sfc.fd as fd
 
 import finn.sfc.__misc as misc
-import finn_demo.demo_data.demo_data_paths as paths
+import demo_data.demo_data_paths as paths
 
 def main():
     data = np.load(paths.fct_sfc_data)
