@@ -101,7 +101,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
         (final_coeff_names, final_coefficients, final_std_error) = __sync_meta_info(coeff_names, coefficients, coeff_std_error, formula)
         (final_anova_factors, final_scores, final_df, final_p_values) = __sync_anova_info(anova_factors, scores, df, p_values, formula)
     except:
-        return overwrite_negative_result(formula, "A coefficient was dropped. Cannot evaluate formula due to insufficient data.")
+        return __overwrite_negative_result(formula, "A coefficient was dropped. Cannot evaluate formula due to insufficient data.")
          
     __result_sanity_check(final_coeff_names, final_coefficients, final_std_error, final_df, final_anova_factors, final_scores, final_p_values)
     
@@ -198,11 +198,11 @@ def __execute_glmm(data_type, formula, random_effect):
     except rpy2.rinterface_lib.embedded.RRuntimeError as e:
         if (len(e.args) > 0):
             if (e.args[0] == 'Error: grouping factors must have > 1 sampled level\n'):
-                return (False, overwrite_negative_result(formula, "Grouping factors must have > 1 sampled level"))
+                return (False, __overwrite_negative_result(formula, "Grouping factors must have > 1 sampled level"))
             elif (e.args[0] == 'Error: number of levels of each grouping factor must be < number of observations\n'):
-                return (False, overwrite_negative_result(formula, "Number of levels of each grouping factor must be < number of observations"))
+                return (False, __overwrite_negative_result(formula, "Number of levels of each grouping factor must be < number of observations"))
             else:
-                return (False, overwrite_negative_result(formula, "Unknown error in input data matrix"))
+                return (False, __overwrite_negative_result(formula, "Unknown error in input data matrix"))
 
 def __process_glmm_data(data, label_name, factor_type):
     glmm_data = __anova_container(data, label_name, factor_type)
