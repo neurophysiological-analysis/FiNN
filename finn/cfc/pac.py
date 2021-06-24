@@ -12,7 +12,7 @@ import scipy.stats
 import lmfit
 
 def run_dmi(low_freq_data, high_freq_data,
-         frequency_window_half_size = 10, frequency_step_width = 1,
+         phase_window_half_size = 10, phase_step_width = 1,
          max_model_fit_iterations = 200):
     """
     Calculates the direct modulation index between a low frequency signal and a high frequency signal. Instead of the original modulation index based on entropy, this modulation index estimate is based on a sinusoidal fit. 
@@ -27,10 +27,10 @@ def run_dmi(low_freq_data, high_freq_data,
     """
     
     phase_signal = np.angle(scipy.signal.hilbert(low_freq_data), deg = True)
-    amplitude_signal = np.zeros(np.arange(-180, 181, frequency_step_width).shape)
+    amplitude_signal = np.zeros(np.arange(-180, 181, phase_step_width).shape)
     
-    for (phaseIdx, loc_phase) in enumerate(np.arange(-180, 181, frequency_step_width)):
-        phase_indices = np.argwhere(np.abs(phase_signal - loc_phase) < frequency_window_half_size)
+    for (phaseIdx, loc_phase) in enumerate(np.arange(-180, 181, phase_step_width)):
+        phase_indices = np.argwhere(np.abs(phase_signal - loc_phase) < phase_window_half_size)
 
         if (len(phase_indices) == 0):
             amplitude_signal[phaseIdx] = np.nan
