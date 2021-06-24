@@ -18,13 +18,16 @@ def run_dmi(low_freq_data, high_freq_data,
     Calculates the direct modulation index between a low frequency signal and a high frequency signal. Instead of the original modulation index based on entropy, this modulation index estimate is based on a sinusoidal fit. 
     
     :param low_freq_data: Single array of low frequency data.
-    :param high_freq_data: Single array of high frequency data.
+    :param high_freq_data: Single array of high frequency data. Must have the same length as low_freq_data.
     :param phase_window_half_size: Width of the phase window used for calculation of frequency/phase histogram. Amplitude gets added to every phase bin within the window size. Larger windows result in more smooth, but also potentially increased PAC estimates.
     :param phase_step_width: Step width of the phase window used for calculation of frequency/phase histogram.
     :param max_model_fit_iterations: Maximum number of iterations applied during sine fitting.
     
     :return: Amount of phase amplitude coupling measured using the modulation index.
     """
+    
+    if (len(low_freq_data) != len(high_freq_data)):
+        AssertionError("Both signals must have the same length")
     
     phase_signal = np.angle(scipy.signal.hilbert(low_freq_data), deg = True)
     amplitude_signal = np.zeros(np.arange(-180, 181, phase_step_width).shape)
