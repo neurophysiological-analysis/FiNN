@@ -27,7 +27,7 @@ def run_dmi(low_freq_data, high_freq_data,
     """
     
     if (len(low_freq_data) != len(high_freq_data)):
-        AssertionError("Both signals must have the same length")
+        raise AssertionError("Both signals must have the same length")
     
     phase_signal = np.angle(scipy.signal.hilbert(low_freq_data), deg = True)
     amplitude_signal = np.zeros(np.arange(-180, 181, phase_step_width).shape)
