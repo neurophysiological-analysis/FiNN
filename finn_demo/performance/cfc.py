@@ -89,7 +89,7 @@ def main(write_csv = False, visualize = True):
             scores = list(); best_fits = list(); amplitude_signals = list()
             for high_freq_signal in high_freq_signals:
                 for low_freq_signal in low_freq_signals:
-                    tmp = pac.run_dmi(low_freq_signal, high_freq_signal, frequency_window_half_size = 4, frequency_step_width = 2)
+                    tmp = pac.run_dmi(low_freq_signal, high_freq_signal, phase_window_half_size = 4, phase_step_width = 2)
                     d_mi_score = tmp[0]
                     plv_score = pac.run_plv(low_freq_signal, high_freq_signal)
                     mvl_score = pac.run_mvl(low_freq_signal, high_freq_signal)
