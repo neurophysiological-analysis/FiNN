@@ -17,12 +17,15 @@ def run(data, ref, max_std_dist = 2, min_samp_cnt = 5, axis = None):
     :param data: Input data. 
     :param ref: Single dimensional reference data.
     :param maxStdDist: Threshold for outlier detection. Number of standard deviations permissible.
-    :param min_samp_cnt: Minimal viable sample count. Terminates if reduced below this number or the current iteration would reduce below this number. 
+    :param min_samp_cnt: Minimal viable sample count. Terminates if reduced below this number or the current iteration would reduce below this number.
+    :param axis: Axis on which to evaluate the data object 
     
     :return: Filtered array without outlier more different than n standard deviations.
     """
     
-    if (len(data) < min_samp_cnt):
+    data = np.asarray(data)
+    
+    if (data.shape[axis] < min_samp_cnt):
         return data
     
     while (True):
