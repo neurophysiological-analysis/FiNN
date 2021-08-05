@@ -15,6 +15,8 @@ matplotlib.use("Qt5Agg")
 import matplotlib.markers
 import matplotlib.pyplot as plt
 
+import pyexcel_ods
+
 class topoplot():
     """
     topoplot generation class. Initialition costs a couple of seconds due to mask generation.
@@ -25,7 +27,8 @@ class topoplot():
     topoplot_mask_data = None
     default_v_diff = 50
     win_sz = 1.3
-    get_eeg_ch_coords = None
+    get_coords = None
+    mode = None
 
     def __init__(self, mode):
         """
@@ -35,12 +38,25 @@ class topoplot():
         Currently supports: The extended 10-20 system for 64 channels - ext_10_20_64_ch
         """
         
-        if (mode == "ext_10_20_64_ch"):
-            self.get_eeg_ch_coords = self.__get_eeg_ch_coords_10_20_ext_64
-        else:
+        if (mode not in ["EEG", "MEG"]):
             raise NotImplementedError("This setup has not yet been implemented")
+        else:
+            self.mode = mode
+            self.get_coords = self.__read_map
         
         self.__generate_topoplot_mask()
+
+    def __read_map(self, mode):
+        map_file = pyexcel_ods.read_data("methods/visualization_map.ods")[mode]
+        while (len(map_file[-1]) == 0): #Remove trailing empty rows
+            map_file = map_file[:-1]
+        map_file = np.asarray(map_file)
+        
+        ch_pos = dict()
+        for (line_idx, _) in enumerate(map_file):
+            ch_pos[str(map_file[line_idx][2])] = (map_file[line_idx][0], map_file[line_idx][1])
+        
+        return ch_pos
 
     def run(self, values, ch_name_list, 
             omit_channels = None, substitute_channels = None, 
@@ -66,10 +82,20 @@ class topoplot():
         """
         
         coords = list()
-        coord_ref_list = self.get_eeg_ch_coords()
-        for ch_name in ch_name_list:
+        coord_ref_list = self.get_coords(self.mode)
+        filt_values = list()
+        filt_ch_names = list()
+        for (ch_name_idx, ch_name) in enumerate(ch_name_list):
+            if (ch_name not in coord_ref_list.keys()):
+                continue
+            
             coords.append(coord_ref_list[ch_name])
-        coords = np.asarray(coords)
+            filt_values.append(values[ch_name_idx])
+            filt_ch_names.append(ch_name)
+        
+        values = np.asarray(filt_values)
+        ch_name_list = filt_ch_names 
+        coords = np.asarray(coords, dtype = np.float32)
         coords = coords.transpose()
         
         (fig, ax) = plt.subplots(1, 1)
@@ -376,7 +402,7 @@ class topoplot():
             text = ch_name_list[chIdx]
             ax.annotate(text, [coords[0, chIdx], coords[1, chIdx]], zorder = 3)
             
-    def __get_eeg_ch_coords_10_20_ext_64(self):
+    def __get_eeg_ch_coords(self):
         """
         
         To be removed into a separate csv file at a later point.
