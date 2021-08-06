@@ -73,7 +73,7 @@ def __save(data, path, current_depth, max_depth, structure = None):
     else:
         os.makedirs(path, exist_ok = True)
         if (type(data) == np.ndarray):
-            np.save(path, data + "/data.npy")
+            np.save(path + "/data.npy", data)
             structure = "data_npy"
         else:
             pickle.dump(data, open(path + "/data.pkl", "wb"))
