@@ -134,7 +134,7 @@ def __load(structure, path):
         if (structure == "data_pkl"):
             data = pickle.load(open(path + "/data.pkl", "rb"))
         elif(structure == "data_npy"):
-            data = np.load(path + "data.npy")
+            data = np.load(path + "/data.npy")
         else:
             raise AssertionError("File corrupted")
     else:
