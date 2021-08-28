@@ -38,7 +38,7 @@ def run_dmi(low_freq_data, high_freq_data,
         if (len(phase_indices) == 0):
             amplitude_signal[phaseIdx] = np.nan
         else:
-            amplitude_signal[phaseIdx] = np.mean(np.abs(high_freq_data[phase_indices]))
+            amplitude_signal[phaseIdx] = np.mean(np.abs(high_freq_data[phase_indices])) # No need for a hilbert transform
     
     amplitude_signal -= np.nanpercentile(amplitude_signal,25)
     amplitude_signal /= np.nanpercentile(amplitude_signal,75)
@@ -77,7 +77,7 @@ def __sine(x, phase, amp):
     """
     freq = 1
     fs = 1
-    return amp * (np.sin(2 * np.pi * freq * (x - phase) / fs))
+    return amp * (np.sin(2 * np.pi * freq * (x - ((phase + 180)/360)) / fs))
     
 def run_plv(low_freq_data, high_freq_data):
     """
@@ -120,7 +120,7 @@ def run_mi(low_freq_data, high_freq_data, phase_window_half_size = 10, phase_ste
         if (len(phase_indices) == 0):
             amplitude_signal[phaseIdx] = np.nan
         else:
-            amplitude_signal[phaseIdx] = np.mean(np.abs(high_freq_data[phase_indices]))
+            amplitude_signal[phaseIdx] = np.mean(np.abs(high_freq_data[phase_indices])) # No need for a hilbert transform
         
     amplitude_signal = np.concatenate((amplitude_signal, amplitude_signal))
     amplitude_signal /= np.nansum(amplitude_signal)
