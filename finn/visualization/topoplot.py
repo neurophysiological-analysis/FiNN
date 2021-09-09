@@ -15,6 +15,7 @@ matplotlib.use("Qt5Agg")
 import matplotlib.markers
 import matplotlib.pyplot as plt
 
+import pathlib
 import pyexcel_ods
 
 class topoplot():
@@ -47,7 +48,9 @@ class topoplot():
         self.__generate_topoplot_mask()
 
     def __read_map(self, mode):
-        map_file = pyexcel_ods.read_data("methods/visualization_map.ods")[mode]
+        map_path = str(pathlib.Path(__file__).parent.absolute()) + "/coord_map.ods"
+        #map_file = pyexcel_ods.read_data("methods/visualization_map.ods")[mode]
+        map_file = pyexcel_ods.read_data(map_path)[mode]
         while (len(map_file[-1]) == 0): #Remove trailing empty rows
             map_file = map_file[:-1]
         map_file = np.asarray(map_file)
@@ -216,11 +219,13 @@ class topoplot():
         for sub_list in substitute_channels:
             tgt_ch_name = sub_list["tgt"]
             
-            tgt_idx = np.where(np.asarray(mod_ch_name_list) == tgt_ch_name)[0][0]
+            if (tgt_ch_name not in mod_ch_name_list):
+                continue
+            tgt_idx = mod_ch_name_list.index(tgt_ch_name)
             
             src_idx = []
             for src_ch_name in sub_list["src"]:
-                tmp = np.where(np.asarray(mod_ch_name_list) == src_ch_name)[0][0]
+                tmp = mod_ch_name_list.index(src_ch_name)
                 src_idx.append(tmp)
                 
             values[tgt_idx] = np.mean(values[np.asarray(src_idx)])
@@ -241,7 +246,9 @@ class topoplot():
         mod_ch_name_list = [ch_name for ch_name in ch_name_list]
         
         for ch_name in omit_channels:
-            idx = np.where(np.asarray(mod_ch_name_list) == ch_name)[0][0]
+            if (ch_name not in mod_ch_name_list):
+                continue
+            idx = mod_ch_name_list.index(ch_name)
             
             if (idx <= len(values)):
                 values[idx] = 0

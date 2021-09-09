@@ -78,7 +78,7 @@ v_border_labels = ["Decrease", "Increase"]
 
 ##Visualize demo data
 
-topo = tp.topoplot("ext_10_20_64_ch") 
+topo = tp.topoplot("EEG") 
 #Plot w/o significances
 topo.run(values_1, ch_name_list, omit_channels, substitute_channels, v_min, v_max, v_border_values, v_border_labels, file_path, screen_channels, annotate_ch_names)
 #Plot with significances before multiple comparison correction (MCC) only
