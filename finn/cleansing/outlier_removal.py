@@ -10,7 +10,7 @@ import scipy.stats
 import numpy as np
 
 
-def run(data, ref, max_std_dist = 2, min_samp_cnt = 5, axis = None):
+def run(data, ref, max_std_dist = 2, min_samp_cnt = 5, axis = 0):
     """
     Removes any sample more distant from the mean than max_std_dist standard deviations. Terminates if either all samples are within the threshold or if the minimal sample count defined by min_samp_cnt is reached.
     

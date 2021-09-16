@@ -31,7 +31,7 @@ def run(data, bins, f_min, f_max, f_step_sz = 1):
         for freq_idx in range(f_min_idx, f_max_idx, 1):
             psi[psi_idx] += np.conjugate(comp_coh[freq_idx])*comp_coh[freq_idx + f_step_sz]
         psi[psi_idx] = np.imag(psi[psi_idx])
-    psi = np.asarray(psi, dtype = np.float32)
+    psi = np.asarray(psi.real, dtype = np.float32)
     
     var = 0
     for idx in range(len(data)):
