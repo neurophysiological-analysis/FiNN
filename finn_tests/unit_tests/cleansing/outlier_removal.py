@@ -8,7 +8,7 @@ import numpy as np
 import random
 import scipy.stats
 
-import finn.artifact_rejection.outlier_removal as om
+import finn.cleansing.outlier_removal as om
 import unittest
 
 class test_outlier_removal(unittest.TestCase):
@@ -29,7 +29,7 @@ class test_outlier_removal(unittest.TestCase):
         
         filtered_data = [None for _ in range(channel_count)]
         for ch_idx in range(channel_count):
-            filtered_data[ch_idx] = om.run(raw_data[ch_idx], raw_data[ch_idx], maxStdDist = 2, minSampCnt = 0)
+            filtered_data[ch_idx] = om.run(raw_data[ch_idx], raw_data[ch_idx], max_std_dist = 2, min_samp_cnt = 0)
         
         assert(np.max(np.abs(scipy.stats.zscore(filtered_data[0]))) < 2)
 
