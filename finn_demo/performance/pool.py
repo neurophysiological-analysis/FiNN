@@ -49,7 +49,7 @@ def sub_process_work2_0(time_stamps, duration_times):
     tp.run(parallel_processes, demo_fnct2, args)
     duration_times.append(time.time_ns() - start)
     time_stamps.append(time.time_ns())
-    
+
 def sub_process_work2_1(time_stamps, duration_times):
     print("loky")
     path = paths.per_pool_data
@@ -88,46 +88,52 @@ def sub_process_work2_3(time_stamps, duration_times):
     time_stamps.append(time.time_ns())
     pool.close()
     pool.join()
+
     
-def sub_process_work2(pipe):
+def sub_process_work2(pipe, pause_time = 2):
+    
     time_stamps = list()
     duration_times = list()
     
     sub_process_work2_0(time_stamps, duration_times)
     gc.collect();gc.collect();gc.collect()
-    
-    time.sleep(10)
-    
+ 
+    time.sleep(pause_time)
+
     sub_process_work2_1(time_stamps, duration_times)
     gc.collect();gc.collect();gc.collect()
-    
-    time.sleep(10)
-        
+
+    time.sleep(pause_time)
+
     sub_process_work2_2(time_stamps, duration_times)
     gc.collect();gc.collect();gc.collect()
-  
-    time.sleep(10)
-    
+ 
+    time.sleep(pause_time)
+
     sub_process_work2_3(time_stamps, duration_times)
     gc.collect();gc.collect();gc.collect()
-    
-    time.sleep(10)
+ 
+    time.sleep(pause_time)
         
     pipe.send((time_stamps, duration_times))
 
-def main(save_results = False, overwrite = True):
+import time
+
+def main(save_results = False, overwrite = True, max_time_s = 30, delay_time_s = 2):
     if (overwrite):
         (parent_pipe, child_pipe) = multiprocessing.Pipe(True)
         sub_process = multiprocessing.Process(target = sub_process_work2, args = (child_pipe,))
         sub_process.start()
+        
         pp = psutil.Process(sub_process.pid)
         
         mem = psutil.virtual_memory()
         
         virt_memory_usage_value = list()
         virt_memory_usage_time = list()
-        wait_time = 0
-        while (sub_process.is_alive() and wait_time < 2):
+        start_time = time.time() # Measures a maximum of max_time_s (default: 30s) before the processes are forcefully terminated
+        delay_time = None # In case the the processes return in time, delay_time_s (default: 2s) delay period is added
+        while ((time.time() - start_time) < max_time_s):# (sub_process.is_alive() and wait_time < 2):
             descendants = list(pp.children(recursive = True))
             
             virt_memory = 0
@@ -143,7 +149,18 @@ def main(save_results = False, overwrite = True):
         
             time.sleep(0.010)
             if (sub_process.is_alive() == False):
-                wait_time += 0.01
+                if (delay_time is None):
+                    delay_time = time.time()
+                else:
+                    if ((delay_time - time.time()) > delay_time_s):
+                        break
+
+                
+            print(time.time() - start_time)
+        if ((time.time() - start_time) >= max_time_s):
+            time_out = True
+        else:
+            time_out = False
         
         virt_memory_usage_value = np.asarray(virt_memory_usage_value)
         virt_memory_usage_time = np.asarray(virt_memory_usage_time)
@@ -158,7 +175,12 @@ def main(save_results = False, overwrite = True):
             
             np.save(config + "_virt_memory_usage_value.npy", virt_memory_usage_value)
             np.save(config + "_virt_memory_usage_time.npy", virt_memory_usage_time)
-        sub_process.join()
+        print("pre-joined")
+        if (time_out == False):
+            sub_process.join()
+        else:
+            sub_process.terminate()
+        print("joined")
     else:
         time_stamps = np.load(config + "_time_stamps.npy")
         duration_times = np.load(config + "_duration_times.npy")

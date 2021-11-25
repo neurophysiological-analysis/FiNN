@@ -115,7 +115,7 @@ def run(max_child_proc_cnt = 4, func = None, args = None, max_time = None, delet
     """
     
     if (type(args) != np.ndarray):
-        args = np.asarray(args)
+        args = np.asarray(args, dtype = object)
     
     job_cnt = len(args)
     curr_job_idx = 0

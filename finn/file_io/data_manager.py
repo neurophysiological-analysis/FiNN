@@ -117,6 +117,7 @@ def __load(structure, path):
             for sub_structure in structure[1:]:
                 loc_data = __load(sub_structure[-1], path + "/" + str(sub_structure[0]))
                 data.append(loc_data)
+            data = np.asarray(data)
                 
         elif (structure[0] == "dict"):
             data = dict()

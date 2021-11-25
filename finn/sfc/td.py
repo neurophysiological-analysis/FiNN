@@ -38,7 +38,7 @@ def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = 
     
     :return: (bins, conn) - Frequency bins and corresponding same_frequency_coupling values.
     """
-    
+        
     (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hanning")
     
     return (bins, calc_dac.run(coh, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh))
@@ -57,24 +57,25 @@ def run_wpli(data1, data2, fs, nperseg, nfft, window = "hann", pad_type = "zero"
     
     :return: (bins, conn) - Frequency bins and corresponding weighted phase lag index values.
     """
+        
     s_xy = list()
     for block_start in np.arange(0, np.min([len(data1), len(data2)]) - nperseg, nperseg):
         loc_data1 = data1[block_start:(block_start + nperseg)]
         loc_data2 = data2[block_start:(block_start + nperseg)]
         
-        seg_data_X = misc.__segment_data(loc_data1, nperseg, pad_type)
-        seg_data_Y = misc.__segment_data(loc_data2, nperseg, pad_type)
+        seg_data_1 = misc.__segment_data(loc_data1, nperseg, pad_type)
+        seg_data_2 = misc.__segment_data(loc_data2, nperseg, pad_type)
     
-        (bins, f_data_X) = misc.__calc_FFT(seg_data_X, fs, nfft, window)
-        (_,    f_data_Y) = misc.__calc_FFT(seg_data_Y, fs, nfft, window)
+        (bins, f_data_1) = misc.__calc_FFT(seg_data_1, fs, nfft, window)
+        (_,    f_data_2) = misc.__calc_FFT(seg_data_2, fs, nfft, window)
     
-        s_xy.append((np.conjugate(f_data_X[0, :]) * f_data_Y[0, :] * 2))
+        s_xy.append((np.conjugate(f_data_1[0, :]) * f_data_2[0, :] * 2))
 
     s_xy = np.asarray(s_xy)
     
     return (bins, calc_wpli.run(s_xy))
 
-def run_psi(data_X, data_Y, nperseg_outer, fs, nperseg_inner, nfft, window, pad_type, f_min, f_max, f_step_sz = 1):
+def run_psi(data_1, data_2, nperseg_outer, fs, nperseg_inner, nfft, window, pad_type, f_min, f_max, f_step_sz = 1):
     """
     Calculates the phase slope index between two signals. Assumes data_1 and data_2 to be from time domain.
   
@@ -92,12 +93,12 @@ def run_psi(data_X, data_Y, nperseg_outer, fs, nperseg_inner, nfft, window, pad_
     
     :return: Connectivity between data1 and data 2 measured using the phase slope index.
     """
-  
+      
     data_coh = list()
     
-    for idx_start in np.arange(0, len(data_X), nperseg_outer):
+    for idx_start in np.arange(0, len(data_1), nperseg_outer):
         
-        (bins, cc) = run_cc(data_X[idx_start:(idx_start + nperseg_outer)], data_Y[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type, fs, nfft, window)
+        (bins, cc) = run_cc(data_1[idx_start:(idx_start + nperseg_outer)], data_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type, fs, nfft, window)
         
         data_coh.append(cc)
     
@@ -115,7 +116,7 @@ def run_ic(data_1, data_2, fs, nperseg, nfft):
     
     :return: (bins, conn) - Frequency bins and corresponding imaginary coherency values.
     """
-    
+        
     (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hanning")
     
     return (bins, np.imag(coh))
@@ -137,12 +138,12 @@ def run_msc(data_1, data_2, fs, nperseg, nfft):
     
     return (bins, np.square(np.abs(coh)))
     
-def run_cc(data_X, data_Y, nperseg, pad_type, fs, nfft, window):
+def run_cc(data_1, data_2, nperseg, pad_type, fs, nfft, window):
     """
     Calculate complex coherency from time domain data.
     
-    :param data_X: data set X from time domain.
-    :param data_Y: data set Y from time domain.
+    :param data_1: data set X from time domain.
+    :param data_2: data set Y from time domain.
     :param nperseg: number of samples in a fft segment.
     :param pad_type: padding type to be applied.
     :param fs: Sampling frequency.
@@ -152,13 +153,13 @@ def run_cc(data_X, data_Y, nperseg, pad_type, fs, nfft, window):
     :return: Complex coherency.
     """
 
-    seg_data_X = misc.__segment_data(data_X, nperseg, pad_type)
-    seg_data_Y = misc.__segment_data(data_Y, nperseg, pad_type)
+    seg_data_1 = misc.__segment_data(data_1, nperseg, pad_type)
+    seg_data_2 = misc.__segment_data(data_2, nperseg, pad_type)
 
-    (bins, f_data_X) = misc.__calc_FFT(seg_data_X, fs, nfft, window)
-    (_,    f_data_Y) = misc.__calc_FFT(seg_data_Y, fs, nfft, window)
+    (bins, f_data_1) = misc.__calc_FFT(seg_data_1, fs, nfft, window)
+    (_,    f_data_2) = misc.__calc_FFT(seg_data_2, fs, nfft, window)
 
-    return (bins, fd.run_cc(f_data_X, f_data_Y))
+    return (bins, fd.run_cc(f_data_1, f_data_2))
 
     
     
