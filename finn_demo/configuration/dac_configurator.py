@@ -64,8 +64,8 @@ def main(data = None):
     :param data: Expects a numpy array of format 2 x samples or 1 x samples to be used as input data. In case no input data is provided a generic input data is used.
     """   
     #Phase range
-    phase_min = -135
-    phase_max = 135
+    phase_min = -270
+    phase_max = 270
     phase_step = 2
 
     run(data, phase_min, phase_max, phase_step)
