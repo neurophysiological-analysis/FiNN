@@ -14,7 +14,7 @@ import finn.sfc.__wpli as calc_wpli
 import finn.sfc.__psi as calc_psi
 import finn.sfc.__dac as calc_dac
 
-def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = True, minimal_angle_thresh = 2):
+def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
     """
     Calculates the directional absolute coherence between two signals. Assumes data_1 and data_2 to be from time domain.
     
@@ -35,13 +35,14 @@ def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = 
     :param nfft: fft window size.
     :param return_signed_conn: Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information.
     :param minimal_angle_thresh: The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan. 
+    :param volume_conductance_ratio: Defines the ratio of below threshold connectivity values to identify volume conductance.
     
     :return: (bins, conn) - Frequency bins and corresponding same_frequency_coupling values.
     """
         
-    (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hanning")
+    (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hann")
     
-    return (bins, calc_dac.run(coh, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh))
+    return (bins, calc_dac.run(coh, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh, volume_conductance_ratio))
     
 def run_wpli(data1, data2, fs, nperseg, nfft, window = "hann", pad_type = "zero"):
     """
@@ -75,13 +76,13 @@ def run_wpli(data1, data2, fs, nperseg, nfft, window = "hann", pad_type = "zero"
     
     return (bins, calc_wpli.run(s_xy))
 
-def run_psi(data_1, data_2, nperseg_outer, fs, nperseg_inner, nfft, window, pad_type, f_min, f_max, f_step_sz = 1):
+def run_psi(data_1, data_2, nperseg_outer, fs, nperseg_inner, nfft, window, pad_type, f_min, f_max, f_step_sz = 1, normalize = True):
     """
     Calculates the phase slope index between two signals. Assumes data_1 and data_2 to be from time domain.
   
     :param data_1: First dataset from time domain; vector of samples.
     :param data_2: Second dataset from time domain; vector of samples.
-    :param nperseg_outer: Outer window size.
+    :param nperseg_outer: Outer window size. If normalize = False, this parameter is not used
     :param fs: Sampling frequency.
     :param nperseg_inner: Inner window size.
     :param nfft: fft window size.
@@ -90,17 +91,22 @@ def run_psi(data_1, data_2, nperseg_outer, fs, nperseg_inner, nfft, window, pad_
     :param f_min: Minimum frequence for the evaluated interval.
     :param f_max: Maximum frequence for the evaluated interval.
     :param f_step_sz: Frequency step size in the evaluated interval.
+    :param normalize: Determines whether to normalize by dividing through the variance
     
     :return: Connectivity between data1 and data 2 measured using the phase slope index.
     """
       
-    data_coh = list()
-    
-    for idx_start in np.arange(0, len(data_1), nperseg_outer):
+    if (normalize == True):
+        data_coh = list()
         
-        (bins, cc) = run_cc(data_1[idx_start:(idx_start + nperseg_outer)], data_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type, fs, nfft, window)
-        
-        data_coh.append(cc)
+        for idx_start in np.arange(0, len(data_1), nperseg_outer):
+            
+            (bins, cc) = run_cc(data_1[idx_start:(idx_start + nperseg_outer)], data_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type, fs, nfft, window)
+            
+            data_coh.append(cc)
+    else:
+        (bins, tmp) = run_cc(data_1, data_2, nperseg_inner, "zero", fs, nfft, "hann")
+        data_coh = [tmp]
     
     return calc_psi.run(data_coh, bins, f_min, f_max, f_step_sz)
     
@@ -155,6 +161,9 @@ def run_cc(data_1, data_2, nperseg, pad_type, fs, nfft, window):
 
     seg_data_1 = misc.__segment_data(data_1, nperseg, pad_type)
     seg_data_2 = misc.__segment_data(data_2, nperseg, pad_type)
+    
+    seg_data_1 = seg_data_1[:seg_data_2.shape[0], :]
+    seg_data_2 = seg_data_2[:seg_data_1.shape[0], :]
 
     (bins, f_data_1) = misc.__calc_FFT(seg_data_1, fs, nfft, window)
     (_,    f_data_2) = misc.__calc_FFT(seg_data_2, fs, nfft, window)

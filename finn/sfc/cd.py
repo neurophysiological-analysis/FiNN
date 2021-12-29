@@ -12,7 +12,7 @@ import finn.sfc.__wpli as calc_wpli
 import finn.sfc.__psi as calc_psi
 import finn.sfc.__dac as calc_dac
 
-def run_dac(data, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 2):
+def run_dac(data, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
     """
     Calculates the directional absolute coherence from complex coherency.
     
@@ -30,11 +30,12 @@ def run_dac(data, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thr
     :param fmax: Maximum frequency of the frequency range on which coherency gets evaluated.
     :param return_signed_conn: Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information
     :param minimal_angle_thresh: The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan.
+    :param volume_conductance_ratio: Defines the ratio of below threshold connectivity values to identify volume conductance.
     
     :return: Connectivity between data_1 and data_2 measured using the directionalized absolute coherence.
     """
         
-    return calc_dac.run(data, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh)
+    return calc_dac.run(data, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh, volume_conductance_ratio)
 
 def run_wpli(s_xy):
     """
