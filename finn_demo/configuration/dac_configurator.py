@@ -111,6 +111,9 @@ def run(data, phase_min, phase_max, phase_step):
         path = demo_paths.per_sfc_data_0
         data1 = np.load(path)[2, :]
         data2 = np.load(path)[2, :]
+    else:
+        data1 = np.copy(data)
+        data2 = np.copy(data)
         
     #Data container
     offset = int(np.ceil(frequency_sampling/frequency_tgt))
