@@ -8,17 +8,18 @@ This module implements the DAC metric.
 
 import numpy as np
 
-def run(coh, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 2):
+def run(coh, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
     """
     Calculates directed absolute coherency from compley coherency
     
-    @param coh: Complex coherency.
-    @param fmin: Minimum frequency of the frequency range on which coherency gets evaluated.
-    @param fmax: Maximum frequency of the frequency range on which coherency gets evaluated.
-    @param return_signed_conn: Whether to add directional information and mask volume conductance.
-    @param minimal_angle_thresh: Minimal phase shift angle to not be considered volume conductance.
+    :param coh: Complex coherency.
+    :param fmin: Minimum frequency of the frequency range on which coherency gets evaluated.
+    :param fmax: Maximum frequency of the frequency range on which coherency gets evaluated.
+    :param return_signed_conn: Whether to add directional information and mask volume conductance.
+    :param minimal_angle_thresh: Minimal phase shift angle to not be considered volume conductance.
+    :param volume_conductance_ratio: Defines the ratio of below threshold connectivity values to identify volume conductance.
     
-    @return: Connectivity information
+    :return: Connectivity information
     """
     coh = np.asarray(coh)
     
@@ -35,7 +36,7 @@ def run(coh, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh =
         psi_cnt += 1
         
     # In case of volume conductance
-    if (vol_cond_cnt == len(range(f_min_idx, f_max_idx))):
+    if (vol_cond_cnt >= (len(range(f_min_idx, f_max_idx))*volume_conductance_ratio)):
         return np.nan
         
     if (return_signed_conn):

@@ -33,12 +33,15 @@ def run(data, bins, f_min, f_max, f_step_sz = 1):
         psi[psi_idx] = np.imag(psi[psi_idx])
     psi = np.asarray(psi.real, dtype = np.float32)
     
-    var = 0
-    for idx in range(len(data)):
-        var += np.var(np.concatenate((psi[:idx], psi[(idx +1):])))
-    var /= len(data)
-    
-    return np.mean(psi)/(np.sqrt(var) * 2)
+    if (len(data) > 1):
+        var = 0
+        for idx in range(len(data)):
+            var += np.var(np.concatenate((psi[:idx], psi[(idx +1):])))
+        var /= len(data)
+        
+        return np.mean(psi)/(np.sqrt(var) * 2)
+    else:
+        return psi[0]
 
 
 

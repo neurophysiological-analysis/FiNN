@@ -20,7 +20,7 @@ def mag_sq_coh(data, _0, _1, frequency_tgt, _2, _3):
     return cohd.run_msc(data)[frequency_tgt]
 def img_coh(data, _0, _1, frequency_tgt, _2, _3):
     return cohd.run_ic(data)[frequency_tgt]
-def dac_coh(data, _0, bins, frequency_tgt, _1, _2, freq_range = 2, min_phase_diff = 5):
+def dac_coh(data, _0, bins, frequency_tgt, _1, _2, freq_range = 2, min_phase_diff = 10):
     dac_range = cohd.run_dac(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1, return_signed_conn = True, minimal_angle_thresh = min_phase_diff)    
     return (0 if (np.isnan(dac_range)) else dac_range)
 def psi_coh(_0, data, bins, frequency_tgt, _1, _2, freq_range = 2):
