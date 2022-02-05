@@ -103,7 +103,7 @@ def run_msc(data_1, data_2, bins):
 
 def run_cc(data_1, data_2):
     """
-    Calculate complex coherency from fft domain data.
+    Calculate complex coherency from frequency domain data.
     
     :param f_data_1: data set X from the complex frequency domain.
     :param f_data_2: data set Y from the compley frequency domain.

@@ -20,10 +20,12 @@ def mag_sq_coh(data, _0, _1, frequency_tgt, _2, _3):
     return cohd.run_msc(data)[frequency_tgt]
 def img_coh(data, _0, _1, frequency_tgt, _2, _3):
     return cohd.run_ic(data)[frequency_tgt]
-def dac_coh(data, _0, bins, frequency_tgt, _1, _2, freq_range = 2, min_phase_diff = 10):
-    dac_range = cohd.run_dac(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1, return_signed_conn = True, minimal_angle_thresh = min_phase_diff)    
+def dac_coh(data, _0, bins, frequency_tgt, _1, _2, freq_range = 5, min_phase_diff = 10, volume_conductance_ratio = 0.4):
+    dac_range = cohd.run_dac(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1,
+                             return_signed_conn = True, minimal_angle_thresh = min_phase_diff, 
+                             volume_conductance_ratio = volume_conductance_ratio)
     return (0 if (np.isnan(dac_range)) else dac_range)
-def psi_coh(_0, data, bins, frequency_tgt, _1, _2, freq_range = 2):
+def psi_coh(_0, data, bins, frequency_tgt, _1, _2, freq_range = 5):
     return cohd.run_psi(data, bins, frequency_tgt - freq_range, frequency_tgt + freq_range + 1)
 def wpli_coh(_0, _1, _2, frequency_tgt, data1, data2):
     win_sz = 5500
@@ -76,7 +78,7 @@ def main():
             axes1[i, j].set_ylim(-1.1, 1.1)
     
     cols = ["P16 DM3 T5 SC", "P23 DM3 T2 SC", "P27 DM1 T6 SC", "P16 DM3 T5 MC"]
-    rows = ["AbsCoh", "imagCoh", "wpli", "psi", "dacV2"]
+    rows = ["AbsCoh", "imagCoh", "wpli", "psi", "dac"]
             
     for ax, col in zip(axes1[0], cols):
         ax.set_title(col, size='small')
