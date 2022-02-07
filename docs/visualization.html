@@ -6,14 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>visualization package &#8212; FiNN  documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -58,23 +57,28 @@
 </dl>
 <dl class="py class">
 <dt id="visualization.topoplot.topoplot">
-<em class="property">class </em><code class="sig-prename descclassname">visualization.topoplot.</code><code class="sig-name descname">topoplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.topoplot" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">visualization.topoplot.</span></code><code class="sig-name descname"><span class="pre">topoplot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.topoplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>topoplot generation class. Initialition costs a couple of seconds due to mask generation.
 Performance advice: if possible, only generate a single topoplot object.</p>
 <dl class="py attribute">
 <dt id="visualization.topoplot.topoplot.default_v_diff">
-<code class="sig-name descname">default_v_diff</code><em class="property"> = 50</em><a class="headerlink" href="#visualization.topoplot.topoplot.default_v_diff" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">default_v_diff</span></code><em class="property"> <span class="pre">=</span> <span class="pre">50</span></em><a class="headerlink" href="#visualization.topoplot.topoplot.default_v_diff" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="visualization.topoplot.topoplot.get_eeg_ch_coords">
-<code class="sig-name descname">get_eeg_ch_coords</code><em class="property"> = None</em><a class="headerlink" href="#visualization.topoplot.topoplot.get_eeg_ch_coords" title="Permalink to this definition">¶</a></dt>
+<dt id="visualization.topoplot.topoplot.get_coords">
+<code class="sig-name descname"><span class="pre">get_coords</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#visualization.topoplot.topoplot.get_coords" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="visualization.topoplot.topoplot.mode">
+<code class="sig-name descname"><span class="pre">mode</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#visualization.topoplot.topoplot.mode" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="visualization.topoplot.topoplot.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">values</span></em>, <em class="sig-param"><span class="n">ch_name_list</span></em>, <em class="sig-param"><span class="n">omit_channels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">substitute_channels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">v_border_values</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="n">v_border_labels</span><span class="o">=</span><span class="default_value">['']</span></em>, <em class="sig-param"><span class="n">file_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">screen_channels</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">annotate_ch_names</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.topoplot.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_name_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omit_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitute_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_border_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_border_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate_ch_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.topoplot.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a 2D topomap</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -100,12 +104,12 @@ Performance advice: if possible, only generate a single topoplot object.</p>
 
 <dl class="py attribute">
 <dt id="visualization.topoplot.topoplot.topoplot_mask_data">
-<code class="sig-name descname">topoplot_mask_data</code><em class="property"> = None</em><a class="headerlink" href="#visualization.topoplot.topoplot.topoplot_mask_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">topoplot_mask_data</span></code><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#visualization.topoplot.topoplot.topoplot_mask_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="visualization.topoplot.topoplot.win_sz">
-<code class="sig-name descname">win_sz</code><em class="property"> = 1.3</em><a class="headerlink" href="#visualization.topoplot.topoplot.win_sz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">win_sz</span></code><em class="property"> <span class="pre">=</span> <span class="pre">1.3</span></em><a class="headerlink" href="#visualization.topoplot.topoplot.win_sz" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -171,7 +175,7 @@ Performance advice: if possible, only generate a single topoplot object.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, VoodooCode.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
     </div>
   </body>
 </html>

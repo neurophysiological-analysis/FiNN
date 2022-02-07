@@ -6,14 +6,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>statistical package &#8212; FiNN  documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -58,7 +57,7 @@
 <p>&#64;author: voodoocode</p>
 <dl class="py function">
 <dt id="statistical.glmm.check_formula">
-<code class="sig-prename descclassname">statistical.glmm.</code><code class="sig-name descname">check_formula</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">formula</span></em><span class="sig-paren">)</span><a class="headerlink" href="#statistical.glmm.check_formula" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">statistical.glmm.</span></code><code class="sig-name descname"><span class="pre">check_formula</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formula</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#statistical.glmm.check_formula" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts fixed and random factors for the purpose of validating these prior to analysis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -72,7 +71,7 @@
 
 <dl class="py function">
 <dt id="statistical.glmm.run">
-<code class="sig-prename descclassname">statistical.glmm.</code><code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">label_name</span></em>, <em class="sig-param"><span class="n">factor_type</span></em>, <em class="sig-param"><span class="n">formula</span></em>, <em class="sig-param"><span class="n">contrasts</span></em>, <em class="sig-param"><span class="n">data_type</span><span class="o">=</span><span class="default_value">'gaussian'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#statistical.glmm.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">statistical.glmm.</span></code><code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">formula</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contrasts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gaussian'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#statistical.glmm.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies generalized linear mixed models (GLMM). As the formula needs to be parsed in order to align significances with model coefficients, it is highly recommended to check prior to execution once whether the formula is understood correctly via running check_formula(formula). The formula will be parsed (scrubbed and unpacked), and fixed and random factors extracted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -167,7 +166,7 @@ var0 ~ var1 + (1|var2) | Model var1 as a random effect.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, VoodooCode.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
     </div>
   </body>
 </html>
