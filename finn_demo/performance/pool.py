@@ -156,7 +156,7 @@ def main(save_results = False, overwrite = True, max_time_s = 30, delay_time_s =
                         break
 
                 
-            print(time.time() - start_time)
+            #print(time.time() - start_time)
         if ((time.time() - start_time) >= max_time_s):
             time_out = True
         else:
@@ -206,9 +206,10 @@ def main(save_results = False, overwrite = True, max_time_s = 30, delay_time_s =
     plt.figure()
     plt.title("time usage")
     plt.ylim((0.8, 1.2))
-    plt.xticks(range(5), ["framework new", "framework old", "joblib - loky", "joblib - multi", "multi - pool"], rotation = 45)
+    plt.xticks(range(4), ["framework", "joblib - loky", "joblib - multi", "multi - pool"], rotation = 45)
     plt.bar(range(len(duration_times)), duration_times/duration_times[0])
     plt.tight_layout()
+    print("times:", duration_times)
      
     plt.figure()
     plt.title("memory usage")
@@ -216,6 +217,7 @@ def main(save_results = False, overwrite = True, max_time_s = 30, delay_time_s =
     plt.xticks(range(5), ["framework new", "framework old", "joblib - loky", "joblib - multi", "multi - pool"], rotation = 45)
     plt.bar(range(len(memory_peaks)), memory_peaks/memory_peaks[0])
     plt.tight_layout()
+    print("memory:", memory_peaks/memory_peaks[0])
     
     plt.figure()
     plt.plot(virt_memory_usage_value)

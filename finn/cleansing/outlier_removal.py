@@ -32,9 +32,9 @@ def run(data, ref, max_std_dist = 2, min_samp_cnt = 5, axis = 0):
         zVals = scipy.stats.zscore(ref)
         
         if ((np.abs(zVals) >= max_std_dist).any()):
-            if (len(zVals) - len(np.argwhere(np.abs(zVals) > max_std_dist).squeeze(1)) <= min_samp_cnt):
+            if (len(zVals) - len(np.argwhere(np.abs(zVals) >= max_std_dist).squeeze(1)) <= min_samp_cnt):
                 return data
-            badPts = np.argwhere(np.abs(zVals) > max_std_dist).squeeze(1)
+            badPts = np.argwhere(np.abs(zVals) >= max_std_dist).squeeze(1)
             ref = np.delete(ref, badPts)
             data = np.delete(data, badPts, axis = axis)
         else:
