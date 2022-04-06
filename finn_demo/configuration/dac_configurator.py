@@ -14,15 +14,15 @@ import matplotlib.pyplot as plt
 
 import finn.misc.timed_pool as tp
 
-import demo_data.demo_data_paths as demo_paths
+import finn_demo.demo_data.demo_data_paths as demo_paths
 
 ################################
 # CONFIGURE ACCORDING TO SETUP #
 ################################
 
 frequency_sampling = 5500
-frequency_tgt = 30
-frequency_range = 5
+frequency_min = 25
+frequency_max = 35
 frequency_bin_sz = 0.5
 
 thread_cnt = 1 #Number of threads used for the simulation
@@ -50,10 +50,8 @@ def dac(data_1, data_2, freq_bin_factor):
     
     :return: DAC scores
     """
-    fmin = int(frequency_tgt - frequency_range*freq_bin_factor)
-    fmax = int(frequency_tgt + frequency_range*freq_bin_factor + 1)
     
-    return td.run_dac(data_1, data_2, fmin, fmax, frequency_sampling, 
+    return td.run_dac(data_1, data_2, frequency_min, frequency_max, frequency_sampling, 
                     int(frequency_sampling*freq_bin_factor), int(frequency_sampling*freq_bin_factor),
                     True, minimal_angle_thresh, volume_conductance_ratio)[1]
 
@@ -86,7 +84,7 @@ def __run_inner(data1, data2, offset, phase_shift, freq_bin_factor):
     :return: DAC scores
     """
     
-    loc_offset = offset - int(np.ceil(frequency_sampling/frequency_tgt * phase_shift/360))
+    loc_offset = offset - int(np.ceil(frequency_sampling/(np.mean([frequency_min, frequency_max])) * phase_shift/360))
     loc_data = data2[(loc_offset):]
     data2_padded = np.zeros(loc_data.shape)
     data2_padded += loc_data
@@ -116,7 +114,7 @@ def run(data, phase_min, phase_max, phase_step):
         data2 = np.copy(data)
         
     #Data container
-    offset = int(np.ceil(frequency_sampling/frequency_tgt))
+    offset = int(np.ceil(frequency_sampling/np.mean([frequency_min, frequency_max])))
     data1 = data1[(offset):]
     
     dac_scores = tp.run(thread_cnt, __run_inner, [(data1, data2, offset, phase_shift,
@@ -135,6 +133,6 @@ def run(data, phase_min, phase_max, phase_step):
     
     plt.legend()
 
-main(input_data)
+#main(input_data)
 
 

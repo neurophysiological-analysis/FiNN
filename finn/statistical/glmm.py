@@ -69,9 +69,12 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
         random_effect = True
     else:
         random_effect = False
+    #Suppress S3 warning
+    ro.r('Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")')
     
     #Check if R dependencies are installed
     __check_r_dependencies()
+
 
     #Copy GLMM data to R
     __process_glmm_data(data, label_name, factor_type)
@@ -124,12 +127,14 @@ def __digit_in_formula(formula):
         random_factor_parts = random_factor.split("|")
         
         for (char_idx, char) in enumerate(random_factor_parts[0]):
-            if ( #In case there is a char left to the digit, check whether it is a meta char
-                (((char_idx - 1) >= 0) and (formula[char_idx - 1] not in ["(", ")", "+", ":", "*", "/"]))
-                or #In case there is a char right to the digit, check whether it is a meta char
-                (((char_idx + 1) < len(random_factor_parts[0])) and (formula[char_idx + 1] not in ["(", ")", "+", ":", "*", "/"]))
-                ): #If either is not the case, the char is part of a factor name
-                return True
+            
+            if (char.isdigit()):
+                if ( #In case there is a char left to the digit, check whether it is a meta char
+                    (((char_idx - 1) >= 0) and (formula[char_idx - 1] not in ["(", ")", "+", ":", "*", "/"]))
+                    or #In case there is a char right to the digit, check whether it is a meta char
+                    (((char_idx + 1) < len(random_factor_parts[0])) and (formula[char_idx + 1] not in ["(", ")", "+", ":", "*", "/"]))
+                    ): #If either is not the case, the char is part of a factor name
+                    return True
         if (any(char.isdigit() for char in random_factor_parts[1])):
             return True
 
