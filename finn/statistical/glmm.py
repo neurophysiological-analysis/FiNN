@@ -194,6 +194,9 @@ def __execute_glmm(data_type, formula, random_effect):
             ro.r('lm0 = glmer(' + formula + ', data, family=poisson(link="log"), nAGQ=0, control=glmerControl(calc.derivs = FALSE, optimizer = "nloptwrap"))')
         elif(random_effect == True and data_type == "binomial"):
             ro.r('lm0 = glmer(' + formula + ', data, family=binomial(link="logit"), nAGQ=0, control=glmerControl(calc.derivs = FALSE, optimizer = "nloptwrap"))')
+        elif(random_effect == True and data_type == "gamma"):
+            ro.r('lm0 = glmer(' + formula + ', data, family=Gamma(link="inverse"), nAGQ=0, control=glmerControl(calc.derivs = FALSE, optimizer = "nloptwrap"))')
+            print("test")
         elif(random_effect == False and (data_type is None or data_type == "gaussian")):
             ro.r("lm0 = lm(" + formula + ", data)")
         else:
