@@ -17,3 +17,16 @@ This section documents the functions offered by FiNN.
    sfc
    statistical
    visualization
+
+.. toctree::
+   :hidden:
+   
+   basic
+   cfc
+   cleansing
+   file_io
+   filters
+   misc
+   sfc
+   statistical
+   visualization
