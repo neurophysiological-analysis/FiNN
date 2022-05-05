@@ -148,7 +148,7 @@ html_static_path = [u'_static']
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
         '**': [
-            'versioning.html',
+            "search-field.html", 'versioning.html',
         ],
     }
 
