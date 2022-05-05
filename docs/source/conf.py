@@ -101,6 +101,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
+#html_theme = u'alabaster'
 html_theme = u'pydata_sphinx_theme'
 #html_theme = u'sphinx_rtd_theme'
 #html_theme = u'default'
@@ -147,7 +148,7 @@ html_static_path = [u'_static']
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
         '**': [
-            'versioning.html',
+            "search-field.html", 'globaltoc.html', 'versioning.html',
         ],
     }
 
@@ -241,6 +242,20 @@ man_pages = [('index', 'docs_source', u'docs_source Documentation', [u'Maximilia
 
 todo_include_todos = True
 
+# Whitelist pattern for tags (set to None to ignore all tags)
+smv_tag_whitelist = r'^.*$'
+
+# Whitelist pattern for branches (set to None to ignore all branches)
 smv_branch_whitelist = r'^.*$'
 
+# Whitelist pattern for remotes (set to None to use local branches only)
+smv_remote_whitelist = None
 
+# Pattern for released versions
+smv_released_pattern = r'^tags/.*$'
+
+# Format for versioned output directories inside the build directory
+smv_outputdir_format = '{ref.name}'
+
+# Determines whether remote or local git branches/tags are preferred if their output dirs conflict
+smv_prefer_remote_refs = False
