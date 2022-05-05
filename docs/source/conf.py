@@ -240,3 +240,7 @@ man_pages = [('index', 'docs_source', u'docs_source Documentation', [u'Maximilia
 # -- Additional options --------------------------------------------------------
 
 todo_include_todos = True
+
+smv_branch_whitelist = r'^.*$'
+
+
