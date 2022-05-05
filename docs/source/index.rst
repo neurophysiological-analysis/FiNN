@@ -21,6 +21,6 @@ Demo applications of the included modules are available in the finn_demo folder.
 
 .. toctree::
    :hidden:
-   :maxdepth: 1
+   :maxdepth: 2
    
    API reference <api_reference>
