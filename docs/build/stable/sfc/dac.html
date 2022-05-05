@@ -146,7 +146,10 @@
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
             <div class="col-12 col-md-3 bd-sidebar">
-              <div class="sidebar-start-items"><h3>Branches</h3>
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><h3>Branches</h3>
 <ul>
   <li><a href="../../develop/sfc/dac.html">develop</a></li>
   <li><a href="dac.html">stable</a></li>
