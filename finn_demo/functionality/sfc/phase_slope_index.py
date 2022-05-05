@@ -14,7 +14,7 @@ import finn.sfc.td as td
 import finn.sfc.fd as fd
 import finn.sfc.cd as cohd
 
-import finn.sfc.__misc as misc
+import finn.sfc._misc as misc
 import demo_data.demo_data_paths as paths
 
 def main():
@@ -87,11 +87,11 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, f_min, f_
     
     for idx_start in np.arange(0, len(signal_1), nperseg_outer):
         
-        seg_data_X = misc.__segment_data(signal_1[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")
-        seg_data_Y = misc.__segment_data(signal_2[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")
+        seg_data_X = misc._segment_data(signal_1[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")
+        seg_data_Y = misc._segment_data(signal_2[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")
     
-        (bins, fd_signal_1) = misc.__calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hanning")
-        (_,    fd_signal_2) = misc.__calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hanning")
+        (bins, fd_signal_1) = misc._calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hanning")
+        (_,    fd_signal_2) = misc._calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hanning")
         
         fd_signals_1.append(fd_signal_1)
         fd_signals_2.append(fd_signal_2)

@@ -43,9 +43,9 @@ def save(data, path = "", var_name = "data", max_depth = 2, ending = None):
 		pickle.dump(data, file)
 		file.close()
 	elif(type(data) == list):
-		__save(data, locPath, 1, max_depth, ending)
+		_save(data, locPath, 1, max_depth, ending)
 	
-def __save(data, path, curr_depth, max_depth = 2, ending = None):
+def _save(data, path, curr_depth, max_depth = 2, ending = None):
 	if (path[-1] != "/"):
 		path += "/"
 	
@@ -73,7 +73,7 @@ def __save(data, path, curr_depth, max_depth = 2, ending = None):
 		if (os.path.exists(path) == False):
 			os.makedirs(path, exist_ok = True)
 		for (sub_data_idx, sub_data) in enumerate(data):
-			__save(sub_data, path + str(sub_data_idx), curr_depth + 1, max_depth)
+			_save(sub_data, path + str(sub_data_idx), curr_depth + 1, max_depth)
 
 def load(path, verbose = False):
 	"""
@@ -95,9 +95,9 @@ def load(path, verbose = False):
 		else:
 			raise AssertionError("Error: File ending must be either *.npy, *.hdr, or *.pkl")
 	elif(os.path.isfile(path) == False):
-		return __load(path, verbose)
+		return _load(path, verbose)
 
-def __load(path, is_top_level = False):
+def _load(path, is_top_level = False):
 	if (path[-1] != "/"):
 		path += "/"
 	if (os.path.isdir(path + os.listdir(path)[0]) == False):
@@ -119,5 +119,5 @@ def __load(path, is_top_level = False):
 			if (is_top_level == True):
 				print("Progress: %f" % (folder_idx/len(os.listdir(path))))
 			sub_path = path + folder
-			sublist.append(__load(sub_path))
+			sublist.append(_load(sub_path))
 		return sublist

@@ -7,10 +7,10 @@ This module provides different functions to estimate sfc between two signals fro
 '''
 
 import numpy as np
-import finn.sfc.__misc as misc
-import finn.sfc.__wpli as calc_wpli
-import finn.sfc.__psi as calc_psi
-import finn.sfc.__dac as calc_dac
+import finn.sfc._misc as misc
+import finn.sfc._wpli as calc_wpli
+import finn.sfc._psi as calc_psi
+import finn.sfc._dac as calc_dac
 
 def run_dac(data, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
     """

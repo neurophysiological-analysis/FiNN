@@ -24,7 +24,7 @@ def check_formula(formula):
     :return: fixed factors, random factors formatted as lists.
      """
     
-    return __get_factors(formula)
+    return _get_factors(formula)
 
 def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian"):
     """
@@ -52,13 +52,13 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     var0 ~ var1 + (1|var2) | Model var1 as a random effect.
     """
     
-    if (__digit_in_formula(formula)):
+    if (_digit_in_formula(formula)):
         raise AssertionError("Formula is malformed and may not include digits as characters within the factor names")
     
     if (type(data) != np.ndarray):
         data = np.asarray(data)
     
-    pre_sanity = __pre_sanity_checks(data, formula)
+    pre_sanity = _pre_sanity_checks(data, formula)
     if (pre_sanity != True):
         return pre_sanity
     
@@ -73,13 +73,13 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     ro.r('Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")')
     
     #Check if R dependencies are installed
-    __check_r_dependencies()
+    _check_r_dependencies()
 
 
     #Copy GLMM data to R
-    __process_glmm_data(data, label_name, factor_type)
+    _process_glmm_data(data, label_name, factor_type)
     
-    execution_successful = __execute_glmm(data_type, formula, random_effect)
+    execution_successful = _execute_glmm(data_type, formula, random_effect)
     if (execution_successful[0] == False):
         return execution_successful[1]
     try:
@@ -90,23 +90,23 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
         data[:, 0] -= np.nanmin(data[:, 0])
         data[:, 0] /= np.nanmax(data[:, 0])
         
-        __process_glmm_data(data, label_name, factor_type)
+        _process_glmm_data(data, label_name, factor_type)
         
-        execution_successful = __execute_glmm(data_type, formula, random_effect)
+        execution_successful = _execute_glmm(data_type, formula, random_effect)
         if (execution_successful[0] == False):
             return execution_successful[1]
         
         ro.r("res = Anova(lm0, type = 3, contrasts=" + contrasts + ")")
         
-    (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error) = __collect_results()
+    (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error) = _collect_results()
     
     try:
-        (final_coeff_names, final_coefficients, final_std_error) = __sync_meta_info(coeff_names, coefficients, coeff_std_error, formula)
-        (final_anova_factors, final_scores, final_df, final_p_values) = __sync_anova_info(anova_factors, scores, df, p_values, formula)
+        (final_coeff_names, final_coefficients, final_std_error) = _sync_meta_info(coeff_names, coefficients, coeff_std_error, formula)
+        (final_anova_factors, final_scores, final_df, final_p_values) = _sync_anova_info(anova_factors, scores, df, p_values, formula)
     except:
-        return __overwrite_negative_result(formula, "A coefficient was dropped. Cannot evaluate formula due to insufficient data.")
+        return _overwrite_negative_result(formula, "A coefficient was dropped. Cannot evaluate formula due to insufficient data.")
          
-    __result_sanity_check(final_coeff_names, final_coefficients, final_std_error, final_df, final_anova_factors, final_scores, final_p_values)
+    _result_sanity_check(final_coeff_names, final_coefficients, final_std_error, final_df, final_anova_factors, final_scores, final_p_values)
     
     ro.r('rm(list=ls(all=TRUE))')
     rpy2.robjects.numpy2ri.deactivate()
@@ -114,11 +114,11 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     
     return (final_scores, final_df, final_p_values, final_coefficients, final_std_error, final_anova_factors)
 
-def __digit_in_formula(formula):
+def _digit_in_formula(formula):
     """
     """
     
-    (fixed_factors, random_factors) = __get_factors(formula)
+    (fixed_factors, random_factors) = _get_factors(formula)
     
     for fixed_factor in fixed_factors:
         if (any(char.isdigit() for char in fixed_factor)):
@@ -140,7 +140,7 @@ def __digit_in_formula(formula):
 
     return False
 
-def __pre_sanity_checks(data, formula):
+def _pre_sanity_checks(data, formula):
     """
     Checks whether the input data is all zeros or all equal.
     
@@ -151,16 +151,16 @@ def __pre_sanity_checks(data, formula):
     """
     
     if (len(data) == 0):
-        return __overwrite_negative_result(formula, "No samples within matrix")
+        return _overwrite_negative_result(formula, "No samples within matrix")
     
     # In case all values are equal, the R-based GLMM will crash.
     # Therefore, this is caught here, returning P = 1 and matching values.
     if ((data[:, 0] == data[0, 0]).all()):
-        return __overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLMM")
+        return _overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLMM")
     
     return True
 
-def __overwrite_negative_result(formula, error_msg):
+def _overwrite_negative_result(formula, error_msg):
     """
     Returns negative results in case of an error.
     
@@ -170,13 +170,13 @@ def __overwrite_negative_result(formula, error_msg):
     @return: A all negative result for any evaluated fixed factor.
     """
     
-    fixed_factors = __get_factors(formula)[0] + ["(Intercept)"]
+    fixed_factors = _get_factors(formula)[0] + ["(Intercept)"]
     factor_cnt = len(fixed_factors)
     negative_result = (np.zeros((factor_cnt)), np.zeros((factor_cnt)), np.ones((factor_cnt)), np.zeros((factor_cnt)), np.zeros((factor_cnt)), fixed_factors)
     warnings.warn(error_msg, UserWarning)
     return negative_result
 
-def __execute_glmm(data_type, formula, random_effect):
+def _execute_glmm(data_type, formula, random_effect):
     """
     Estimates the GLMM defined in formula using the data already copied to R (variable name 'data').
     
@@ -205,14 +205,14 @@ def __execute_glmm(data_type, formula, random_effect):
     except rpy2.rinterface_lib.embedded.RRuntimeError as e:
         if (len(e.args) > 0):
             if (e.args[0] == 'Error: grouping factors must have > 1 sampled level\n'):
-                return (False, __overwrite_negative_result(formula, "Grouping factors must have > 1 sampled level"))
+                return (False, _overwrite_negative_result(formula, "Grouping factors must have > 1 sampled level"))
             elif (e.args[0] == 'Error: number of levels of each grouping factor must be < number of observations\n'):
-                return (False, __overwrite_negative_result(formula, "Number of levels of each grouping factor must be < number of observations"))
+                return (False, _overwrite_negative_result(formula, "Number of levels of each grouping factor must be < number of observations"))
             else:
-                return (False, __overwrite_negative_result(formula, "Unknown error in input data matrix"))
+                return (False, _overwrite_negative_result(formula, "Unknown error in input data matrix"))
 
-def __process_glmm_data(data, label_name, factor_type):
-    glmm_data = __anova_container(data, label_name, factor_type)
+def _process_glmm_data(data, label_name, factor_type):
+    glmm_data = _Anova_container(data, label_name, factor_type)
     
     for idx in range(0, len(glmm_data.label_name)):
         tmp = ro.r.matrix(glmm_data.data[:, idx], nrow = len(glmm_data.data[:, idx]), ncol = 1)
@@ -220,7 +220,7 @@ def __process_glmm_data(data, label_name, factor_type):
         
     glmm_data.send_labels()
 
-def __check_r_dependencies():
+def _check_r_dependencies():
     """
     Checks whether all R dependncies for the GLMM are installied, raises an exception otherwise
     """
@@ -231,7 +231,7 @@ def __check_r_dependencies():
             raise Exception("Error: R dependency " + r_dependency + " no installed.")
         ro.r("library(" + r_dependency + ")")
 
-def __collect_results():
+def _collect_results():
     """
     Collects the results from R and transfers them back to python. As the anova call and the GLMM call may return the factors with slightly different names and in different order, the results are synchronized for a coherent return.
     
@@ -269,7 +269,7 @@ def __collect_results():
     
     return (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error)
 
-def __result_sanity_check(final_coeff_names, final_coefficients, final_std_error,
+def _result_sanity_check(final_coeff_names, final_coefficients, final_std_error,
                         final_df, final_anova_factors, final_scores, final_p_values):
     """
     Checks whether the results from the anova and the GLMM call returned the same number of arguments. This should *theoretically* always be the case. Raises an error in case the sanity check fails.
@@ -292,7 +292,7 @@ def __result_sanity_check(final_coeff_names, final_coefficients, final_std_error
         or len(final_df) != len(final_p_values)):
         raise AssertionError("Something went wrong with the ANOVA.")
 
-def __sync_meta_info(names, values, values_2, formula, skip_missing = False):
+def _sync_meta_info(names, values, values_2, formula, skip_missing = False):
     """
     Synchronizes the order of names to the order defined in formula
     
@@ -306,7 +306,7 @@ def __sync_meta_info(names, values, values_2, formula, skip_missing = False):
     """
     
     #formula_names = get_fixed_factors(formula) + ["(Intercept)"]
-    formula_names = __get_factors(formula)[0] + ["(Intercept)"]
+    formula_names = _get_factors(formula)[0] + ["(Intercept)"]
     corr_names = list()
     for name in names:
         for refVal in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", ","]:
@@ -344,7 +344,7 @@ def __sync_meta_info(names, values, values_2, formula, skip_missing = False):
     
     return (final_names, final_vals, final_vals_2)
     
-def __sync_anova_info(anova_factors, scores, df, p_values, formula):
+def _sync_anova_info(anova_factors, scores, df, p_values, formula):
     """
     Synchronizes the order of factors to the order defined in the formula.
     
@@ -358,7 +358,7 @@ def __sync_anova_info(anova_factors, scores, df, p_values, formula):
     """
     
     #formula_names = get_fixed_factors(formula) + ["(Intercept)"]
-    formula_names = __get_factors(formula)[0] + ["(Intercept)"]
+    formula_names = _get_factors(formula)[0] + ["(Intercept)"]
     
     corr_anova_factors = list()
     for name in anova_factors:
@@ -393,13 +393,13 @@ def __sync_anova_info(anova_factors, scores, df, p_values, formula):
     
     return (final_anova_factors, final_score, final_df, final_p_palue)
 
-def __get_factors(formula):
-    formula = __clean_formula(formula)
-    (fixed_effects, random_effects) = __split_effects(formula)
+def _get_factors(formula):
+    formula = _clean_formula(formula)
+    (fixed_effects, random_effects) = _split_effects(formula)
      
     return (fixed_effects, random_effects)
 
-def __split_effects(formula):
+def _split_effects(formula):
     """
     Splits the effects specified in the formula into fixed effects and random effects.
     
@@ -423,8 +423,8 @@ def __split_effects(formula):
         l_idx = idx;
         r_idx = idx if (formula[idx + 1] != "|") else idx + 1
          
-        left_idx = __find_left_idx(formula, l_idx, operators = [])
-        right_idx = __find_right_idx(formula, r_idx, operators = [])
+        left_idx = _find_left_idx(formula, l_idx, operators = [])
+        right_idx = _find_right_idx(formula, r_idx, operators = [])
          
         pre_form = formula[:(left_idx-1)]
         post_form = formula[(right_idx+1):]
@@ -442,7 +442,7 @@ def __split_effects(formula):
             else:
                 return (fixed_effects, random_effects)
 
-def __clean_formula(formula):
+def _clean_formula(formula):
     """
     Preprocesses the formula prior to parsing it by removing space and simplifying operators.
     
@@ -450,13 +450,13 @@ def __clean_formula(formula):
     
     @return: The refined formula.
     """
-    formula = __rm_empty_space(formula)
-    formula = __replace_operator(formula)
-    formula = __restore_interactions(formula)
+    formula = _rm_empty_space(formula)
+    formula = _replace_operator(formula)
+    formula = _restore_interactions(formula)
     
     return formula
 
-def __rm_empty_space(formula):
+def _rm_empty_space(formula):
     """
     Removes empty parts in the formula
     
@@ -473,7 +473,7 @@ def __rm_empty_space(formula):
     
     return formula
 
-def __replace_operator(formula):
+def _replace_operator(formula):
     """
     Replaces convoluted operators in formulas with their elongated versions for parsing. The operators
     '*' (crossed) and '/' (nested) get replaced with A*B -> A+B+A:B and A/B -> A+A:B respectively.
@@ -485,12 +485,12 @@ def __replace_operator(formula):
     
     while(True):
 
-        idx = __find_idx(formula)
+        idx = _find_idx(formula)
         if (idx == -1):
             return formula
         
-        left_idx = __find_left_idx(formula, idx)
-        right_idx = __find_right_idx(formula, idx)
+        left_idx = _find_left_idx(formula, idx)
+        right_idx = _find_right_idx(formula, idx)
         
         pre_form = formula[:left_idx]
         post_form = formula[(right_idx):]
@@ -505,7 +505,7 @@ def __replace_operator(formula):
     
     return formula
 
-def __find_idx(formula):
+def _find_idx(formula):
     """
     Finds the next occurance of the '*' (cross) or '/' (nested) operator in a given formula.
     
@@ -520,7 +520,7 @@ def __find_idx(formula):
     else:
         return formula.find("/")
 
-def __find_left_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
+def _find_left_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
     """
     In case an operator is part of a bracketed equation, the left bracket is looked for. In case a closeing right side bracked is found, it is recognized and a left bracket is skipped for each additional right side bracket.
     
@@ -549,7 +549,7 @@ def __find_left_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
         if (idx == 0):
             return idx
         
-def __find_right_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
+def _find_right_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
     """
     In case an operator is part of a bracketed equation, the right bracket is looked for. In case a closeing left side bracked is found, it is recognized and a right bracket is skipped for each additional left side bracket.
     
@@ -578,7 +578,7 @@ def __find_right_idx(formula, idx, operators = ["+", ":", "|", "*", "/"]):
         if (idx == (len(formula) - 1)):
             return idx+1
 
-def __restore_interactions(formula):
+def _restore_interactions(formula):
     """
     Replaces any occurance of (term1):(term2) with term1:term2
     
@@ -597,8 +597,8 @@ def __restore_interactions(formula):
         if (idx == -1):
             return formula
         
-        left_idx = __find_left_idx(formula, idx)
-        right_idx = __find_right_idx(formula, idx)
+        left_idx = _find_left_idx(formula, idx)
+        right_idx = _find_right_idx(formula, idx)
         
         pre_form = formula[:left_idx]
         post_form = formula[right_idx:]
@@ -616,7 +616,7 @@ def __restore_interactions(formula):
             
     return formula
 
-class __anova_container():
+class _Anova_container():
 
     label_name   = None
     factor_type  = None
@@ -625,12 +625,12 @@ class __anova_container():
     label_comm   = None
     
 
-    def __init__(self, raw_wata, label_name, factor_type):
+    def __init__(self, raw_data, label_name, factor_type):
         self.label_name  = label_name
         self.factor_type = factor_type
         
         self.gen_labels()
-        self.data       = np.asarray(raw_wata)
+        self.data       = np.asarray(raw_data)
 
     def gen_labels(self):
         self.label_comm = "data = data.frame(" + self.label_name[0]

@@ -84,12 +84,12 @@ def run(data, ch_names, fs, ref_areas = [[105, 120], [135, 145], [155, 195]], br
         
     idenfity_faulty_visual_inspection_lock.acquire()
     if (visual_inspection):
-        (valid_list, invalid_list) = __manual_check(len(data), ch_names, diff, min_ref, max_ref, valid_list, invalid_list)
+        (valid_list, invalid_list) = _manual_check(len(data), ch_names, diff, min_ref, max_ref, valid_list, invalid_list)
     idenfity_faulty_visual_inspection_lock.release()
         
     return (valid_list.tolist(), invalid_list.tolist(), np.asarray(score_list))
 
-def __manual_check(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list):
+def _manual_check(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list):
     """
     Visualizes the z-score of each channel and annotates all channels. Afterwards bad channel selection may be manually adjusted. Internally parallelized to speed up the drawing process.
     
@@ -106,7 +106,7 @@ def __manual_check(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invali
     shared_valid_list = multiprocessing.Array('i', ch_cnt)
     
     #Need to run as a subproces to enable the starting of multiple Qapplications
-    vis_sub_process = multiprocessing.Process(target = __manual_check_mp, args = [ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list])
+    vis_sub_process = multiprocessing.Process(target = _manual_check_mp, args = [ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list])
     vis_sub_process.start()
     vis_sub_process.join()
     
@@ -115,10 +115,10 @@ def __manual_check(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invali
     
     return(valid_list, invalid_list)
 
-def __manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list):
+def _manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, invalid_list, shared_valid_list):
     """
     
-    Parallized part of __manual_check.
+    Parallized part of _manual_check.
     
     :param ch_cnt: Number of channels.
     :param ch_names: Number of channels.
@@ -139,7 +139,7 @@ def __manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, inv
     if (type(invalid_list) == np.ndarray):
         invalid_list = invalid_list.tolist()
     
-    win = __Qt_win(app, ch_cnt, ch_names, min_ref, max_ref, score, valid_list, invalid_list)
+    win = _Qt_win(app, ch_cnt, ch_names, min_ref, max_ref, score, valid_list, invalid_list)
     
     app.exec()
     
@@ -160,7 +160,7 @@ def __manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, inv
     
     return (valid_list, invalid_list)
 
-class __Qt_win(PyQt5.QtWidgets.QWidget):
+class _Qt_win(PyQt5.QtWidgets.QWidget):
     """
 
     Window visualizing the z-score distribution of the provided channels.

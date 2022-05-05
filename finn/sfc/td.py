@@ -8,11 +8,11 @@ This module provides different functions to estimate sfc between two signals fro
 """
 
 import numpy as np
-import finn.sfc.__misc as misc
+import finn.sfc._misc as misc
 import finn.sfc.fd as fd
-import finn.sfc.__wpli as calc_wpli
-import finn.sfc.__psi as calc_psi
-import finn.sfc.__dac as calc_dac
+import finn.sfc._wpli as calc_wpli
+import finn.sfc._psi as calc_psi
+import finn.sfc._dac as calc_dac
 
 def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
     """
@@ -64,11 +64,11 @@ def run_wpli(data1, data2, fs, nperseg, nfft, window = "hann", pad_type = "zero"
         loc_data1 = data1[block_start:(block_start + nperseg)]
         loc_data2 = data2[block_start:(block_start + nperseg)]
         
-        seg_data_1 = misc.__segment_data(loc_data1, nperseg, pad_type)
-        seg_data_2 = misc.__segment_data(loc_data2, nperseg, pad_type)
+        seg_data_1 = misc._segment_data(loc_data1, nperseg, pad_type)
+        seg_data_2 = misc._segment_data(loc_data2, nperseg, pad_type)
     
-        (bins, f_data_1) = misc.__calc_FFT(seg_data_1, fs, nfft, window)
-        (_,    f_data_2) = misc.__calc_FFT(seg_data_2, fs, nfft, window)
+        (bins, f_data_1) = misc._calc_FFT(seg_data_1, fs, nfft, window)
+        (_,    f_data_2) = misc._calc_FFT(seg_data_2, fs, nfft, window)
     
         s_xy.append((np.conjugate(f_data_1[0, :]) * f_data_2[0, :] * 2))
 
@@ -159,14 +159,14 @@ def run_cc(data_1, data_2, nperseg, pad_type, fs, nfft, window):
     :return: Complex coherency.
     """
 
-    seg_data_1 = misc.__segment_data(data_1, nperseg, pad_type)
-    seg_data_2 = misc.__segment_data(data_2, nperseg, pad_type)
+    seg_data_1 = misc._segment_data(data_1, nperseg, pad_type)
+    seg_data_2 = misc._segment_data(data_2, nperseg, pad_type)
     
     seg_data_1 = seg_data_1[:seg_data_2.shape[0], :]
     seg_data_2 = seg_data_2[:seg_data_1.shape[0], :]
 
-    (bins, f_data_1) = misc.__calc_FFT(seg_data_1, fs, nfft, window)
-    (_,    f_data_2) = misc.__calc_FFT(seg_data_2, fs, nfft, window)
+    (bins, f_data_1) = misc._calc_FFT(seg_data_1, fs, nfft, window)
+    (_,    f_data_2) = misc._calc_FFT(seg_data_2, fs, nfft, window)
 
     return (bins, fd.run_cc(f_data_1, f_data_2))
 

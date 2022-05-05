@@ -70,7 +70,7 @@ def main(data = None):
             
     plt.show(block = True)
 
-def __run_inner(data1, data2, offset, phase_shift, freq_bin_factor):
+def _run_inner(data1, data2, offset, phase_shift, freq_bin_factor):
     
     """
     Parallelization-friendly inner loop of the DAC call.
@@ -117,7 +117,7 @@ def run(data, phase_min, phase_max, phase_step):
     offset = int(np.ceil(frequency_sampling/np.mean([frequency_min, frequency_max])))
     data1 = data1[(offset):]
     
-    dac_scores = tp.run(thread_cnt, __run_inner, [(data1, data2, offset, phase_shift,
+    dac_scores = tp.run(thread_cnt, _run_inner, [(data1, data2, offset, phase_shift,
                                                    freq_bin_factor) for phase_shift in np.arange(phase_min, phase_max, phase_step)], max_time = None, delete_data = False)
     dac_scores = np.asarray(dac_scores)
     

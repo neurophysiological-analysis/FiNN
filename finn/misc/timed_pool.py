@@ -10,7 +10,7 @@ import multiprocessing
 import time
 import numpy as np
 
-def __manage_sub_process(func, args, child_pipe, return_data_lock):
+def _manage_sub_process(func, args, child_pipe, return_data_lock):
     """
     Commands a sub-process to execute *func* with the arguments provided in *args*.
     
@@ -29,7 +29,7 @@ def __manage_sub_process(func, args, child_pipe, return_data_lock):
      
     child_pipe.close()
     
-def __launch_child_process(sub_processes, func, args, max_time, curr_job_idx, return_data_lock):
+def _launch_child_process(sub_processes, func, args, max_time, curr_job_idx, return_data_lock):
     """
     
     Starts a child-process to execute work.
@@ -44,12 +44,12 @@ def __launch_child_process(sub_processes, func, args, max_time, curr_job_idx, re
     """
     
     (parent_pipe, child_pipe) = multiprocessing.Pipe(True)
-    sub_process = multiprocessing.Process(target = __manage_sub_process, args = (func, args[curr_job_idx], child_pipe, return_data_lock))
+    sub_process = multiprocessing.Process(target = _manage_sub_process, args = (func, args[curr_job_idx], child_pipe, return_data_lock))
     sub_processes.append((sub_process, parent_pipe, curr_job_idx, time.time()))
         
     sub_process.start()
     
-def __get_child_proc_data(sub_processes, max_time, res_data, args, delete_data):
+def _get_child_proc_data(sub_processes, max_time, res_data, args, delete_data):
     """
     
     Gets result data from sub-processes or terminates them if they have exceeded their life-time.
@@ -127,12 +127,12 @@ def run(max_child_proc_cnt = 4, func = None, args = None, max_time = None, delet
     
     while(len(sub_processes) != 0 or curr_job_idx < job_cnt):
         if (len(sub_processes) < max_child_proc_cnt and curr_job_idx < job_cnt):
-            __launch_child_process(sub_processes, func, args, max_time, curr_job_idx, return_data_lock)
+            _launch_child_process(sub_processes, func, args, max_time, curr_job_idx, return_data_lock)
             curr_job_idx += 1
 
-        failed_idx = __get_child_proc_data(sub_processes, max_time, res_data, args, delete_data)
+        failed_idx = _get_child_proc_data(sub_processes, max_time, res_data, args, delete_data)
         if (failed_idx is not None):
-            __launch_child_process(sub_processes, func, args, max_time, failed_idx, return_data_lock)
+            _launch_child_process(sub_processes, func, args, max_time, failed_idx, return_data_lock)
                 
         time.sleep(0.01)
         

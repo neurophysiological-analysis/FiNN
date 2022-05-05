@@ -9,7 +9,7 @@ import numpy as np
 import finn.sfc.td as td
 import finn.sfc.fd as fd
 
-import finn.sfc.__misc as misc
+import finn.sfc._misc as misc
 import demo_data.demo_data_paths as paths
 
 def main():
@@ -47,13 +47,14 @@ def calc_from_time_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft,
     return td.run_cc(signal_1, signal_2, nperseg, pad_type, frequency_sampling, nfft, window)
 
 def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, window = "hann", pad_type = "zero"):
-    seg_data_X = misc.__segment_data(signal_1, nperseg, pad_type)
-    seg_data_Y = misc.__segment_data(signal_2, nperseg, pad_type)
+    seg_data_X = misc._segment_data(signal_1, nperseg, pad_type)
+    seg_data_Y = misc._segment_data(signal_2, nperseg, pad_type)
 
-    (bins, fd_signal_1) = misc.__calc_FFT(seg_data_X, frequency_sampling, nfft)
-    (_,    fd_signal_2) = misc.__calc_FFT(seg_data_Y, frequency_sampling, nfft)
+    (bins, fd_signal_1) = misc._calc_FFT(seg_data_X, frequency_sampling, nfft)
+    (_,    fd_signal_2) = misc._calc_FFT(seg_data_Y, frequency_sampling, nfft)
     
     return fd.run_cc(fd_signal_1, fd_signal_2)
     
     
 main()
+print("terminated succesfully")

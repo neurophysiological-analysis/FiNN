@@ -14,7 +14,7 @@ import finn.sfc.td as td
 import finn.sfc.fd as fd
 import finn.sfc.cd as cohd
 
-import finn.sfc.__misc as misc
+import finn.sfc._misc as misc
 import demo_data.demo_data_paths as paths
 
 def main():
@@ -84,11 +84,11 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, 
         loc_signal_1 = signal_1[block_start:(block_start + nperseg)]
         loc_signal_2 = signal_2[block_start:(block_start + nperseg)]
         
-        seg_signal_X = misc.__segment_data(loc_signal_1, nperseg, pad_type = "zero")
-        seg_signal_Y = misc.__segment_data(loc_signal_2, nperseg, pad_type = "zero")
+        seg_signal_X = misc._segment_data(loc_signal_1, nperseg, pad_type = "zero")
+        seg_signal_Y = misc._segment_data(loc_signal_2, nperseg, pad_type = "zero")
     
-        (bins, fd_signal_X) = misc.__calc_FFT(seg_signal_X, frequency_sampling, nfft, window = "hann")
-        (_, fd_signal_Y) = misc.__calc_FFT(seg_signal_Y, frequency_sampling, nfft, window = "hanning")
+        (bins, fd_signal_X) = misc._calc_FFT(seg_signal_X, frequency_sampling, nfft, window = "hann")
+        (_, fd_signal_Y) = misc._calc_FFT(seg_signal_Y, frequency_sampling, nfft, window = "hanning")
         
         fd_signals_X.append(fd_signal_X[0, :])
         fd_signals_Y.append(fd_signal_Y[0, :])
@@ -101,11 +101,11 @@ def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, nperseg, 
         loc_data1 = signal_1[block_start:(block_start + nperseg)]
         loc_data2 = signal_2[block_start:(block_start + nperseg)]
         
-        seg_data_X = misc.__segment_data(loc_data1, nperseg, pad_type = "zero")
-        seg_data_Y = misc.__segment_data(loc_data2, nperseg, pad_type = "zero")
+        seg_data_X = misc._segment_data(loc_data1, nperseg, pad_type = "zero")
+        seg_data_Y = misc._segment_data(loc_data2, nperseg, pad_type = "zero")
     
-        (_, f_data_X) = misc.__calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hann")
-        (_,    f_data_Y) = misc.__calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hann")
+        (_, f_data_X) = misc._calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hann")
+        (_,    f_data_Y) = misc._calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hann")
     
         s_xy.append((np.conjugate(f_data_X[0, :]) * f_data_Y[0, :] * 2))
 

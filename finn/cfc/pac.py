@@ -49,7 +49,7 @@ def run_dmi(low_freq_data, high_freq_data,
     params = lmfit.Parameters()
     params.add("phase", value = 0, min = -180, max = 180, vary = True)
     params.add("amp", value = 1, min = 0.95, max = 1.05, vary = True)
-    model = lmfit.Model(__sine, nan_policy = "omit")
+    model = lmfit.Model(_sine, nan_policy = "omit")
     result = model.fit(amplitude_signal, x = np.arange(0, 1, 1/len(amplitude_signal)),
                        params = params, max_nfev = max_model_fit_iterations)
 
@@ -65,7 +65,7 @@ def run_dmi(low_freq_data, high_freq_data,
 
     return (score, result.best_fit, amplitude_signal)
 
-def __sine(x, phase, amp):
+def _sine(x, phase, amp):
     """
     Internal method. Used in run_dmi to estimate the direct modulation index. The amount of PAC is quantified via a sine fit. This sine is defined by the following paramters:
     
