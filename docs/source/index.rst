@@ -22,14 +22,5 @@ Demo applications of the included modules are available in the finn_demo folder.
 .. toctree::
    :hidden:
    :maxdepth: 1
-   :caption: Packages:
    
-   basic
-   cfc
-   cleansing
-   file_io
-   filters
-   misc
-   sfc
-   statistical
-   visualization
+   api_reference
