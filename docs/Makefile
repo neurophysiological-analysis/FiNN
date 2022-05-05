@@ -3,10 +3,12 @@
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-SPHINXBUILD   = sphinx-build
-SPHINXBUILD   = cd build && sphinx-multiversion
+#SPHINXBUILD   = sphinx-build
+SPHINXBUILD   = cd .. && sphinx-multiversion
 PAPER         =
-BUILDDIR      = ../docs/build
+#BUILDDIR      = ../docs/build
+BUILDDIR      = ../build/html
+SOURCEDIR	  = docs/source
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -38,7 +40,8 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 
 html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	#$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	$(SPHINXBUILD) $(SOURCEDIR) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
