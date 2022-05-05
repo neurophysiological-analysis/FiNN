@@ -3,7 +3,8 @@
 __pycache__/
 *.pyc
 *.egg-info/
-build/
+build/lib/
+build/bdist.linux-x86_64/
 dist/
 /.metadata/
 *.svg
