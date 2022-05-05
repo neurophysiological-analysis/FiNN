@@ -5,6 +5,11 @@ FiNN API
 
 This section documents the functions offered by FiNN.
 
+* `finn.basic`
+
+  - `finn.basic.car`
+  - `finn.basic.downsampling`
+
 .. toctree::
    :hidden:
    :maxdepth: 1
