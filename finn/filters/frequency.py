@@ -29,11 +29,11 @@ def butter(data, f_low, f_high, fs, order, zero_phase = True):
         
     #https://docs.scipy.org/doc/scipy-0.19.0/reference/generated/scipy.signal.butter.html
     filter_param = scipy.signal.butter(N = order, Wn = (f_low / nyq , f_high / nyq), btype = 'bandpass', analog = False, output = 'ba')
-    filter_func = __apply_zero_phase if (zero_phase == True) else __apply_nonzero_phase
+    filter_func = _apply_zero_phase if (zero_phase == True) else _apply_nonzero_phase
 
     return filter_func(filter_param[0], filter_param[1], data)
         
-def __apply_zero_phase(b, a, data): 
+def _apply_zero_phase(b, a, data): 
     """
     Applies the filters twice resulting in zero phase distortion
     
@@ -46,7 +46,7 @@ def __apply_zero_phase(b, a, data):
     
     return scipy.signal.filtfilt(b, a, data)
             
-def __apply_nonzero_phase(b, a, data):
+def _apply_nonzero_phase(b, a, data):
     """
     Applies scipy's lfilter function.
     
@@ -88,24 +88,24 @@ def fir(data, f_low, f_high, trans_width, fs, ripple_pass_band = 10e-5, stop_ban
     
     nyq = fs / 2
     
-    N = __estimate_FIR_coeff_num(fs, trans_width, ripple_pass_band, stop_band_suppression)
+    N = _estimate_FIR_coeff_num(fs, trans_width, ripple_pass_band, stop_band_suppression)
         
     if (f_low is not None and f_high is None): # Is high pass
-        (freq, gain) = __calc_FIR_freq_and_gain_left_sided(nyq, f_low, trans_width)
+        (freq, gain) = _calc_FIR_freq_and_gain_left_sided(nyq, f_low, trans_width)
         if ((N % 2) == 0):
             N += 1
     if (f_low is None and f_high is not None): # Is low pass
-        (freq, gain) = __calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width)
+        (freq, gain) = _calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width)
         if ((N % 2) == 1):
             N += 1
     if (f_low is not None and f_high is not None): # Is band pass or band stop
         if (f_low > f_high): # Is band stop
-            (freq, gain) = __calc_FIR_freq_and_gain_two_sided(nyq, f_high, f_low, trans_width)
+            (freq, gain) = _calc_FIR_freq_and_gain_two_sided(nyq, f_high, f_low, trans_width)
             gain = np.logical_not(gain).astype(np.int)
             if ((N % 2) == 0):
                 N += 1
         else: # Is band pass
-            (freq, gain) = __calc_FIR_freq_and_gain_two_sided(nyq, f_low, f_high, trans_width)
+            (freq, gain) = _calc_FIR_freq_and_gain_two_sided(nyq, f_low, f_high, trans_width)
             if ((N % 2) == 1):
                 N += 1
     
@@ -113,11 +113,11 @@ def fir(data, f_low, f_high, trans_width, fs, ripple_pass_band = 10e-5, stop_ban
     if (mode == "fast"):
         data = np.asarray(data, dtype = np.float32)
         coeffs = np.asarray(coeffs, dtype = np.float32)
-    res_data = __overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type) # Removes shift introduced by the filter
+    res_data = _overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type) # Removes shift introduced by the filter
                     
     return res_data
 
-def __estimate_FIR_coeff_num(fs, trans_width, ripple_pass_band = 10e-5, stop_band_suppression = 10e-7):
+def _estimate_FIR_coeff_num(fs, trans_width, ripple_pass_band = 10e-5, stop_band_suppression = 10e-7):
     """
     Estimates the FIR filters coefficients base on the given parameters. Note, the sharper the 'edges' of the filters are, 
     the wider becomes the filters
@@ -136,7 +136,7 @@ def __estimate_FIR_coeff_num(fs, trans_width, ripple_pass_band = 10e-5, stop_ban
     
     return int(2/3 * math.log10(1/(10 * ripple_pass_band * stop_band_suppression)) * fs / trans_width)
 
-def __calc_FIR_freq_and_gain_two_sided(nyq, f_low, f_high, trans_width):
+def _calc_FIR_freq_and_gain_two_sided(nyq, f_low, f_high, trans_width):
     """
     Calculates the two-sided frequency window and the gain for a FIR filters 
     
@@ -164,7 +164,7 @@ def __calc_FIR_freq_and_gain_two_sided(nyq, f_low, f_high, trans_width):
     
     return (freq, gain)
 
-def __calc_FIR_freq_and_gain_left_sided(nyq, f_low, trans_width):
+def _calc_FIR_freq_and_gain_left_sided(nyq, f_low, trans_width):
     """
     Calculates the left-sided frequency window and the gain for a FIR filters 
     
@@ -184,7 +184,7 @@ def __calc_FIR_freq_and_gain_left_sided(nyq, f_low, trans_width):
     
     return (freq, gain)
 
-def __calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width):
+def _calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width):
     """
     Calculates the right-sided frequency window and the gain for a FIR filters 
     
@@ -204,7 +204,7 @@ def __calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width):
     
     return (freq, gain)
 
-def __overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type):
+def _overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type):
     
     coeff_length = len(coeffs)
     data_length = len(data)
@@ -215,17 +215,17 @@ def __overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type):
     #Compensate for filters introduced shift
     shift = math.floor((coeff_length - 1) / 2) + pad_width
         
-    fft_win_sz = __overlap_add_sanity_check(fs = fs, trans_width = trans_width, data_length = data_length, filter_length = coeff_length,
+    fft_win_sz = _overlap_add_sanity_check(fs = fs, trans_width = trans_width, data_length = data_length, filter_length = coeff_length,
                                        shift = shift, fft_win_sz = fft_win_sz)
     
     #filter_length has to be at least the length of a single fft window
     coeffsFFT = scipy.fftpack.fft(np.concatenate([coeffs, np.zeros(fft_win_sz - coeff_length, dtype = coeffs.dtype)]))
         
     
-    (seg_length, seg_cnt) = __estimate_overlap_add_segments(data_length = data_length, pad_edge_width = pad_width,
+    (seg_length, seg_cnt) = _estimate_overlap_add_segments(data_length = data_length, pad_edge_width = pad_width,
                                                       filter_length = coeff_length, fft_win_sz = fft_win_sz)
 
-    padded_data = __pad_overlap_add_data(data, pad_width, pad_type)
+    padded_data = _pad_overlap_add_data(data, pad_width, pad_type)
     
     result_data = np.zeros((len(padded_data)), dtype = coeffs.dtype)
 
@@ -267,7 +267,7 @@ def __overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type):
 
     return res_data
 
-def __overlap_add_sanity_check(fs, trans_width, data_length, filter_length, shift, fft_win_sz = 2):
+def _overlap_add_sanity_check(fs, trans_width, data_length, filter_length, shift, fft_win_sz = 2):
     """
     Checks whether designed filters can be applied to the data
     
@@ -296,7 +296,7 @@ def __overlap_add_sanity_check(fs, trans_width, data_length, filter_length, shif
         print("Either add more data or increase the transition width.")        
     return fft_win_sz
 
-def __estimate_overlap_add_segments(data_length, pad_edge_width, filter_length, fft_win_sz):
+def _estimate_overlap_add_segments(data_length, pad_edge_width, filter_length, fft_win_sz):
     """
     Estimates the size and the number of segments used in the overlap add approach.
     
@@ -317,7 +317,7 @@ def __estimate_overlap_add_segments(data_length, pad_edge_width, filter_length, 
     
     return (seg_length, seg_cnt)
 
-def __pad_overlap_add_data(data, pad_width, pad_type = "zero"):
+def _pad_overlap_add_data(data, pad_width, pad_type = "zero"):
     """
     Pads the individual segments of the overlap add function. 
     

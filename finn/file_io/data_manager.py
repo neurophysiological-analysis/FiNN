@@ -31,10 +31,10 @@ def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
     if (path[-1] == "/"):
         path = path[:-1]
     
-    structure = __save(data, path, current_depth, max_depth, None)
+    structure = _save(data, path, current_depth, max_depth, None)
     pickle.dump(structure, open(path + "/meta.nfo", "wb"))
     
-def __save(data, path, current_depth, max_depth, structure = None):
+def _save(data, path, current_depth, max_depth, structure = None):
     """
     
     Internally recursively called until either an incompatible data type is discovered or the max_depth is reached.
@@ -54,21 +54,21 @@ def __save(data, path, current_depth, max_depth, structure = None):
             
         for (sub_data_idx, sub_data) in enumerate(data):
             structure.append([sub_data_idx, list()])
-            structure[-1][-1] = __save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
+            structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
             
     elif(type(data) == dict and current_depth < max_depth):
         structure = list(); structure.append("dict")
             
         for key in data:
             structure.append([key, type(key), list()])
-            structure[-1][-1] = __save(data[key], path + "/" + str(key), current_depth + 1, max_depth, structure[-1][-1])
+            structure[-1][-1] = _save(data[key], path + "/" + str(key), current_depth + 1, max_depth, structure[-1][-1])
             
     elif(type(data) == list and current_depth < max_depth):
         structure = list(); structure.append("list")
             
         for (sub_data_idx, sub_data) in enumerate(data):
             structure.append([sub_data_idx, list()])
-            structure[-1][-1] = __save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
+            structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
             
     else:
         os.makedirs(path, exist_ok = True)
@@ -95,9 +95,9 @@ def load(path, legacy_mode = False):
         return legacy.load(path)
     
     structure = pickle.load(open(path + "/meta.nfo", "rb"))
-    return __load(structure, path)
+    return _load(structure, path)
 
-def __load(structure, path):
+def _load(structure, path):
     """
     
     Internally recursively called to load data
@@ -115,7 +115,7 @@ def __load(structure, path):
         if (structure[0] == "np.ndarray"):
             data = list()
             for sub_structure in structure[1:]:
-                loc_data = __load(sub_structure[-1], path + "/" + str(sub_structure[0]))
+                loc_data = _load(sub_structure[-1], path + "/" + str(sub_structure[0]))
                 data.append(loc_data)
             data = np.asarray(data)
                 
@@ -123,13 +123,13 @@ def __load(structure, path):
             data = dict()
             for sub_structure in structure[1:]:
                 key = sub_structure[1](sub_structure[0])
-                loc_data = __load(sub_structure[-1], path + "/" + str(sub_structure[0]))
+                loc_data = _load(sub_structure[-1], path + "/" + str(sub_structure[0]))
                 data[key] = loc_data
                 
         if (structure[0] == "list"):
             data = list()
             for sub_structure in structure[1:]:
-                loc_data = __load(sub_structure[-1], path + "/" + str(sub_structure[0]))
+                loc_data = _load(sub_structure[-1], path + "/" + str(sub_structure[0]))
                 data.append(loc_data)
     elif (structure[:4] == "data"):
         if (structure == "data_pkl"):

@@ -18,7 +18,7 @@ def run(data, src_freq, tgt_freq):
     :return: Downsampled data
     """
     
-    paddedData = np.zeros((__nextPowerTwo(len(data))))
+    paddedData = np.zeros((_nextPowerTwo(len(data))))
     paddedData[0:len(data)] = data
     
     padTgtSampNum = int(float(len(paddedData)) / float(src_freq) * float(tgt_freq))
@@ -31,7 +31,7 @@ def run(data, src_freq, tgt_freq):
     
     return data
 
-def __nextPowerTwo(value):
+def _nextPowerTwo(value):
     """
     Returns the next power of two.
     

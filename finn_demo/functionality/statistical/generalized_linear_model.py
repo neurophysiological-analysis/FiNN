@@ -5,6 +5,7 @@ Created on Jun 2, 2020
 '''
 
 import numpy as np
+np.random.seed(0)
 
 import finn.statistical.glmm as glmm
 

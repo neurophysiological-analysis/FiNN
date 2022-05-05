@@ -6,7 +6,7 @@ Created on Jun 2, 2020
 
 import numpy as np
 
-import finn.sfc.__misc as misc
+import finn.sfc._misc as misc
 import finn.sfc.td as td
 import finn.sfc.cd as cohd
 
@@ -35,11 +35,11 @@ def wpli_coh(_0, _1, _2, frequency_tgt, data1, data2):
         loc_data1 = data1[block_start:(block_start + win_sz)]
         loc_data2 = data2[block_start:(block_start + win_sz)]
         
-        seg_data_X = misc.__segment_data(loc_data1, win_sz, "zero")
-        seg_data_Y = misc.__segment_data(loc_data2, win_sz, "zero")
+        seg_data_X = misc._segment_data(loc_data1, win_sz, "zero")
+        seg_data_Y = misc._segment_data(loc_data2, win_sz, "zero")
     
-        (_, f_data_X) = misc.__calc_FFT(seg_data_X, 5500, win_sz, "hann")
-        (_,    f_data_Y) = misc.__calc_FFT(seg_data_Y, 5500, win_sz, "hann")
+        (_, f_data_X) = misc._calc_FFT(seg_data_X, 5500, win_sz, "hann")
+        (_,    f_data_Y) = misc._calc_FFT(seg_data_Y, 5500, win_sz, "hann")
     
         s_xy.append((np.conjugate(f_data_X[0, :]) * f_data_Y[0, :] * 2))
 

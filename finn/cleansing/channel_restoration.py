@@ -9,7 +9,7 @@ This module implements functions to restore channels as an approach to deal with
 import numpy as np
 import finn.cleansing.neighboring_channels as nc
 
-def __get_neighbor_channel_ids(ch_names):
+def _get_neighbor_channel_ids(ch_names):
     """
     
     Determines the neighboring channels of a specific channel
@@ -44,7 +44,7 @@ def run(data, ch_names, bad_ch_idx_list):
     
     sub_data = np.copy(data)
 
-    neigh_list = __get_neighbor_channel_ids(ch_names)
+    neigh_list = _get_neighbor_channel_ids(ch_names)
 
     while(len(bad_ch_idx_list) > 0):
         # Update neighbor count per bad channel

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='finn',
-    version='0.1.3',
+    version='0.1.5',
     description='Toolbox for the analysis of electrophysiological data',
     long_description='A Python Toolbox for the analysis of electrophysiological data',
     author='Maximilian Scherer',

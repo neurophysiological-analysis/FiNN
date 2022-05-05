@@ -18,10 +18,12 @@ import matplotlib.pyplot as plt
 import pathlib
 import pyexcel_ods
 
-class topoplot():
+class Topoplot():
     """
     topoplot generation class. Initialition costs a couple of seconds due to mask generation.
     Performance advice: if possible, only generate a single topoplot object.
+    
+    :param mode: Mode is either "EEG" or "MEG"
     """
     
     #Mask for the topoplot color value data
@@ -33,21 +35,20 @@ class topoplot():
 
     def __init__(self, mode):
         """
-        Constructor
+        Constructor. Currently supports: The extended 10-20 system for 64 channels - ext_10_20_64_ch
         
-        :param mode: EEG montage setup
-        Currently supports: The extended 10-20 system for 64 channels - ext_10_20_64_ch
+        :param mode: Mode is either "EEG" or "MEG"
         """
         
         if (mode not in ["EEG", "MEG"]):
             raise NotImplementedError("This setup has not yet been implemented")
         else:
             self.mode = mode
-            self.get_coords = self.__read_map
+            self.get_coords = self._read_map
         
-        self.__generate_topoplot_mask()
+        self._generate_topoplot_mask()
 
-    def __read_map(self, mode):
+    def _read_map(self, mode):
         map_path = str(pathlib.Path(__file__).parent.absolute()) + "/coord_map.ods"
         #map_file = pyexcel_ods.read_data("methods/visualization_map.ods")[mode]
         map_file = pyexcel_ods.read_data(map_path)[mode]
@@ -108,28 +109,28 @@ class topoplot():
         if (len(values.shape) == 1):
             values = np.expand_dims(values, axis = 1)
         
-        values[:, 0] = self.__mask_data(values[:, 0], ch_name_list, substitute_channels, omit_channels)
-        (data, X, Y) = self.__interpolate_data(coords, values[:, 0], screen_channels)
+        values[:, 0] = self._mask_data(values[:, 0], ch_name_list, substitute_channels, omit_channels)
+        (data, X, Y) = self._interpolate_data(coords, values[:, 0], screen_channels)
 
-        (norm_data, v_min, v_max, v_diff) = self.__normalize_data(data, X, Y, v_min, v_max)
+        (norm_data, v_min, v_max, v_diff) = self._normalize_data(data, X, Y, v_min, v_max)
     
-        self.__draw_figure(ax, X, Y, norm_data, v_min, v_max, v_diff)
+        self._draw_figure(ax, X, Y, norm_data, v_min, v_max, v_diff)
         
         if (len(values.shape) > 1):
-            self.__annotate_ch_sig(coords, ch_name_list, ax, values[:, :], omit_channels, substitute_channels)
+            self._annotate_ch_sig(coords, ch_name_list, ax, values[:, :], omit_channels, substitute_channels)
         
         if (annotate_ch_names):
-            self.__add_ch_names(coords, ch_name_list, ax)
+            self._add_ch_names(coords, ch_name_list, ax)
             
-        self.__refine_image(ax)
-        self.__add_color_bar(v_min, v_max, v_border_values, v_border_labels)
+        self._refine_image(ax)
+        self._add_color_bar(v_min, v_max, v_border_values, v_border_labels)
         
         if ((file_path is None) == False):
             fig.savefig(file_path)
         
         return (fig, ax)
     
-    def __add_color_bar(self, v_min, v_max, v_border_values, v_border_labels):
+    def _add_color_bar(self, v_min, v_max, v_border_values, v_border_labels):
         """
         Adds a color bar to the topoplot.
         
@@ -159,7 +160,7 @@ class topoplot():
         cbar.ax.get_yaxis().set_ticks(y_ticks)
         cbar.ax.get_yaxis().set_ticklabels(y_tick_labels, rotation = -90, va = 'center')
     
-    def __refine_image(self, ax):
+    def _refine_image(self, ax):
         """
         Adds additional elements to the topoplot to make it visually more appealing.
         
@@ -183,7 +184,7 @@ class topoplot():
         ax.set_xlim(-self.win_sz, self.win_sz)
         ax.set_ylim(-self.win_sz, self.win_sz)
     
-    def __mask_data(self, values, ch_name_list, substitute_channels, omit_channels):
+    def _mask_data(self, values, ch_name_list, substitute_channels, omit_channels):
         """
         Substitutes and omits channels which are marked respectively.
         
@@ -197,13 +198,13 @@ class topoplot():
         """    
         
         if ((substitute_channels is None or substitute_channels == False) == False):
-            values = self.__substitute_channels(values, ch_name_list, substitute_channels)
+            values = self._substitute_channels(values, ch_name_list, substitute_channels)
         if ((omit_channels is None or omit_channels == False) == False):
-            values = self.__omit_channels(values, ch_name_list, omit_channels)
+            values = self._omit_channels(values, ch_name_list, omit_channels)
             
         return values
     
-    def __substitute_channels(self, values, ch_name_list, substitute_channels):
+    def _substitute_channels(self, values, ch_name_list, substitute_channels):
         """
         Substitutes channels by overwriting each 'tgt' channel with the average of the respective 'src' channels
         
@@ -232,7 +233,7 @@ class topoplot():
         
         return values
     
-    def __omit_channels(self, values, ch_name_list, omit_channels):
+    def _omit_channels(self, values, ch_name_list, omit_channels):
         """
         Omits channels by setting them to zero.
         
@@ -255,7 +256,7 @@ class topoplot():
                
         return values
     
-    def __generate_topoplot_mask(self):
+    def _generate_topoplot_mask(self):
         """
         Generates a mask to hide areas of the topoplot to make it circular
         """
@@ -268,7 +269,7 @@ class topoplot():
                 if ((np.power(xPos - 0, 2) + np.power(yPos - 0, 2)) >= (self.win_sz - 0.1)):
                     self.topoplot_mask_data[x, y] = np.nan
     
-    def __interpolate_data(self, coords, values, screen_channels = False):
+    def _interpolate_data(self, coords, values, screen_channels = False):
         """
         Interpolates the individual data points and hides anything 'outside' the head
         
@@ -291,7 +292,7 @@ class topoplot():
         
         return data, X, Y
     
-    def __normalize_data(self, data, X, Y, v_min, v_max):
+    def _normalize_data(self, data, X, Y, v_min, v_max):
         """
         Normalizes the topoplot data
         
@@ -336,7 +337,7 @@ class topoplot():
                 
         return (norm_data, v_min, v_max, v_diff)
     
-    def __draw_figure(self, ax, X, Y, norm_data, v_min, v_max, v_diff):
+    def _draw_figure(self, ax, X, Y, norm_data, v_min, v_max, v_diff):
         """
         Draws the contour of the topoplot.
         
@@ -353,7 +354,7 @@ class topoplot():
         
         ax.contourf(X, Y, norm_data, cmap = plt.get_cmap("jet"), levels = levels, antialiased = False, zorder = 1)
     
-    def __annotate_ch_sig(self, coords, ch_name_list, ax, signValues, omit_channels = None, substitute_channels = None):
+    def _annotate_ch_sig(self, coords, ch_name_list, ax, signValues, omit_channels = None, substitute_channels = None):
         """
         Adds channel positions and respective significance (if supplied)
         
@@ -396,7 +397,7 @@ class topoplot():
             else:
                 ax.scatter(coords[0, chIdx], coords[1, chIdx], color = 'black', s = 24, marker="o", zorder = 2)
     
-    def __add_ch_names(self, coords, ch_name_list, ax):
+    def _add_ch_names(self, coords, ch_name_list, ax):
         """
         Annotates the individual channels with their names
         
@@ -409,7 +410,7 @@ class topoplot():
             text = ch_name_list[chIdx]
             ax.annotate(text, [coords[0, chIdx], coords[1, chIdx]], zorder = 3)
             
-    def __get_eeg_ch_coords(self):
+    def _get_eeg_ch_coords(self):
         """
         
         To be removed into a separate csv file at a later point.
