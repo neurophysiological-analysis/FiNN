@@ -38,7 +38,6 @@ setuptools.setup(
     	'lmfit',
     	'PyQt5',
     	'matplotlib',
-    	'matplotlib',
     	'mne',
     	'rpy2',
     	'scikit-image',
