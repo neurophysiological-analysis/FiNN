@@ -14,6 +14,8 @@ def save(data, path = "", var_name = "data", max_depth = 2, ending = None):
 	"""
 	**Depricated**. Will be removed in a future version. Saves data using the legacy data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
    
+    This function saves data.
+   
 	:param data: The data to be stored.
 	:param path: Location for data storage.
 	:param var_name: Name of the lwo level data containers.
@@ -46,6 +48,18 @@ def save(data, path = "", var_name = "data", max_depth = 2, ending = None):
 		_save(data, locPath, 1, max_depth, ending)
 	
 def _save(data, path, curr_depth, max_depth = 2, ending = None):
+	"""
+	**Depricated** Will be removed in a future version. Loads data stored via the data_manager.
+	
+	This function is recursively called to save data.
+	
+	:param data: The data to be stored.
+	:param path: Location for data storage.
+	:param curr_depth: Current depth of the folder tree.
+	:param max_depth: The depth to which folders are created prior to storing data via pickle.
+	:param ending: To be stored data type.
+	"""
+	
 	if (path[-1] != "/"):
 		path += "/"
 	
@@ -79,6 +93,8 @@ def load(path, verbose = False):
 	"""
 	**Depricated**. Will be removed in a future version. Loads data stored via the data_manager.
 	
+	This function loads data.
+	
 	:param path: Location from which the data is to be read.
 	:param legacy_mode: *deprecated* Will be removed in a future version.
 	"""
@@ -98,6 +114,15 @@ def load(path, verbose = False):
 		return _load(path, verbose)
 
 def _load(path, is_top_level = False):
+	"""
+	**Depricated**. Will be removed in a future version. Loads data stored via the data_manager.
+	
+	This function recursively loads data.
+	
+	:param path: Location from which the data is to be read.
+	:param is_top_level: Flag indicating whether the current level is the top level
+	"""
+	
 	if (path[-1] != "/"):
 		path += "/"
 	if (os.path.isdir(path + os.listdir(path)[0]) == False):

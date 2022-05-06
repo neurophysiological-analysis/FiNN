@@ -8,6 +8,7 @@ Provides different methods for frequency filtering of provided signals.
 
 import scipy.signal
 import scipy.fftpack
+import scipy.fft
 import math
 import numpy as np
 
@@ -205,6 +206,18 @@ def _calc_FIR_freq_and_gain_right_sided(nyq, f_high, trans_width):
     return (freq, gain)
 
 def _overlap_add(data, coeffs, fs, trans_width, fft_win_sz, pad_type):
+    """
+    Implements the overlap add approach to speed up filter application.
+    
+    :param data: Data to be filtered. Single vector of data.
+    :param coeffs: Filter coefficients.
+    :param fs: Sampling frequency.
+    :param trans_width: Width of the transition band.
+    :param fft_win_sz: Size of the fft window.
+    :param pad_type: Type of padding. Supported types are: *zero* and *mirror*
+    
+    :return: Filtered data
+    """
     
     coeff_length = len(coeffs)
     data_length = len(data)

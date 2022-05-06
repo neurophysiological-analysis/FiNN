@@ -1,3 +1,7 @@
+"""
+Paths to demo data used in the demo applications and the testing (whenever necessary)
+"""
+
 import pathlib
 
 fct_sfc_data = str(pathlib.Path(__file__).parent.absolute()) + "/functionality/sfc/demo_data.npy"

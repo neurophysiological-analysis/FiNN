@@ -47,7 +47,6 @@ def run_wpli(s_xy):
     """
     return calc_wpli.run(s_xy)
 
-
 def run_psi(data, bins, f_min, f_max, f_step_sz = 1):
     """
     This function calculates the phase slope index between two signals. 

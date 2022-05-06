@@ -113,6 +113,11 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
 
 def _digit_in_formula(formula):
     """
+    Checks whether there is a digit in a forbidden place in the formula.
+    
+    :param formula: The formula to be checked.
+    
+    :return: Boolean indicating whether the formula is valid.
     """
     
     (fixed_factors, random_factors) = _get_factors(formula)
@@ -209,7 +214,15 @@ def _execute_glmm(data_type, formula, random_effect):
                 return (False, _overwrite_negative_result(formula, "Unknown error in input data matrix"))
 
 def _process_glmm_data(data, label_name, factor_type):
-    glmm_data = _Anova_container(data, label_name, factor_type)
+    """
+    Transfers data between Python and R.
+
+    :param data: The data to be transferred.
+    :param label_name: The label of the current data.
+    :param factor_type: the factor_type of the curent data.
+
+    """
+    glmm_data = _Glmm_container(data, label_name, factor_type)
     np_cv_rules = rpy2.robjects.default_converter + rpy2.robjects.numpy2ri.converter
     
     with conv.localconverter(np_cv_rules) as cv:
@@ -394,6 +407,13 @@ def _sync_anova_info(anova_factors, scores, df, p_values, formula):
     return (final_anova_factors, final_score, final_df, final_p_palue)
 
 def _get_factors(formula):
+    """
+    Identifies the factors in the formula.
+    
+    :param formula: Formula from which factors are identified.
+    
+    :return: A list of fixed and random effects.
+    """
     formula = _clean_formula(formula)
     (fixed_effects, random_effects) = _split_effects(formula)
      
@@ -616,7 +636,10 @@ def _restore_interactions(formula):
             
     return formula
 
-class _Anova_container():
+class _Glmm_container():
+    """
+    Data container used for convenience
+    """
 
     label_name   = None
     factor_type  = None
@@ -626,6 +649,13 @@ class _Anova_container():
     
 
     def __init__(self, raw_data, label_name, factor_type):
+        """
+        Constructor of the class.
+        
+        :param raw_data: Data to be handled by this object.
+        :param label_name: Label of this data.
+        :param factor_type: factor type of this data. 
+        """
         self.label_name  = label_name
         self.factor_type = factor_type
         
@@ -633,6 +663,9 @@ class _Anova_container():
         self.data       = np.asarray(raw_data)
 
     def gen_labels(self):
+        """
+        Formats the labels for R.
+        """
         self.label_comm = "data = data.frame(" + self.label_name[0]
         
         for nIdx in range(1, len(self.label_name)):
@@ -646,6 +679,10 @@ class _Anova_container():
         self.label_comm += ")"
         
     def send_labels(self):
+        """
+        Transfers internal labels to R.
+        """
+        
         ro.r(self.label_comm)
         
         

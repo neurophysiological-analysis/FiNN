@@ -1,5 +1,6 @@
 ###### Requirements without Version Specifiers ######
 PyQt5
+pyexcel_ods
 
 ###### Requirements with Version Specifiers ######
 numpy >= 1.21.5

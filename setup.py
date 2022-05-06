@@ -41,6 +41,7 @@ setuptools.setup(
     	'mne',
     	'rpy2',
     	'scikit-image',
+    	'pyexcel_ods',
     ],
     include_package_data = True
 )
