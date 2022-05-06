@@ -21,7 +21,7 @@ import finn.data.paths as paths
 
 np.random.seed(0)
 
-class test_filters(unittest.TestCase):
+class test_sfc_all(unittest.TestCase):
 
     def mag_sq_coh(self, data, _0, _1, frequency_tgt, _2, _3):
         return cohd.run_msc(data)[frequency_tgt]
@@ -105,7 +105,7 @@ class test_filters(unittest.TestCase):
                 features[method_idx].append(method(comp_coh, comp_coh2, bins, frequency_peak, signal_1, signal_2))
         return features
 
-    def test_filters(self):
+    def test_sfc_all(self):
         #Signal configuration
         window = "hann"
         pad_type = "zero"

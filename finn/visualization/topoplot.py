@@ -49,6 +49,11 @@ class Topoplot():
         self._generate_topoplot_mask()
 
     def _read_map(self, mode):
+        """
+        Reads the coordinate map.
+        
+        :param mode: Identifies which coordinate map to read.
+        """
         map_path = str(pathlib.Path(__file__).parent.absolute()) + "/coord_map.ods"
         #map_file = pyexcel_ods.read_data("methods/visualization_map.ods")[mode]
         map_file = pyexcel_ods.read_data(map_path)[mode]
