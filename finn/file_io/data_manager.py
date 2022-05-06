@@ -32,7 +32,9 @@ def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
         path = path[:-1]
     
     structure = _save(data, path, current_depth, max_depth, None)
-    pickle.dump(structure, open(path + "/meta.nfo", "wb"))
+    file = open(path + "/meta.nfo", "wb")
+    pickle.dump(structure, file)
+    file.close()
     
 def _save(data, path, current_depth, max_depth, structure = None):
     """
@@ -76,8 +78,10 @@ def _save(data, path, current_depth, max_depth, structure = None):
             np.save(path + "/data.npy", data)
             structure = "data_npy"
         else:
-            pickle.dump(data, open(path + "/data.pkl", "wb"))
+            file = open(path + "/data.pkl", "wb")
+            pickle.dump(data, file)
             structure = "data_pkl"
+            file.close()
         
     return structure
 
@@ -94,7 +98,9 @@ def load(path, legacy_mode = False):
     if (legacy_mode == True):
         return legacy.load(path)
     
-    structure = pickle.load(open(path + "/meta.nfo", "rb"))
+    file = open(path + "/meta.nfo", "rb")
+    structure = pickle.load(file)
+    file.close()
     return _load(structure, path)
 
 def _load(structure, path):
@@ -133,7 +139,9 @@ def _load(structure, path):
                 data.append(loc_data)
     elif (structure[:4] == "data"):
         if (structure == "data_pkl"):
-            data = pickle.load(open(path + "/data.pkl", "rb"))
+            file = open(path + "/data.pkl", "rb")
+            data = pickle.load(file)
+            file.close()
         elif(structure == "data_npy"):
             data = np.load(path + "/data.npy")
         else:

@@ -94,7 +94,7 @@ def run_plv(low_freq_data, high_freq_data):
     
     phase_signal = phase_low_freq_signal - phase_amplitude_high_freq_signal
     
-    phase_signal = np.exp(np.complex(0, 1) * phase_signal)
+    phase_signal = np.exp(complex(0, 1) * phase_signal)
     
     score = np.abs(np.average(phase_signal))
     
@@ -146,7 +146,7 @@ def run_mvl(low_freq_data, high_freq_data):
     phase_low_freq_signal = np.angle(scipy.signal.hilbert(low_freq_data))
     amplitude_high_freq_signal = np.abs(scipy.signal.hilbert(high_freq_data))
     
-    vectors = amplitude_high_freq_signal * np.exp(np.complex(0, 1) * phase_low_freq_signal)
+    vectors = amplitude_high_freq_signal * np.exp(complex(0, 1) * phase_low_freq_signal)
     
     score = np.abs(np.average(vectors))
     

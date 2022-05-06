@@ -10,8 +10,8 @@ np.random.seed(0)
 
 import finn.statistical.glmm as glmm
 
-class test_sfc(unittest.TestCase):
-    def test_sfc(self):
+class test_glmm(unittest.TestCase):
+    def test_glmm(self):
         
         data_size = 100000
         random_factor_count = 20
@@ -33,12 +33,13 @@ class test_sfc(unittest.TestCase):
         glm_model_type = "gaussian"
         
         stat_results = glmm.run(data = data, label_name= data_label, factor_type = glm_factor_types, formula = glm_formula, contrasts = glm_contrasts, data_type = glm_model_type)
-                
-        assert(np.abs(stat_results[3][0] -  0.81) < 0.01)
-        assert(np.abs(stat_results[3][1] - -0.02) < 0.01)
-        assert(np.abs(stat_results[3][2] -  0.03) < 0.01)
-        assert(np.abs(stat_results[3][3] - -0.01) < 0.01)
-        assert(np.abs(stat_results[3][4] -  0.10) < 0.01)
+        
+        
+        assert(np.abs(stat_results[3][0] -  0.81) < 0.05)
+        assert(np.abs(stat_results[3][1] - -0.02) < 0.05)
+        assert(np.abs(stat_results[3][2] -  0.03) < 0.05)
+        assert(np.abs(stat_results[3][3] - -0.01) < 0.05)
+        assert(np.abs(stat_results[3][4] -  0.10) < 0.05)
             
 if __name__ == '__main__':
     unittest.main()

@@ -13,6 +13,7 @@ import gc
 import rpy2.robjects as ro
 import rpy2.robjects.numpy2ri
 import rpy2.rinterface_lib.embedded
+import rpy2.robjects.conversion as conv
 
 
 def check_formula(formula):
@@ -62,8 +63,6 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     if (pre_sanity != True):
         return pre_sanity
     
-    rpy2.robjects.numpy2ri.activate()
-    
     
     if ("|" in formula):
         random_effect = True
@@ -73,8 +72,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     ro.r('Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")')
     
     #Check if R dependencies are installed
-    _check_r_dependencies()
-
+    _check_r_dependencies() 
 
     #Copy GLMM data to R
     _process_glmm_data(data, label_name, factor_type)
@@ -97,7 +95,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
             return execution_successful[1]
         
         ro.r("res = Anova(lm0, type = 3, contrasts=" + contrasts + ")")
-        
+    
     (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error) = _collect_results()
     
     try:
@@ -109,7 +107,6 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     _result_sanity_check(final_coeff_names, final_coefficients, final_std_error, final_df, final_anova_factors, final_scores, final_p_values)
     
     ro.r('rm(list=ls(all=TRUE))')
-    rpy2.robjects.numpy2ri.deactivate()
     gc.collect()
     
     return (final_scores, final_df, final_p_values, final_coefficients, final_std_error, final_anova_factors)
@@ -213,10 +210,13 @@ def _execute_glmm(data_type, formula, random_effect):
 
 def _process_glmm_data(data, label_name, factor_type):
     glmm_data = _Anova_container(data, label_name, factor_type)
+    np_cv_rules = rpy2.robjects.default_converter + rpy2.robjects.numpy2ri.converter
     
-    for idx in range(0, len(glmm_data.label_name)):
-        tmp = ro.r.matrix(glmm_data.data[:, idx], nrow = len(glmm_data.data[:, idx]), ncol = 1)
-        ro.r.assign(glmm_data.label_name[idx], tmp)
+    with conv.localconverter(np_cv_rules) as cv:
+        for idx in range(0, len(glmm_data.label_name)):
+                in_data = glmm_data.data[:, idx]
+                out_data = ro.r.matrix(in_data, nrow = len(glmm_data.data[:, idx]), ncol = 1)
+                ro.r.assign(glmm_data.label_name[idx], out_data)
         
     glmm_data.send_labels()
 

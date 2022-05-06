@@ -101,7 +101,7 @@ def fir(data, f_low, f_high, trans_width, fs, ripple_pass_band = 10e-5, stop_ban
     if (f_low is not None and f_high is not None): # Is band pass or band stop
         if (f_low > f_high): # Is band stop
             (freq, gain) = _calc_FIR_freq_and_gain_two_sided(nyq, f_high, f_low, trans_width)
-            gain = np.logical_not(gain).astype(np.int)
+            gain = np.logical_not(gain).astype(int)
             if ((N % 2) == 0):
                 N += 1
         else: # Is band pass
