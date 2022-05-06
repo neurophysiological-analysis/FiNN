@@ -250,29 +250,6 @@
                 
   <section id="load-brainvision-data">
 <h1>Load brainvision data<a class="headerlink" href="#load-brainvision-data" title="Permalink to this headline">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="file_io.load_brain_vision_data.run">
-<span class="sig-prename descclassname"><span class="pre">file_io.load_brain_vision_data.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vhdr_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">badChList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">montage_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">montage_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preload</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.load_brain_vision_data.run" title="Permalink to this definition">#</a></dt>
-<dd><p>Load data recorded via the brain vision software wrapping mne calls.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vhdr</strong> – Path to the vhdr file.</p></li>
-<li><p><strong>misc_ch</strong> – MISC - channels.</p></li>
-<li><p><strong>montage_file</strong> – File name of the montage file.</p></li>
-<li><p><strong>montage_path</strong> – Path to the montage file.</p></li>
-<li><p><strong>preload</strong> – If ‘true’ the data is loaded directly in this function. If ‘false’ only a container is created.</p></li>
-<li><p><strong>tmin</strong> – Start of the returned recording segment in seconds.</p></li>
-<li><p><strong>tmax</strong> – End of the returned recording segment in seconds.</p></li>
-<li><p><strong>verbose</strong> – Verbose the command line output.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A raw data object containing either the data or a dummy container and the address of the ‘to be loaded’ data.</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
