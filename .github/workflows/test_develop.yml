@@ -41,4 +41,5 @@ jobs:
         python -m pip install .
     - name: Test with unittest
       run: |
-        python -m unittest discover tests
+        python -m unittest discover finn/unit_tests/
+        python -m unittest discover finn/integration_tests/
