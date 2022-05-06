@@ -30,7 +30,7 @@ class test_downsampling(unittest.TestCase):
             
         ds_data = ds.run(raw_data[0], frequency_sampling, frequency_downsampled)
         
-        reference_data = (raw_data[0, np.arange(0, len(data_range), frequency_sampling/frequency_downsampled, dtype = np.int)])[100:-100]
+        reference_data = (raw_data[0, np.arange(0, len(data_range), frequency_sampling/frequency_downsampled, dtype = int)])[100:-100]
         test_ds_data = ds_data[100:-100]
         
         assert((np.abs(test_ds_data - reference_data) < 0.1).all())

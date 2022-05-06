@@ -12,7 +12,7 @@ import finn.file_io.load_brainvision_data as lbvd
 class test_lbvd(unittest.TestCase):
     
     def test_lbvd(self):
-        data = lbvd.run(paths.fct_brainvision_data)
+        data = lbvd.run(paths.fct_brainvision_data, verbose = "ERROR")
         
         assert(data.get_data().shape == (68, 479200))
         
