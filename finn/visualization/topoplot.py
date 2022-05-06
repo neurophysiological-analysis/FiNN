@@ -11,7 +11,7 @@ import scipy.interpolate
 import skimage.filters
 
 import matplotlib
-matplotlib.use("Qt5Agg")
+#matplotlib.use("Qt5Agg")
 import matplotlib.markers
 import matplotlib.pyplot as plt
 

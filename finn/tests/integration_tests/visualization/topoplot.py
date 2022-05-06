@@ -7,10 +7,13 @@ Created on May 5, 2022
 import unittest
 import numpy as np
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 import finn.visualization.topoplot as tp
 
-class test_sfc(unittest.TestCase):
-    def test_sfc(self):
+class test_topoplot(unittest.TestCase):
+    def test_topoplot(self):
         ##Generate some demo data
         #Values to be plotted
         values_1 = [                        0,
@@ -69,7 +72,7 @@ class test_sfc(unittest.TestCase):
         v_min = -3
         v_max = 3
         
-        file_path = "./test.svg"
+        file_path = None
         screen_channels = False
         annotate_ch_names = False
         
@@ -85,6 +88,8 @@ class test_sfc(unittest.TestCase):
         topo.run(np.asarray([values_1, values_2]).transpose(), ch_name_list, omit_channels, substitute_channels, v_min, v_max, v_border_values, v_border_labels, file_path, screen_channels, annotate_ch_names)
         #Plot with significances after MCC only 
         topo.run(np.asarray([values_1, values_2, values_3]).transpose(), ch_name_list, omit_channels, substitute_channels, v_min, v_max, v_border_values, v_border_labels, file_path, screen_channels, annotate_ch_names)
+        
+        #plt.show(block = True)
         
         assert(True) # if visualization routine ran until here, consider it successfull
             
