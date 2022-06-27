@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Bad channel identification &#8212; FiNN 0.1.5 documentation</title>
+    <title>Bad channel identification &#8212; FiNNPy 0.1.5 documentation</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -64,7 +64,7 @@
   
   
   
-    <p class="title logo__title">FiNN 0.1.5 documentation</p>
+    <p class="title logo__title">FiNNPy 0.1.5 documentation</p>
   
 </a>
     
@@ -270,6 +270,28 @@
                 
   <section id="bad-channel-identification">
 <h1>Bad channel identification<a class="headerlink" href="#bad-channel-identification" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="cleansing.bad_channel_identification.run">
+<span class="sig-prename descclassname"><span class="pre">cleansing.bad_channel_identification.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_areas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[105,</span> <span class="pre">120],</span> <span class="pre">[135,</span> <span class="pre">145],</span> <span class="pre">[155,</span> <span class="pre">195]]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broadness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visual_inspection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cleansing.bad_channel_identification.run" title="Permalink to this definition">#</a></dt>
+<dd><p>Identifies which channels have substantially more or less power in the frequency ranges defined by ref_areas. Channels whose power is more different than <em>broadness</em> (default: 3) standard deviations will be primed as faulty channels. In case visual inspection is <em>active</em> (default: True), the automatic results can be further refined via manual selection.</p>
+<p>Attention: Function is parallelized. Sensitive parts are placed within a locked area to avoid unexpected behaviour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Input data in the format channel x samples.</p></li>
+<li><p><strong>ch_names</strong> – Names of the channels. Used for visualization purposes only. Order has to match the channel order of data.</p></li>
+<li><p><strong>fs</strong> – List of sampling frequencies for each channel.</p></li>
+<li><p><strong>ref_areas</strong> – Spectral reference areas used for power estimation. Only power within these ranges is defined. It is recommended to choose ranges, which are not part of any evaluation to decrease the chances of pre-processing induced biases.</p></li>
+<li><p><strong>broadness</strong> – Number of standard deviations threshold by which channels are automatically categorized as faulty. In case visual inspection is enabled (recommended) this only results in priming the channels.</p></li>
+<li><p><strong>visual_inspection</strong> – Toggles visual inspection on and off.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(valid_list, invalid_list, score). List of valid channels, invalid channels and their respective z-scores.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>The following code example shows how to apply bad channel identification &amp; subsequent restoration.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Outlier removal &#8212; FiNN 0.1.5 documentation</title>
+    <title>Outlier removal &#8212; FiNNPy 0.1.5 documentation</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -64,7 +64,7 @@
   
   
   
-    <p class="title logo__title">FiNN 0.1.5 documentation</p>
+    <p class="title logo__title">FiNNPy 0.1.5 documentation</p>
   
 </a>
     
@@ -270,6 +270,26 @@
                 
   <section id="outlier-removal">
 <h1>Outlier removal<a class="headerlink" href="#outlier-removal" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="cleansing.outlier_removal.run">
+<span class="sig-prename descclassname"><span class="pre">cleansing.outlier_removal.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_std_dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samp_cnt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cleansing.outlier_removal.run" title="Permalink to this definition">#</a></dt>
+<dd><p>Removes any sample more distant from the mean than max_std_dist standard deviations. Terminates if either all samples are within the threshold or if the minimal sample count defined by min_samp_cnt is reached.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Input data.</p></li>
+<li><p><strong>ref</strong> – Single dimensional reference data.</p></li>
+<li><p><strong>maxStdDist</strong> – Threshold for outlier detection. Number of standard deviations permissible.</p></li>
+<li><p><strong>min_samp_cnt</strong> – Minimal viable sample count. Terminates if reduced below this number or the current iteration would reduce below this number.</p></li>
+<li><p><strong>axis</strong> – Axis on which to evaluate the data object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Filtered array without outlier more different than n standard deviations.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>The following code example shows how to apply statistical outlier removal.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>

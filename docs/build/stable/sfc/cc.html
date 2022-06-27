@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Complex coherency &#8212; FiNN 0.1.5 documentation</title>
+    <title>Complex coherency &#8212; FiNNPy 0.1.5 documentation</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -64,7 +64,7 @@
   
   
   
-    <p class="title logo__title">FiNN 0.1.5 documentation</p>
+    <p class="title logo__title">FiNNPy 0.1.5 documentation</p>
   
 </a>
     
@@ -185,6 +185,45 @@
   <section id="complex-coherency">
 <h1>Complex coherency<a class="headerlink" href="#complex-coherency" title="Permalink to this heading">#</a></h1>
 <p>This function may be called for data in the time domain or the frequency domain.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="sfc.td.run_cc">
+<span class="sig-prename descclassname"><span class="pre">sfc.td.</span></span><span class="sig-name descname"><span class="pre">run_cc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nperseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.td.run_cc" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate complex coherency from time domain data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_1</strong> – data set X from time domain.</p></li>
+<li><p><strong>data_2</strong> – data set Y from time domain.</p></li>
+<li><p><strong>nperseg</strong> – number of samples in a fft segment.</p></li>
+<li><p><strong>pad_type</strong> – padding type to be applied.</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>nfft</strong> – Size of fft window.</p></li>
+<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Complex coherency.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sfc.fd.run_cc">
+<span class="sig-prename descclassname"><span class="pre">sfc.fd.</span></span><span class="sig-name descname"><span class="pre">run_cc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.fd.run_cc" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate complex coherency from frequency domain data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>f_data_1</strong> – data set X from the complex frequency domain.</p></li>
+<li><p><strong>f_data_2</strong> – data set Y from the compley frequency domain.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Complex coherency</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>The following code example shows how to calcualte complex coherency, a precurses to several connectivity metrics.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 

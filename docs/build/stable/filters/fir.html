@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>FIR filter &#8212; FiNN 0.1.5 documentation</title>
+    <title>FIR filter &#8212; FiNNPy 0.1.5 documentation</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -64,7 +64,7 @@
   
   
   
-    <p class="title logo__title">FiNN 0.1.5 documentation</p>
+    <p class="title logo__title">FiNNPy 0.1.5 documentation</p>
   
 </a>
     
@@ -184,6 +184,36 @@
                 
   <section id="fir-filter">
 <h1>FIR filter<a class="headerlink" href="#fir-filter" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="filters.frequency.fir">
+<span class="sig-prename descclassname"><span class="pre">filters.frequency.</span></span><span class="sig-name descname"><span class="pre">fir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_high</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ripple_pass_band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_band_suppression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fft_win_sz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zero'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fast'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#filters.frequency.fir" title="Permalink to this definition">#</a></dt>
+<dd><p>Constructs an FIR filter and applies it to data.</p>
+<p>f_low = None and f_high = value creates a lowpass filter
+f_low = value and f_high = None creates a highpass filter
+f_low = value and f_high = value creates a bandstop or bandpass filter.
+In case f_low &lt; f_high, a bandpass is created; if f_low &gt; f_high a bandstop filter is created.</p>
+<p>This filter is always a zero-phase filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Data to be filtered. Single vector of data.</p></li>
+<li><p><strong>f_low</strong> – Start of the pass band.</p></li>
+<li><p><strong>f_high</strong> – End of the pass band.</p></li>
+<li><p><strong>trans_width</strong> – Width of the transition band.</p></li>
+<li><p><strong>fs</strong> – Sampling frequency.</p></li>
+<li><p><strong>ripple_pass_band</strong> – Suppression of the ripple in the pass band.</p></li>
+<li><p><strong>stop_band_suppression</strong> – Suppression of the stop band.</p></li>
+<li><p><strong>fft_win_sz</strong> – Size of the fft window.</p></li>
+<li><p><strong>pad_type</strong> – Type of padding. Supported types are: <em>zero</em> and <em>mirror</em></p></li>
+<li><p><strong>mode</strong> – Defines whether the FIR filter is executed in <em>fast</em> or <em>precise</em> mode (32 vs 64 bit floats)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Filtered data.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>The following code example shows how to apply the FIR filter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>

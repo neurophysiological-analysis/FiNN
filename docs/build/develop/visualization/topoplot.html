@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Topoplot &#8212; FiNN 0.1.5 documentation</title>
+    <title>Topoplot &#8212; FiNNPy 0.1.5 documentation</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -63,7 +63,7 @@
   
   
   
-    <p class="title logo__title">FiNN 0.1.5 documentation</p>
+    <p class="title logo__title">FiNNPy 0.1.5 documentation</p>
   
 </a>
     
@@ -195,6 +195,44 @@
                 
   <section id="topoplot">
 <h1>Topoplot<a class="headerlink" href="#topoplot" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="visualization.topoplot.Topoplot">
+<span class="sig-prename descclassname"><span class="pre">visualization.topoplot.</span></span><span class="sig-name descname"><span class="pre">Topoplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.Topoplot" title="Permalink to this definition">#</a></dt>
+<dd><p>topoplot generation class. Initialition costs a couple of seconds due to mask generation.
+Performance advice: if possible, only generate a single topoplot object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> – Mode is either “EEG” or “MEG”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="visualization.topoplot.Topoplot.run">
+<span class="sig-prename descclassname"><span class="pre">visualization.topoplot.Topoplot.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_name_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omit_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">substitute_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_border_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_border_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate_ch_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#visualization.topoplot.Topoplot.run" title="Permalink to this definition">#</a></dt>
+<dd><p>Plots a 2D topomap</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – May either be a N x 3 or N x 1 matrix. Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.</p></li>
+<li><p><strong>ch_names</strong> – Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.</p></li>
+<li><p><strong>omit_channels</strong> – A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.</p></li>
+<li><p><strong>substitute_channels</strong> – A list of dictionaries. Each dictionary contains a ‘tgt’ section with a single string defining the channel to be substituted and a second ‘src’ section which contains a list of strings, defining channel names which are used to substitute the ‘tgt’ channel.</p></li>
+<li><p><strong>v_min</strong> – Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.</p></li>
+<li><p><strong>v_max</strong> – Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.</p></li>
+<li><p><strong>v_border_values</strong> – Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.</p></li>
+<li><p><strong>v_border_labels</strong> – Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.</p></li>
+<li><p><strong>file_path</strong> – Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.</p></li>
+<li><p><strong>screen_channels</strong> – If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.</p></li>
+<li><p><strong>annotate_ch_names</strong> – If true, channels get annotate with their individual names.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The figure and the axes object to easen the inclusion of a plot into a larger picture.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <p>The following code example shows how to create a topoplot.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
