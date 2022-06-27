@@ -4,15 +4,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Same frequency coupling (sfc) &#8212; FiNN 0.1.5 documentation</title>
-    
-  <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
 
-    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
   <link rel="stylesheet"
     href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
@@ -21,44 +25,53 @@
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    
+
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Directional absolute coherence" href="sfc/dac.html" />
     <link rel="prev" title="Timed Pool" href="misc/timed_pool.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en">
-    
-
-    <!-- Google Analytics -->
-    
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
 
     
-    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
 
   <div id="navbar-start">
     
     
-<a class="navbar-brand" href="index.html">
-<p class="title">FiNN</p>
-</a>
+  
 
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNN 0.1.5 documentation</p>
+  
+</a>
     
   </div>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+    <span class="fas fa-bars"></span>
   </button>
 
   
@@ -67,57 +80,9 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="basic.html">
-  Basic
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="cfc.html">
-  Cross frequency connectivity (cfc)
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="cleansing.html">
-  Cleansing
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="file_io.html">
-  File IO
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="filters.html">
-  Filters
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="misc.html">
-  Misc
- </a>
-</li>
-
-<li class="toctree-l1 current active nav-item">
- <a class="current reference internal nav-link" href="#">
-  Same frequency coupling (sfc)
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="statistical.html">
-  Statistical
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="visualization.html">
-  Visualization
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="api_reference.html">
+  API reference
  </a>
 </li>
 
@@ -130,6 +95,14 @@
     <div id="navbar-end">
       
       <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
       </ul>
       </div>
@@ -140,65 +113,27 @@
     </nav>
     
 
-    <div class="container-xl">
-      <div class="row">
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
           
-            
-            <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar">
-              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><h3><a href="index.html">FiNN</a></h3>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Packages:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="basic/car.html">Common Average Re-Referencing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic/downsample.html">Downsampling</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cfc.html">Cross frequency connectivity (cfc)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cfc/dmi.html">Direct Modulation Index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc/mi.html">Modulation Index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc/mvl.html">Mean Vector Length</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc/plv.html">Phase Lock Value</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cleansing.html">Cleansing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cleansing/bad_channel_identification.html">Bad channel identification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cleansing/channel_restoration.html">Channel restoration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cleansing/outlier_removal.html">Outlier removal</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="file_io.html">File IO</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file_io/data_manager.html">Data manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file_io/load_brainvision_data.html">Load brainvision data</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="filters/butter.html">Butterwort filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="filters/fir.html">FIR filter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="misc.html">Misc</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="misc/timed_pool.html">Timed Pool</a></li>
-</ul>
-</li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Same frequency coupling (sfc)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sfc/dac.html">Directional absolute coherence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/psi.html">Phase slope index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/wpli.html">Weighted phase lag index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/im.html">Imaginary coherence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/msc.html">Magnitude squared coherence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/cc.html">Complex coherency</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="statistical.html">Statistical</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="statistical/glmm.html">Generalized linear mixed model</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="visualization/topoplot.html">Topoplot</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cfc.html">Cross frequency connectivity (cfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cleansing.html">Cleansing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_io.html">File IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Misc</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Same frequency coupling (sfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical.html">Statistical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
 </ul>
 </li>
 </ul>
@@ -213,43 +148,42 @@
 <ul>
   <li><a href="../v0.1.5/sfc.html">v0.1.5</a></li>
 </ul>
-              </div>
-              <div class="sidebar-end-items">
-              </div>
-            </div>
-            
-          
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
 
           
-          <div class="d-none d-xl-block col-xl-2 bd-toc">
-            
-              
-              <div class="toc-item">
-                
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
 
 <nav id="bd-toc-nav">
     
 </nav>
-              </div>
-              
-              <div class="toc-item">
-                
-              </div>
-              
-            
-          </div>
-          
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
 
           
           
-            
-          
-          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+          <div class="bd-content col-12 col-md-9 col-xl-7">
               
-              <div>
+              <article class="bd-article" role="main">
                 
   <section id="module-sfc">
-<span id="same-frequency-coupling-sfc"></span><h1>Same frequency coupling (sfc)<a class="headerlink" href="#module-sfc" title="Permalink to this headline">#</a></h1>
+<span id="same-frequency-coupling-sfc"></span><h1>Same frequency coupling (sfc)<a class="headerlink" href="#module-sfc" title="Permalink to this heading">#</a></h1>
 <p>This package provides a number of different same frequency connectivity metrics.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -264,51 +198,55 @@
 </section>
 
 
-              </div>
+              </article>
               
-              
-              <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="misc/timed_pool.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Timed Pool</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="sfc/dac.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Directional absolute coherence</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
-</div>
-              
-          </main>
-          
 
+              
+              <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="misc/timed_pool.html" title="previous page">
+      <i class="fas fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Timed Pool</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="sfc/dac.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Directional absolute coherence</p>
+  </div>
+  <i class="fas fa-angle-right"></i>
+  </a>
+</div>
+              </footer>
+              
+          </div>
+          
       </div>
     </div>
+
+  
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
-<footer class="footer mt-5 mt-md-0">
-  <div class="container">
-    
-    <div class="footer-item">
-      <p class="copyright">
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
     &copy; Copyright 2022, Maximilian Scherer.<br>
 </p>
-    </div>
-    
-    <div class="footer-item">
-      <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.3.2.<br>
-</p>
-    </div>
-    
   </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+</p>
+  </div>
+  
+</div>
 </footer>
   </body>
 </html>

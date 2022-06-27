@@ -27,7 +27,7 @@ def check_formula(formula):
     
     return _get_factors(formula)
 
-def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian"):
+def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian", return_covariance = False):
     """
     Applies generalized linear mixed models (GLMM). As the formula needs to be parsed in order to align significances with model coefficients, it is highly recommended to check prior to execution once whether the formula is understood correctly via running check_formula(formula). The formula will be parsed (scrubbed and unpacked), and fixed and random factors extracted. 
     
@@ -37,6 +37,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     :param formula: Formula to be applied by the GLMM. The formula must not contain a digit within the factor names.
     :param contrasts: Contrast values for the GLMM. Contrast names have to align with the names specified in the formula.
     :param data_type: Model type for the GLMM, default is gaussian.
+    :param return_covariance: Flag on whether to return a covariance matrix. Optional since this causes the output to be not equal across all dimensions.
     
     :return: (scores, df, p-values, coefficients, std_error, factor names)
     
@@ -59,7 +60,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     if (type(data) != np.ndarray):
         data = np.asarray(data)
     
-    pre_sanity = _pre_sanity_checks(data, formula)
+    pre_sanity = _pre_sanity_checks(data, formula, return_covariance)
     if (pre_sanity != True):
         return pre_sanity
     
@@ -77,7 +78,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     #Copy GLMM data to R
     _process_glmm_data(data, label_name, factor_type)
     
-    execution_successful = _execute_glmm(data_type, formula, random_effect)
+    execution_successful = _execute_glmm(data_type, formula, random_effect, return_covariance)
     if (execution_successful[0] == False):
         return execution_successful[1]
     try:
@@ -90,27 +91,36 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
         
         _process_glmm_data(data, label_name, factor_type)
         
-        execution_successful = _execute_glmm(data_type, formula, random_effect)
+        execution_successful = _execute_glmm(data_type, formula, random_effect, return_covariance)
         if (execution_successful[0] == False):
             return execution_successful[1]
         
         ro.r("res = Anova(lm0, type = 3, contrasts=" + contrasts + ")")
     
-    (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error) = _collect_results()
+    if (return_covariance):
+        (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error, covariance) = _collect_results(return_covariance)
+    else:
+        (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error) = _collect_results(return_covariance)
     
     try:
-        (final_coeff_names, final_coefficients, final_std_error) = _sync_meta_info(coeff_names, coefficients, coeff_std_error, formula)
+        if (return_covariance):
+            (final_coeff_names, final_coefficients, final_std_error, covariance) = _sync_meta_info(coeff_names, coefficients, coeff_std_error, covariance, formula)
+        else:
+            (final_coeff_names, final_coefficients, final_std_error) = _sync_meta_info(coeff_names, coefficients, coeff_std_error, None, formula)
         (final_anova_factors, final_scores, final_df, final_p_values) = _sync_anova_info(anova_factors, scores, df, p_values, formula)
     except:
-        return _overwrite_negative_result(formula, "A coefficient was dropped. Cannot evaluate formula due to insufficient data.")
+        return _overwrite_negative_result(formula, "A coefficient was dropped. Cannot evaluate formula due to insufficient data.", return_covariance)
          
     _result_sanity_check(final_coeff_names, final_coefficients, final_std_error, final_df, final_anova_factors, final_scores, final_p_values)
     
     ro.r('rm(list=ls(all=TRUE))')
     gc.collect()
+        
+    if (return_covariance):
+        return (final_scores, final_df, final_p_values, final_coefficients, final_std_error, final_anova_factors, covariance)
+    else:
+        return (final_scores, final_df, final_p_values, final_coefficients, final_std_error, final_anova_factors)
     
-    return (final_scores, final_df, final_p_values, final_coefficients, final_std_error, final_anova_factors)
-
 def _digit_in_formula(formula):
     """
     Checks whether there is a digit in a forbidden place in the formula.
@@ -142,7 +152,7 @@ def _digit_in_formula(formula):
 
     return False
 
-def _pre_sanity_checks(data, formula):
+def _pre_sanity_checks(data, formula, return_covariance):
     """
     Checks whether the input data is all zeros or all equal.
     
@@ -153,16 +163,16 @@ def _pre_sanity_checks(data, formula):
     """
     
     if (len(data) == 0):
-        return _overwrite_negative_result(formula, "No samples within matrix")
+        return _overwrite_negative_result(formula, "No samples within matrix", return_covariance)
     
     # In case all values are equal, the R-based GLMM will crash.
     # Therefore, this is caught here, returning P = 1 and matching values.
     if ((data[:, 0] == data[0, 0]).all()):
-        return _overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLMM")
+        return _overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLMM", return_covariance)
     
     return True
 
-def _overwrite_negative_result(formula, error_msg):
+def _overwrite_negative_result(formula, error_msg, return_covariance):
     """
     Returns negative results in case of an error.
     
@@ -176,9 +186,13 @@ def _overwrite_negative_result(formula, error_msg):
     factor_cnt = len(fixed_factors)
     negative_result = (np.zeros((factor_cnt)), np.zeros((factor_cnt)), np.ones((factor_cnt)), np.zeros((factor_cnt)), np.zeros((factor_cnt)), fixed_factors)
     warnings.warn(error_msg, UserWarning)
-    return negative_result
+    
+    if (return_covariance):
+        return (*negative_result, dict())
+    else:
+        return negative_result
 
-def _execute_glmm(data_type, formula, random_effect):
+def _execute_glmm(data_type, formula, random_effect, return_covariance):
     """
     Estimates the GLMM defined in formula using the data already copied to R (variable name 'data').
     
@@ -200,6 +214,8 @@ def _execute_glmm(data_type, formula, random_effect):
             ro.r('lm0 = glmer(' + formula + ', data, family=Gamma(link="inverse"), nAGQ=0, control=glmerControl(calc.derivs = FALSE, optimizer = "nloptwrap"))')
         elif(random_effect == False and (data_type is None or data_type == "gaussian")):
             ro.r("lm0 = lm(" + formula + ", data)")
+        elif(random_effect == False and (data_type != "gaussian")):
+            ro.r('lm0 = lm(' + formula + ', data, family=Gamma(link="inverse"), nAGQ=0, control=glmerControl(calc.derivs = FALSE, optimizer = "nloptwrap"))')
         else:
             raise AssertionError("Distribution not implemented")
         
@@ -207,11 +223,11 @@ def _execute_glmm(data_type, formula, random_effect):
     except rpy2.rinterface_lib.embedded.RRuntimeError as e:
         if (len(e.args) > 0):
             if (e.args[0] == 'Error: grouping factors must have > 1 sampled level\n'):
-                return (False, _overwrite_negative_result(formula, "Grouping factors must have > 1 sampled level"))
+                return (False, _overwrite_negative_result(formula, "Grouping factors must have > 1 sampled level", return_covariance))
             elif (e.args[0] == 'Error: number of levels of each grouping factor must be < number of observations\n'):
-                return (False, _overwrite_negative_result(formula, "Number of levels of each grouping factor must be < number of observations"))
+                return (False, _overwrite_negative_result(formula, "Number of levels of each grouping factor must be < number of observations", return_covariance))
             else:
-                return (False, _overwrite_negative_result(formula, "Unknown error in input data matrix"))
+                return (False, _overwrite_negative_result(formula, "Unknown error in input data matrix", return_covariance))
 
 def _process_glmm_data(data, label_name, factor_type):
     """
@@ -244,9 +260,11 @@ def _check_r_dependencies():
             raise Exception("Error: R dependency " + r_dependency + " no installed.")
         ro.r("library(" + r_dependency + ")")
 
-def _collect_results():
+def _collect_results(return_covariance = False):
     """
     Collects the results from R and transfers them back to python. As the anova call and the GLMM call may return the factors with slightly different names and in different order, the results are synchronized for a coherent return.
+
+    :param return_covariance: Flag on whether to return a covariance matrix.
     
     @return: scores, p-values, degrees of freedom, anova factor names, coefficients, coefficient names and standard errors of the coefficients.
     """
@@ -275,12 +293,22 @@ def _collect_results():
     coefficients = list()
     coeff_names = list()
     coeff_std_error = list()
-    for coeffName in list(ro.r('rownames(coefficients(summary(lm0)))')):
-        coeff_names.append(coeffName)
-        coefficients.append(ro.r('coefficients(summary(lm0))["' + coeffName + '","Estimate"]')[0])
-        coeff_std_error.append(ro.r('coefficients(summary(lm0))["' + coeffName + '","Std. Error"]')[0])
-    
-    return (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error)
+    covariance = dict()
+    for coeff_name in list(ro.r('rownames(coefficients(summary(lm0)))')):
+        coeff_names.append(coeff_name)
+        coefficients.append(ro.r('coefficients(summary(lm0))["' + coeff_name + '","Estimate"]')[0])
+        coeff_std_error.append(ro.r('coefficients(summary(lm0))["' + coeff_name + '","Std. Error"]')[0])
+        
+    if (return_covariance):
+        for coeff_name_row in list(ro.r('rownames(vcov(lm0))')):
+            for coeff_name_col in list(ro.r('rownames(vcov(lm0))')):
+                coeff_value = ro.r('vcov(lm0)["' + coeff_name_row + '","' + coeff_name_col + '"]')[0]
+                covariance[coeff_name_row + "_" + coeff_name_col] = coeff_value
+                
+        
+        return (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error, covariance)
+    else:
+        return (scores, p_values, df, anova_factors, coefficients, coeff_names, coeff_std_error)
 
 def _result_sanity_check(final_coeff_names, final_coefficients, final_std_error,
                         final_df, final_anova_factors, final_scores, final_p_values):
@@ -305,7 +333,7 @@ def _result_sanity_check(final_coeff_names, final_coefficients, final_std_error,
         or len(final_df) != len(final_p_values)):
         raise AssertionError("Something went wrong with the ANOVA.")
 
-def _sync_meta_info(names, values, values_2, formula, skip_missing = False):
+def _sync_meta_info(names, values, values_2, covariance = None, formula = "", skip_missing = False):
     """
     Synchronizes the order of names to the order defined in formula
     
@@ -354,8 +382,25 @@ def _sync_meta_info(names, values, values_2, formula, skip_missing = False):
                 final_names[tgtIdx] = None
             else:
                 raise AssertionError("Cannot synchronize component")
+
+    if (covariance is not None):
+        final_covariances = dict()
+        final_covariance_keys = list()
+        
+        for covariance_key in list(covariance.keys()):
+            clean_cov_key = covariance_key #Getting a proper key
+            for refVal in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ".", ","]:
+                clean_cov_key = clean_cov_key.replace(refVal, "")
+            if (clean_cov_key not in final_covariances.keys()): # If there is no such key, add a new one
+                final_covariances[clean_cov_key] = list()
+            final_covariances[clean_cov_key].append(covariance[covariance_key])
+        for clean_cov_key in final_covariances.keys():
+            final_covariances[clean_cov_key] = np.mean(final_covariances[clean_cov_key]) # Average all values 
     
-    return (final_names, final_vals, final_vals_2)
+    if (covariance is not None):
+        return (final_names, final_vals, final_vals_2, final_covariances)
+    else:
+        return (final_names, final_vals, final_vals_2)
     
 def _sync_anova_info(anova_factors, scores, df, p_values, formula):
     """
