@@ -1,9 +1,9 @@
 
 
-FiNN API
+FiNNPY API
 ========
 
-This section documents the functions offered by FiNN.
+This section documents the functions offered by FiNNPY.
 
 .. toctree::
    :maxdepth: 2

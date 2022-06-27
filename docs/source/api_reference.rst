@@ -1,7 +1,7 @@
 
 
 FiNNPY API
-========
+==========
 
 This section documents the functions offered by FiNNPY.
 
