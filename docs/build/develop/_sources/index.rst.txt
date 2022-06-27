@@ -23,4 +23,5 @@ Demo applications of the included modules are available in the finn_demo folder.
    :hidden:
    :maxdepth: 3
    
+   Installation guide <install_guide>
    API reference <api_reference>

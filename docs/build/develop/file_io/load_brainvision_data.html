@@ -80,7 +80,13 @@
       
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 current active nav-item">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../install_guide.html">
+  Installation guide
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../api_reference.html">
   API reference
  </a>
@@ -124,6 +130,12 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><h3><a href="../index.html">FiNN</a></h3>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R/enabling statistics</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
@@ -184,6 +196,28 @@
                 
   <section id="load-brainvision-data">
 <h1>Load brainvision data<a class="headerlink" href="#load-brainvision-data" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="file_io.load_brainvision_data.run">
+<span class="sig-prename descclassname"><span class="pre">file_io.load_brainvision_data.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vhdr_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_ch_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preload</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.load_brainvision_data.run" title="Permalink to this definition">#</a></dt>
+<dd><p>Load data recorded via the brain vision software wrapping mne calls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vhdr</strong> – Path to the vhdr file.</p></li>
+<li><p><strong>misc_ch</strong> – MISC - channels.</p></li>
+<li><p><strong>preload</strong> – If ‘true’ the data is loaded directly in this function. If ‘false’ only a container is created.</p></li>
+<li><p><strong>t_min</strong> – Start of the returned recording segment in seconds.</p></li>
+<li><p><strong>t_max</strong> – End of the returned recording segment in seconds.</p></li>
+<li><p><strong>verbose</strong> – Verbose the command line output.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A raw data object containing either the data or a dummy container and the address of the ‘to be loaded’ data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>This module may be used to read data saved in the brainvision format.</p>
 </section>
 
 

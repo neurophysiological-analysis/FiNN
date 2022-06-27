@@ -4,7 +4,7 @@ Installation guide
 This guide explains how to install FiNN automatically (via pip) or manually using the build package. FiNN proper can be installed either via pip or manually build using the build package. Additionally, to use the statistics module offered by FiNN, R needs to be installed and visible within the system path.
 
 1. Automatic install
---------------------
+-----------------
 
 FiNN can be conveniently installed via pip running the following command:
 Unix/macOS: python3 -m pip install --upgrade finn
@@ -12,7 +12,7 @@ Windows: py -m pip install --upgrade finn
 
 
 2. Manual build
----------------
+------------
 
 2.1. Open a terminal within the FiNN directory
 
@@ -34,7 +34,7 @@ Windows: py -m pip install --upgrade finn
 For more information, see https://packaging.python.org/en/latest/tutorials/packaging-projects/
 
 3. Installing R/enabling statistics
------------------------------------
+--------------------------------
 
 3.1. The latest version of R proper is available at https://www.r-project.org/ for Windows/macOS/Unix.
 
