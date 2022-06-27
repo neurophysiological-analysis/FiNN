@@ -23,7 +23,7 @@ setuptools.setup(
         'Intended Audience :: Healthcare Industry',
         'Intended Audience :: Science/Research',
         'Intended Audience :: Information Technology',
-        'License :: OSI Approved :: GPLv3 License',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
