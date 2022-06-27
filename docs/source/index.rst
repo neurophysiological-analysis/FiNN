@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to FiNNPY
-===============
+=================
 
 FiNNPY is a toolbox for the analysis of electrophysiological to *Fi*\nd *N*\europhysiological *N*\etworks using *Py*\thon. To this end, FiNNPY provides a number of methods which support the analysis of electrophysiological data. This support is expanded to a broad scope from basic digital signal processing, to file IO, statistical analysis, visualization & most importantly, a number of different metrics to evaluate same frequency connectivity and cross frequency connectivity. 
 

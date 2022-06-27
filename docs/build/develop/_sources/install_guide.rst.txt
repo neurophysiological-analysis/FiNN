@@ -1,35 +1,36 @@
+
 Installation guide
 ==================
 
-This guide explains how to install FiNN automatically (via pip) or manually using the build package. FiNN proper can be installed either via pip or manually build using the build package. Additionally, to use the statistics module offered by FiNN, R needs to be installed and visible within the system path.
+This guide explains how to install FiNNPY automatically (via pip) or manually using the build package. FiNNPY proper can be installed either via pip or manually build using the build package. Additionally, to use the statistics module offered by FiNNPY, R needs to be installed and visible within the system path.
 
 1. Automatic install
 --------------------
 
-FiNN can be conveniently installed via pip running the following command:
-Unix/macOS: python3 -m pip install --upgrade finn
-Windows: py -m pip install --upgrade finn
+FiNNPY can be conveniently installed via pip running the following command:
+Unix/macOS: python3 -m pip install --upgrade finnpy
+Windows: py -m pip install --upgrade finnpy
 
 
 2. Manual build
 ---------------
 
-2.1. Open a terminal within the FiNN directory
+2.1. Open a terminal within the FiNNPY directory
 
 2.2. Install the build package::
 
     Unix/macOS: python3 -m pip install --upgrade build
     Windows: py -m pip install --upgrade build
 
-2.3. Build FiNN::
+2.3. Build FiNNPY::
 
     Unix/macOS: python3 -m build
     Windows: py -m build
 
-2.4. Install FiNN::
+2.4. Install FiNNPY::
 
-    Unix/macOS: python3 -m pip install dist/finn-<version>-py3-none-any.whl
-    Windows: py -m pip install dist/finn-<version>-py3-none-any.whl
+    Unix/macOS: python3 -m pip install dist/finnpy-<version>-py3-none-any.whl
+    Windows: py -m pip install dist/finnpy-<version>-py3-none-any.whl
 
 For more information, see https://packaging.python.org/en/latest/tutorials/packaging-projects/
 
