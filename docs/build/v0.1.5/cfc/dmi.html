@@ -270,26 +270,6 @@
                 
   <section id="direct-modulation-index">
 <h1>Direct Modulation Index<a class="headerlink" href="#direct-modulation-index" title="Permalink to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="cfc.pac.run_dmi">
-<span class="sig-prename descclassname"><span class="pre">cfc.pac.</span></span><span class="sig-name descname"><span class="pre">run_dmi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">low_freq_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_freq_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_window_half_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_step_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_model_fit_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cfc.pac.run_dmi" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculates the direct modulation index between a low frequency signal and a high frequency signal. Instead of the original modulation index based on entropy, this modulation index estimate is based on a sinusoidal fit.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>low_freq_data</strong> – Single array of low frequency data.</p></li>
-<li><p><strong>high_freq_data</strong> – Single array of high frequency data. Must have the same length as low_freq_data.</p></li>
-<li><p><strong>phase_window_half_size</strong> – Width of the phase window used for calculation of frequency/phase histogram. Amplitude gets added to every phase bin within the window size. Larger windows result in more smooth, but also potentially increased PAC estimates.</p></li>
-<li><p><strong>phase_step_width</strong> – Step width of the phase window used for calculation of frequency/phase histogram.</p></li>
-<li><p><strong>max_model_fit_iterations</strong> – Maximum number of iterations applied during sine fitting.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Amount of phase amplitude coupling measured using the modulation index.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following example shows how to apply the dmi to estimate PAC.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>

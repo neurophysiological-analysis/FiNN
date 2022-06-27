@@ -201,82 +201,14 @@
 <p class="admonition-title">Note</p>
 <p>Use the following function for time domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.td.run_psi">
-<span class="sig-prename descclassname"><span class="pre">sfc.td.</span></span><span class="sig-name descname"><span class="pre">run_psi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nperseg_outer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nperseg_inner</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_step_sz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.td.run_psi" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculates the phase slope index between two signals. Assumes data_1 and data_2 to be from time domain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples.</p></li>
-<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples.</p></li>
-<li><p><strong>nperseg_outer</strong> – Outer window size. If normalize = False, this parameter is not used</p></li>
-<li><p><strong>fs</strong> – Sampling frequency.</p></li>
-<li><p><strong>nperseg_inner</strong> – Inner window size.</p></li>
-<li><p><strong>nfft</strong> – fft window size.</p></li>
-<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a>.</p></li>
-<li><p><strong>pad_type</strong> – Padding type, currently only “zero” padding is supported.</p></li>
-<li><p><strong>f_min</strong> – Minimum frequence for the evaluated interval.</p></li>
-<li><p><strong>f_max</strong> – Maximum frequence for the evaluated interval.</p></li>
-<li><p><strong>f_step_sz</strong> – Frequency step size in the evaluated interval.</p></li>
-<li><p><strong>normalize</strong> – Determines whether to normalize by dividing through the variance</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity between data1 and data 2 measured using the phase slope index.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the following function for frequency domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.fd.run_psi">
-<span class="sig-prename descclassname"><span class="pre">sfc.fd.</span></span><span class="sig-name descname"><span class="pre">run_psi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_step_sz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.fd.run_psi" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculates the phase slope index between two signals. Assumes data_1 and data_2 to be from time domain.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> – First dataset from the frequency domain domain; vector of frequency domain samples.</p></li>
-<li><p><strong>data2</strong> – Second dataset from the frequency domain; vector of frequency domain samples.</p></li>
-<li><p><strong>bins</strong> – Frequency bins of the sample data.</p></li>
-<li><p><strong>f_min</strong> – Minimum frequence for the evaluated interval.</p></li>
-<li><p><strong>f_max</strong> – Maximum frequence for the evaluated interval.</p></li>
-<li><p><strong>f_step_sz</strong> – Frequency step size in the evaluated interval.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity between data_1 and data_2 measured using the phase slope index.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the following function for complex coherency domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.cd.run_psi">
-<span class="sig-prename descclassname"><span class="pre">sfc.cd.</span></span><span class="sig-name descname"><span class="pre">run_psi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_step_sz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.cd.run_psi" title="Permalink to this definition">#</a></dt>
-<dd><p>This function calculates the phase slope index between two signals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – List of outer window complex coherency estimates calculated from two signals.</p></li>
-<li><p><strong>bins</strong> – Frequency bins of the sample data.</p></li>
-<li><p><strong>f_min</strong> – Minimum frequence for the evaluated interval.</p></li>
-<li><p><strong>f_max</strong> – Maximum frequence for the evaluated interval.</p></li>
-<li><p><strong>f_step_sz</strong> – Frequency step size in the evaluated interval.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity estimated based on the provided complex coherency measured using the phase slope index.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following code example shows how to apply the phase slope index to measure sfc.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 

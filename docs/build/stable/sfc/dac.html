@@ -189,100 +189,14 @@
 <p class="admonition-title">Note</p>
 <p>Use the following function for time domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.td.run_dac">
-<span class="sig-prename descclassname"><span class="pre">sfc.td.</span></span><span class="sig-name descname"><span class="pre">run_dac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nperseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_signed_conn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimal_angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_conductance_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.td.run_dac" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculates the directional absolute coherence between two signals. Assumes data_1 and data_2 to be from time domain.</p>
-<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
-<p>Important design decision:
-- In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
-- In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.</p>
-<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from time domain; vector of samples.</p></li>
-<li><p><strong>data_2</strong> – Second dataset from time domain; vector of samples.</p></li>
-<li><p><strong>fmin</strong> – Minimum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>fmax</strong> – Maximum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>fs</strong> – Sampling frequency.</p></li>
-<li><p><strong>nperseg</strong> – Size of individual segments in fft.</p></li>
-<li><p><strong>nfft</strong> – fft window size.</p></li>
-<li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information.</p></li>
-<li><p><strong>minimal_angle_thresh</strong> – The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan.</p></li>
-<li><p><strong>volume_conductance_ratio</strong> – Defines the ratio of below threshold connectivity values to identify volume conductance.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding same_frequency_coupling values.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the following function for frequency domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.fd.run_dac">
-<span class="sig-prename descclassname"><span class="pre">sfc.fd.</span></span><span class="sig-name descname"><span class="pre">run_dac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_signed_conn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimal_angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_conductance_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.fd.run_dac" title="Permalink to this definition">#</a></dt>
-<dd><blockquote>
-<div><p>Calculates the directional absolute coherence between two signals. Assumes data_1 and data_2 to be from the complex frequency domain.</p>
-</div></blockquote>
-<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
-<p>Important design decision: 
-- In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
-- In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.</p>
-<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from the complex frequency domain; vector of samples.</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the complex frequency domain; vector of samples.</p></li>
-<li><p><strong>fmin</strong> – Minimum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>fmax</strong> – Maximum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information</p></li>
-<li><p><strong>minimal_angle_thresh</strong> – The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan.</p></li>
-<li><p><strong>volume_conductance_ratio</strong> – Defines the ratio of below threshold connectivity values to identify volume conductance.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity between data_1 and data_2 measured using the directionalized absolute coherence.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the following function for complex coherency domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.cd.run_dac">
-<span class="sig-prename descclassname"><span class="pre">sfc.cd.</span></span><span class="sig-name descname"><span class="pre">run_dac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_signed_conn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimal_angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_conductance_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.cd.run_dac" title="Permalink to this definition">#</a></dt>
-<dd><p>Calculates the directional absolute coherence from complex coherency.</p>
-<p>As the coherence is similar to the Fouier Transform of the Pearson correlation coefficient, the magnitude informs of the strength of the correlation and whereas the sign of the imaginary part informs on the direction.</p>
-<p>Important design decision: 
-- In case data_2 happens before data_1, the sign of the psi (used to gain directional information) is defined to be positive.
-- In case data_1 happens before data_2, the sign of the psi (used to gain directional information)  is defined to be negative.</p>
-<p>The sign of the imaginary part of the coherence is a sine with a frequency of f = 1 in [-180°, 180°]. Naturally, there are two roots of this sine, one at 0° and another at -180°/180°. Around these root phase shifts, the calculated sign is proportionally more sensetive to noise in the signal. Therefore, in case of phase shifts from [-thresh°, +thresh°] the amplitude is corrected to 0. Furthermore, any same_frequency_coupling with a phase shift of ~0° is (mostly) indistingusihable from volume conduction effects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – List of outer window complex coherency estimates calculated from two signals.</p></li>
-<li><p><strong>bins</strong> – Frequency bins of the complex coherency data.</p></li>
-<li><p><strong>fmin</strong> – Minimum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>fmax</strong> – Maximum frequency of the frequency range on which coherency gets evaluated.</p></li>
-<li><p><strong>return_signed_conn</strong> – Flag whether the absolute coherence should be multiplied with [-1, 1] for directional information</p></li>
-<li><p><strong>minimal_angle_thresh</strong> – The minimal angle (phase shift) to evaluate in this analysis. Any angle smaller than the angle defined by minimal_angle_thresh is considered volume conduction and therefore replace with np.nan.</p></li>
-<li><p><strong>volume_conductance_ratio</strong> – Defines the ratio of below threshold connectivity values to identify volume conductance.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity between data_1 and data_2 measured using the directionalized absolute coherence.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following code example shows how to apply directional absolute coherence to measure sfc.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 

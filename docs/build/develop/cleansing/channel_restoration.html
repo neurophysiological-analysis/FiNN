@@ -196,24 +196,6 @@
                 
   <section id="channel-restoration">
 <h1>Channel restoration<a class="headerlink" href="#channel-restoration" title="Permalink to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="cleansing.channel_restoration.run">
-<span class="sig-prename descclassname"><span class="pre">cleansing.channel_restoration.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_ch_idx_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cleansing.channel_restoration.run" title="Permalink to this definition">#</a></dt>
-<dd><p>Restores channel by averaging signals from their respective neighbors. In case neighboring channels are flagged as bad, channels get iteratively restored, from the channel with the most valid neighbors to the channel with the least. Restored channels are considered valid candidates for channel reconstruction.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Input data in the format channels x samples.</p></li>
-<li><p><strong>ch_names</strong> – Names of the channles from the input data. Order needs to be aligned with the channel order of ch_names.</p></li>
-<li><p><strong>bad_ch_idx_list</strong> – List of bad channels with are selected for substitution by their neighbors.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Restored channels in the format channels x samples.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following code example shows how to apply bad channel identification &amp; subsequent restoration.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>

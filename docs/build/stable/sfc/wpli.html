@@ -189,67 +189,14 @@
 <p class="admonition-title">Note</p>
 <p>Use the following function for time domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.td.run_wpli">
-<span class="sig-prename descclassname"><span class="pre">sfc.td.</span></span><span class="sig-name descname"><span class="pre">run_wpli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nperseg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nfft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hann'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zero'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.td.run_wpli" title="Permalink to this definition">#</a></dt>
-<dd><p>This function calculates the weighted phase lag index between two signals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data1</strong> – First dataset from time domain; vector of samples.</p></li>
-<li><p><strong>data2</strong> – Second dataset from time domain; vector of samples.</p></li>
-<li><p><strong>fs</strong> – Sampling frequency.</p></li>
-<li><p><strong>nperseg</strong> – Number of data points per segment.</p></li>
-<li><p><strong>nfft</strong> – FFT window size.</p></li>
-<li><p><strong>window</strong> – FFT window type. Supported window types are listed at <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html">https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.get_window.html</a>.</p></li>
-<li><p><strong>pad_type</strong> – Padding type, currently only “zero” padding is supported.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(bins, conn) - Frequency bins and corresponding weighted phase lag index values.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the following function for frequency domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.fd.run_wpli">
-<span class="sig-prename descclassname"><span class="pre">sfc.fd.</span></span><span class="sig-name descname"><span class="pre">run_wpli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.fd.run_wpli" title="Permalink to this definition">#</a></dt>
-<dd><p>This function calculates the weighted phase lag index between two signals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data_1</strong> – First dataset from the frequency domain domain; vector of frequency domain samples.</p></li>
-<li><p><strong>data_2</strong> – Second dataset from the frequency domain; vector of frequency domain samples.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity between data_1 and data_2 measured using the weighted phase lag index.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Use the following function for complex coherency domain data.</p>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="sfc.cd.run_wpli">
-<span class="sig-prename descclassname"><span class="pre">sfc.cd.</span></span><span class="sig-name descname"><span class="pre">run_wpli</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_xy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sfc.cd.run_wpli" title="Permalink to this definition">#</a></dt>
-<dd><p>This function calculates the weighted phase lag index between two signals.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>s_xy</strong> – List of complex coherency estimates calculated from two signals.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Connectivity estimated based on the provided complex coherency measured using the weighted lag slope index.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following code example shows how to apply the weighted phase lag index to measure sfc.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 

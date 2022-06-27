@@ -270,27 +270,6 @@
                 
   <section id="butterwort-filter">
 <h1>Butterwort filter<a class="headerlink" href="#butterwort-filter" title="Permalink to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="filters.frequency.butter">
-<span class="sig-prename descclassname"><span class="pre">filters.frequency.</span></span><span class="sig-name descname"><span class="pre">butter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_high</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zero_phase</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#filters.frequency.butter" title="Permalink to this definition">#</a></dt>
-<dd><p>Creates a butterworth filter and applies it to the input data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Single vector of input data</p></li>
-<li><p><strong>f_low</strong> – Start of filters’s pass band.</p></li>
-<li><p><strong>f_high</strong> – End of the filters’s pass band.</p></li>
-<li><p><strong>fs</strong> – Sampling frequency</p></li>
-<li><p><strong>order</strong> – Order of the filters.</p></li>
-<li><p><strong>zero_phase</strong> – If ‘true’ the filters is applied forwards and backwards resulting in zero phase distortion.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Filtered data.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following code example shows how to apply the butterwort filter.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">random</span>

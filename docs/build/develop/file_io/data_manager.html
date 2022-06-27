@@ -196,40 +196,6 @@
                 
   <section id="data-manager">
 <h1>Data manager<a class="headerlink" href="#data-manager" title="Permalink to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="file_io.data_manager.save">
-<span class="sig-prename descclassname"><span class="pre">file_io.data_manager.</span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.data_manager.save" title="Permalink to this definition">#</a></dt>
-<dd><p>Saves data using the data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – The data to be stored.</p></li>
-<li><p><strong>path</strong> – Location for data storage.</p></li>
-<li><p><strong>max_depth</strong> – The depth to which folders are created prior to storing data via pickle.</p></li>
-<li><p><strong>legacy_mode</strong> – <em>depricated</em> Will be removed in a future version.</p></li>
-<li><p><strong>legacy_params</strong> – <em>depricated</em> Will be removed in a future version.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="file_io.data_manager.load">
-<span class="sig-prename descclassname"><span class="pre">file_io.data_manager.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#file_io.data_manager.load" title="Permalink to this definition">#</a></dt>
-<dd><p>Loads data stored via the data_manager.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Location from which the data is to be read.</p></li>
-<li><p><strong>legacy_mode</strong> – <em>deprecated</em> Will be removed in a future version.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The read data.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>The following code example shows how to load and save data using the data manager.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
