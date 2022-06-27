@@ -40,14 +40,14 @@ jobs:
         R -e "install.packages(c('car'))"
         R -e "install.packages(c('carData'))"
         R -e "install.packages(c('lme4'))"
-    - name: Install python3 FiNN dependencies #dependencies are installed here to make sure R is found
+    - name: Install python3 FiNNPy dependencies #dependencies are installed here to make sure R is found
       run: |
         pip install -r requirements.txt
-    - name: Build & install FiNN
+    - name: Build & install FiNNPy
       run: |
         pip install build
         python -m build
         python -m pip install .
     - name: Test with unittest
       run: |
-        python -m unittest discover -s finn/tests/ -p "*.py"
+        python -m unittest discover -s finnpy/tests/ -p "*.py"

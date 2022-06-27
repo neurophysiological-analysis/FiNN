@@ -7,7 +7,7 @@ setuptools.setup(
     name='finnpy',
     version='1.0.0',
     description='Toolbox for the analysis of electrophysiological data',
-    long_description='A Python Toolbox for the analysis of electrophysiological data',
+    long_description='A Python based toolbox for the analysis of electrophysiological data with a focus on the investigation of connectivity estimates.',
     author='Maximilian Scherer',
     author_email='maximilian.scherer@posteo.net',
     url='https://github.com/VoodooCode14/FiNN',

@@ -2,14 +2,14 @@
 
 A Python Toolbox for the analysis of electrophysiological data
 
-The main directory *finn* contains the toolbox itself, while *finn_demo* contains a number of demo files describing end-point functionality of the toolbox. *finn_tests* contains automated tests to perform unit tests in order to evaluate the state of the toolbox.
+The main directory *finnpy* contains the toolbox itself, while *demo* contains a number of demo files describing end-point functionality of the toolbox. *tests* on the other hand contains automated tests to perform unit tests in order to evaluate the state of the toolbox.
 
 
 ## Branches
 
-FiNN offers two branches:
-- Stable: Contains only stable releases (passed all unit tests)
-- Develop: Contains all latest changes and may be unstable (not unit tested)
+FiNNPy offers two branches:
+- Stable: Contains only stable releases (passed all tests)
+- Develop: Contains all latest changes and may be unstable (only unit tested)
 
 ## Features
 

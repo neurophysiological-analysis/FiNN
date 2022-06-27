@@ -50,4 +50,4 @@ jobs:
         python -m pip install .
     - name: Test with unittest
       run: |
-        python -m unittest discover -s finn/tests/ -p "*.py"
+        python -m unittest discover -s finnpy/tests/ -p "*.py"
