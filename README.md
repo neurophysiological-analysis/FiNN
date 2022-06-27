@@ -1,4 +1,4 @@
-# **Fi**nd **N**europyhsiological **N**etworks (FiNN)
+# **Fi**nd **N**europyhsiological **N**etworks (FiNNPy) using **Py**thon
 
 A Python Toolbox for the analysis of electrophysiological data
 
@@ -43,7 +43,7 @@ Currently implemented features in this toolbox. Full documentation is accessible
 
 ## Requirements
 
-- Python 3.6 or above.
+- Python 3.8 or above.
 - R and R packages
   - lm4
   - car
