@@ -34,8 +34,8 @@ Windows: py -m pip install --upgrade finnpy
 
 For more information, see https://packaging.python.org/en/latest/tutorials/packaging-projects/
 
-3. Installing R/enabling statistics
------------------------------------
+3. Installing R & enabling statistics
+-------------------------------------
 
 3.1. The latest version of R proper is available at https://www.r-project.org/ for Windows/macOS/Unix.
 
