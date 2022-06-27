@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='finn',
+    name='finnpy',
     version='1.0.0',
     description='Toolbox for the analysis of electrophysiological data',
     long_description='A Python Toolbox for the analysis of electrophysiological data',
@@ -13,8 +13,8 @@ setuptools.setup(
     url='https://github.com/VoodooCode14/FiNN',
     download_url='https://github.com/VoodooCode14/FiNN',
     license='GPLv3',
-    packages=['finn.basic','finn.cfc','finn.cleansing','finn.file_io','finn.filters',
-    'finn.misc', 'finn.sfc', 'finn.statistical', 'finn.visualization'],
+    packages=['finnpy.basic','finnpy.cfc','finnpy.cleansing','finnpy.file_io','finnpy.filters',
+    'finnpy.misc', 'finnpy.sfc', 'finnpy.statistical', 'finnpy.visualization'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
