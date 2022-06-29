@@ -6,6 +6,8 @@ DAC configurator
 
 A primary application case of FiNNPy is the estimation of neuronal network dynamics using same and cross frequency coupling. This guide is focused on calibrating the directionalized absolute coherence (DAC) metric which is employed for same frequency connectivity estimates. Generally speaking, the reliability of same frequency connectivity estimates depends on a number of factors. While some of these vary in between the different same frequency connectivity metrics, the reliability limiting factor *amount of available data per sample* applies to all. Furthermore, in the case of DAC, limitations from magnitude squared coherence (MSC), imaginary coherence (IC), and phase slope index (PSI) are inherited.
 
+A general review of this topic is provided in this `video <https://youtu.be/sn7Xnt6zIiE>`_.
+
 Jump to the :ref:`dac_configurator_application_label` section.
 
 Theory
