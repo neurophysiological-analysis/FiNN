@@ -17,9 +17,6 @@ Data preparation
 Feature generation
 ------------------
 
-Same frequency coupling
-^^^^^^^^^^^^^^^^^^^^^^^
-
 :ref:`dac_configurator_label`.
 
 Statistics

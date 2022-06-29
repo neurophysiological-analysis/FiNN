@@ -17,7 +17,7 @@ Data preparation
 Feature generation
 ------------------
 
-:ref:`dac_configurator_label`.
+:ref:`dac_configurator_label`
 
 Statistics
 ----------
