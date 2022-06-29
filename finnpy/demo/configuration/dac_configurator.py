@@ -23,7 +23,6 @@ import finnpy.data.paths as paths
 frequency_sampling = 5500
 frequency_min = 25
 frequency_max = 35
-frequency_bin_sz = 0.5
 
 thread_cnt = 1 #Number of threads used for the simulation
 
@@ -33,6 +32,7 @@ input_data = None
 # CONFIGURE ACCORDING TO RESULTS #
 ##################################
 
+frequency_bin_sz = 0.5
 minimal_angle_thresh = 10
 volume_conductance_ratio = 0.3
 
@@ -133,6 +133,6 @@ def run(data, phase_min, phase_max, phase_step):
     
     plt.legend()
 
-#main(input_data)
+main(input_data)
 
 

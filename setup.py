@@ -16,7 +16,7 @@ setuptools.setup(
     packages=['finnpy.basic','finnpy.cfc','finnpy.cleansing','finnpy.file_io','finnpy.filters',
     'finnpy.misc', 'finnpy.sfc', 'finnpy.statistical', 'finnpy.visualization'],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Intended Audience :: Education',
