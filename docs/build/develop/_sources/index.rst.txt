@@ -17,5 +17,6 @@ Demo applications of the included modules are available in the finnpy_demo folde
    :hidden:
    :maxdepth: 3
    
-   Installation guide <install_guide>
+   Installation <install_guide>
+   Guides <guides>
    API reference <api_reference>
