@@ -1,15 +1,22 @@
-# **Fi**nd **N**europyhsiological **N**etworks (FiNNPy) using **Py**thon
+# **Fi**nd **N**europyhsiological **N**etworks (FiNN)
 
 A Python Toolbox for the analysis of electrophysiological data
 
-The main directory *finnpy* contains the toolbox itself, while *demo* contains a number of demo files describing end-point functionality of the toolbox. *tests* on the other hand contains automated tests to perform unit tests in order to evaluate the state of the toolbox.
+The main directory *finn* contains the toolbox itself, while *finn_demo* contains a number of demo files describing end-point functionality of the toolbox. *finn_tests* contains automated tests to perform unit tests in order to evaluate the state of the toolbox.
 
+## Installation
+
+FiNN can be installed either
+1) manually by downloading a branch of choice
+2) via pip when calling `pip install finnpy`
+
+For more information please [click here](https://neurophysiological-analysis.github.io/FiNN/build/develop/install_guide.html).
 
 ## Branches
 
-FiNNPy offers two branches:
-- Stable: Contains only stable releases (passed all tests)
-- Develop: Contains all latest changes and may be unstable (only unit tested)
+FiNN offers two branches:
+- Stable: Contains only stable releases (passed all unit tests)
+- Develop: Contains all latest changes and may be unstable (not unit tested)
 
 ## Features
 
@@ -43,7 +50,7 @@ Currently implemented features in this toolbox. Full documentation is accessible
 
 ## Requirements
 
-- Python 3.8 or above.
+- Python 3.6 or above.
 - R and R packages
   - lm4
   - car
