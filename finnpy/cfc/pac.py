@@ -120,9 +120,8 @@ def run_mi(low_freq_data, high_freq_data, phase_window_half_size = 10, phase_ste
         if (len(phase_indices) == 0):
             amplitude_signal[phaseIdx] = np.nan
         else:
-            amplitude_signal[phaseIdx] = np.mean(np.abs(high_freq_data[phase_indices])) # No need for a hilbert transform
+            amplitude_signal[phaseIdx] = np.mean(np.abs(scipy.signal.hilbert(high_freq_data[phase_indices]))) # No need for a hilbert transform
         
-    amplitude_signal = np.concatenate((amplitude_signal, amplitude_signal))
     amplitude_signal /= np.nansum(amplitude_signal)
     
     entropy_value = scipy.stats.entropy(amplitude_signal)
