@@ -125,12 +125,10 @@ def run_mi(low_freq_data, high_freq_data, phase_window_half_size = 10, phase_ste
     amplitude_signal = np.concatenate((amplitude_signal, amplitude_signal))
     amplitude_signal /= np.nansum(amplitude_signal)
     
-    len_signal = len(amplitude_signal)
-    uniform_signal = np.random.uniform(np.nanmin(amplitude_signal), np.nanmax(amplitude_signal), len_signal)
+    entropy_value = scipy.stats.entropy(amplitude_signal)
+    max_entropy = np.log(len(amplitude_signal))
     
-    score = (scipy.stats.entropy(amplitude_signal, uniform_signal, len_signal))/np.log(len_signal)
-
-    return score
+    return (max_entropy - entropy_value)/max_entropy
 
 def run_mvl(low_freq_data, high_freq_data):
     """
