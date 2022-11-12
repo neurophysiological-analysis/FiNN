@@ -16,7 +16,7 @@ class test_pac(unittest.TestCase):
     ref_dmi_score = 0.940
     ref_plv_score = 0.633
     ref_mvl_score = 0.249
-    ref_mi_score = 0.045
+    ref_mi_score = 0.121
     
     def generate_high_frequency_signal(self, n, frequency_sampling, frequency_within_bursts, random_noise_strength,
                                        offset, burst_count, burst_length,
