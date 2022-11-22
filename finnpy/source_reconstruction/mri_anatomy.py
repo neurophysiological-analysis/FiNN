@@ -57,7 +57,7 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file):
     shutil.rmtree(old_base_dir)
     shutil.move(new_base_dir, old_base_dir)
 
-def copy_fs_avg_anatomy(fs_path, subj_path, subj_name, rec_meta_info):
+def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
     old_base_dir = fs_path + "fsaverage" + "/"
     new_base_dir = fs_path + subj_name + "/"
     
@@ -86,8 +86,11 @@ def copy_fs_avg_anatomy(fs_path, subj_path, subj_name, rec_meta_info):
     shutil.copyfile(old_base_dir + "surf/" + "rh.sphere.reg", new_base_dir + "surf/" + "rh.sphere.reg")
     shutil.copyfile(old_base_dir + "surf/" + "rh.white", new_base_dir + "surf/" + "rh.white")
     
-def scale_anatomy(fs_path, subj_name, scale):
+def scale_anatomy(fs_path, subj_name, scale, overwrite = False):
     path = fs_path + subj_name + "/"
+    
+    if (os.path.exists(path + ".is_scaled") == True and overwrite == False):
+        continue
     
     if (os.path.exists(path + "bem/" + subj_name + "-fiducials.fif")):
         load_scale_save_fiducials(path + "bem/" + subj_name + "-fiducials.fif", scale)
@@ -98,10 +101,17 @@ def scale_anatomy(fs_path, subj_name, scale):
     
     load_scale_save_mri(path + "mri/" + "orig.mgz", scale)
     load_scale_save_mri(path + "mri/" + "T1.mgz", scale)
-
-import mne.io
+    
+    file = open(path + ".is_scaled", "wb")
+    file.close()
 
 def load_scale_save_fiducials(path, scale):
+    
+    if (os.path.exists(path + "_unscaled")):
+        path = path + "_unscaled"
+    
+    shutil.copyfile(path, path + "_unscaled")
+    
     (fiducials, coord_system) = mne.io.read_fiducials(path)
     
     for pt_idx in range(len(fiducials)):
@@ -110,11 +120,23 @@ def load_scale_save_fiducials(path, scale):
     mne.io.write_fiducials(path, fiducials, coord_system, overwrite = True)
 
 def load_scale_save_surfaces(path, scale):
+    
+    if (os.path.exists(path + "_unscaled")):
+        path = path + "_unscaled"
+    
+    shutil.copyfile(path, path + "_unscaled")
+    
     (vert, faces) = nibabel.freesurfer.read_geometry(path)
     vert = vert * scale
     nibabel.freesurfer.write_geometry(path, vert, faces)
 
 def load_scale_save_mri(path, scale):
+    
+    if (os.path.exists(path + "_unscaled")):
+        path = path + "_unscaled"
+    
+    shutil.copyfile(path, path + "_unscaled")
+    
     mri = nibabel.load(path)
     
     zooms = np.array(mri.header.get_zooms())

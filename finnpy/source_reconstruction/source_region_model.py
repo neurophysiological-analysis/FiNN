@@ -42,7 +42,7 @@ def get_sphere_faces(fs_avg_path, hemisphere, model_vert, model_faces):
     return neigh_faces
 
 def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert,
-                              model_vert, model_faces, fs_avg_path, demo = True):
+                              model_vert, model_faces, fs_avg_path, demo = False):
     morphed_epoch_data = [list()]
     morphed_epoch_channels = [list()]
     morphed_region_names = [list()]
