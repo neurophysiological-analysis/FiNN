@@ -8,8 +8,8 @@ import numpy as np
 import scipy.spatial
 import mpmath
 
-import source_reconstruction.utils
-import source_reconstruction.bem_model
+import finnpy.source_reconstruction.utils
+import finnpy.source_reconstruction.bem_model
 
 import mne.forward
 
@@ -86,7 +86,7 @@ def calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_t
 def add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices):
     pc = np.empty((len(white_vertices) * 3, len(meg_ch_infos)))
     for (vortex_idx, vortex) in enumerate(white_vertices):
-        pp = source_reconstruction.bem_model.calc_bem_fields(vortex, rmags, cosmags)
+        pp = finnpy.source_reconstruction.bem_model.calc_bem_fields(vortex, rmags, cosmags)
         pp *= ws
         pp = pp.squeeze(0)
         
@@ -225,7 +225,7 @@ def reset_forward_model_orientation(lh_acc_normals, valid_lh_vert, lh_patch_info
     tmp_orient = orient[2::3, :]
     
     #get block matrix
-    rot = source_reconstruction.utils.orient_mat_to_block_format(tmp_orient) #Correct, double checked
+    rot = finnpy.source_reconstruction.utils.orient_mat_to_block_format(tmp_orient) #Correct, double checked
     
     return fwd_sol * rot
         

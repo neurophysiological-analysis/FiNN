@@ -99,11 +99,12 @@ def calc_sensor_covariance(file_path, cov_path, method = None, method_params = N
     method_params = {"shrinkage" : 0.2,}
     """
     
-    raw_file = mne.io.read_raw_fif(file_path, preload = True, verbose = "ERROR")
-    (bio_sensor_noise_cov, ch_names) = get_sensor_noise_cov(raw_file, method, method_params)
-    
     if ((os.path.exists(cov_path + "eval.npy") == False or 
          os.path.exists(cov_path + "evec.npy") == False) or overwrite):
+    
+        raw_file = mne.io.read_raw_fif(file_path, preload = True, verbose = "ERROR")
+        (bio_sensor_noise_cov, ch_names) = get_sensor_noise_cov(raw_file, method, method_params)
+    
         mat = mpmath.matrix(bio_sensor_noise_cov)
         mat.ctx.dps = 40
         (eigen_val, eigen_vec) = mpmath.eigsy(mat)

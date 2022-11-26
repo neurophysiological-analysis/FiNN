@@ -13,7 +13,7 @@ import scipy.linalg
 
 import nibabel.freesurfer
 
-import source_reconstruction.utils
+import finnpy.source_reconstruction.utils
 import os
 
 import mayavi.mlab
@@ -48,22 +48,22 @@ def load_coreg_data(subj_name, subj_path, rec_meta_info):
     ref_pts["coord_frame"] = ref_pts["coord_frame"][0]
     
     if (os.path.exists(subj_path + "surf/lh.seghead") == False):
-        calc_head_model(subj_name)
+        calc_head_model(subj_name, subj_path)
     
     (hd_surf_vert, _) = nibabel.freesurfer.read_geometry(subj_path + "surf/lh.seghead")
     hd_surf_vert /= 1000 ## whyever??
     
     return (ref_pts, hd_surf_vert)
 
-def calc_head_model(subj_name):
-    if (subj_name[-1] == "/"):
-        patient_id = subj_name[:-1]
+def calc_head_model(subj_name, subj_path):
+    if (subj_path[-1] == "/"):
+        subj_name = subj_path.split("/")[-2]
     else:
-        patient_id = subj_name
+        subj_name = subj_path.split("/")[-1]
     
-    cmd = ["/mnt/data/Professional/UHN/projects/code/tester/source_reconstruction/fs_get_model.sh", subj_name]
+    cmd = [__file__[:__file__.rindex("/")] + "/fs_get_model.sh", subj_name]
     
-    source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
+    finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(subj_name, cmd)
     
     os.remove(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/mri/" + "seghead.mgz")
     shutil.rmtree(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/scripts")
@@ -83,11 +83,12 @@ def format_fiducials(pre_mri_ref_pts):
     return mri_ref_pts
 
 def get_mri_pts(fs_path, subj_path, subj_name):
+    
     if (os.path.exists(subj_path + "bem/" + subj_name + "-fiducials.fif")):
         (pre_mri_ref_pts, _) = mne.io.read_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif")
         mri_ref_pts = format_fiducials(pre_mri_ref_pts)
     else:
-        (pre_mri_ref_pts, _) = mne.io.read_fiducials(fs_path + "fsaverage/bem/fsaverage-fiducials.fif")
+        (pre_mri_ref_pts, _) = mne.io.read_fiducials(mne.__file__[:mne.__file__.rindex("/")] + "/data/fsaverage/fsaverage-fiducials.fif")
         mri_ref_pts = format_fiducials(pre_mri_ref_pts)
     
         trans_mat_ras_mni = np.zeros((4, 4))
@@ -216,17 +217,17 @@ def refine_registration(meg_pts, mri_vert,
     
     for iteration_idx in range(max_number_of_iterations):
         meg_pts_partial = list(); meg_pts_partial.extend(meg_pts["hsp"])
-        inv_pre_mri_pts_partial = source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hsp"])), last_mat)
-        (mri_indices, tree) = source_reconstruction.utils.find_nearest_neighbor(mri_vert, inv_pre_mri_pts_partial, "kdtree")
+        inv_pre_mri_pts_partial = finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hsp"])), last_mat)
+        (mri_indices, tree) = finnpy.source_reconstruction.utils.find_nearest_neighbor(mri_vert, inv_pre_mri_pts_partial, "kdtree")
         mri_pts_partial = list(); mri_pts_partial.extend(mri_vert[mri_indices, :])
         
         meg_pts_partial.append(meg_pts["lpa"]); meg_pts_partial.append(meg_pts["nasion"]); meg_pts_partial.append(meg_pts["rpa"]);
-        mri_pts_partial.extend(mri_vert[source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["lpa"])), last_mat), axis = 0), "kdtree")[0], :])
-        mri_pts_partial.extend(mri_vert[source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["nasion"])), last_mat), axis = 0), "kdtree")[0], :])
-        mri_pts_partial.extend(mri_vert[source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["rpa"])), last_mat), axis = 0), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["lpa"])), last_mat), axis = 0), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["nasion"])), last_mat), axis = 0), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["rpa"])), last_mat), axis = 0), "kdtree")[0], :])
         
         meg_pts_partial.extend(meg_pts["hpi"])
-        mri_pts_partial.extend(mri_vert[source_reconstruction.utils.find_nearest_neighbor(tree, source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hpi"])), last_mat), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hpi"])), last_mat), "kdtree")[0], :])
         meg_pts_full = np.asarray(meg_pts_partial)
         mri_pts_full = np.asarray(mri_pts_partial)
         
@@ -238,7 +239,7 @@ def refine_registration(meg_pts, mri_vert,
         trans_diff = np.linalg.norm(last_rotors[3:6] - ref_trans_list[3:6]) * 1000
         last_angle = scipy.spatial.transform.Rotation.from_matrix(last_mat[:3, :3]).as_quat()
         ref_angle = scipy.spatial.transform.Rotation.from_matrix(ref_trans_mat[:3, :3]).as_quat()
-        angle_diff = np.rad2deg(source_reconstruction.utils.calc_quat_angle(ref_angle, last_angle))
+        angle_diff = np.rad2deg(finnpy.source_reconstruction.utils.calc_quat_angle(ref_angle, last_angle))
         scale_diff = np.max((ref_trans_list[6:9] - last_rotors[6:9])/last_rotors[6:9] * 100)
         
         last_rotors = ref_trans_list
@@ -263,8 +264,8 @@ def get_rigid_transform(rotors):
     return mat
 
 def rm_bad_head_shape_pts(meg_pts, mri_vert, trans_mat, distance_thresh = 5/1000):
-    loc_meg_pts = source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts)), trans_mat)
-    mri_indices = mri_vert[source_reconstruction.utils.find_nearest_neighbor(mri_vert, loc_meg_pts, "kdtree")[0], :]
+    loc_meg_pts = finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts)), trans_mat)
+    mri_indices = mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(mri_vert, loc_meg_pts, "kdtree")[0], :]
     
     distance = np.linalg.norm(mri_indices - loc_meg_pts, axis = 1)
     
@@ -290,28 +291,24 @@ def get_ref_ptn_cnt(meg_pts):
             ptn_cnt += len(meg_pts["hsp"])
             hsp_cnt = len(meg_pts["hsp"])
     return (ptn_cnt, hsp_cnt)
-
-def calc_coregistration(subj_name, fs_path, surf_path, rec_meta_info, registration_type = "restricted", 
+    
+def calc_coregistration(subj_name, fs_path, subj_path, rec_meta_info, registration_type = "restricted", 
                         max_number_of_iterations = 500, overwrite = False):
     
-    if (os.path.exists(surf_path + "coreg/rotors") and
-        os.path.exists(surf_path + "coreg/meg_pts") and overwrite == False):
+    if (os.path.exists(subj_path + "coreg/rotors") and
+        os.path.exists(subj_path + "coreg/meg_pts") and overwrite == False):
         
-        coreg_rotors = dm.load(surf_path + "coreg/rotors")
-        meg_pts = dm.load(surf_path + "coreg/meg_pts")
+        coreg_rotors = dm.load(subj_path + "coreg/rotors")
+        meg_pts = dm.load(subj_path + "coreg/meg_pts")
     else:
         ## Find initial solution
-        (meg_pts, hd_surf_vert) = load_coreg_data(subj_name, surf_path, rec_meta_info)
-        mri_pts = get_mri_pts(fs_path, surf_path, subj_name)
+        (meg_pts, hd_surf_vert) = load_coreg_data(subj_name, subj_path, rec_meta_info)
+        mri_pts = get_mri_pts(fs_path, subj_path, subj_name)
         
         mri_pts_initial = np.asarray([mri_pts["LPA"], mri_pts["NASION"], mri_pts["RPA"]])
         meg_pts_initial = np.asarray([meg_pts["lpa"], meg_pts["nasion"], meg_pts["rpa"]])
         
         (coreg_rotors, coreg_mat) = registrate_3d_points_restricted(mri_pts_initial, meg_pts_initial, scale = (registration_type == "free"))
-        
-        ###### perfect match 
-        # scipy.linalg.inv(get_rigid_transform(coreg_rotors))
-        
         
         # Refine initial solution
         (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
@@ -321,9 +318,6 @@ def calc_coregistration(subj_name, fs_path, surf_path, rec_meta_info, registrati
                                                         max_number_of_iterations = max_number_of_iterations,
                                                         registration_type = registration_type)
         
-        ####################
-        # Almost perfect match
-        
         meg_pts["hsp"] = rm_bad_head_shape_pts(meg_pts["hsp"], hd_surf_vert, coreg_mat)
         
         (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
@@ -332,17 +326,11 @@ def calc_coregistration(subj_name, fs_path, surf_path, rec_meta_info, registrati
                                                         coreg_rotors, coreg_mat, refined_weights,
                                                         max_number_of_iterations = max_number_of_iterations,
                                                         registration_type = registration_type)
-        
-        #=======================================================================
-        # os.makedirs(surf_path + "coreg/", exist_ok = True)
-        # dm.save(coreg_rotors, surf_path + "coreg/rotors")
-        # dm.save(meg_pts, surf_path + "coreg/meg_pts")
-        #=======================================================================
     
     return (coreg_rotors, meg_pts)
 
-def plot_coregistration(coreg, rec_meta_info, meg_pts, fs_path, subj_name):
-    (vert, faces) = nibabel.freesurfer.read_geometry(fs_path + subj_name + "/surf/lh.seghead")
+def plot_coregistration(coreg, rec_meta_info, meg_pts, subj_path):
+    (vert, faces) = nibabel.freesurfer.read_geometry(subj_path + "/surf/lh.seghead")
     vert/= 1000
     
     _ = mayavi.mlab.figure(size = (800, 800))
@@ -372,7 +360,7 @@ def plot_coregistration(coreg, rec_meta_info, meg_pts, fs_path, subj_name):
         
         inv_trans = scipy.linalg.inv(trans)
         
-        vert        = np.dot(vert, inv_trans[:3, :3].T);        vert        += inv_trans[:3, 3]
+        vert = np.dot(vert, inv_trans[:3, :3].T); vert += inv_trans[:3, 3]
         
         return vert
     

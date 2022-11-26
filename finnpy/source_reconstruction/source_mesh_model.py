@@ -6,13 +6,13 @@ Created on Oct 13, 2022
 
 import nibabel.freesurfer
 
-import source_reconstruction.utils
-import source_reconstruction.sphere_model
+import finnpy.source_reconstruction.utils
+import finnpy.source_reconstruction.sphere_model
 import warnings
 
 def create_mesh(octahedron_level = 6):
-    (vert, faces) = source_reconstruction.sphere_model.calculate_sphere_from_octahedron(octahedron_level)
-    (vert, faces) = source_reconstruction.sphere_model.prune_closeby_vert(vert, faces)
+    (vert, faces) = finnpy.source_reconstruction.sphere_model.calculate_sphere_from_octahedron(octahedron_level)
+    (vert, faces) = finnpy.source_reconstruction.sphere_model.prune_closeby_vert(vert, faces)
     
     return (vert, faces)
 
@@ -39,12 +39,12 @@ def create_source_mesh_model(path):
      rh_geom_sphere_vert) = read_cortical_data(path)
         
     #Normalize geometric
-    lh_geom_sphere_vert = source_reconstruction.utils.norm_vert(lh_geom_sphere_vert)
-    rh_geom_sphere_vert = source_reconstruction.utils.norm_vert(rh_geom_sphere_vert)
+    lh_geom_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(lh_geom_sphere_vert)
+    rh_geom_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(rh_geom_sphere_vert)
     
     #Get valid vertices
-    valid_geom_lh_vert = source_reconstruction.utils.find_valid_vertices(lh_geom_sphere_vert, model_vert)
-    valid_geom_rh_vert = source_reconstruction.utils.find_valid_vertices(rh_geom_sphere_vert, model_vert)
+    valid_geom_lh_vert = finnpy.source_reconstruction.utils.find_valid_vertices(lh_geom_sphere_vert, model_vert)
+    valid_geom_rh_vert = finnpy.source_reconstruction.utils.find_valid_vertices(rh_geom_sphere_vert, model_vert)
     
     return (lh_geom_white_vert, lh_geom_white_faces,
             rh_geom_white_vert, rh_geom_white_faces,

@@ -8,7 +8,7 @@ import os
 import numpy as np
 import scipy.spatial
 
-import source_reconstruction.utils
+import finnpy.source_reconstruction.utils
 
 def tessellate_sphere(vert, faces, level):
     new_vert = [None, None, None]
@@ -16,9 +16,9 @@ def tessellate_sphere(vert, faces, level):
     new_faces = [None, None, None, None]
     for _ in range(0, level - 1):
         
-        new_vert[0] = vert[faces[:, 0]] + vert[faces[:, 1]]; new_vert[0] = source_reconstruction.utils.norm_vert(new_vert[0])
-        new_vert[1] = vert[faces[:, 1]] + vert[faces[:, 2]]; new_vert[1] = source_reconstruction.utils.norm_vert(new_vert[1])
-        new_vert[2] = vert[faces[:, 0]] + vert[faces[:, 2]]; new_vert[2] = source_reconstruction.utils.norm_vert(new_vert[2])
+        new_vert[0] = vert[faces[:, 0]] + vert[faces[:, 1]]; new_vert[0] = finnpy.source_reconstruction.utils.norm_vert(new_vert[0])
+        new_vert[1] = vert[faces[:, 1]] + vert[faces[:, 2]]; new_vert[1] = finnpy.source_reconstruction.utils.norm_vert(new_vert[1])
+        new_vert[2] = vert[faces[:, 0]] + vert[faces[:, 2]]; new_vert[2] = finnpy.source_reconstruction.utils.norm_vert(new_vert[2])
         
         new_vert_cnt = np.cumsum([len(vert), len(new_vert[0]), len(new_vert[1]), len(new_vert[2])])
         new_vert_len[0] = np.arange(new_vert_cnt[0], new_vert_cnt[1])

@@ -6,7 +6,7 @@ Created on Oct 17, 2022
 
 import numpy as np
 import nibabel.freesurfer
-import source_reconstruction.utils
+import finnpy.source_reconstruction.utils
 
 import matplotlib
 matplotlib.use("Qt5agg")
@@ -36,13 +36,14 @@ def get_translation_list(neigh_faces):
 
 def get_sphere_faces(fs_avg_path, hemisphere, model_vert, model_faces):
     (fs_avg_surf_sph_vert, _) = nibabel.freesurfer.read_geometry(fs_avg_path + "surf/" + hemisphere + ".sphere")
-    neigh_indices = source_reconstruction.utils.find_nearest_neighbor(fs_avg_surf_sph_vert/100, model_vert)[0]
+    neigh_indices = finnpy.source_reconstruction.utils.find_nearest_neighbor(fs_avg_surf_sph_vert/100, model_vert)[0]
     neigh_faces = [neigh_indices[face] for face in model_faces]; neigh_faces = np.asarray(neigh_faces, dtype = int)
 
     return neigh_faces
 
 def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert,
-                              model_vert, model_faces, fs_avg_path, demo = False):
+                              model_vert, model_faces, fs_avg_path):
+    
     morphed_epoch_data = [list()]
     morphed_epoch_channels = [list()]
     morphed_region_names = [list()]
@@ -67,12 +68,7 @@ def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_
             
             morphed_epoch_data[-1].append(np.mean(np.abs(hem_data[region_channel_ids, :]), axis = 0))
             morphed_epoch_channels[-1].append(region_channel_ids)
-            morphed_region_names[-1].append(region_name)
-            
-            if (demo):
-                plt.figure()
-                plt.plot(morphed_epoch_data[-1][-1] - np.mean(morphed_epoch_data[-1][-1]))
-                return (None, None, None)
+            morphed_region_names[-1].append(hemisphere + "_" + region_name)
     
     return (morphed_epoch_data, morphed_epoch_channels, morphed_region_names)
 

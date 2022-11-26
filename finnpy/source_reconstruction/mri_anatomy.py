@@ -5,12 +5,14 @@ Created on Oct 21, 2022
 '''
 
 import os
-import source_reconstruction.utils
+import finnpy.source_reconstruction.utils
 import shutil
-from source_reconstruction.coregistration_meg_mri import calc_coregistration
+from finnpy.source_reconstruction.coregistration_meg_mri import calc_coregistration
 
 import nibabel.freesurfer
 import numpy as np
+
+import mne.io
 
 def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file):
     if (subj_name[-1] == "/"):
@@ -24,13 +26,13 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file):
     if (os.path.exists(old_base_dir)):
         return
     
-    cmd = ["/mnt/data/Professional/UHN/projects/code/tester/source_reconstruction/fs_extract_anatomy.sh", subj_name, t1_scan_file]
+    cmd = [__file__[:__file__.rindex("/")] + "/fs_extract_anatomy.sh", subj_name, t1_scan_file]
     #===========================================================================
     # os.environ["FNAME"] = t1_scan_file
     # os.environ["SUBJECT"] = subj_name
     #===========================================================================
     
-    source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
+    finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
     
     os.mkdir(new_base_dir)
     
@@ -67,7 +69,8 @@ def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
      
     #Create and populate bem folder
     os.mkdir(new_base_dir + "bem")
-    shutil.copyfile(old_base_dir + "bem/" + "fsaverage-fiducials.fif", new_base_dir + "bem/" + subj_name + "-fiducials.fif")
+    #shutil.copyfile(old_base_dir + "bem/" + "fsaverage-fiducials.fif", new_base_dir + "bem/" + subj_name + "-fiducials.fif")
+    shutil.copyfile(mne.__file__[:mne.__file__.rindex("/")] + "/data/fsaverage/fsaverage-fiducials.fif", new_base_dir + "bem/" + subj_name + "-fiducials.fif")
     os.mkdir(new_base_dir + "bem/watershed")
      
     #Create and populate mri folder
@@ -86,23 +89,22 @@ def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
     shutil.copyfile(old_base_dir + "surf/" + "rh.sphere.reg", new_base_dir + "surf/" + "rh.sphere.reg")
     shutil.copyfile(old_base_dir + "surf/" + "rh.white", new_base_dir + "surf/" + "rh.white")
     
-def scale_anatomy(fs_path, subj_name, scale, overwrite = False):
-    path = fs_path + subj_name + "/"
+def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
     
-    if (os.path.exists(path + ".is_scaled") == True and overwrite == False):
-        continue
+    if (os.path.exists(subj_path + ".is_scaled") == True and overwrite == False):
+        return
     
-    if (os.path.exists(path + "bem/" + subj_name + "-fiducials.fif")):
-        load_scale_save_fiducials(path + "bem/" + subj_name + "-fiducials.fif", scale)
+    if (os.path.exists(subj_path + "bem/" + subj_name + "-fiducials.fif")):
+        load_scale_save_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif", scale)
     
-    load_scale_save_surfaces(path + "surf/" + "lh.white", scale)
-    load_scale_save_surfaces(path + "surf/" + "rh.white", scale)
-    load_scale_save_surfaces(path + "surf/" + "lh.seghead", scale)
+    load_scale_save_surfaces(subj_path + "surf/" + "lh.white", scale)
+    load_scale_save_surfaces(subj_path + "surf/" + "rh.white", scale)
+    load_scale_save_surfaces(subj_path + "surf/" + "lh.seghead", scale)
     
-    load_scale_save_mri(path + "mri/" + "orig.mgz", scale)
-    load_scale_save_mri(path + "mri/" + "T1.mgz", scale)
+    load_scale_save_mri(subj_path + "mri/" + "orig.mgz", scale)
+    load_scale_save_mri(subj_path + "mri/" + "T1.mgz", scale)
     
-    file = open(path + ".is_scaled", "wb")
+    file = open(subj_path + ".is_scaled", "wb")
     file.close()
 
 def load_scale_save_fiducials(path, scale):

@@ -7,7 +7,7 @@ Created on Oct 12, 2022
 import numpy as np
 import scipy.linalg
 
-import source_reconstruction.utils
+import finnpy.source_reconstruction.utils
 
 import mne
 
@@ -43,7 +43,7 @@ def calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_na
     sensor_cov_eigen_val = sensor_cov_eigen_val[valid_meg_ch_idx]
     sensor_cov_eigen_vec = sensor_cov_eigen_vec[valid_meg_ch_idx, :]; sensor_cov_eigen_vec = sensor_cov_eigen_vec[:, valid_meg_ch_idx]
     
-    whitener = source_reconstruction.utils.calc_whitener(sensor_cov_eigen_val, sensor_cov_eigen_vec)
+    whitener = finnpy.source_reconstruction.utils.calc_whitener(sensor_cov_eigen_val, sensor_cov_eigen_vec)
     gain_mat = np.dot(whitener, fwd_sol)
     
     scale = np.sqrt(np.sum(sensor_cov_eigen_val > 0) / np.linalg.norm(gain_mat) ** 2)

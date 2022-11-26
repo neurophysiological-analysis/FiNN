@@ -15,14 +15,14 @@ import nibabel.freesurfer
 
 import matplotlib.pyplot as plt
 
-import source_reconstruction.utils
-import source_reconstruction.sphere_model
+import finnpy.source_reconstruction.utils
+import finnpy.source_reconstruction.sphere_model
 
 def calc_skull_and_skin_models(path, patient_id, preflood_height = 25, overwrite = False):
     if (overwrite == True or os.path.exists(path + "bem/watershed/" + patient_id + "_inner_skull_surface") == False):
         
         cmd = ["mri_watershed", "-h", str(preflood_height), "-useSRAS", "-surf", path + "bem/watershed/" + patient_id, path + "mri/T1.mgz", path + "bem/watershed/ws.mgz"]
-        source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
+        finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
         
         os.remove(path + "bem/watershed/" + patient_id + "_brain_surface")
         os.remove(path + "bem/watershed/ws.mgz")
@@ -107,8 +107,8 @@ import mne
 def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 4):
     src_icosahedron_level = int(np.log(ws_in_skull_faces.shape[0]/20)/np.log(2) / 2)
     
-    (src_vert, _) = source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order(src_icosahedron_level)
-    (tgt_vert, tgt_faces) = source_reconstruction.sphere_model.calculate_sphere_from_icosahedron(tgt_icosahedron_level)
+    (src_vert, _) = finnpy.source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order(src_icosahedron_level)
+    (tgt_vert, tgt_faces) = finnpy.source_reconstruction.sphere_model.calculate_sphere_from_icosahedron(tgt_icosahedron_level)
     
     #===========================================================================
     # #####################
@@ -125,7 +125,7 @@ def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 
     # ###################
     #===========================================================================
     
-    trans_ws_in_skill_vert = np.copy(ws_in_skull_vert)[source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
+    trans_ws_in_skill_vert = np.copy(ws_in_skull_vert)[finnpy.source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
     ws_in_skull_faces = tgt_faces
     
     trans_ws_in_skill_vert /= 1000 # whyever??
@@ -135,8 +135,8 @@ def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 
     y_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 1], :]
     z_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 2], :]
     
-    faces_normal = source_reconstruction.utils.fast_cross_product((y_pos - x_pos), (z_pos - x_pos))
-    double_faces_area = source_reconstruction.utils.magn_of_vec(faces_normal)
+    faces_normal = finnpy.source_reconstruction.utils.fast_cross_product((y_pos - x_pos), (z_pos - x_pos))
+    double_faces_area = finnpy.source_reconstruction.utils.magn_of_vec(faces_normal)
     n_faces_normal = np.linalg.norm(faces_normal, axis = 1)
     faces_normal[n_faces_normal > 0] = faces_normal[n_faces_normal > 0] / np.expand_dims(n_faces_normal[n_faces_normal > 0], axis = 1)
     
