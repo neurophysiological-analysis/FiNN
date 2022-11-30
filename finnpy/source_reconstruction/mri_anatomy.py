@@ -111,7 +111,7 @@ def load_scale_save_fiducials(path, scale):
     
     if (os.path.exists(path + "_unscaled")):
         path = path + "_unscaled"
-    
+     
     shutil.copyfile(path, path + "_unscaled")
     
     (fiducials, coord_system) = mne.io.read_fiducials(path)
@@ -125,7 +125,7 @@ def load_scale_save_surfaces(path, scale):
     
     if (os.path.exists(path + "_unscaled")):
         path = path + "_unscaled"
-    
+     
     shutil.copyfile(path, path + "_unscaled")
     
     (vert, faces) = nibabel.freesurfer.read_geometry(path)
@@ -136,7 +136,7 @@ def load_scale_save_mri(path, scale):
     
     if (os.path.exists(path + "_unscaled")):
         path = path + "_unscaled"
-    
+     
     shutil.copyfile(path, path + "_unscaled")
     
     mri = nibabel.load(path)

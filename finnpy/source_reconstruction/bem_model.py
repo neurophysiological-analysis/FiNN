@@ -110,21 +110,6 @@ def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 
     (src_vert, _) = finnpy.source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order(src_icosahedron_level)
     (tgt_vert, tgt_faces) = finnpy.source_reconstruction.sphere_model.calculate_sphere_from_icosahedron(tgt_icosahedron_level)
     
-    #===========================================================================
-    # #####################
-    # # DEBUG STARTS HERE #
-    # #####################
-    # 
-    # warnings.warn("Remove debug section")
-    # src_vert = mne.read_bem_surfaces('/home/voodoocode/.local/lib/python3.10/site-packages/mne/data/icos.fif.gz', False, s_id=9005, verbose=False)["rr"]
-    # tgt_vert = mne.read_bem_surfaces('/home/voodoocode/.local/lib/python3.10/site-packages/mne/data/icos.fif.gz', False, s_id=9004, verbose=False)["rr"]
-    # tgt_faces = mne.read_bem_surfaces('/home/voodoocode/.local/lib/python3.10/site-packages/mne/data/icos.fif.gz', False, s_id=9004, verbose=False)["tris"]
-    # 
-    # ###################
-    # # DEBUG ENDS HERE #
-    # ###################
-    #===========================================================================
-    
     trans_ws_in_skill_vert = np.copy(ws_in_skull_vert)[finnpy.source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
     ws_in_skull_faces = tgt_faces
     

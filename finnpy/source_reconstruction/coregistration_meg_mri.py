@@ -13,7 +13,7 @@ import scipy.linalg
 
 import nibabel.freesurfer
 
-import finnpy.source_reconstruction.utils
+import finnpy.source_reconstruction.utils as finnpy_utils
 import os
 
 import mayavi.mlab
@@ -63,7 +63,7 @@ def calc_head_model(subj_name, subj_path):
     
     cmd = [__file__[:__file__.rindex("/")] + "/fs_get_model.sh", subj_name]
     
-    finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(subj_name, cmd)
+    finnpy_utils.run_subprocess_in_custom_working_directory(subj_name, cmd)
     
     os.remove(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/mri/" + "seghead.mgz")
     shutil.rmtree(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/scripts")
@@ -192,16 +192,16 @@ def registrate_3d_points_restricted(src_pts, tgt_pts, weights = [1., 10., 1.], s
     else:
         scale = 1
     
-    t = mu_tgt.T - scale * np.dot(rot, mu_src.T) - (scale == 0) * np.dot(rot, mu_src.T)
+    trans = mu_tgt.T - scale * np.dot(rot, mu_src.T) - (scale == 0) * np.dot(rot, mu_src.T)
     
     rotors = np.zeros((9,))
     rotors[0:3] = scipy.spatial.transform.Rotation.from_matrix(rot).as_euler("xyz")
-    rotors[3:6] = t[:, 0]
+    rotors[3:6] = trans[:, 0]
     rotors[6:9] = scale
     
     mat = np.zeros((4, 4))
     mat[:3, :3] = rot
-    mat[:3, 3] = t[:3, 0]
+    mat[:3, 3] = trans[:3, 0]
     mat[0, 0] *= scale; mat[1, 1] *= scale; mat[2, 2] *= scale
     mat[3, 3] = 1
     
@@ -210,26 +210,27 @@ def registrate_3d_points_restricted(src_pts, tgt_pts, weights = [1., 10., 1.], s
 def refine_registration(meg_pts, mri_vert, 
                         last_rotors, last_mat, 
                         weights, 
-                        #trans_thresh = .002, angle_thresh = .002, scale_thresh = .002, 
-                        trans_thresh = .2, angle_thresh = .2, scale_thresh = .2, 
+                        trans_thresh = .002, angle_thresh = .002, scale_thresh = .002, 
+                        #trans_thresh = .2, angle_thresh = .2, scale_thresh = .2, 
                         max_number_of_iterations = 500, 
                         registration_type = "free"):
     
     for iteration_idx in range(max_number_of_iterations):
         meg_pts_partial = list(); meg_pts_partial.extend(meg_pts["hsp"])
-        inv_pre_mri_pts_partial = finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hsp"])), last_mat)
-        (mri_indices, tree) = finnpy.source_reconstruction.utils.find_nearest_neighbor(mri_vert, inv_pre_mri_pts_partial, "kdtree")
+        inv_pre_mri_pts_partial = finnpy_utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hsp"])), last_mat)
+        (mri_indices, tree) = finnpy_utils.find_nearest_neighbor(mri_vert, inv_pre_mri_pts_partial, "kdtree")
         mri_pts_partial = list(); mri_pts_partial.extend(mri_vert[mri_indices, :])
         
         meg_pts_partial.append(meg_pts["lpa"]); meg_pts_partial.append(meg_pts["nasion"]); meg_pts_partial.append(meg_pts["rpa"]);
-        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["lpa"])), last_mat), axis = 0), "kdtree")[0], :])
-        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["nasion"])), last_mat), axis = 0), "kdtree")[0], :])
-        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["rpa"])), last_mat), axis = 0), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy_utils.find_nearest_neighbor(tree, np.expand_dims(finnpy_utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["lpa"])), last_mat), axis = 0), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy_utils.find_nearest_neighbor(tree, np.expand_dims(finnpy_utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["nasion"])), last_mat), axis = 0), "kdtree")[0], :])
+        mri_pts_partial.extend(mri_vert[finnpy_utils.find_nearest_neighbor(tree, np.expand_dims(finnpy_utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["rpa"])), last_mat), axis = 0), "kdtree")[0], :])
         
         meg_pts_partial.extend(meg_pts["hpi"])
-        mri_pts_partial.extend(mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(tree, finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hpi"])), last_mat), "kdtree")[0], :])
-        meg_pts_full = np.asarray(meg_pts_partial)
-        mri_pts_full = np.asarray(mri_pts_partial)
+        mri_pts_partial.extend(mri_vert[finnpy_utils.find_nearest_neighbor(tree, finnpy_utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["hpi"])), last_mat), "kdtree")[0], :])
+        meg_pts_full = np.asarray(meg_pts_partial, dtype = np.float64)
+        mri_pts_full = np.asarray(mri_pts_partial, dtype = np.float64)
+        print(score_coregistration(meg_pts_full, mri_pts_full, scipy.linalg.inv(last_mat))[1])
         
         if (registration_type == "free"):
             (ref_trans_list, ref_trans_mat) = registrate_3d_points_free(mri_pts_full, meg_pts_full, weights, initial_guess = (0, 0, 0, 0, 0, 0, 1, 1, 1))
@@ -239,7 +240,7 @@ def refine_registration(meg_pts, mri_vert,
         trans_diff = np.linalg.norm(last_rotors[3:6] - ref_trans_list[3:6]) * 1000
         last_angle = scipy.spatial.transform.Rotation.from_matrix(last_mat[:3, :3]).as_quat()
         ref_angle = scipy.spatial.transform.Rotation.from_matrix(ref_trans_mat[:3, :3]).as_quat()
-        angle_diff = np.rad2deg(finnpy.source_reconstruction.utils.calc_quat_angle(ref_angle, last_angle))
+        angle_diff = np.rad2deg(finnpy_utils.calc_quat_angle(ref_angle, last_angle))
         scale_diff = np.max((ref_trans_list[6:9] - last_rotors[6:9])/last_rotors[6:9] * 100)
         
         last_rotors = ref_trans_list
@@ -248,11 +249,17 @@ def refine_registration(meg_pts, mri_vert,
         if (trans_diff < trans_thresh and angle_diff < angle_thresh and scale_diff < scale_thresh):
             break
         pass
+
+    print(score_coregistration(meg_pts_full, mri_pts_full, scipy.linalg.inv(last_mat))[1])
     
     if (iteration_idx == max_number_of_iterations):
         warnings.warn("Max number of iterations reached")
         
-    return (last_rotors, last_mat)
+    return (last_rotors, last_mat, mri_pts_full, meg_pts_full)
+
+def score_coregistration(meg_pts, mri_pts, trans):
+    scores = scipy.linalg.norm((np.dot(meg_pts, trans[:3, :3].T) + trans[:3, 3]) - mri_pts, axis = 1)
+    return (np.min(scores), np.mean(scores), np.max(scores))
 
 def get_rigid_transform(rotors):
     
@@ -264,8 +271,8 @@ def get_rigid_transform(rotors):
     return mat
 
 def rm_bad_head_shape_pts(meg_pts, mri_vert, trans_mat, distance_thresh = 5/1000):
-    loc_meg_pts = finnpy.source_reconstruction.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts)), trans_mat)
-    mri_indices = mri_vert[finnpy.source_reconstruction.utils.find_nearest_neighbor(mri_vert, loc_meg_pts, "kdtree")[0], :]
+    loc_meg_pts = finnpy_utils.apply_inv_transformation(np.copy(np.asarray(meg_pts)), trans_mat)
+    mri_indices = mri_vert[finnpy_utils.find_nearest_neighbor(mri_vert, loc_meg_pts, "kdtree")[0], :]
     
     distance = np.linalg.norm(mri_indices - loc_meg_pts, axis = 1)
     
@@ -294,40 +301,38 @@ def get_ref_ptn_cnt(meg_pts):
     
 def calc_coregistration(subj_name, fs_path, subj_path, rec_meta_info, registration_type = "restricted", 
                         max_number_of_iterations = 500, overwrite = False):
+    ## Find initial solution
+    (meg_pts, hd_surf_vert) = load_coreg_data(subj_name, subj_path, rec_meta_info)
+    mri_pts = get_mri_pts(fs_path, subj_path, subj_name)
     
-    if (os.path.exists(subj_path + "coreg/rotors") and
-        os.path.exists(subj_path + "coreg/meg_pts") and overwrite == False):
-        
-        coreg_rotors = dm.load(subj_path + "coreg/rotors")
-        meg_pts = dm.load(subj_path + "coreg/meg_pts")
-    else:
-        ## Find initial solution
-        (meg_pts, hd_surf_vert) = load_coreg_data(subj_name, subj_path, rec_meta_info)
-        mri_pts = get_mri_pts(fs_path, subj_path, subj_name)
-        
-        mri_pts_initial = np.asarray([mri_pts["LPA"], mri_pts["NASION"], mri_pts["RPA"]])
-        meg_pts_initial = np.asarray([meg_pts["lpa"], meg_pts["nasion"], meg_pts["rpa"]])
-        
-        (coreg_rotors, coreg_mat) = registrate_3d_points_restricted(mri_pts_initial, meg_pts_initial, scale = (registration_type == "free"))
-        
-        # Refine initial solution
-        (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
-        refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 2
-        (coreg_rotors, coreg_mat) = refine_registration(meg_pts, hd_surf_vert,
-                                                        coreg_rotors, coreg_mat, refined_weights,
-                                                        max_number_of_iterations = max_number_of_iterations,
-                                                        registration_type = registration_type)
-        
-        meg_pts["hsp"] = rm_bad_head_shape_pts(meg_pts["hsp"], hd_surf_vert, coreg_mat)
-        
-        (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
-        refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 10
-        (coreg_rotors, coreg_mat) = refine_registration(meg_pts, hd_surf_vert,
-                                                        coreg_rotors, coreg_mat, refined_weights,
-                                                        max_number_of_iterations = max_number_of_iterations,
-                                                        registration_type = registration_type)
+    mri_pts_initial = np.asarray([mri_pts["LPA"], mri_pts["NASION"], mri_pts["RPA"]])
+    meg_pts_initial = np.asarray([meg_pts["lpa"], meg_pts["nasion"], meg_pts["rpa"]])
     
-    return (coreg_rotors, meg_pts)
+    (coreg_rotors, coreg_mat) = registrate_3d_points_restricted(mri_pts_initial, meg_pts_initial, scale = (registration_type == "free"))
+    
+    thresh = 1e-10#0.2
+    
+    # Refine initial solution
+    (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
+    refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 2
+    (coreg_rotors, coreg_mat, mri_pts, meg_pts_arr) = refine_registration(meg_pts, hd_surf_vert,
+                                                                          coreg_rotors, coreg_mat, refined_weights,
+                                                                          trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
+                                                                          max_number_of_iterations = max_number_of_iterations,
+                                                                          registration_type = registration_type)
+            
+    meg_pts["hsp"] = rm_bad_head_shape_pts(meg_pts["hsp"], hd_surf_vert, coreg_mat)
+    
+    (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
+    refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 10
+    (coreg_rotors, coreg_mat, mri_pts, meg_pts_arr) = refine_registration(meg_pts, hd_surf_vert,
+                                                                          coreg_rotors, coreg_mat, refined_weights,
+                                                                          trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
+                                                                          max_number_of_iterations = max_number_of_iterations,
+                                                                          registration_type = registration_type)
+    score_coregistration(meg_pts_arr, mri_pts, coreg_mat)
+    
+    return (coreg_rotors, meg_pts, mri_pts)
 
 def plot_coregistration(coreg, rec_meta_info, meg_pts, subj_path):
     (vert, faces) = nibabel.freesurfer.read_geometry(subj_path + "/surf/lh.seghead")
