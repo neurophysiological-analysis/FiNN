@@ -15,7 +15,8 @@ import finnpy.source_reconstruction.utils as finnpy_utils
 
 import mne.io
 
-def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = None, fiducials_path = None):
+def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = None, fiducials_path = None, 
+                                      overwrite = False):
     if (subj_name[-1] == "/"):
         patient_id = subj_name[:-1]
     else:
@@ -24,7 +25,7 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     old_base_dir = os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/"
     new_base_dir = os.environ["SUBJECTS_DIR"] + "/" + subj_name + "_tmp" + "/"
     
-    if (os.path.exists(old_base_dir)):
+    if (os.path.exists(old_base_dir) and overwrite == False):
         return
     
     cmd = [__file__[:__file__.rindex("/")] + "/fs_extract_anatomy.sh", subj_name, t1_scan_file]
@@ -36,10 +37,10 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     #Create watershed model folder
     os.mkdir(new_base_dir + "bem")
     os.mkdir(new_base_dir + "bem/watershed")
-    if (fiducials is None):
-        create_fiducials(new_base_dir)
+    if (fiducials_file is None):
+        create_fiducials(old_base_dir, new_base_dir, subj_name)
     else:
-        shutil.copyfile(fiducials_path + fiducials, new_base_dir + fiducials)
+        shutil.copyfile(fiducials_path + fiducials_file, new_base_dir + fiducials)
     
     #Create and populate mri folder
     os.mkdir(new_base_dir + "mri")
@@ -60,12 +61,12 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     shutil.rmtree(old_base_dir)
     shutil.move(new_base_dir, old_base_dir)
 
-def create_fiducials(subj_path, subj_name):
+def create_fiducials(in_path, out_path, subj_name):
     (pre_mri_ref_pts, coord_system) = mne.io.read_fiducials(mne.__file__[:mne.__file__.rindex("/")] + "/data/fsaverage/fsaverage-fiducials.fif")
     mri_ref_pts = finnpy_utils.format_fiducials(pre_mri_ref_pts)
 
     trans_mat_ras_mni = np.zeros((4, 4))
-    fid = open(subj_path + "mri/transforms/talairach.xfm", "r")
+    fid = open(in_path + "mri/transforms/talairach.xfm", "r")
     for line in fid:
         if (line == "Linear_Transform = \n" or line == "Linear_Transform =\n"):
             break
@@ -76,7 +77,7 @@ def create_fiducials(subj_path, subj_name):
     trans_mat_ras_mni[:3, 3] /= 1000 ## Whyever
     trans_mat_ras_mni[3, 3] = 1
     
-    trans_mat_mri_ras = nibabel.freesurfer.load(subj_path + "mri/orig.mgz")
+    trans_mat_mri_ras = nibabel.freesurfer.load(in_path + "mri/orig.mgz")
     trans_mat_mri_ras = np.matmul(trans_mat_mri_ras.header.get_vox2ras(), np.linalg.inv(trans_mat_mri_ras.header.get_vox2ras_tkr()))
     trans_mat_mri_ras[:3, 3] /= 1000
     
@@ -96,8 +97,7 @@ def create_fiducials(subj_path, subj_name):
             ident = mne.io.constants.FIFF.FIFFV_POINT_RPA
         formatted_mri_ref_pts.append({"r" : mri_ref_pts[mri_ref_pt_key], "ident" : ident, "kind" : mne.io.constants.FIFF.FIFFV_POINT_CARDINAL})
     
-    
-    mne.io.write_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif", mri_ref_pts, coord_system, overwrite = False)
+    mne.io.write_fiducials(out_path + "bem/" + subj_name + "-fiducials.fif", formatted_mri_ref_pts, coord_system, overwrite = False)
 
 def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
     old_base_dir = fs_path + "fsaverage" + "/"

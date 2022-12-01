@@ -10,7 +10,7 @@ import numpy as np
 
 def run(coh, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
     """
-    Calculates directed absolute coherency from compley coherency
+    Calculates directed absolute coherency from complex coherency
     
     :param coh: Complex coherency.
     :param fmin: Minimum frequency of the frequency range on which coherency gets evaluated.
