@@ -14,6 +14,21 @@ import shutil
 import subprocess
 import warnings
 
+import mne.io
+
+def format_fiducials(pre_mri_ref_pts):
+    mri_ref_pts = {"LPA" : None, "NASION" : None, "RPA" : None}
+        
+    for pt_idx in range(len(pre_mri_ref_pts)):
+        if (pre_mri_ref_pts[pt_idx]["ident"] == mne.io.constants.FIFF.FIFFV_POINT_LPA):
+            mri_ref_pts["LPA"] = pre_mri_ref_pts[pt_idx]["r"] 
+        elif(pre_mri_ref_pts[pt_idx]["ident"] == mne.io.constants.FIFF.FIFFV_POINT_NASION):
+            mri_ref_pts["NASION"] = pre_mri_ref_pts[pt_idx]["r"] 
+        elif(pre_mri_ref_pts[pt_idx]["ident"] == mne.io.constants.FIFF.FIFFV_POINT_RPA):
+            mri_ref_pts["RPA"] = pre_mri_ref_pts[pt_idx]["r"]
+    
+    return mri_ref_pts
+
 def run_subprocess_in_custom_working_directory(patient_id, cmd):
     path_to_tmp_cwd = "finnpy_" + patient_id + "_freesurfer_tmp_dir/" # A temporary working directory is needed as freesurfer saves intermediate results in files.
         

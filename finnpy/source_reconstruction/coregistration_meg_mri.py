@@ -69,49 +69,39 @@ def calc_head_model(subj_name, subj_path):
     shutil.rmtree(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/scripts")
     os.remove(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/surf/" + "lh.seghead.inflated")
 
-def format_fiducials(pre_mri_ref_pts):
-    mri_ref_pts = {"LPA" : None, "NASION" : None, "RPA" : None}
-        
-    for pt_idx in range(len(pre_mri_ref_pts)):
-        if (pre_mri_ref_pts[pt_idx]["ident"] == mne.io.constants.FIFF.FIFFV_POINT_LPA):
-            mri_ref_pts["LPA"] = pre_mri_ref_pts[pt_idx]["r"] 
-        elif(pre_mri_ref_pts[pt_idx]["ident"] == mne.io.constants.FIFF.FIFFV_POINT_NASION):
-            mri_ref_pts["NASION"] = pre_mri_ref_pts[pt_idx]["r"] 
-        elif(pre_mri_ref_pts[pt_idx]["ident"] == mne.io.constants.FIFF.FIFFV_POINT_RPA):
-            mri_ref_pts["RPA"] = pre_mri_ref_pts[pt_idx]["r"]
-    
-    return mri_ref_pts
-
 def get_mri_pts(fs_path, subj_path, subj_name):
-    
-    if (os.path.exists(subj_path + "bem/" + subj_name + "-fiducials.fif")):
-        (pre_mri_ref_pts, _) = mne.io.read_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif")
-        mri_ref_pts = format_fiducials(pre_mri_ref_pts)
-    else:
-        (pre_mri_ref_pts, _) = mne.io.read_fiducials(mne.__file__[:mne.__file__.rindex("/")] + "/data/fsaverage/fsaverage-fiducials.fif")
-        mri_ref_pts = format_fiducials(pre_mri_ref_pts)
-    
-        trans_mat_ras_mni = np.zeros((4, 4))
-        fid = open(subj_path + "mri/transforms/talairach.xfm", "r")
-        for line in fid:
-            if (line == "Linear_Transform = \n" or line == "Linear_Transform =\n"):
-                break
-        trans_mat_ras_mni[0, :] = fid.readline().replace("\n", "").split(" ")[:4]
-        trans_mat_ras_mni[1, :] = fid.readline().replace("\n", "").split(" ")[:4]
-        trans_mat_ras_mni[2, :] = fid.readline().replace("\n", "").replace(";","").split(" ")[:4]
-        fid.close()
-        trans_mat_ras_mni[:3, 3] /= 1000 ## Whyever
-        trans_mat_ras_mni[3, 3] = 1
-        
-        trans_mat_mri_ras = nibabel.freesurfer.load(subj_path + "mri/orig.mgz")
-        trans_mat_mri_ras = np.matmul(trans_mat_mri_ras.header.get_vox2ras(), np.linalg.inv(trans_mat_mri_ras.header.get_vox2ras_tkr()))
-        trans_mat_mri_ras[:3, 3] /= 1000
-        
-        trans_mat_mri_mni = np.matmul(trans_mat_ras_mni, trans_mat_mri_ras)
-        trans_mat_mni_mri = np.linalg.inv(trans_mat_mri_mni)
-        
-        for mri_ref_pt_key in mri_ref_pts.keys():
-            mri_ref_pts[mri_ref_pt_key] = np.dot(trans_mat_mni_mri[:3, :3], mri_ref_pts[mri_ref_pt_key]) + trans_mat_mni_mri[:3, 3]
+    #===========================================================================
+    # if (os.path.exists(subj_path + "bem/" + subj_name + "-fiducials.fif")):
+    #===========================================================================
+    (pre_mri_ref_pts, _) = mne.io.read_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif")
+    mri_ref_pts = finnpy_utils.format_fiducials(pre_mri_ref_pts)
+    #===========================================================================
+    # else:
+    #     (pre_mri_ref_pts, _) = mne.io.read_fiducials(mne.__file__[:mne.__file__.rindex("/")] + "/data/fsaverage/fsaverage-fiducials.fif")
+    #     mri_ref_pts = finnpy_utils.format_fiducials(pre_mri_ref_pts)
+    # 
+    #     trans_mat_ras_mni = np.zeros((4, 4))
+    #     fid = open(subj_path + "mri/transforms/talairach.xfm", "r")
+    #     for line in fid:
+    #         if (line == "Linear_Transform = \n" or line == "Linear_Transform =\n"):
+    #             break
+    #     trans_mat_ras_mni[0, :] = fid.readline().replace("\n", "").split(" ")[:4]
+    #     trans_mat_ras_mni[1, :] = fid.readline().replace("\n", "").split(" ")[:4]
+    #     trans_mat_ras_mni[2, :] = fid.readline().replace("\n", "").replace(";","").split(" ")[:4]
+    #     fid.close()
+    #     trans_mat_ras_mni[:3, 3] /= 1000 ## Whyever
+    #     trans_mat_ras_mni[3, 3] = 1
+    #     
+    #     trans_mat_mri_ras = nibabel.freesurfer.load(subj_path + "mri/orig.mgz")
+    #     trans_mat_mri_ras = np.matmul(trans_mat_mri_ras.header.get_vox2ras(), np.linalg.inv(trans_mat_mri_ras.header.get_vox2ras_tkr()))
+    #     trans_mat_mri_ras[:3, 3] /= 1000
+    #     
+    #     trans_mat_mri_mni = np.matmul(trans_mat_ras_mni, trans_mat_mri_ras)
+    #     trans_mat_mni_mri = np.linalg.inv(trans_mat_mri_mni)
+    #     
+    #     for mri_ref_pt_key in mri_ref_pts.keys():
+    #         mri_ref_pts[mri_ref_pt_key] = np.dot(trans_mat_mni_mri[:3, :3], mri_ref_pts[mri_ref_pt_key]) + trans_mat_mni_mri[:3, 3]
+    #===========================================================================
     return mri_ref_pts
 
 def registrate_3d_points_free(src_pts, tgt_pts, weights = [1., 10., 1.], initial_guess = None):
