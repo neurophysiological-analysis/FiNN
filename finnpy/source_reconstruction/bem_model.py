@@ -39,9 +39,9 @@ def read_skull_and_skin_models(path, subj_name):
 def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces, 
                                ws_out_skull_vert, ws_out_skull_faces,
                                ws_out_skin_vect, ws_out_skin_faces, 
-                               path):
+                               fs_path):
     
-    (t1_data_trans, ras_to_mri) = load_and_orient_t1(path)
+    (t1_data_trans, ras_to_mri) = load_and_orient_t1(fs_path)
     mri_to_ras = np.linalg.inv(ras_to_mri)
     
     ws_in_skull_vert_trans = np.dot(ws_in_skull_vert, mri_to_ras[:3, :3].transpose()); ws_in_skull_vert_trans += mri_to_ras[:3, 3]
@@ -61,8 +61,8 @@ def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
     plot_skull_and_skin_subplots(t1_data_trans, axes, surfaces)
     plt.show(block = True)
 
-def load_and_orient_t1(path):
-    t1_img = nibabel.load(path + "mri/T1.mgz")
+def load_and_orient_t1(fs_path):
+    t1_img = nibabel.load(fs_path + "mri/T1.mgz")
     
     src_orientation = nibabel.orientations.aff2axcodes(t1_img.affine)
     tgt_orientation = ('R', 'A', 'S')

@@ -12,13 +12,14 @@ import os
 
 import finnpy.file_io.data_manager_legacy as legacy
 
-def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
+def save(data, path, max_depth = 2, max_length = 100, legacy_mode = False, legacy_params = None):
     """
     Saves data using the data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
    
     :param data: The data to be stored.
     :param path: Location for data storage.
     :param max_depth: The depth to which folders are created prior to storing data via pickle.
+    :param max_length: Maximum length of a sublist within the to be saved object.
     :param legacy_mode: *depricated* Will be removed in a future version.
     :param legacy_params: *depricated* Will be removed in a future version.
     """
@@ -31,12 +32,12 @@ def save(data, path, max_depth = 2, legacy_mode = False, legacy_params = None):
     if (path[-1] == "/"):
         path = path[:-1]
     
-    structure = _save(data, path, current_depth, max_depth, None)
+    structure = _save(data, path, current_depth, max_depth, max_length, None)
     file = open(path + "/meta.nfo", "wb")
     pickle.dump(structure, file)
     file.close()
     
-def _save(data, path, current_depth, max_depth, structure = None):
+def _save(data, path, current_depth, max_depth, max_length, structure = None):
     """
     
     Internally recursively called until either an incompatible data type is discovered or the max_depth is reached.
@@ -45,27 +46,28 @@ def _save(data, path, current_depth, max_depth, structure = None):
     :param path: Location for data storage.
     :param current_depth: The current depth of the tree.
     :param max_depth: The depth to which folders are created prior to storing data via pickle.
+    :param max_length: Maximum length of a sublist within the to be saved object.
     :param structure: Data structure used for data storage.
     
     returns the data structure used for data storage.
     
     """
         
-    if (type(data) == np.ndarray and current_depth < max_depth):
+    if (type(data) == np.ndarray and current_depth < max_depth and len(data) < max_length):
         structure = list(); structure.append("np.ndarray")
             
         for (sub_data_idx, sub_data) in enumerate(data):
             structure.append([sub_data_idx, list()])
             structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
             
-    elif(type(data) == dict and current_depth < max_depth):
+    elif(type(data) == dict and current_depth < max_depth and len(data) < max_length):
         structure = list(); structure.append("dict")
             
         for key in data:
             structure.append([key, type(key), list()])
             structure[-1][-1] = _save(data[key], path + "/" + str(key), current_depth + 1, max_depth, structure[-1][-1])
             
-    elif(type(data) == list and current_depth < max_depth):
+    elif(type(data) == list and current_depth < max_depth and len(data) < max_length):
         structure = list(); structure.append("list")
             
         for (sub_data_idx, sub_data) in enumerate(data):
