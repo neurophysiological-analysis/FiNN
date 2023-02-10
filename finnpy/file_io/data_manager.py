@@ -12,7 +12,7 @@ import os
 
 import finnpy.file_io.data_manager_legacy as legacy
 
-def save(data, path, max_depth = 2, max_length = 100, legacy_mode = False, legacy_params = None):
+def save(data, path, max_depth = 2, max_length = 100, compress_np = False, legacy_mode = False, legacy_params = None):
     """
     Saves data using the data manager. Allows for the convenient storage of large unbalanced data structures without memory spikes.
    
@@ -20,6 +20,7 @@ def save(data, path, max_depth = 2, max_length = 100, legacy_mode = False, legac
     :param path: Location for data storage.
     :param max_depth: The depth to which folders are created prior to storing data via pickle.
     :param max_length: Maximum length of a sublist within the to be saved object.
+    :param compress_np: Specifies whether numpy arrays are to be compressed.
     :param legacy_mode: *depricated* Will be removed in a future version.
     :param legacy_params: *depricated* Will be removed in a future version.
     """
@@ -32,12 +33,12 @@ def save(data, path, max_depth = 2, max_length = 100, legacy_mode = False, legac
     if (path[-1] == "/"):
         path = path[:-1]
     
-    structure = _save(data, path, current_depth, max_depth, max_length, None)
+    structure = _save(data, path, current_depth, max_depth, max_length, compress_np, None)
     file = open(path + "/meta.nfo", "wb")
     pickle.dump(structure, file)
     file.close()
     
-def _save(data, path, current_depth, max_depth, max_length, structure = None):
+def _save(data, path, current_depth, max_depth, max_length, compress_np, structure = None):
     """
     
     Internally recursively called until either an incompatible data type is discovered or the max_depth is reached.
@@ -58,27 +59,31 @@ def _save(data, path, current_depth, max_depth, max_length, structure = None):
             
         for (sub_data_idx, sub_data) in enumerate(data):
             structure.append([sub_data_idx, list()])
-            structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
+            structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, max_length, compress_np, structure[-1][-1])
             
     elif(type(data) == dict and current_depth < max_depth and len(data) < max_length):
         structure = list(); structure.append("dict")
             
         for key in data:
             structure.append([key, type(key), list()])
-            structure[-1][-1] = _save(data[key], path + "/" + str(key), current_depth + 1, max_depth, structure[-1][-1])
+            structure[-1][-1] = _save(data[key], path + "/" + str(key), current_depth + 1, max_depth, max_length, compress_np, structure[-1][-1])
             
     elif(type(data) == list and current_depth < max_depth and len(data) < max_length):
         structure = list(); structure.append("list")
             
         for (sub_data_idx, sub_data) in enumerate(data):
             structure.append([sub_data_idx, list()])
-            structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, structure[-1][-1])
+            structure[-1][-1] = _save(sub_data, path + "/" + str(sub_data_idx), current_depth + 1, max_depth, max_length, compress_np, structure[-1][-1])
             
     else:
         os.makedirs(path, exist_ok = True)
         if (type(data) == np.ndarray):
-            np.save(path + "/data.npy", data)
-            structure = "data_npy"
+            if (compress_np):
+                np.savez_compressed(path + "/data.npz", data)
+                structure = "data_npz"
+            else:
+                np.save(path + "/data.npy", data)
+                structure = "data_npy"
         else:
             file = open(path + "/data.pkl", "wb")
             pickle.dump(data, file)
@@ -146,6 +151,8 @@ def _load(structure, path):
             file.close()
         elif(structure == "data_npy"):
             data = np.load(path + "/data.npy")
+        elif(structure == "data_npz"):
+            data = np.load(path + "/data.npz")["arr_0"]
         else:
             raise AssertionError("File corrupted")
     else:
