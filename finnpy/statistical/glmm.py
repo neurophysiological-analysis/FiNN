@@ -60,7 +60,7 @@ def run(data, label_name, factor_type, formula, contrasts, data_type = "gaussian
     if (type(data) != np.ndarray):
         data = np.asarray(data)
     
-    pre_sanity = _pre_sanity_checks(data, formula, return_covariance)
+    pre_sanity = _pre_sanity_checks(data, label_name, formula, return_covariance)
     if (pre_sanity != True):
         return pre_sanity
     
@@ -152,7 +152,7 @@ def _digit_in_formula(formula):
 
     return False
 
-def _pre_sanity_checks(data, formula, return_covariance):
+def _pre_sanity_checks(data, label_name, formula, return_covariance):
     """
     Checks whether the input data is all zeros or all equal.
     
@@ -167,7 +167,7 @@ def _pre_sanity_checks(data, formula, return_covariance):
     
     # In case all values are equal, the R-based GLMM will crash.
     # Therefore, this is caught here, returning P = 1 and matching values.
-    if ((data[:, 0] == data[0, 0]).all()):
+    if ((data[:, label_name.index(formula.split(" ~")[0])] == data[0, label_name.index(formula.split(" ~")[0])]).all()):
         return _overwrite_negative_result(formula, "All dependent values are equal in the input data for the GLMM", return_covariance)
     
     return True
