@@ -6,8 +6,6 @@ Created on Jun 2, 2020
 import numpy as np
 import random
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import finnpy.filters.frequency as ff

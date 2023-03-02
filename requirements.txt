@@ -1,5 +1,5 @@
 ###### Requirements without Version Specifiers ######
-PyQt5
+PyQt6
 pyexcel_ods
 
 ###### Requirements with Version Specifiers ######

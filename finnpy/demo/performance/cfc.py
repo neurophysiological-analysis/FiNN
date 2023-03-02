@@ -6,8 +6,6 @@ Created on Aug 7, 2020
 
 import numpy as np
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import finnpy.cfc.pac as pac
@@ -107,8 +105,6 @@ def main(write_csv = False, visualize = True):
                         file.writerow(scores[idx0 + idx1 * 7])
         
             plt.legend()
-            figManager = plt.get_current_fig_manager()
-            figManager.window.showMaximized()
         
         if (visualize == True):
             plt.show(block = True)

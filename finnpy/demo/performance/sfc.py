@@ -10,8 +10,6 @@ import finnpy.sfc._misc as misc
 import finnpy.sfc.td as td
 import finnpy.sfc.cd as cohd
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import finnpy.data.paths as paths

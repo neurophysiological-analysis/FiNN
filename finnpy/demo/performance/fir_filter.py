@@ -8,8 +8,6 @@ import finnpy.filters.frequency as ff
 import mne.filter as mf
 import numpy as np
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import time

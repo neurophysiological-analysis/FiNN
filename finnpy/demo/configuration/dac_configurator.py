@@ -8,8 +8,6 @@ import numpy as np
 
 import finnpy.sfc.td as td
 
-import matplotlib
-matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 
 import finnpy.misc.timed_pool as tp

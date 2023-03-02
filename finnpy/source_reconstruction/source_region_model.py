@@ -8,10 +8,6 @@ import numpy as np
 import nibabel.freesurfer
 import finnpy.source_reconstruction.utils
 
-import matplotlib
-matplotlib.use("Qt5agg")
-import matplotlib.pyplot as plt
-
 import warnings
 
 def read_freesurfer_annotation(path):

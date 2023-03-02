@@ -6,8 +6,6 @@ Created on Jun 2, 2020
 
 import numpy as np
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import finnpy.cfc.pac as pac
@@ -77,8 +75,6 @@ def main():
     
     plt.tight_layout()
     plt.legend()
-    figManager = plt.get_current_fig_manager()
-    figManager.window.showMaximized()
     plt.show(block = True)
 
 main()

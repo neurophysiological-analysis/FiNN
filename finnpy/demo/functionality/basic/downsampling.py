@@ -8,8 +8,6 @@ import numpy as np
 
 import finnpy.basic.downsampling as ds
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import random

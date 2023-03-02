@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='finnpy',
-    version='1.0.1',
+    version='1.1.0',
     description='Toolbox for the analysis of electrophysiological data',
     long_description='A Python based toolbox for the analysis of electrophysiological data with a focus on the investigation of connectivity estimates.',
     author='Maximilian Scherer',
@@ -36,7 +36,7 @@ setuptools.setup(
     	'numpy',
     	'scipy',
     	'lmfit',
-    	'PyQt5',
+    	'PyQt6',
     	'matplotlib',
     	'mne',
     	'rpy2',

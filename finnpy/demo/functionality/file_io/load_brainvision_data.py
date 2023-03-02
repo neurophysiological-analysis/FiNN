@@ -4,8 +4,6 @@ Created on May 6, 2022
 @author: voodoocode
 '''
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import numpy as np

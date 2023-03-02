@@ -14,8 +14,6 @@ import psutil
 
 import joblib
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import finnpy.filters.frequency as ff

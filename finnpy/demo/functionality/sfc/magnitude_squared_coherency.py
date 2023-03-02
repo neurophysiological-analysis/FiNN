@@ -6,8 +6,6 @@ Created on Jan 4, 2021
 
 import numpy as np
 
-import matplotlib
-matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 import finnpy.sfc.td as td

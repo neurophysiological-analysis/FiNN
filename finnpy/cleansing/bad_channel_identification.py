@@ -8,16 +8,16 @@ This module implements a function to identify bad channels based on increased/de
 
 import numpy as np
 
-import PyQt5.QtWidgets
-import PyQt5.Qt
+import PyQt6.QtWidgets
+import PyQt6.QtGui
+import PyQt6.QtCore
 import functools
-import matplotlib.backends
+import matplotlib.backends.backend_qtagg
 import scipy.signal
 import multiprocessing
 import warnings
 
 import finnpy.cleansing.outlier_removal
-
 
 idenfity_faulty_visual_inspection_lock = multiprocessing.Lock()
 
@@ -132,7 +132,7 @@ def _manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, inva
     :return: (valid_list, invalid_list). List of valid and invalid channels, may be different from the input due to performed manual adjustments.
     
     """   
-    app = PyQt5.QtWidgets.QApplication([])
+    app = PyQt6.QtWidgets.QApplication([])
     
     if (type(valid_list) == np.ndarray):
         valid_list = valid_list.tolist()
@@ -160,7 +160,7 @@ def _manual_check_mp(ch_cnt, ch_names, score, min_ref, max_ref, valid_list, inva
     
     return (valid_list, invalid_list)
 
-class _Qt_win(PyQt5.QtWidgets.QWidget):
+class _Qt_win(PyQt6.QtWidgets.QWidget):
     """
 
     Window visualizing the z-score distribution of the provided channels.
@@ -202,8 +202,9 @@ class _Qt_win(PyQt5.QtWidgets.QWidget):
         self.diff = diff
         self.ch_names = ch_names
         
-        self.setGeometry(PyQt5.QtWidgets.QStyle.alignedRect(PyQt5.Qt.Qt.LeftToRight, PyQt5.Qt.Qt.AlignCenter, self.size(), app.desktop().availableGeometry()))
-        self.layout = PyQt5.QtWidgets.QGridLayout(self)
+        #self.setGeometry(PyQt6.QtWidgets.QStyle.alignedRect(PyQt6.QtCore.Qt.LayoutDirection.LeftToRight, PyQt6.QtCore.Qt.AlignmentFlag.AlignCenter, self.size(), app.desktop().availableGeometry()))
+        #self.setGeometry(PyQt6.QtWidgets.QStyle.alignedRect(PyQt6.QtCore.Qt.LayoutDirection.LeftToRight, PyQt6.QtCore.Qt.AlignmentFlag.AlignCenter, self.size()))
+        self.layout = PyQt6.QtWidgets.QGridLayout(self)
         self.valid_list = list(); self.test = list()
         for ch_idx in valid_list:
             self.valid_list.append(ch_idx)
@@ -213,27 +214,27 @@ class _Qt_win(PyQt5.QtWidgets.QWidget):
         
         self.fig = matplotlib.figure.Figure()
         self.fig.subplots(1, 1)
-        self.canvas = matplotlib.backends.backend_qt5agg.FigureCanvasQTAgg(self.fig)
+        self.canvas = matplotlib.backends.backend_qtagg.FigureCanvasQTAgg(self.fig)
         self.init_canvas()
         self.layout.addWidget(self.canvas, 0, 0, 1, maxX+2)
-        self.canvas.setSizePolicy(PyQt5.Qt.QSizePolicy(PyQt5.Qt.QSizePolicy.Ignored, PyQt5.Qt.QSizePolicy.Expanding))
+        self.canvas.setSizePolicy(PyQt6.QtWidgets.QSizePolicy(PyQt6.QtWidgets.QSizePolicy.Policy.Ignored, PyQt6.QtWidgets.QSizePolicy.Policy.Expanding))
         self.canvas.setMinimumHeight(300)
         self.canvas.mpl_connect("button_press_event", self.on_click)
         
         xPos = 1
         maxXPos = list()
         yPos = 1
-        fm = PyQt5.QtGui.QFontMetrics(PyQt5.QtWidgets.QPushButton().font())
+        fm = PyQt6.QtGui.QFontMetrics(PyQt6.QtWidgets.QPushButton().font())
         self.buttonList = list()
         for ch_idx in range(ch_cnt):
             if (ch_idx in invalid_list):
-                button = PyQt5.QtWidgets.QPushButton(ch_names[ch_idx] + ": Invalid")
+                button = PyQt6.QtWidgets.QPushButton(ch_names[ch_idx] + ": Invalid")
                 button.setStyleSheet("Background-color:red;")
             else:
-                button = PyQt5.QtWidgets.QPushButton(ch_names[ch_idx] + ": Valid")
+                button = PyQt6.QtWidgets.QPushButton(ch_names[ch_idx] + ": Valid")
                 button.setStyleSheet("Background-color:green;")
             self.buttonList.append(button)
-            button.setFixedWidth(fm.width("CCCC: Invalid"))
+            button.setFixedWidth(120)
             button.clicked.connect(functools.partial(self.change_state, ch_idx))
 
             self.layout.addWidget(button,   yPos, xPos, 1, 1)
@@ -246,9 +247,9 @@ class _Qt_win(PyQt5.QtWidgets.QWidget):
         
         nextWidth = button.maximumWidth()
         
-        button = PyQt5.QtWidgets.QPushButton("Close")
+        button = PyQt6.QtWidgets.QPushButton("Close")
         button.clicked.connect(self.clicked_close)
-        button.setMaximumWidth(np.max((nextWidth, fm.width("Close"))))
+        button.setMaximumWidth(np.max((nextWidth, 120)))
 
         if (maxXPos % 2 == 0):
             self.layout.addWidget(button, yPos + 1, maxXPos//2, 1, 2)
@@ -258,12 +259,12 @@ class _Qt_win(PyQt5.QtWidgets.QWidget):
             else:
                 self.layout.addWidget(button, yPos + 1, (maxXPos + 1)//2 - 1, 1, 3)
 
-        self.layout.setAlignment(button, PyQt5.Qt.Qt.AlignHCenter)
+        self.layout.setAlignment(button, PyQt6.QtCore.Qt.AlignmentFlag.AlignHCenter)
 
-        buffer1 = PyQt5.QtWidgets.QWidget()
-        buffer2 = PyQt5.QtWidgets.QWidget()
-        buffer1.setSizePolicy(PyQt5.Qt.QSizePolicy(PyQt5.Qt.QSizePolicy.Expanding, PyQt5.Qt.QSizePolicy.Ignored))
-        buffer2.setSizePolicy(PyQt5.Qt.QSizePolicy(PyQt5.Qt.QSizePolicy.Expanding, PyQt5.Qt.QSizePolicy.Ignored))
+        buffer1 = PyQt6.QtWidgets.QWidget()
+        buffer2 = PyQt6.QtWidgets.QWidget()
+        buffer1.setSizePolicy(PyQt6.QtWidgets.QSizePolicy(PyQt6.QtWidgets.QSizePolicy.Policy.Expanding, PyQt6.QtWidgets.QSizePolicy.Policy.Ignored))
+        buffer2.setSizePolicy(PyQt6.QtWidgets.QSizePolicy(PyQt6.QtWidgets.QSizePolicy.Policy.Expanding, PyQt6.QtWidgets.QSizePolicy.Policy.Ignored))
         self.layout.addWidget(buffer1, 1, 0,           yPos + 1, 1)
         self.layout.addWidget(buffer2, 1, maxXPos + 1, yPos + 1, 1)
         
@@ -353,9 +354,6 @@ class _Qt_win(PyQt5.QtWidgets.QWidget):
         """
         
         pass
-        #------------------------ if (event.key() == PyQt5.QtCore.Qt.Key_Space):
-            #---------------------------------------------- print("Hello World")
-            #---------------------------------------------- #self.clickedClose()
         
     def clicked_close(self):
         """
