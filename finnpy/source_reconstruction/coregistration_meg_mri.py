@@ -385,11 +385,11 @@ def run(subj_name, subj_path, rec_meta_info, registration_scale_type = "restrict
     # Refine initial solution, 1st run
     (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
     refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 2
-    (coreg_rotors, coreg_mat) = refine_registration(meg_pts, hd_surf_vert,
-                                                    coreg_rotors, coreg_mat, refined_weights,
-                                                    trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
-                                                    max_number_of_iterations = max_number_of_iterations,
-                                                    registration_scale_type = registration_scale_type)
+    (coreg_rotors, coreg_mat, _, _) = refine_registration(meg_pts, hd_surf_vert,
+                                                          coreg_rotors, coreg_mat, refined_weights,
+                                                          trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
+                                                          max_number_of_iterations = max_number_of_iterations,
+                                                          registration_scale_type = registration_scale_type)
             
     # Remove non-fitting pts
     meg_pts["hsp"] = rm_bad_head_shape_pts(meg_pts["hsp"], hd_surf_vert, coreg_mat)
@@ -397,11 +397,11 @@ def run(subj_name, subj_path, rec_meta_info, registration_scale_type = "restrict
     # Refine initial solution, 2nd run
     (ptn_cnt, hsp_cnt) = get_ref_ptn_cnt(meg_pts)
     refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 10
-    (coreg_rotors, coreg_mat) = refine_registration(meg_pts, hd_surf_vert,
-                                                    coreg_rotors, coreg_mat, refined_weights,
-                                                    trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
-                                                    max_number_of_iterations = max_number_of_iterations,
-                                                    registration_scale_type = registration_scale_type)
+    (coreg_rotors, coreg_mat, _, _) = refine_registration(meg_pts, hd_surf_vert,
+                                                          coreg_rotors, coreg_mat, refined_weights,
+                                                          trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
+                                                          max_number_of_iterations = max_number_of_iterations,
+                                                          registration_scale_type = registration_scale_type)
     
     return (coreg_rotors, meg_pts)
 

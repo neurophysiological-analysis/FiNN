@@ -7,7 +7,6 @@ Created on Oct 21, 2022
 import os
 import finnpy.source_reconstruction.utils
 import shutil
-from finnpy.source_reconstruction.coregistration_meg_mri import calc_coregistration
 
 import nibabel.freesurfer
 import numpy as np
