@@ -294,16 +294,11 @@ def _overlap_add_sanity_check(fs, trans_width, data_length, filter_length, shift
     :return: Valid size of the fft window.
     """
     minfft_win_sz = max(filter_length, shift) #FFT window has to be at least as large as the filters including the shifted amount
-    maxfft_win_sz = data_length #FFT window cannot be longer than the entire data
     
     while (fft_win_sz < minfft_win_sz):
         fft_win_sz *= 2
         
-    if (fft_win_sz < minfft_win_sz):
-        print("Error, there is no power of two between the min fft win size %i and the max fft win size %i." % (minfft_win_sz, maxfft_win_sz))
-        print("Either add more data or easen the restrictions on the filters.")
-        
-    fftBinWidth = (fs / (fft_win_sz / 2))
+    fftBinWidth = (fs / fft_win_sz)
     if (fftBinWidth > trans_width):
         print("Warning, fft bin size is only %f, but the desired transition width is %f" % (fftBinWidth, trans_width))
         print("Either add more data or increase the transition width.")        

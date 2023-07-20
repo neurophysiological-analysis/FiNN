@@ -102,8 +102,6 @@ def plot_skull_and_skin_subplots(data, axes, surfaces):
     
     return (slices, primary_dim, secondary_dim_x, secondary_dim_y)
 
-import mne
-
 def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 4):
     src_icosahedron_level = int(np.log(ws_in_skull_faces.shape[0]/20)/np.log(2) / 2)
     
@@ -113,7 +111,7 @@ def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 
     trans_ws_in_skill_vert = np.copy(ws_in_skull_vert)[finnpy.source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
     ws_in_skull_faces = tgt_faces
     
-    trans_ws_in_skill_vert /= 1000 # whyever??
+    trans_ws_in_skill_vert /= 1000
     
     ###make bem model
     x_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 0], :]
@@ -166,6 +164,12 @@ def find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
         gamma2 = np.log((nr2 * nr02 + np.dot(r2, r02))/(nr0 * nr02 + np.dot(r0, r02)))/nr02
         gamma = np.expand_dims(gamma2 - gamma0, axis = 1) * r0 + np.expand_dims(gamma0 - gamma1, axis = 1) * r1 + np.expand_dims(gamma1 - gamma2, axis = 1) * r2
         
+        #=======================================================================
+        # For reference
+        #
+        # See equation #17 of "Error Analysis of a New Galerkin Method to Solve the Forward Problem in MEG and EEG Using the Boundary Element Method"
+        # by Satu Tissari, Jussi Rahola, 1998
+        #=======================================================================
         omega0 = (double_faces_area[face_idx] * solid_angles * np.sum(np.cross(r2, r1) * faces_normal[face_idx], axis = 1)
                   + np.sum(np.cross(r0, r1) * r2, axis = 1) * np.sum((r2 - r1) * gamma, axis = 1)) / (double_faces_area[face_idx]*double_faces_area[face_idx])
         omega1 = (double_faces_area[face_idx] * solid_angles * np.sum(np.cross(r0, r2) * faces_normal[face_idx], axis = 1)

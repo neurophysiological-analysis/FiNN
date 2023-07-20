@@ -12,10 +12,12 @@ import finnpy.source_reconstruction.utils
 import finnpy.source_reconstruction.bem_model
 
 import mne.forward
+import mne.io.constants
+
 
 def get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
     meg_to_head_trans = rec_meta_info['dev_head_t']["trans"]
-    coil_types = mne.forward._read_coil_defs(verbose = "Error") # Reads meg coil types from mne library
+    coil_types = mne.forward._read_coil_defs(verbose="Error")  # Reads meg coil types from mne library
     meg_chs = list()
     for (_, channel) in enumerate(rec_meta_info["chs"]):
         if (channel["kind"] == mne.io.constants.FIFF.FIFFV_MEG_CH):
@@ -41,40 +43,43 @@ def get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
                 
             meg_ch = {"coil_type":channel["coil_type_info"]["coil_type"],
                       "rmag":np.copy(channel["coil_type_info"]["rmag"]),
-                      "cosmag":np.copy(channel["coil_type_info"]["cosmag"]), 
-                      "w":np.copy(channel["coil_type_info"]["w"]), 
+                      "cosmag":np.copy(channel["coil_type_info"]["cosmag"]),
+                      "w":np.copy(channel["coil_type_info"]["w"]),
                       "ch_trans":ch_trans}
             
-            meg_ch["rmag"] = np.dot(meg_ch["rmag"], loc_trans[:3, :3].T) + loc_trans[:3, 3]
-            meg_ch["cosmag"] = np.dot(meg_ch["cosmag"], loc_trans[:3, :3].T)
+            meg_ch["rmag"] = np.dot(meg_ch["rmag"], loc_trans[:3,:3].T) + loc_trans[:3, 3]
+            meg_ch["cosmag"] = np.dot(meg_ch["cosmag"], loc_trans[:3,:3].T)
             
-            meg_ch["rmag_mri"] = np.dot(meg_ch["rmag"], head_to_mri_trans[:3, :3].T) + head_to_mri_trans[:3, 3]
-            meg_ch["cosmag_mri"] = np.dot(meg_ch["cosmag"], head_to_mri_trans[:3, :3].T)
+            meg_ch["rmag_mri"] = np.dot(meg_ch["rmag"], head_to_mri_trans[:3,:3].T) + head_to_mri_trans[:3, 3]
+            meg_ch["cosmag_mri"] = np.dot(meg_ch["cosmag"], head_to_mri_trans[:3,:3].T)
             
             meg_chs.append(meg_ch)
             
     return meg_chs
 
+
 def apply_coreg_to_vertices(geom_white_vert, coreg_trans_mat):
     geom_white_vert /= 1000
-    trans_geom_white_vert = np.dot(geom_white_vert, coreg_trans_mat[:3, :3].T) + coreg_trans_mat[:3, 3]
+    trans_geom_white_vert = np.dot(geom_white_vert, coreg_trans_mat[:3,:3].T) + coreg_trans_mat[:3, 3]
     
     return trans_geom_white_vert
 
+
 def update_invalid_vertices(approx_surface, geom_white_vert, valid_geom_vert):
-    data = geom_white_vert[np.asarray(valid_geom_vert, dtype = bool)]
+    data = geom_white_vert[np.asarray(valid_geom_vert, dtype=bool)]
     inside_check = (approx_surface.find_simplex(data) != -1)
     valid_geom_vert[np.where(valid_geom_vert)[0][~inside_check]] = False
     
     return valid_geom_vert
 
+
 def calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_trans_mat, pre_fwd_solution):
     fwd_sol = np.zeros((len(white_vertices_mri), 3, len(bem_trans_ws_in_skull_vert)))
     for (white_vortex_mir_idx, white_vortex_mri) in enumerate(white_vertices_mri):
-        norm_diff = np.power(np.linalg.norm(bem_trans_ws_in_skull_vert - white_vortex_mri, axis = 1), 3)
+        norm_diff = np.power(np.linalg.norm(bem_trans_ws_in_skull_vert - white_vortex_mri, axis=1), 3)
         norm_diff[norm_diff == 0] = 1
-        loc_diff = np.dot((bem_trans_ws_in_skull_vert - white_vortex_mri), coreg_trans_mat[:3, :3])
-        loc_diff /= np.expand_dims(norm_diff, axis = 1)
+        loc_diff = np.dot((bem_trans_ws_in_skull_vert - white_vortex_mri), coreg_trans_mat[:3,:3])
+        loc_diff /= np.expand_dims(norm_diff, axis=1)
         
         fwd_sol[white_vortex_mir_idx] = loc_diff.T
     
@@ -82,6 +87,7 @@ def calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_t
     fwd_sol = np.dot(fwd_sol, pre_fwd_solution.T)
     
     return fwd_sol
+
 
 def add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices):
     pc = np.empty((len(white_vertices) * 3, len(meg_ch_infos)))
@@ -94,17 +100,18 @@ def add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosma
         for idx in range(len(meg_ch_indices)):
             tmp[:, meg_ch_indices[idx]] += pp[:, idx]
         tmp = np.asarray(tmp)
-        pc[int(3*vortex_idx):int(3*(vortex_idx + 1)), :] = tmp
+        pc[int(3 * vortex_idx):int(3 * (vortex_idx + 1)),:] = tmp
     
     fwd_sol += pc
     
     return fwd_sol
 
+
 def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
                        head_to_mri_trans, mri_to_head_trans, rec_meta_info,
                        bem_trans_ws_in_skull_vert, bem_ws_in_skull_faces, bem_ws_in_skull_faces_normal, bem_ws_in_skull_faces_area, bem_solution,
-                       valid_lh_geom_vert, valid_rh_geom_vert, 
-                       _mag_factor = 1e-7):
+                       valid_lh_geom_vert, valid_rh_geom_vert,
+                       _mag_factor=1e-7):
 
     trans_lh_geom_white_vert = apply_coreg_to_vertices(lh_geom_white_vert, mri_to_head_trans)
     trans_rh_geom_white_vert = apply_coreg_to_vertices(rh_geom_white_vert, mri_to_head_trans)
@@ -118,7 +125,7 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     
     conductivity = (.3,)
     sigma = conductivity[0]
-    source_mult = 2.0 / ((sigma) + 0) # Conductivity in the first layer (sigma) and outside the skull (0)
+    source_mult = 2.0 / ((sigma) + 0)  # Conductivity in the first layer (sigma) and outside the skull (0)
     field_mult = sigma - 0
     
     meg_ch_infos = get_meg_coil_positions(rec_meta_info, head_to_mri_trans)
@@ -132,7 +139,8 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     if (meg_ch_comp != 0):
         raise NotImplementedError("Compensation not yet implemented.")
     
-    rmags = list(); rmags_mri = list(); cosmags = list(); cosmags_mri= list(); ws = list(); meg_ch_indices = list() 
+    # cosmag contains the direction of the coils and rmag contains the. position vector
+    rmags = list(); rmags_mri = list(); cosmags = list(); cosmags_mri = list(); ws = list(); meg_ch_indices = list() 
     for (meg_ch_info_idx, _) in enumerate(meg_ch_infos):
         rmags.extend(meg_ch_infos[meg_ch_info_idx]["rmag"])
         rmags_mri.extend(meg_ch_infos[meg_ch_info_idx]["rmag_mri"])
@@ -142,33 +150,42 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
         meg_ch_indices.extend(np.ones((meg_ch_infos[meg_ch_info_idx]["w"].shape[0],)) * meg_ch_info_idx)
     rmags = np.asarray(rmags); rmags_mri = np.asarray(rmags_mri)
     cosmags = np.asarray(cosmags); cosmags_mri = np.asarray(cosmags_mri)
-    ws = np.asarray(ws); meg_ch_indices = np.asarray(meg_ch_indices, dtype = int)
+    ws = np.asarray(ws); meg_ch_indices = np.asarray(meg_ch_indices, dtype=int)
     
-    # See section IV of Mosher et al., 1999 (specifically equation 35).
+    #===========================================================================
+    # For reference
+    # 
+    # See Mosher et al. 1999, 
+    # equations 3, 42, and Table 1 equation 42
+    #
+    # and
+    # Lewis 1995, NEUROMAGNETIC SOURCE RECONSTRUCTION
+    #===========================================================================
+    
     meg_coeff = np.zeros((len(meg_ch_infos), bem_trans_ws_in_skull_vert.shape[0]))
-    w_cosmags = np.expand_dims(ws, axis = 1) * cosmags_mri
-    tau = np.expand_dims(rmags_mri, axis = 1) - bem_trans_ws_in_skull_vert
-    den = np.sum(tau * tau, axis = 2)
-    den *= np.sqrt(den)*3
+    w_cosmags = np.expand_dims(ws, axis=1) * cosmags_mri
+    tau = np.expand_dims(rmags_mri, axis=1) - bem_trans_ws_in_skull_vert
+    den = np.sum(tau * tau, axis=2)
+    den *= np.sqrt(den) * 3
     
     for (face_idx, face) in enumerate(bem_ws_in_skull_faces):
-        num = np.cross(tau[:, face], bem_ws_in_skull_faces_normal[face_idx, :]) * np.expand_dims(w_cosmags, axis = 1)
+        num = np.cross(tau[:, face], bem_ws_in_skull_faces_normal[face_idx,:]) * np.expand_dims(w_cosmags, axis=1)
         for vert_idx in range(3):
-            loc_effects = np.sum(num[:, vert_idx], axis = 1) * bem_ws_in_skull_faces_area[face_idx] / den[:, face[vert_idx]]
-            effects_on_vert = np.zeros((len(meg_ch_infos), ))
+            loc_effects = np.sum(num[:, vert_idx], axis=1) * bem_ws_in_skull_faces_area[face_idx] / den[:, face[vert_idx]]
+            effects_on_vert = np.zeros((len(meg_ch_infos),))
             for (effect_idx, effect_value) in enumerate(loc_effects):
                 effects_on_vert[meg_ch_indices[effect_idx]] += effect_value
             meg_coeff[:, face[vert_idx]] += effects_on_vert
     meg_coeff *= field_mult
     
-    pre_fwd_solution = np.dot(meg_coeff, bem_solution) * source_mult/(4*np.pi) # Checked 'till here
+    pre_fwd_solution = np.dot(meg_coeff, bem_solution) * source_mult / (4 * np.pi)
     
-    white_vertices_mri = np.dot(head_to_mri_trans[:3, :3], white_vertices.T).T + head_to_mri_trans[:3, 3]
+    white_vertices_mri = np.dot(head_to_mri_trans[:3,:3], white_vertices.T).T + head_to_mri_trans[:3, 3]
     
     # Calculate magnetic potentials/fields
     fwd_sol = calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, head_to_mri_trans, pre_fwd_solution)
     
-    #Calculate primary current distribution
+    # Calculate primary current distribution
     fwd_sol = add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices)
     
     fwd_sol *= _mag_factor
@@ -176,64 +193,5 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     
     return (fwd_sol,
             valid_lh_geom_vert, valid_rh_geom_vert)
-
-def get_orientation(acc_normals, valid_vert, patch_info, patch_indices,
-                    coreg_trans_mat, double_precision = 40):
-    rot_acc_normals = np.dot(acc_normals, coreg_trans_mat[:3, :3].T)
-    
-    pre_trans = np.zeros((np.where(valid_vert)[0].shape[0], 3))
-    for (vertex_idx, vertex_id) in enumerate(np.searchsorted(np.where(valid_vert)[0], np.where(valid_vert)[0])): 
-        pre_trans[vertex_idx] = np.sum(rot_acc_normals[patch_info[patch_indices[vertex_id]], :], axis = 0)
-    pre_trans /= np.linalg.norm(pre_trans, axis = 1, keepdims = True)
-    
-    tmp = np.empty((pre_trans.shape[0], 3, 3))
-    for idx in range(tmp.shape[0]):
-        tmp[idx, :, :] = np.matmul(pre_trans[[idx], :].T, pre_trans[[idx], :])
-    
-    ### START CHECK HERE ### -> Result is proper
-    evec = list()
-    for mat_idx in range(tmp.shape[0]):
-        if ((tmp[mat_idx, :, :] == tmp[mat_idx, :, :].T).all() == False):
-            raise AssertionError("Something went wrong with the orientation matrix")
-        
-        mat = mpmath.matrix(np.eye(3) - tmp[mat_idx, :, :])
-        mat.ctx.dps = double_precision
-        (_, loc_evec) = mpmath.eigsy(mat)
-        
-        evec.append(loc_evec.tolist())
-    
-    ### 2nd CHECK HERE ###
-    
-    evec = np.asarray(evec, dtype = float)
-    evec = evec[:, :, ::-1]
-    direction = np.sign(np.matmul(np.expand_dims(pre_trans, axis = 1), evec[:, :, -1:]))
-    direction[direction == 0] = 1
-    evec *= direction
-    evec = evec.swapaxes(1, 2)
-    evec = evec.reshape(-1, 3)
-    
-    return evec
-
-def reset_forward_model_orientation(lh_acc_normals, valid_lh_vert, lh_patch_info, lh_patch_indices, 
-                                    rh_acc_normals, valid_rh_vert, rh_patch_info, rh_patch_indices, 
-                                    fwd_sol, coreg_trans_mat):
-    
-    lh_orient = get_orientation(lh_acc_normals, valid_lh_vert, lh_patch_info, lh_patch_indices, coreg_trans_mat)
-    rh_orient = get_orientation(rh_acc_normals, valid_rh_vert, rh_patch_info, rh_patch_indices, coreg_trans_mat)
-    
-    orient = np.concatenate((lh_orient, rh_orient), axis = 0)
-    tmp_orient = orient[2::3, :]
-    
-    #get block matrix
-    rot = finnpy.source_reconstruction.utils.orient_mat_to_block_format(tmp_orient) #Correct, double checked
-    
-    return fwd_sol * rot
-        
-        
-        
-        
-        
-        
-        
         
         

@@ -711,7 +711,14 @@ class _Glmm_container():
         """
         Formats the labels for R.
         """
-        self.label_comm = "data = data.frame(" + self.label_name[0]
+        self.label_comm = "data = data.frame("
+        
+        if (self.factor_type[0] == "categorical"):
+            self.label_comm += self.label_name[0] + " = factor(" + self.label_name[0] + ")"
+        elif (self.factor_type[0] == "continuous"):
+            self.label_comm += self.label_name[0]
+        else:
+            raise TypeError("Only categorical and continuous variables are allowed")
         
         for nIdx in range(1, len(self.label_name)):
             if (self.factor_type[nIdx] == "categorical"):

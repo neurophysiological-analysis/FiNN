@@ -42,7 +42,7 @@ def run_dac(data_1, data_2, fmin, fmax, fs, nperseg, nfft, return_signed_conn = 
         
     (bins, coh) = run_cc(data_1, data_2, nperseg, "zero", fs, nfft, "hann")
     
-    return (bins, calc_dac.run(coh, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh, volume_conductance_ratio))
+    return calc_dac.run(coh, bins, fmin, fmax, return_signed_conn, minimal_angle_thresh, volume_conductance_ratio)
     
 def run_wpli(data1, data2, fs, nperseg, nfft, window = "hann", pad_type = "zero"):
     """

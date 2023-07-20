@@ -17,6 +17,13 @@ import warnings
 import mne.io
 
 def format_fiducials(pre_mri_ref_pts):
+    """
+    Transforms an mne-fiducials object into an dictionary containing the fiducials.
+    
+    :param pre_mri_ref_pts: The mne-fiducials object in question.
+    
+    :return: Dictionary containing the fiducial points.
+    """
     mri_ref_pts = {"LPA" : None, "NASION" : None, "RPA" : None}
         
     for pt_idx in range(len(pre_mri_ref_pts)):
@@ -29,11 +36,17 @@ def format_fiducials(pre_mri_ref_pts):
     
     return mri_ref_pts
 
-def run_subprocess_in_custom_working_directory(patient_id, cmd):
-    path_to_tmp_cwd = "finnpy_" + patient_id + "_freesurfer_tmp_dir/" # A temporary working directory is needed as freesurfer saves intermediate results in files.
+def run_subprocess_in_custom_working_directory(subject_id, cmd):
+    """
+    Creates a custom work directory to run a freesurfer command within. 
+    
+    :param subject_id: Name of the subject whose data is worked on.
+    :param cmd: The freesurfer command to be executed in the custom environment. 
+    """
+    path_to_tmp_cwd = "finnpy_" + subject_id + "_freesurfer_tmp_dir/" # A temporary working directory is needed as freesurfer saves intermediate results in files.
         
     if (os.path.exists(path_to_tmp_cwd + ".lock")): # Checks if the current directory is already worked in, if yes, raise error.
-        raise AssertionError("Patient is already being worked on as %s already exists" % (path_to_tmp_cwd + ".lock",))
+        raise AssertionError("Subject is already being worked on as %s already exists" % (path_to_tmp_cwd + ".lock",))
     
     os.makedirs(path_to_tmp_cwd, exist_ok = True)
     file = open(path_to_tmp_cwd + ".lock", "wb")
@@ -46,6 +59,11 @@ def run_subprocess_in_custom_working_directory(patient_id, cmd):
     shutil.rmtree(path_to_tmp_cwd) # And removed alter on
 
 def init_fs_paths(subjects_path):
+    """
+    Runs some freesurfer initialization steps.
+    
+    :param subjects_path: Path to the subject folder.
+    """
     os.environ["FREESURFER_HOME"]   = "/usr/local/freesurfer/7.2.0/"
     os.environ["FSFAST_HOME"]       = "/usr/local/freesurfer/7.2.0/fsfast/"
     os.environ["FSF_OUTPUT_FORMAT"] = "nii.gz"
@@ -57,7 +75,12 @@ def init_fs_paths(subjects_path):
 
 def fast_cross_product(a, b):
     """
-    Seemingly numpy has too much overhead here to be fast
+    Calculates the cross product between two vectors. Seemingly numpy has too much overhead here to be fast.
+    
+    :param a: The 1st vector in the cross product.
+    :param b: The 2nd vector in the cross product.
+    
+    :return: Crossproduct of vectors a x b.
     """
     
     res = np.empty(a.shape)
@@ -68,33 +91,56 @@ def fast_cross_product(a, b):
     return res
 
 def norm_vert(vert):
+    """
+    Normalizes a vector. Seemingly numpy has too much overhead here to be fast.
+    
+    :param vert: The to be normalized vector.
+    
+    :return: The normalized vector.
+    """
     size = np.sqrt(vert[:, 0]*vert[:, 0]+vert[:, 1]*vert[:, 1]+vert[:, 2]*vert[:, 2])
     vert[size > 0] /= size[size > 0, np.newaxis]
     return vert
 
-def find_nearest_neighbor(src_model, tgt_model, method = "kdtree"):
+def find_nearest_neighbor(src_model, tgt_pt, method = "kdtree"):
+    """
+    Employs two methods to find the nearest neighbors. In case a src_model a list of points is provided, a model is trained, otherwise, pretrained models are used if a (KDTree or BallTree objects) are provided.
+    
+    :param src_model: Either a list of data points or a kdtree/balltree object.
+    :param tgt_pt: The tgt_point to be queried.
+    
+    :return: The nearest neighbor of the respective point.
+    """
     
     if (type(src_model) == sklearn.neighbors.KDTree or type(src_model) == sklearn.neighbors.BallTree):
         tree = src_model
         if (method == "kdtree"):
-            neigh_indices = tree.query(tgt_model, k = 1)[1].squeeze(1)
+            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
         elif(method == "balltree"):
-            neigh_indices = tree.query(tgt_model, k = 1)[1].squeeze(1)
+            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
         else:
             raise NotImplementedError("This type of tree is not implemented.")
     else:
         if (method == "kdtree"):
             tree = sklearn.neighbors.KDTree(src_model)
-            neigh_indices = tree.query(tgt_model, k = 1)[1].squeeze(1)
+            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
         elif(method == "balltree"):
             tree = sklearn.neighbors.BallTree(src_model)
-            neigh_indices = tree.query(tgt_model, k = 1)[1].squeeze(1)
+            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
         else:
             raise NotImplementedError("This type of tree is not implemented.")
 
     return (neigh_indices, tree)
 
 def find_valid_vertices(mri_vert, model_vert, max_neighborhood_size = 5):
+    """
+    Matches freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron).
+    
+    :param mri_vert: Freesurfer based vertices (sphere).
+    :param model vert: Octahedron based vertices.
+    
+    :return: Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).
+    """    
     (nearest, nearest_tree) = find_nearest_neighbor(mri_vert, model_vert)
     vert_valid = np.zeros((mri_vert.shape[0]))
     vert_valid[nearest] = 1
@@ -117,14 +163,38 @@ def find_valid_vertices(mri_vert, model_vert, max_neighborhood_size = 5):
     return vert_valid
 
 def magn_of_vec(vec):
+    """
+    Calculates the magnitude of a vector
+    
+    :param vec: The vector in question.
+    
+    :return: The magnitude of vec.
+    """
+    
     return np.sqrt(vec[:, 0]*vec[:, 0]+vec[:, 1]*vec[:, 1]+vec[:, 2]*vec[:, 2])
 
 def apply_inv_transformation(data, trans):
+    """
+    Applies the inverse of trans to data.
+    
+    :param data: The data to be transformed.
+    :param trans: The transformation matrix (4x4 matrix; rotation + translation only).
+    
+    :return: The transformed data.    
+    """
     inv_trans = np.linalg.inv(trans)
     tmp = np.dot(inv_trans[:3, :3], data.T).T
     return tmp + inv_trans[:3, 3]    
 
 def calc_quat_angle(a, b):
+    """
+    Calculate the angle between two quaternions.
+    
+    :param a: The 1st quaternion.
+    :param b: The 2nd quaternion.
+    
+    :return: The angle between a and b.
+    """
     w = a[3]*b[3] + a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
     x = a[3]*b[0] - a[0]*b[3] - a[1]*b[2] + a[2]*b[1]
     y = a[3]*b[1] - a[1]*b[3] - a[0]*b[2] + a[2]*b[0]
@@ -133,6 +203,13 @@ def calc_quat_angle(a, b):
     return 2 * np.arctan2(np.linalg.norm(np.asarray((x, y, z))), np.abs(w))
 
 def orient_mat_to_block_format(orient_mat):
+    """
+    Transforms an orientation matrix (rotation matrix) into (sparse) block format.
+    
+    :param orient_mat: The orientation matrix in question.
+    
+    :return: The transformed orientation matrix.
+    """
     bdn = orient_mat.shape[0]
     tmp = np.arange(orient_mat.shape[1] * bdn, dtype=np.int64).reshape(bdn, orient_mat.shape[1])
     tmp = np.tile(tmp, (1, 1))
@@ -150,6 +227,9 @@ def orient_mat_to_block_format(orient_mat):
 
 def get_orientation(acc_normals, valid_vert, patch_info, patch_indices,
                     coreg_trans_mat, double_precision = 40):
+    """
+     
+    """
     
     rot_acc_normals = np.dot(acc_normals, coreg_trans_mat[:3, :3].T)
     
@@ -170,7 +250,7 @@ def get_orientation(acc_normals, valid_vert, patch_info, patch_indices,
         mat = mpmath.matrix(np.eye(3) - tmp[mat_idx, :, :])
         mat.ctx.dps = double_precision
         (_, loc_evec) = mpmath.eigsy(mat)
-        
+         
         evec.append(loc_evec.tolist())
     
     evec = np.asarray(evec, dtype = float)
@@ -180,10 +260,18 @@ def get_orientation(acc_normals, valid_vert, patch_info, patch_indices,
     evec *= direction
     evec = evec.swapaxes(1, 2)
     evec = evec.reshape(-1, 3)
-    
+     
     return evec
 
 def calc_acc_hem_normals(geom_white_vert, geom_white_faces):
+    """
+    Calculates surface normals of a list of faces (triangles) and vertices. 
+    
+    :param geom_white_vert: Array of vertices. 
+    :param geom_white_faces: Array of faces. 
+    
+    :return: Array of surface normals for the input faces/vertices.
+    """
     vert0 = geom_white_vert[geom_white_faces[:, 0], :]
     vert1 = geom_white_vert[geom_white_faces[:, 1], :]
     vert2 = geom_white_vert[geom_white_faces[:, 2], :]
@@ -208,6 +296,9 @@ def calc_acc_hem_normals(geom_white_vert, geom_white_faces):
     return acc_normals
 
 def find_vertex_patches(geom_white_vert, valid_geom_vert, geom_white_faces):
+    """
+    
+    """
     lh_edges = scipy.sparse.coo_matrix((np.ones(3 * geom_white_faces.shape[0]),
                                         (np.concatenate((geom_white_faces[:, 0], geom_white_faces[:, 1], geom_white_faces[:, 2])),
                                          np.concatenate((geom_white_faces[:, 1], geom_white_faces[:, 2], geom_white_faces[:, 0])))),
@@ -239,6 +330,8 @@ def find_vertex_patches(geom_white_vert, valid_geom_vert, geom_white_faces):
 def reset_model_orientation(lh_geom_white_vert, lh_geom_white_faces, valid_geom_lh_vert,
                             rh_geom_white_vert, rh_geom_white_faces, valid_geom_rh_vert,
                             fwd_sol, coreg_trans_mat):
+    """
+    """
      
     lh_acc_normals = calc_acc_hem_normals(lh_geom_white_vert, lh_geom_white_faces)
     rh_acc_normals = calc_acc_hem_normals(rh_geom_white_vert, rh_geom_white_faces)
@@ -258,6 +351,8 @@ def reset_model_orientation(lh_geom_white_vert, lh_geom_white_faces, valid_geom_
     return fwd_sol * rot
     
 def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
+    """
+    """
     (sub_vert, sub_faces) = nibabel.freesurfer.read_geometry(subj_path + "surf/" + hemisphere + ".sphere.reg")
     (avg_vert, _) = nibabel.freesurfer.read_geometry(fs_avg_path + "surf/" + hemisphere + ".sphere.reg")
     
@@ -381,6 +476,8 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
     return (sub_vert, sub_faces, avg_vert, mri_map)
 
 def calc_model_orientation_fs_avg_single_hem(valid_vert, model_vert, subj_path, fs_avg_path, hemisphere, overwrite):
+    """
+    """
     ###
     # Move src space data into fs_average space
     # Calculate transformation
@@ -430,6 +527,8 @@ def calc_model_orientation_fs_avg_single_hem(valid_vert, model_vert, subj_path, 
 
 def get_mri_subj_to_fs_avg_trans_mat(valid_lh_vert, valid_rh_vert,
                                      model_vert, subj_path, fs_avg_path, overwrite):
+    """
+    """
     
     (avg_lh_vert, lh_mir_map, lh_trans) = calc_model_orientation_fs_avg_single_hem(valid_lh_vert, model_vert, subj_path, fs_avg_path, "lh", overwrite)
     (avg_rh_vert, rh_mir_map, rh_trans) = calc_model_orientation_fs_avg_single_hem(valid_rh_vert, model_vert, subj_path, fs_avg_path, "rh", overwrite)
@@ -448,9 +547,20 @@ def get_mri_subj_to_fs_avg_trans_mat(valid_lh_vert, valid_rh_vert,
     return (trans_mat, valid_avg_lh_vert, valid_avg_rh_vert)
     
 def apply_mri_subj_to_fs_avg_trans_mat(trans_mat, data):
+    """
+    Applies a transformation matrix to data
+    """
     return trans_mat * data
 
 def calc_whitener(eigen_val, eigen_vec):
+    """
+    Calculate whitenere from provided eigenvalues and eigenvectors.
+    
+    :param eigen_val: Eigenvalues.
+    :param eigen_vec: Eigenvectors.
+    
+    :return: Whitener.
+    """
     eigen_val_white = np.copy(eigen_val)
     eigen_val_white[eigen_val_white < 0] = 0 #Cannot be negative in a cov-matrix; may happen due to numerical innaccuracy
     eigen_val_white[eigen_val_white > 0] = 1/np.sqrt(eigen_val_white[eigen_val_white > 0])

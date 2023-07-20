@@ -51,7 +51,7 @@ def load_coreg_data(subj_name, subj_path, rec_meta_info):
         calc_head_model(subj_name, subj_path)
     
     (hd_surf_vert, _) = nibabel.freesurfer.read_geometry(subj_path + "surf/lh.seghead")
-    hd_surf_vert /= 1000 ## whyever??
+    hd_surf_vert /= 1000
     
     return (ref_pts, hd_surf_vert)
 
