@@ -17,6 +17,14 @@ import mne.io
 
 def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = None, fiducials_path = None, 
                                       overwrite = False):
+    """
+    Extracts anatomical structures from an mri scan using freesurfer.
+    
+    :param subj_name: Name of the subject.
+    :param t1_scan_file: Name of the mri file.
+    :param fiducials_file: Name of the fiducials file. If none is present, default fiducials are morphed from fs-average.
+    :param overwrite: Flag whether to overwrite the files of the respective subject folder already exists.
+    """
     if (subj_name[-1] == "/"):
         patient_id = subj_name[:-1]
     else:
@@ -40,7 +48,7 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     if (fiducials_file is None):
         create_fiducials(old_base_dir, new_base_dir, subj_name)
     else:
-        shutil.copyfile(fiducials_path + fiducials_file, new_base_dir + fiducials)
+        shutil.copyfile(fiducials_path + fiducials_file, new_base_dir + fiducials_file)
     
     #Create and populate mri folder
     os.mkdir(new_base_dir + "mri")
@@ -62,9 +70,23 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     shutil.move(new_base_dir, old_base_dir)
 
 def create_fiducials(in_path, out_path, subj_name):
+    """
+    Reads fiducials from fs-average and transforms them from fs-average space into subject space.
+    
+    :param in_path: Path to the src folder.
+    :param out_path: Path to the tgt folder.
+    :param subj_name: Name of the subject.
+    """
+    
+    #===========================================================================
+    # Read fiducials from fs average
+    #===========================================================================
     (pre_mri_ref_pts, coord_system) = mne.io.read_fiducials(mne.__file__[:mne.__file__.rindex("/")] + "/data/fsaverage/fsaverage-fiducials.fif")
     mri_ref_pts = finnpy_utils.format_fiducials(pre_mri_ref_pts)
 
+    #===========================================================================
+    # Move fiducials from fs-average space (MNI) into subject space (MRI)
+    #===========================================================================
     trans_mat_ras_mni = np.zeros((4, 4))
     fid = open(in_path + "mri/transforms/talairach.xfm", "r")
     for line in fid:
@@ -74,12 +96,12 @@ def create_fiducials(in_path, out_path, subj_name):
     trans_mat_ras_mni[1, :] = fid.readline().replace("\n", "").split(" ")[:4]
     trans_mat_ras_mni[2, :] = fid.readline().replace("\n", "").replace(";","").split(" ")[:4]
     fid.close()
-    trans_mat_ras_mni[:3, 3] /= 1000 ## Whyever
+    trans_mat_ras_mni[:3, 3] /= 1000 # scale from m to mm
     trans_mat_ras_mni[3, 3] = 1
     
     trans_mat_mri_ras = nibabel.freesurfer.load(in_path + "mri/orig.mgz")
     trans_mat_mri_ras = np.matmul(trans_mat_mri_ras.header.get_vox2ras(), np.linalg.inv(trans_mat_mri_ras.header.get_vox2ras_tkr()))
-    trans_mat_mri_ras[:3, 3] /= 1000
+    trans_mat_mri_ras[:3, 3] /= 1000 # scale from m to mm
     
     trans_mat_mri_mni = np.matmul(trans_mat_ras_mni, trans_mat_mri_ras)
     trans_mat_mni_mri = np.linalg.inv(trans_mat_mri_mni)
@@ -87,6 +109,9 @@ def create_fiducials(in_path, out_path, subj_name):
     for mri_ref_pt_key in mri_ref_pts.keys():
         mri_ref_pts[mri_ref_pt_key] = np.dot(trans_mat_mni_mri[:3, :3], mri_ref_pts[mri_ref_pt_key]) + trans_mat_mni_mri[:3, 3]
     
+    #===========================================================================
+    # Write transformed fiducials into directory
+    #===========================================================================
     formatted_mri_ref_pts = list()
     for mri_ref_pt_key in mri_ref_pts.keys():
         if (mri_ref_pt_key == "LPA"):
@@ -100,6 +125,13 @@ def create_fiducials(in_path, out_path, subj_name):
     mne.io.write_fiducials(out_path + "bem/" + subj_name + "-fiducials.fif", formatted_mri_ref_pts, coord_system, overwrite = False)
 
 def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
+    """
+    In case no mri scans are available for this subject, fs-average is used as a reference template.
+    
+    :param fs_path: Path to the freesurfer files (containing fs average).
+    :param subj_path: Folder name of the subject.
+    :param subj_name: Name of the subject.
+    """
     old_base_dir = fs_path + "fsaverage" + "/"
     new_base_dir = fs_path + subj_name + "/"
     
@@ -130,6 +162,14 @@ def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
     shutil.copyfile(old_base_dir + "surf/" + "rh.white", new_base_dir + "surf/" + "rh.white")
     
 def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
+    """
+    Scales anatomy for a perfect fit between fiducials and anatomy. If files are already scaled, an .is_scaled file created. This flag can be ignore via setting overwrite to True. 
+    
+    :param subj_path: Path to the freesurfer created subject specific files.
+    :param subj_name: Name of the subject.
+    :param scale: Scaling to be applied (x, y, z). 
+    :param overwrite: Flag to apply scaling even if scaling is already applied.
+    """
     
     if (os.path.exists(subj_path + ".is_scaled") == True and overwrite == False):
         return
@@ -148,6 +188,12 @@ def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
     file.close()
 
 def load_scale_save_fiducials(path, scale):
+    """
+    Loads, scales, and saves fiducials.
+    
+    :param path: Path to the fiducials file.
+    :param scale: Scale to be applied (x, y, z).
+    """
     
     if (os.path.exists(path + "_unscaled")):
         path = path + "_unscaled"
@@ -162,6 +208,12 @@ def load_scale_save_fiducials(path, scale):
     mne.io.write_fiducials(path, fiducials, coord_system, overwrite = True)
 
 def load_scale_save_surfaces(path, scale):
+    """
+    Load, scale, and save surfaces.
+    
+    :param path: Path to the subject's freesurfer created surface surfaces.
+    :param scale: Scale to be applied (x, y, z).
+    """
     
     if (os.path.exists(path + "_unscaled")):
         path = path + "_unscaled"
@@ -173,6 +225,12 @@ def load_scale_save_surfaces(path, scale):
     nibabel.freesurfer.write_geometry(path, vert, faces)
 
 def load_scale_save_mri(path, scale):
+    """
+    Load, scale, and save MRI information.
+    
+    :param path: Path to the subject's freesurfer created mri files.
+    :param scale: Scale to be applied (x, y, z).
+    """
     
     if (os.path.exists(path + "_unscaled")):
         path = path + "_unscaled"
@@ -189,6 +247,11 @@ def load_scale_save_mri(path, scale):
     nibabel.save(mri, path)
 
 def visualize_anatomy_from_mri_using_fs(subj_path):
+    """
+    Employ freesurfer to visualize anatomy results extracted from freesurfer.
+    
+    :param subj_path: Path to the subject's freesurfer created files.
+    """
     if (subj_path[-1] == "/"):
         patient_id = subj_path[:-1]
     else:
@@ -203,10 +266,7 @@ def visualize_anatomy_from_mri_using_fs(subj_path):
            "-f", "$SUBJECTS_DIR/$SUBJECT/surf/rh.pial:annot=aparc:edgecolor=red",
            "-all", "-qcache"]
     
-    source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)    
-
-def cleanup_non_essential_fs_files(subj_path):
-    pass
+    finnpy_utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
 
 
 
