@@ -40,6 +40,19 @@ def get_sphere_faces(fs_avg_path, hemisphere, model_vert, model_faces):
 def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert,
                               model_vert, model_faces, fs_avg_path):
     
+    """
+    Averages activity from individual areas in source space to parcellation of the Desikan-Killiany cortical atlas.
+    
+    :param fs_avg_src_data: Data in fs average source space.
+    :param src_fs_avg_valid_lh_vert: List of left hemisphere valid/supporting vertices in fs average space.
+    :param src_fs_avg_valid_rh_vert: List of right hemisphere valid/supporting vertices in fs average space.
+    :param model_vert: Model vertices.
+    :param model: Model faces.
+    :param fs_avg_path: Path to fs average's freesurfer  files.
+    
+    :return: (morphed_epoch_data, morphed_epoch_channels, morphed_region_names) - Data, src space vertices' ids, and channel names.
+    """
+    
     morphed_epoch_data = list()
     morphed_epoch_channels = list()
     morphed_region_names = list()

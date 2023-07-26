@@ -76,6 +76,16 @@ matplotlib.use("Qt5agg")
 import matplotlib.pyplot as plt
 
 def get_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz_s = .2):
+    """
+    Calculates the sensor noise covariance
+    
+    :param raw_file: The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example. 
+    :param method: Method to be employed, either "empirically", "shrinkage", or "factor_analysis".
+    :param method_params: Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis.
+    :param epoch_sz_s: Epoch size for covariance calculation in seconds.
+    
+    :return: (cov, ch_names) - Covariance and channel names.
+    """
     (valid_ch_indices, meg_ch_indices, grad_ch_indices, ch_names) = get_bio_channel_type_idx(raw_file)
     
     cov_data = raw_file.get_data()
@@ -95,8 +105,15 @@ def get_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz
 def calc_sensor_covariance(file_path, cov_path, method = None, method_params = None, overwrite = False):
     
     """
-    method = "shrinkage"
-    method_params = {"shrinkage" : 0.2,}
+    #Determines eigenvectors/values from the sensor noise covariance
+    
+    :param file_path: The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example. 
+    :param cov_path: Path to a the covariance file. If none exists, the covariance will be saved in this location.
+    :param method: Method to be employed, either "empirically", "shrinkage", or "factor_analysis" (default: shrinkage).
+    :param method_params: Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis (default: {"shrinkage" : 0.2,} - epoch size in s).
+    :param overwrite: Flag to overwrite covariance calculation.
+    
+    :return: (cov, ch_names) - Covariance and channel names.
     """
     
     if ((os.path.exists(cov_path + "eval.npy") == False or 

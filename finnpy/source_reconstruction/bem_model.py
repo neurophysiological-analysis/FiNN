@@ -18,19 +18,36 @@ import matplotlib.pyplot as plt
 import finnpy.source_reconstruction.utils
 import finnpy.source_reconstruction.sphere_model
 
-def calc_skull_and_skin_models(path, patient_id, preflood_height = 25, overwrite = False):
-    if (overwrite == True or os.path.exists(path + "bem/watershed/" + patient_id + "_inner_skull_surface") == False):
+def calc_skull_and_skin_models(subject_path, subject_id, preflood_height = 25, overwrite = False):
+    """
+    Employs freesufers watershed algorithm to calculate skull and skin models.
+    
+    :param subject_path: Subjects freesurfer path.
+    :param subject_id: Subject name.
+    :param preflood_height: Freesurfer parameter. May need adjusting if segmentation doesn't work properly.
+    :param overwrite: Flag to overwrite if files are already present. Defaults to False.
+    """
+    if (overwrite == True or os.path.exists(subject_path + "bem/watershed/" + subject_id + "_inner_skull_surface") == False):
         
-        cmd = ["mri_watershed", "-h", str(preflood_height), "-useSRAS", "-surf", path + "bem/watershed/" + patient_id, path + "mri/T1.mgz", path + "bem/watershed/ws.mgz"]
-        finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
+        cmd = ["mri_watershed", "-h", str(preflood_height), "-useSRAS", "-surf", subject_path + "bem/watershed/" + subject_id, subject_path + "mri/T1.mgz", subject_path + "bem/watershed/ws.mgz"]
+        finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(subject_id, cmd)
         
-        os.remove(path + "bem/watershed/" + patient_id + "_brain_surface")
-        os.remove(path + "bem/watershed/ws.mgz")
+        #Remove files not needed for source reconstruction
+        os.remove(subject_path + "bem/watershed/" + subject_id + "_brain_surface")
+        os.remove(subject_path + "bem/watershed/ws.mgz")
 
-def read_skull_and_skin_models(path, subj_name):
-    (ws_in_skull_vert, ws_in_skull_faces) = nibabel.freesurfer.read_geometry(path + "bem/watershed/" + subj_name + "_inner_skull_surface")
-    (ws_out_skull_vert, ws_out_skull_faces) = nibabel.freesurfer.read_geometry(path + "bem/watershed/" + subj_name + "_outer_skull_surface")
-    (ws_out_skin_vect, ws_out_skin_faces) = nibabel.freesurfer.read_geometry(path + "bem/watershed/" + subj_name + "_outer_skin_surface")
+def read_skull_and_skin_models(subject_path, subj_name):
+    """
+    Reads skull and skin models extracted via freesurfer's watershed algorithm.
+    
+    :param subject_path: Subject's freesurfer path.
+    :param subj_name: Subject name.
+    
+    :return: Vertices and faces of the inner skull, outer skull, and skin models.
+    """
+    (ws_in_skull_vert, ws_in_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_inner_skull_surface")
+    (ws_out_skull_vert, ws_out_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skull_surface")
+    (ws_out_skin_vect, ws_out_skin_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skin_surface")
     
     return (ws_in_skull_vert, ws_in_skull_faces,
             ws_out_skull_vert, ws_out_skull_faces,
@@ -39,9 +56,20 @@ def read_skull_and_skin_models(path, subj_name):
 def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces, 
                                ws_out_skull_vert, ws_out_skull_faces,
                                ws_out_skin_vect, ws_out_skin_faces, 
-                               fs_path):
+                               subject_path):
+    """
+    Plot skull and skin models for visual confirmation of proper alignment.
     
-    (t1_data_trans, ras_to_mri) = load_and_orient_t1(fs_path)
+    :param ws_in_skull_vert: Vertices of the inner skull model.
+    :param ws_in_skull_faces: Faces of the inner skull model.
+    :param ws_out_skull_vert: Vertices of the outer skull model.
+    :param ws_out_skull_faces: Faces of the outer skull model.
+    :param ws_out_skin_vert: Vertices of the skin model.
+    :param ws_out_skin_faces: Faces of the skin model.
+    :param subject_path: Subject's freesurfer path.
+    """
+    
+    (t1_data_trans, ras_to_mri) = load_and_orient_t1(subject_path)
     mri_to_ras = np.linalg.inv(ras_to_mri)
     
     ws_in_skull_vert_trans = np.dot(ws_in_skull_vert, mri_to_ras[:3, :3].transpose()); ws_in_skull_vert_trans += mri_to_ras[:3, 3]
@@ -61,8 +89,15 @@ def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
     plot_skull_and_skin_subplots(t1_data_trans, axes, surfaces)
     plt.show(block = True)
 
-def load_and_orient_t1(fs_path):
-    t1_img = nibabel.load(fs_path + "mri/T1.mgz")
+def load_and_orient_t1(subject_path):
+    """
+    Loads and orients an MRI scan.
+    
+    :param subject_path: Subject's freesurfer path.
+    
+    :return: Data and orientation of the scan.
+    """
+    t1_img = nibabel.load(subject_path + "mri/T1.mgz")
     
     src_orientation = nibabel.orientations.aff2axcodes(t1_img.affine)
     tgt_orientation = ('R', 'A', 'S')
@@ -76,6 +111,13 @@ def load_and_orient_t1(fs_path):
     return (t1_image_trans.get_fdata(), ras_to_mri)
 
 def plot_skull_and_skin_subplots(data, axes, surfaces):
+    """
+    Adds splices from the MRI scan onto the plot.
+    
+    :param data: The transformed data for plotting.
+    :param axes: Axes do plot data onto.
+    :param surfaces: Surfaces (inner skull, skin, and/or outer skull models.
+    """
     (primary_dim, secondary_dim_x, secondary_dim_y) = (1, 0, 2) # Plot in reference to coronal orientation.
     
     slices = np.asarray([[.12, .14, .17, .21],
@@ -99,38 +141,63 @@ def plot_skull_and_skin_subplots(data, axes, surfaces):
                                                   levels = [slices[row_idx, col_idx]], colors = surface[1], linewidths = 1.0, 
                                                   zorder = 1)
     warnings.simplefilter('default')
-    
-    return (slices, primary_dim, secondary_dim_x, secondary_dim_y)
 
-def calc_bem_model(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 4):
-    src_icosahedron_level = int(np.log(ws_in_skull_faces.shape[0]/20)/np.log(2) / 2)
+def calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 4):
+    """
+    Calcuates the BEM linear basis coefficients from the collocation method.
     
+    :param ws_in_skull_vert: Inner skull vertices.
+    :param ws_in_skull_faces: Inner skull faces.
+    :param tgt_icosahedron_level: Order of the icosahedron employed herein.
+    
+    :return: Scaled and filtered MRI vertices/faces, face area, face normals, and bem_solution.
+    """
+    src_icosahedron_level = int(np.log(ws_in_skull_faces.shape[0] / 20) / np.log(2) / 2)
+    
+    #Creates a model 
+    #Icosahedrons are provided by freesurfer and reading those is faster than computing.
     (src_vert, _) = finnpy.source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order(src_icosahedron_level)
     (tgt_vert, tgt_faces) = finnpy.source_reconstruction.sphere_model.calculate_sphere_from_icosahedron(tgt_icosahedron_level)
     
+    #Reduce anatomy vertices/faces to relevant ones
     trans_ws_in_skill_vert = np.copy(ws_in_skull_vert)[finnpy.source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
     ws_in_skull_faces = tgt_faces
     
-    trans_ws_in_skill_vert /= 1000
-    
-    ###make bem model
+    #Calculate matrix omega, containing "the solid angles subtended at the center of each triangle by all other triangles", see "Error Analysis of a New Galerkin Method to
+    #Solve the Forward Problem in MEG and EEG Using the Boundary Element Method" by Satu Tissari, Jussi Rahola for more details equation #17.
+    #In short, to calculate potentials using a BEM model, its coefficients/weights have to be calculated beforehand. 
+    trans_ws_in_skill_vert /= 1000 # Scale from m to mm
     x_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 0], :]
     y_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 1], :]
     z_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 2], :]
-    
     faces_normal = finnpy.source_reconstruction.utils.fast_cross_product((y_pos - x_pos), (z_pos - x_pos))
     double_faces_area = finnpy.source_reconstruction.utils.magn_of_vec(faces_normal)
     n_faces_normal = np.linalg.norm(faces_normal, axis = 1)
     faces_normal[n_faces_normal > 0] = faces_normal[n_faces_normal > 0] / np.expand_dims(n_faces_normal[n_faces_normal > 0], axis = 1)
-    
     omega = find_non_diag_omega(ws_in_skull_faces, trans_ws_in_skill_vert, double_faces_area, faces_normal)
     omega = find_diag_omega(omega, ws_in_skull_faces)
     
-    bem_solution = np.linalg.inv(np.eye(omega.shape[0]) + 1/omega.shape[0] - omega / (2*np.pi))
+    #The matrix "bem_solution" contains all linear basis functions
+    #A "deflation" factor is added to replace the "zero" eigenvalue within to ensure invertability
+    #See "EEG and MEG: Forward Solutions for Inverse Methods" by Mosher, 1999 for reference: "In E/MEG, the Neumann boundary condition used [...]"
+    deflation_factor = 1/omega.shape[0]
+    
+    #Left part of equation #6 by Satu Tissari, Jussi Rahola (see above). 
+    bem_solution = np.linalg.inv(np.eye(omega.shape[0]) + deflation_factor - omega / (2*np.pi))
     
     return (trans_ws_in_skill_vert, ws_in_skull_faces, double_faces_area/2, faces_normal, bem_solution)
 
 def find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
+    """
+    Calculates the non-diagonal elements of omega, see function calc_bem_model.
+    
+    :param faces: Individual faces.
+    :param vert: Individual vertices.
+    :param double_faces_area: Precomputed double face area.
+    :param faces_normal: Normales of each face.
+    
+    :return: Thre respective omega elements.
+    """
     omega = np.zeros((vert.shape[0], vert.shape[0]))
     
     for (face_idx, face) in enumerate(faces):
@@ -184,6 +251,17 @@ def find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
     return omega
 
 def find_diag_omega(omega, faces):
+    """
+    Calculates the diagonal elements of omega as these cannot be calculated as the non-diagonal ones due to the auto solid angle problem.
+    
+    See "Error Analysis of a New Galerkin Method to Solve the Forward Problem in MEG and EEG Using the Boundary Element Method" by Satu Tissari, Jussi Rahola for reference.
+    See function calc_bem_model for a more general description.
+    
+    :param omega: The omega matrix with non-diagonal elements populated.
+    :param faces: Respective faces.
+    
+    :return: The respective omega elements.
+    """
     half_missing_omega = (((2.0*np.pi) - np.sum(omega, axis = 1)) / 2)
     
     #Half the angle goes to r0, the other half is distributed amongst the respective faces
@@ -198,17 +276,29 @@ def find_diag_omega(omega, faces):
     return omega
 
 def calc_bem_fields(vortex, rmags, cosmags):
+    """
+    Calculates the magnetic field at a vortex from all MEG sensors.
+    
+    :param vortex: Position of the vortex.
+    :param rmags: 3D position of the MEG coils.
+    :param cosmags: MEG coil direction.
+    
+    :return: The magnetic field of all MEG sensors at a vortex.
+    """
+    #See Mosher et al, 1999, equation #1.
     diff = np.expand_dims(rmags.T, axis = 0) - np.expand_dims(vortex, axis = [0, 2])
     norm_diff = np.power(np.linalg.norm(diff, axis = 1), 3)
     norm_diff = norm_diff.squeeze(0)
     norm_diff[norm_diff == 0] = 1
     norm_diff = np.expand_dims(norm_diff, axis = [0, 1])
     
+    #See Mosher et al, 1999, equation #19.
     x = np.empty((1, 3, rmags.shape[0]))
     x[:, 0] = diff[:, 1] * cosmags[:, 2] - diff[:, 2] * cosmags[:, 1]
     x[:, 1] = diff[:, 2] * cosmags[:, 0] - diff[:, 0] * cosmags[:, 2]
     x[:, 2] = diff[:, 0] * cosmags[:, 1] - diff[:, 1] * cosmags[:, 0]
     
+    #See Mosher et al, 1999, equation #1.
     x /= norm_diff
     
     return x

@@ -175,11 +175,10 @@ def registrate_3d_points_restricted(src_pts, tgt_pts, weights = [1., 10., 1.], s
     
     :return: Estimated rotors and transformation matrix (4x4).
     """
-    """
-    Horns method
     
-    Scale is either uniform or None 
-    """
+    #Horns method
+    #Scale is either uniform or None 
+    
     weights = np.expand_dims(np.asarray(weights), axis = 1)
     weights /= np.sum(weights)
     
