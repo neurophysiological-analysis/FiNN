@@ -1,5 +1,5 @@
 
-Coregistration (MEG to MRI)
+Coregistration, MEG to MRI
 ===========================
 
 This module may be employed to coregister MEG to MRI images.
