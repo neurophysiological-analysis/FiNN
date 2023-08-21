@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Coregistration (MEG to MRI) &#8212; FiNNPy 1.2.0 documentation</title>
+    <title>Coregistration, MEG to MRI &#8212; FiNNPy 1.2.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -167,9 +167,122 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri.calc_coreg">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_coreg()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri.get_rigid_transform">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_rigid_transform()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri.plot_coregistration">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     plot_coregistration()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._load_meg_ref_pts">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_meg_ref_pts()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._load_hd_surf">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_hd_surf()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._calc_head_model">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _calc_head_model()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._load_mri_ref_pts">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_mri_ref_pts()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._registrate_3d_points_free">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _registrate_3d_points_free()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._registrate_3d_points_restricted">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _registrate_3d_points_restricted()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._refine_registration">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _refine_registration()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._rm_bad_head_shape_pts">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _rm_bad_head_shape_pts()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.coregistration_meg_mri._get_ref_ptn_cnt">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _get_ref_ptn_cnt()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -190,8 +303,216 @@
               <div>
                 
   <section id="coregistration-meg-to-mri">
-<h1>Coregistration (MEG to MRI)<a class="headerlink" href="#coregistration-meg-to-mri" title="Permalink to this heading">¶</a></h1>
+<h1>Coregistration, MEG to MRI<a class="headerlink" href="#coregistration-meg-to-mri" title="Permalink to this heading">¶</a></h1>
 <p>This module may be employed to coregister MEG to MRI images.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri.calc_coreg">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">calc_coreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'restricted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri.calc_coreg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coregisters MRI data (src) to MEG data (tgt).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+<li><p><strong>subj_path</strong> – Path to the subject’s freesurfer folder.</p></li>
+<li><p><strong>rec_meta_info</strong> – MEG scan meta info.</p></li>
+<li><p><strong>registration_scale_type</strong> – Can be either “free” or “restricted”. If free, the initial registration may be scaled with a uniform factor, no scaling with restricted.</p></li>
+<li><p><strong>max_number_of_iterations</strong> – Number of iterations per registration step (total 3).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Coregistration rotors, and coregistered MEG/MRI points.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri.get_rigid_transform">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">get_rigid_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri.get_rigid_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms rotors into a rigid transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rotors</strong> – Input rotors.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformation matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri.plot_coregistration">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">plot_coregistration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri.plot_coregistration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the result of the coregistration from MRI to MEG using mayavi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coreg</strong> – Coregistration matrix.</p></li>
+<li><p><strong>rec_meta_info</strong> – Meta info from MRI scan.</p></li>
+<li><p><strong>meg_pts</strong> – MEG pts used in the coregistration.</p></li>
+<li><p><strong>subj_path</strong> – Path to the subject’s freesurfer files.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._load_meg_ref_pts">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_load_meg_ref_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._load_meg_ref_pts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load meg references points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rec_meta_info</strong> – Meta information from the MEG scan.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Reference points in the meg scan.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._load_hd_surf">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_load_hd_surf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._load_hd_surf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load freesurfer extracted hd surface model vertices. If this information does not yet exists, it is created using freesurfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_name</strong> – Name of the subject</p></li>
+<li><p><strong>subj_path</strong> – Path to the subject’s head model data. In case this doesn’t exists, it is created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>HD surface vertices (head model).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._calc_head_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_calc_head_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._calc_head_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a head model to read hd surface vertices using freesurfer. Removes files not needed by this reconstruction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+<li><p><strong>subj_path</strong> – Path to the subject’s freesurfer folder.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._load_mri_ref_pts">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_load_mri_ref_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._load_mri_ref_pts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load mri reference points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_path</strong> – Path to subject files.</p></li>
+<li><p><strong>subj_name</strong> – Subject name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>MRI reference points.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._registrate_3d_points_free">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_registrate_3d_points_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">10.0,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._registrate_3d_points_free" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registrates src points to tgt points via least squares minimizing. The resulting 4x4 transformation matrix may contain translation, rotation, and scaling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_pts</strong> – Array/list of 3d src pts.</p></li>
+<li><p><strong>tgt_pts</strong> – Array/list of 3d tgt pts.</p></li>
+<li><p><strong>weights</strong> – Weights of the individual pts.</p></li>
+<li><p><strong>initial_guess</strong> – Initial transformation guess. Defaults to no translation/rotation/scaling.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Estimated rotors and transformation matrix (4x4).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._registrate_3d_points_restricted">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_registrate_3d_points_restricted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">10.0,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._registrate_3d_points_restricted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registrates src points to tgt points via Horns method. The resulting 4x4 transformation matrix may contain translation, rotation, and scaling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_pts</strong> – Array/list of 3d src pts.</p></li>
+<li><p><strong>tgt_pts</strong> – Array/list of 3d tgt pts.</p></li>
+<li><p><strong>weights</strong> – Weights of the individual pts.</p></li>
+<li><p><strong>scale</strong> – Flag whether to apply uniform scaling. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Estimated rotors and transformation matrix (4x4).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._refine_registration">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_refine_registration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_rotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'free'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._refine_registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refines an initial registration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meg_pts</strong> – MEG pts.</p></li>
+<li><p><strong>mri_vert</strong> – MRI pts.</p></li>
+<li><p><strong>last_rotors</strong> – Guessed rotos.</p></li>
+<li><p><strong>last_mat</strong> – Guessed transformation matrix.</p></li>
+<li><p><strong>weights</strong> – Weights to be applied.</p></li>
+<li><p><strong>trans_thresh</strong> – Translation error threshold.</p></li>
+<li><p><strong>angle_thresh</strong> – Rotation error threshold.</p></li>
+<li><p><strong>scale_thresh</strong> – Scaling error threshold.</p></li>
+<li><p><strong>max_number_of_iterations</strong> – Number of iterations.</p></li>
+<li><p><strong>registration_scale_type</strong> – If “free”, scaling is estimated across 3 axis, if “reduced”, scaling is uniform. Defaults to “free”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated rotors and transformation matrices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._rm_bad_head_shape_pts">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_rm_bad_head_shape_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.005</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._rm_bad_head_shape_pts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identify MEG points whose distance is too far from MRI points and remove those.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meg_pts</strong> – MEG pts.</p></li>
+<li><p><strong>mri_pts</strong> – MRI pts.</p></li>
+<li><p><strong>trans_mat</strong> – MRI to MEG transformation matrix.</p></li>
+<li><p><strong>distance_threshold</strong> – Maximum distance. Defaults to 5 mm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pruned list of MEG pts.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._get_ref_ptn_cnt">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_get_ref_ptn_cnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._get_ref_ptn_cnt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the total and hsp counts from MEG pts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>meg_pts</strong> – MEG pts.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total point count and hsp point count.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
