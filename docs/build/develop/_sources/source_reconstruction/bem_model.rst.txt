@@ -1,6 +1,6 @@
 
-Boundary element model (BEM)
-============================
+Complex coherency
+=================
 
 This function may be called for data in the time domain or the frequency domain.
 
