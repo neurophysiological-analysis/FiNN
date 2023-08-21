@@ -2,7 +2,7 @@
 Boundary element model (BEM)
 ============================
 
-This function may be called for data in the time domain or the frequency domain.
+This module may be employed to calcualte the boundary element model for EEG/MEG source reconstruction.
 
 .. currentmodule:: source_reconstruction.bem_model
 .. autofunction:: calc_skull_and_skin_models
