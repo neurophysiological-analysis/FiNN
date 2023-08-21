@@ -13,7 +13,10 @@ import warnings
 
 import os
 
-def get_bio_channel_type_idx(raw_file, mask = None):
+import sklearn.covariance
+import sklearn.decomposition
+
+def _get_bio_channel_type_idx(raw_file, mask = None):
     valid_ch_indices = np.zeros((len(raw_file.info["chs"]), ), dtype = bool)
     meg_ch_indices = list()
     grad_ch_indices = list()
@@ -46,7 +49,7 @@ def get_bio_channel_type_idx(raw_file, mask = None):
     
     return (valid_ch_indices, meg_ch_indices, grad_ch_indices, ch_names)
 
-def empirically_estimate_cov(cov_data, meg_ch_indices, grad_ch_indices, valid_ch_indices):
+def _empirically_estimate_cov(cov_data, meg_ch_indices, grad_ch_indices, valid_ch_indices):
     reject_thresholds = {"meg" : 4e-12, "grad" : 4e-10}
     mu = 0; samp_cnt = 0; cov = 0
     for segment_idx in range(cov_data.shape[0]):
@@ -68,14 +71,7 @@ def empirically_estimate_cov(cov_data, meg_ch_indices, grad_ch_indices, valid_ch
     
     return cov
 
-import sklearn.covariance
-import sklearn.decomposition
-
-import matplotlib
-matplotlib.use("Qt5agg")
-import matplotlib.pyplot as plt
-
-def get_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz_s = .2):
+def _calc_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz_s = .2):
     """
     Calculates the sensor noise covariance
     
@@ -86,7 +82,7 @@ def get_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz
     
     :return: (cov, ch_names) - Covariance and channel names.
     """
-    (valid_ch_indices, meg_ch_indices, grad_ch_indices, ch_names) = get_bio_channel_type_idx(raw_file)
+    (valid_ch_indices, meg_ch_indices, grad_ch_indices, ch_names) = _get_bio_channel_type_idx(raw_file)
     
     cov_data = raw_file.get_data()
     
@@ -94,7 +90,7 @@ def get_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz
     emp_cov_data = np.asarray(np.split(cov_data, epoch_splits, axis = 1)[1:])
     
     if (method is None or method == "empirically"):
-        cov = empirically_estimate_cov(emp_cov_data, meg_ch_indices, grad_ch_indices, valid_ch_indices)
+        cov = _empirically_estimate_cov(emp_cov_data, meg_ch_indices, grad_ch_indices, valid_ch_indices)
     elif(method == "shrinkage"):
         cov = sklearn.covariance.ShrunkCovariance(**method_params).fit(cov_data.T[:, valid_ch_indices]).covariance_
     elif(method == "factor_analysis"):
@@ -102,7 +98,7 @@ def get_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_sz
     
     return (cov, ch_names)
 
-def calc_sensor_covariance(file_path, cov_path, method = None, method_params = None, overwrite = False):
+def get_sensor_covariance(file_path, cov_path, method = None, method_params = None, overwrite = False):
     
     """
     #Determines eigenvectors/values from the sensor noise covariance
@@ -120,7 +116,7 @@ def calc_sensor_covariance(file_path, cov_path, method = None, method_params = N
          os.path.exists(cov_path + "evec.npy") == False) or overwrite):
     
         raw_file = mne.io.read_raw_fif(file_path, preload = True, verbose = "ERROR")
-        (bio_sensor_noise_cov, ch_names) = get_sensor_noise_cov(raw_file, method, method_params)
+        (bio_sensor_noise_cov, ch_names) = _calc_sensor_noise_cov(raw_file, method, method_params)
     
         mat = mpmath.matrix(bio_sensor_noise_cov)
         mat.ctx.dps = 40

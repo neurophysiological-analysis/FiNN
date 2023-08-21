@@ -10,7 +10,7 @@ import finnpy.source_reconstruction.utils
 import finnpy.source_reconstruction.sphere_model
 import warnings
 
-def create_mesh(octahedron_level = 6):
+def _create_mesh(octahedron_level = 6):
     """
     Creates a sphere from an octahedron and prunes duplicate vertices/faces.
     
@@ -23,7 +23,7 @@ def create_mesh(octahedron_level = 6):
     
     return (vert, faces)
 
-def read_cortical_data(subject_path):
+def _read_cortical_data(subject_path):
     """
     Reads cortical freesurfer data.
     
@@ -51,13 +51,13 @@ def create_source_mesh_model(subject_path):
     :return: Vertices and faces of the freesurfer extracted cortical white matter surface models, a list of matched freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron), and octahedron vertices and faces. 
     """
     #Get reference mesh
-    (model_vert, model_faces) = create_mesh()
+    (model_vert, model_faces) = _create_mesh()
     
     #Load surface data from freesurfer reconstructions
     (lh_geom_white_vert, lh_geom_white_faces,
      rh_geom_white_vert, rh_geom_white_faces,
      lh_geom_sphere_vert,
-     rh_geom_sphere_vert) = read_cortical_data(subject_path)
+     rh_geom_sphere_vert) = _read_cortical_data(subject_path)
         
     #Normalize geometric
     lh_geom_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(lh_geom_sphere_vert)

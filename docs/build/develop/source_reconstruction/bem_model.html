@@ -167,9 +167,95 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.calc_skull_and_skin_models">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_skull_and_skin_models()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.read_skull_and_skin_models">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     read_skull_and_skin_models()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.plot_skull_and_skin_models">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     plot_skull_and_skin_models()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model._load_and_orient_t1">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_and_orient_t1()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model._plot_skull_and_skin_subplots">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _plot_skull_and_skin_subplots()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_bem_model_linear_basis()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model._find_non_diag_omega">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _find_non_diag_omega()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model._find_diag_omega">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _find_diag_omega()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model._calc_bem_fields">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _calc_bem_fields()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -191,7 +277,162 @@
                 
   <section id="boundary-element-model-bem">
 <h1>Boundary element model (BEM)<a class="headerlink" href="#boundary-element-model-bem" title="Permalink to this heading">¶</a></h1>
-<p>This function may be called for data in the time domain or the frequency domain.</p>
+<p>This module may be employed to calcualte the boundary element model for EEG/MEG source reconstruction.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_skull_and_skin_models">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preflood_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Employs freesufers watershed algorithm to calculate skull and skin models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subject_path</strong> – Subjects freesurfer path.</p></li>
+<li><p><strong>subject_id</strong> – Subject name.</p></li>
+<li><p><strong>preflood_height</strong> – Freesurfer parameter. May need adjusting if segmentation doesn’t work properly.</p></li>
+<li><p><strong>overwrite</strong> – Flag to overwrite if files are already present. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model.read_skull_and_skin_models">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">read_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.read_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads skull and skin models extracted via freesurfer’s watershed algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subject_path</strong> – Subject’s freesurfer path.</p></li>
+<li><p><strong>subj_name</strong> – Subject name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vertices and faces of the inner skull, outer skull, and skin models.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model.plot_skull_and_skin_models">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">plot_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skin_vect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skin_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.plot_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot skull and skin models for visual confirmation of proper alignment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws_in_skull_vert</strong> – Vertices of the inner skull model.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> – Faces of the inner skull model.</p></li>
+<li><p><strong>ws_out_skull_vert</strong> – Vertices of the outer skull model.</p></li>
+<li><p><strong>ws_out_skull_faces</strong> – Faces of the outer skull model.</p></li>
+<li><p><strong>ws_out_skin_vert</strong> – Vertices of the skin model.</p></li>
+<li><p><strong>ws_out_skin_faces</strong> – Faces of the skin model.</p></li>
+<li><p><strong>subject_path</strong> – Subject’s freesurfer path.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model._load_and_orient_t1">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_load_and_orient_t1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._load_and_orient_t1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads and orients an MRI scan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subject_path</strong> – Subject’s freesurfer path.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Data and orientation of the scan.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model._plot_skull_and_skin_subplots">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_plot_skull_and_skin_subplots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfaces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._plot_skull_and_skin_subplots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds splices from the MRI scan onto the plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The transformed data for plotting.</p></li>
+<li><p><strong>axes</strong> – Axes do plot data onto.</p></li>
+<li><p><strong>surfaces</strong> – Surfaces (inner skull, skin, and/or outer skull models.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_bem_model_linear_basis">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcuates the BEM linear basis coefficients from the collocation method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ws_in_skull_vert</strong> – Inner skull vertices.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> – Inner skull faces.</p></li>
+<li><p><strong>tgt_icosahedron_level</strong> – Order of the icosahedron employed herein.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Scaled and filtered MRI vertices/faces, face area, face normals, and bem_solution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model._find_non_diag_omega">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_non_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces_normal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_non_diag_omega" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the non-diagonal elements of omega, see function calc_bem_model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>faces</strong> – Individual faces.</p></li>
+<li><p><strong>vert</strong> – Individual vertices.</p></li>
+<li><p><strong>double_faces_area</strong> – Precomputed double face area.</p></li>
+<li><p><strong>faces_normal</strong> – Normales of each face.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Thre respective omega elements.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model._find_diag_omega">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_diag_omega" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the diagonal elements of omega as these cannot be calculated as the non-diagonal ones due to the auto solid angle problem.</p>
+<p>See “Error Analysis of a New Galerkin Method to Solve the Forward Problem in MEG and EEG Using the Boundary Element Method” by Satu Tissari, Jussi Rahola for reference.
+See function calc_bem_model for a more general description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>omega</strong> – The omega matrix with non-diagonal elements populated.</p></li>
+<li><p><strong>faces</strong> – Respective faces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The respective omega elements.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model._calc_bem_fields">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_calc_bem_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._calc_bem_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the magnetic field at a vortex from all MEG sensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vortex</strong> – Position of the vortex.</p></li>
+<li><p><strong>rmags</strong> – 3D position of the MEG coils.</p></li>
+<li><p><strong>cosmags</strong> – MEG coil direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnetic field of all MEG sensors at a vortex.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

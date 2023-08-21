@@ -11,7 +11,7 @@ import finnpy.source_reconstruction.utils
 
 import mne
 
-def get_meg_channel_type_idx(rec_meta_info):
+def _get_meg_channel_type_idx(rec_meta_info):
     """
     Returns the channel names of the MEG channels.
     
@@ -42,7 +42,7 @@ def calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_na
                        fwd_sol, rec_meta_info, method = "dSPM"):
      
      
-    data_meg_ch_names = get_meg_channel_type_idx(rec_meta_info)
+    data_meg_ch_names = _get_meg_channel_type_idx(rec_meta_info)
      
     #Extract relevant indices from the sensor covariance matrix's eigenvectors/values.
     #And construct whitener
@@ -84,61 +84,6 @@ def calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_na
         raise AssertionError("Noise normalization method not yet implemented")
  
     return (inv_trans, noise_norm)
-
-#===============================================================================
-# def calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names,
-#                        fwd_sol, rec_meta_info):
-#      
-#      
-#     data_meg_ch_names = get_meg_channel_type_idx(rec_meta_info)
-#      
-#     #Extract relevant indices from the sensor covariance matrix's eigenvectors/values.
-#     valid_meg_ch_idx = np.empty(((len(data_meg_ch_names))), dtype = int)
-#     for (ch_idx, data_meg_ch_name) in enumerate(data_meg_ch_names):
-#         valid_meg_ch_idx[ch_idx] = sensor_cov_names.index(data_meg_ch_name)
-#     sensor_cov_eigen_val = sensor_cov_eigen_val[valid_meg_ch_idx]
-#     sensor_cov_eigen_vec = sensor_cov_eigen_vec[valid_meg_ch_idx, :]; sensor_cov_eigen_vec = sensor_cov_eigen_vec[:, valid_meg_ch_idx]
-#      
-#     whitener = finnpy.source_reconstruction.utils.calc_whitener(sensor_cov_eigen_val, sensor_cov_eigen_vec)
-#     gain_mat = np.dot(whitener, fwd_sol)
-#      
-#     #MNE: inverse.py - _prepare_forward: 1859
-#     scale = np.sqrt(np.sum(sensor_cov_eigen_val > 0) / np.linalg.norm(gain_mat) ** 2)
-#     gain_mat *= scale
-#     source_cov = np.ones((fwd_sol.shape[1],)) * scale
-#     source_cov = source_cov * source_cov
-#      
-#     (fields, sing, leads) = scipy.linalg.svd(gain_mat, full_matrices = False)
-#  
-#     # Regularize inverse to be used as noise-weight
-#     #Employ Tikhonov regularized SVD decomposition
-#     lambda2 = 1/9
-#     reg_inv = np.zeros(sing.shape)
-#     rank = np.sum(sensor_cov_eigen_val > 0)
-#     loc_sing = sing[:rank]
-#     reg_inv[:rank] = np.where(loc_sing > 0, loc_sing / (loc_sing ** 2 + lambda2), 0)
-#     noise_weight = reg_inv
-#      
-#     if (0 in sensor_cov_eigen_val):
-#         raise AssertionError("0 in sensor covariance eigenvalue list.")
-#     lambda2 = 1/9
-#     noise_weight2 = sing/(sing ** 2 + lambda2)
-#      
-#     #Compute noise normalization vector
-#     noise_normalization_vec = np.zeros((leads.shape[1],))
-#     for idx in range(leads.shape[1]):
-#         pre_norm_factor = (np.sqrt(source_cov[idx]) * leads[:, idx] * noise_weight)
-#         noise_normalization_vec[idx] = np.linalg.norm(pre_norm_factor)
-#     noise_normalization_vec = 1 / np.abs(noise_normalization_vec)
-#      
-#     pre_inv_trans = np.dot(fields.T, whitener)
-#     pre_inv_trans *= np.expand_dims(reg_inv, axis = 1)
-#      
-#     inv_trans = np.dot(leads.T, pre_inv_trans)
-#     inv_trans *= np.expand_dims(np.sqrt(source_cov), axis = 1)
-#  
-#     return (inv_trans, noise_normalization_vec)
-#===============================================================================
 
 def apply_inverse_model(sensor_data, inv_model, noise_norm):
     """

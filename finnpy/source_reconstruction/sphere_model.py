@@ -10,7 +10,7 @@ import scipy.spatial
 
 import finnpy.source_reconstruction.utils
 
-def tessellate_sphere(vert, faces, level):
+def _tessellate_sphere(vert, faces, level):
     new_vert = [None, None, None]
     new_vert_len = [None, None, None]
     new_faces = [None, None, None, None]
@@ -43,7 +43,7 @@ def calculate_sphere_from_octahedron(level):
     
     #faces = faces[:, ::-1] #Triangle point order is reversed whyever??
     
-    (vert, faces) = tessellate_sphere(vert, faces, level)
+    (vert, faces) = _tessellate_sphere(vert, faces, level)
     
     return (vert, faces)
 
@@ -82,7 +82,7 @@ def calculate_sphere_from_icosahedron(level):
                         [ 5, 10,  6], [ 5,  6,  1], [ 1,  6,  7], [ 1,  7,  2], [ 2,  7,  8],
                         [ 8, 11,  9], [ 9, 11, 10], [10, 11,  6], [ 6, 11,  7], [ 7, 11,  8]], dtype = int)
         
-    (vert, faces) = tessellate_sphere(vert, faces, level = level + 1)
+    (vert, faces) = _tessellate_sphere(vert, faces, level = level + 1)
     (vert, faces) = prune_closeby_vert(vert, faces)
     
     return (vert, faces)

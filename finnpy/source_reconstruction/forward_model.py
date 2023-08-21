@@ -15,7 +15,7 @@ import mne.forward
 import mne.io.constants
 
 
-def get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
+def _get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
     meg_to_head_trans = rec_meta_info['dev_head_t']["trans"]
     coil_types = mne.forward._read_coil_defs(verbose="Error")  # Reads meg coil types from mne library
     meg_chs = list()
@@ -57,20 +57,20 @@ def get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
             
     return meg_chs
 
-def apply_coreg_to_vertices(geom_white_vert, coreg_trans_mat):
+def _apply_coreg_to_vertices(geom_white_vert, coreg_trans_mat):
     geom_white_vert /= 1000 #Scale from m to mm
     trans_geom_white_vert = np.dot(geom_white_vert, coreg_trans_mat[:3,:3].T) + coreg_trans_mat[:3, 3]
     
     return trans_geom_white_vert
 
-def update_invalid_vertices(approx_surface, geom_white_vert, valid_geom_vert):
+def _update_invalid_vertices(approx_surface, geom_white_vert, valid_geom_vert):
     data = geom_white_vert[np.asarray(valid_geom_vert, dtype=bool)]
     inside_check = (approx_surface.find_simplex(data) != -1)
     valid_geom_vert[np.where(valid_geom_vert)[0][~inside_check]] = False
     
     return valid_geom_vert
 
-def calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_trans_mat, pre_fwd_solution):
+def _calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_trans_mat, pre_fwd_solution):
     """
     Computes infinite medium potentials.
     
@@ -100,7 +100,7 @@ def calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_t
     
     return fwd_sol
 
-def add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices):
+def _add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices):
     """
     Adds current distribution to the MEG forward solution.
     
@@ -133,7 +133,6 @@ def add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosma
     
     return fwd_sol
 
-
 def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
                        head_to_mri_trans, mri_to_head_trans, rec_meta_info,
                        bem_trans_ws_in_skull_vert, bem_ws_in_skull_faces, bem_ws_in_skull_faces_normal, bem_ws_in_skull_faces_area, bem_solution,
@@ -159,13 +158,13 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     """
 
     #Transform anatomy into head space
-    trans_lh_geom_white_vert = apply_coreg_to_vertices(lh_geom_white_vert, mri_to_head_trans)
-    trans_rh_geom_white_vert = apply_coreg_to_vertices(rh_geom_white_vert, mri_to_head_trans)
+    trans_lh_geom_white_vert = _apply_coreg_to_vertices(lh_geom_white_vert, mri_to_head_trans)
+    trans_rh_geom_white_vert = _apply_coreg_to_vertices(rh_geom_white_vert, mri_to_head_trans)
     
     #Flag cortical points outside of the skull as invalid and concatenat all vertices
     approx_surface = scipy.spatial.Delaunay(bem_trans_ws_in_skull_vert)
-    valid_lh_geom_vert = update_invalid_vertices(approx_surface, lh_geom_white_vert, valid_lh_geom_vert)
-    valid_rh_geom_vert = update_invalid_vertices(approx_surface, rh_geom_white_vert, valid_rh_geom_vert)
+    valid_lh_geom_vert = _update_invalid_vertices(approx_surface, lh_geom_white_vert, valid_lh_geom_vert)
+    valid_rh_geom_vert = _update_invalid_vertices(approx_surface, rh_geom_white_vert, valid_rh_geom_vert)
     white_vertices = np.concatenate((trans_lh_geom_white_vert[np.where(valid_lh_geom_vert)[0]], trans_rh_geom_white_vert[np.where(valid_rh_geom_vert)[0]]))
     
     #Configure constants
@@ -175,7 +174,7 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     field_mult = sigma - 0
     
     #Load MEG coil meta information (e.g. direction)
-    meg_ch_infos = get_meg_coil_positions(rec_meta_info, head_to_mri_trans)    
+    meg_ch_infos = _get_meg_coil_positions(rec_meta_info, head_to_mri_trans)    
     meg_ch_comp = np.zeros((len(rec_meta_info["chs"],)))
     for (meg_ch_idx, meg_ch) in enumerate(meg_ch_infos):
         meg_ch_comp[meg_ch_idx] = int(meg_ch["coil_type"]) >> 16
@@ -222,10 +221,10 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     white_vertices_mri = np.dot(head_to_mri_trans[:3,:3], white_vertices.T).T + head_to_mri_trans[:3, 3]
     
     # Calculate magnetic potentials/fields
-    fwd_sol = calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, head_to_mri_trans, pre_fwd_solution)
+    fwd_sol = _calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, head_to_mri_trans, pre_fwd_solution)
     
     # Calculate primary current distribution
-    fwd_sol = add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices)
+    fwd_sol = _add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices)
     
     #Rescaling
     fwd_sol *= _mag_factor

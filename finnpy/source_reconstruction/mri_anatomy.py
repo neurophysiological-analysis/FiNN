@@ -45,7 +45,7 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     os.mkdir(new_base_dir + "bem")
     os.mkdir(new_base_dir + "bem/watershed")
     if (fiducials_file is None):
-        create_fiducials(old_base_dir, new_base_dir, subj_name)
+        _create_fiducials(old_base_dir, new_base_dir, subj_name)
     else:
         shutil.copyfile(fiducials_path + fiducials_file, new_base_dir + fiducials_file)
     
@@ -68,7 +68,7 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     shutil.rmtree(old_base_dir)
     shutil.move(new_base_dir, old_base_dir)
 
-def create_fiducials(in_path, out_path, subj_name):
+def _create_fiducials(in_path, out_path, subj_name):
     """
     Reads fiducials from fs-average and transforms them from fs-average space into subject space.
     
@@ -174,19 +174,19 @@ def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
         return
     
     if (os.path.exists(subj_path + "bem/" + subj_name + "-fiducials.fif")):
-        load_scale_save_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif", scale)
+        _load_scale_save_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif", scale)
     
-    load_scale_save_surfaces(subj_path + "surf/" + "lh.white", scale)
-    load_scale_save_surfaces(subj_path + "surf/" + "rh.white", scale)
-    load_scale_save_surfaces(subj_path + "surf/" + "lh.seghead", scale)
+    _load_scale_save_surfaces(subj_path + "surf/" + "lh.white", scale)
+    _load_scale_save_surfaces(subj_path + "surf/" + "rh.white", scale)
+    _load_scale_save_surfaces(subj_path + "surf/" + "lh.seghead", scale)
     
-    load_scale_save_mri(subj_path + "mri/" + "orig.mgz", scale)
-    load_scale_save_mri(subj_path + "mri/" + "T1.mgz", scale)
+    _load_scale_save_mri(subj_path + "mri/" + "orig.mgz", scale)
+    _load_scale_save_mri(subj_path + "mri/" + "T1.mgz", scale)
     
     file = open(subj_path + ".is_scaled", "wb")
     file.close()
 
-def load_scale_save_fiducials(path, scale):
+def _load_scale_save_fiducials(path, scale):
     """
     Loads, scales, and saves fiducials.
     
@@ -206,7 +206,7 @@ def load_scale_save_fiducials(path, scale):
         
     mne.io.write_fiducials(path, fiducials, coord_system, overwrite = True)
 
-def load_scale_save_surfaces(path, scale):
+def _load_scale_save_surfaces(path, scale):
     """
     Load, scale, and save surfaces.
     
@@ -223,7 +223,7 @@ def load_scale_save_surfaces(path, scale):
     vert = vert * scale
     nibabel.freesurfer.write_geometry(path, vert, faces)
 
-def load_scale_save_mri(path, scale):
+def _load_scale_save_mri(path, scale):
     """
     Load, scale, and save MRI information.
     

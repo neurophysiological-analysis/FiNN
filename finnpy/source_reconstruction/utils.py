@@ -225,8 +225,8 @@ def orient_mat_to_block_format(orient_mat):
     
     return rot
 
-def get_orientation(vortex_normals, valid_vert, cluster_grp, cluster_indices,
-                    mri_to_head_trans, double_precision = 40):
+def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
+                   mri_to_head_trans, double_precision = 40):
     """
     Calculates an orthonormal basis of eigenvector/values for each supporting/valid point.
     
@@ -374,8 +374,8 @@ def cortical_surface_reorient_fwd_model(lh_geom_white_vert, lh_geom_white_faces,
     (rh_cluster_grp, rh_cluster_indices) = find_vertex_clusters(rh_geom_white_vert, valid_geom_rh_vert, rh_geom_white_faces)
     
     #Determines the orientation 
-    lh_orient = get_orientation(lh_acc_normals, valid_geom_lh_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
-    rh_orient = get_orientation(rh_acc_normals, valid_geom_rh_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
+    lh_orient = get_eigenbasis(lh_acc_normals, valid_geom_lh_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
+    rh_orient = get_eigenbasis(rh_acc_normals, valid_geom_rh_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
     
     #Concatenates the eigenvector bases 
     orient = np.concatenate((lh_orient, rh_orient), axis = 0)
@@ -592,9 +592,9 @@ def get_mri_subj_to_fs_avg_trans_mat(valid_lh_vert, valid_rh_vert,
     rh_proj = rh_mri_map[np.where(valid_avg_rh_vert)[0]] * rh_proj
     
     #Reformat
-    trans_mat = scipy.sparse.lil_matrix((lh_trans.shape[0] + rh_trans.shape[0], lh_trans.shape[1] + rh_trans.shape[1]))
-    trans_mat[:lh_trans.shape[0], :lh_trans.shape[1]] += lh_trans
-    trans_mat[lh_trans.shape[0]:, lh_trans.shape[1]:] += rh_trans
+    trans_mat = scipy.sparse.lil_matrix((lh_proj.shape[0] + rh_proj.shape[0], lh_proj.shape[1] + rh_proj.shape[1]))
+    trans_mat[:lh_proj.shape[0], :lh_proj.shape[1]] += lh_proj
+    trans_mat[lh_proj.shape[0]:, lh_proj.shape[1]:] += rh_proj
     trans_mat = trans_mat.tocsr()
     
     return (trans_mat, valid_avg_lh_vert, valid_avg_rh_vert)
