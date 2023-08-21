@@ -36,7 +36,7 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Statistical" href="../statistical.html" />
+    <link rel="next" title="Coregistration (MEG to MRI)" href="coregistration_meg_mri.html" />
     <link rel="prev" title="Source reconstruction" href="../source_reconstruction.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -174,6 +174,15 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.read_skull_and_skin_models">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     read_skull_and_skin_models()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#source_reconstruction.bem_model.calc_skull_and_skin_models">
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -183,10 +192,10 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.read_skull_and_skin_models">
+  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis">
    <code class="docutils literal notranslate">
     <span class="pre">
-     read_skull_and_skin_models()
+     calc_bem_model_linear_basis()
     </span>
    </code>
   </a>
@@ -214,15 +223,6 @@
    <code class="docutils literal notranslate">
     <span class="pre">
      _plot_skull_and_skin_subplots()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_bem_model_linear_basis()
     </span>
    </code>
   </a>
@@ -279,6 +279,23 @@
 <h1>Boundary element model (BEM)<a class="headerlink" href="#boundary-element-model-bem" title="Permalink to this heading">¶</a></h1>
 <p>This module may be employed to calcualte the boundary element model for EEG/MEG source reconstruction.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.bem_model.read_skull_and_skin_models">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">read_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.read_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads skull and skin models extracted via freesurfer’s watershed algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subject_path</strong> – Subject’s freesurfer path.</p></li>
+<li><p><strong>subj_name</strong> – Subject name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vertices and faces of the inner skull, outer skull, and skin models.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_skull_and_skin_models">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preflood_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
 <dd><p>Employs freesufers watershed algorithm to calculate skull and skin models.</p>
@@ -295,18 +312,19 @@
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.bem_model.read_skull_and_skin_models">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">read_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.read_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads skull and skin models extracted via freesurfer’s watershed algorithm.</p>
+<dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_bem_model_linear_basis">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcuates the BEM linear basis coefficients from the collocation method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subject_path</strong> – Subject’s freesurfer path.</p></li>
-<li><p><strong>subj_name</strong> – Subject name.</p></li>
+<li><p><strong>ws_in_skull_vert</strong> – Inner skull vertices.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> – Inner skull faces.</p></li>
+<li><p><strong>tgt_icosahedron_level</strong> – Order of the icosahedron employed herein.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Vertices and faces of the inner skull, outer skull, and skin models.</p>
+<dd class="field-even"><p>Scaled and filtered MRI vertices/faces, face area, face normals, and bem_solution.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -355,24 +373,6 @@
 <li><p><strong>axes</strong> – Axes do plot data onto.</p></li>
 <li><p><strong>surfaces</strong> – Surfaces (inner skull, skin, and/or outer skull models.</p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_bem_model_linear_basis">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calcuates the BEM linear basis coefficients from the collocation method.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ws_in_skull_vert</strong> – Inner skull vertices.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> – Inner skull faces.</p></li>
-<li><p><strong>tgt_icosahedron_level</strong> – Order of the icosahedron employed herein.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Scaled and filtered MRI vertices/faces, face area, face normals, and bem_solution.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -448,10 +448,10 @@ See function calc_bem_model for a more general description.</p>
             <p class="prev-next-title">Source reconstruction</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../statistical.html" title="next page">
+    <a class='right-next' id="next-link" href="coregistration_meg_mri.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Statistical</p>
+        <p class="prev-next-title">Coregistration (MEG to MRI)</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

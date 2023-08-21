@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Forward model &#8212; FiNNPy 1.2.0 documentation</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet">
+  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inverse model" href="inverse_model.html" />
+    <link rel="prev" title="Coregistration (MEG to MRI)" href="coregistration_meg_mri.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../index.html">
+<p class="title">FiNNPy</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../install_guide.html">
+  Installation
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../guides.html">
+  Guides
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../api_reference.html">
+  API reference
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><h3><a href="../index.html">FiNNPY</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../file_io.html">File IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../source_reconstruction.html">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+</ul>
+</li>
+</ul>
+
+<h3>Branches</h3>
+<ul>
+  <li><a href="forward_model.html">develop</a></li>
+  <li><a href="../../stable/index.html">stable</a></li>
+</ul>
+
+<h3>Tags</h3>
+<ul>
+  <li><a href="../../v0.1.5/index.html">v0.1.5</a></li>
+</ul>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model.calc_forward_model">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_forward_model()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model._get_meg_coil_positions">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _get_meg_coil_positions()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model._apply_coreg_to_vertices">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _apply_coreg_to_vertices()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model._update_invalid_vertices">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _update_invalid_vertices()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model._calc_magnetic_fields">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _calc_magnetic_fields()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model._add_current_distribution">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _add_current_distribution()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="forward-model">
+<h1>Forward model<a class="headerlink" href="#forward-model" title="Permalink to this heading">¶</a></h1>
+<p>This module may be employed to calculate the forward model for the source reconstruction.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model.calc_forward_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">calc_forward_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_to_mri_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_trans_ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_ws_in_skull_faces_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_ws_in_skull_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_solution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_lh_geom_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_rh_geom_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mag_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model.calc_forward_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the forward model according to Mosher et al, 1999.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lh_geom_white_vert</strong> – Lh white matter surface (MRI).</p></li>
+<li><p><strong>rh_geom_white_vert</strong> – Rh white matter surface (MRI).</p></li>
+<li><p><strong>head_to_mri_trans</strong> – Head to MRI transformation.</p></li>
+<li><p><strong>mri_to_head_trans</strong> – MRI to head transformation.</p></li>
+<li><p><strong>rec_meta_info</strong> – MEG recording meta info.</p></li>
+<li><p><strong>bem_trans_ws_in_skull_vert</strong> – Inner skull model vertices.</p></li>
+<li><p><strong>bem_ws_in_skull_faces</strong> – Inner skull model faces.</p></li>
+<li><p><strong>bem_ws_in_skull_faces_normal</strong> – Inner skull model faces’ normals.</p></li>
+<li><p><strong>bem_ws_in_skull_faces_area</strong> – Inner skull model faces’ areas.</p></li>
+<li><p><strong>bem_solution</strong> – BEM linear basis functions.</p></li>
+<li><p><strong>valid_lh_geom_vert</strong> – Binary list of Freesurfer lh vertices that have a match in the model vertices (octahedron).</p></li>
+<li><p><strong>valid_rh_geom_vert</strong> – Binary list of Freesurfer rh vertices that have a match in the model vertices (octahedron).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Forward model and checked vertices (lh &amp; rh) for being within the skull.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._get_meg_coil_positions">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_get_meg_coil_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_to_mri_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._get_meg_coil_positions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._apply_coreg_to_vertices">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_apply_coreg_to_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg_trans_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._apply_coreg_to_vertices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._update_invalid_vertices">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_update_invalid_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">approx_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_geom_vert</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._update_invalid_vertices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._calc_magnetic_fields">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_calc_magnetic_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vertices_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_trans_ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg_trans_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_fwd_solution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._calc_magnetic_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes infinite medium potentials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>white_vertices_mri</strong> – White matter vertices.</p></li>
+<li><p><strong>bem_trans_ws_in_skull_vert</strong> – Inner skull model vertices.</p></li>
+<li><p><strong>coreg_trans_mat</strong> – Transformatio matrix from the coregistration.</p></li>
+<li><p><strong>pre_fwd_solution</strong> – Fwd solution precursor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Forward solution with infinite medium potentials.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._add_current_distribution">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_add_current_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_infos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._add_current_distribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds current distribution to the MEG forward solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fwd_sol</strong> – Previously calcualted forward solution.</p></li>
+<li><p><strong>white_vertices</strong> – White matter vertices.</p></li>
+<li><p><strong>meg_ch_infos</strong> – MEG recording meta into.</p></li>
+<li><p><strong>rmags</strong> – 3D positions of MEG coil integration points (MEG space).</p></li>
+<li><p><strong>cosmags</strong> – Direction of the MEG coil integration points (MEG space).</p></li>
+<li><p><strong>ws</strong> – Weights for MEG coil integration points.</p></li>
+<li><p><strong>meg_ch_indices</strong> – Indices of MEG channels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Forward solution updated for primary currend distributions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="coregistration_meg_mri.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Coregistration (MEG to MRI)</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="inverse_model.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Inverse model</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, Maximilian Scherer.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
