@@ -15,5 +15,6 @@ This section documents the functions offered by FiNNPy.
    filters
    misc
    sfc
+   source_reconstruction
    statistical
    visualization

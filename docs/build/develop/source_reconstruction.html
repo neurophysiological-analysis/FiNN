@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Guides &#8212; FiNNPy 1.2.0 documentation</title>
+    <title>Source reconstruction &#8212; FiNNPy 1.2.0 documentation</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -36,8 +36,8 @@
     <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="FiNNPy API" href="api_reference.html" />
-    <link rel="prev" title="Installation guide" href="install_guide.html" />
+    <link rel="next" title="Statistical" href="statistical.html" />
+    <link rel="prev" title="Complex coherency" href="sfc/cc.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -78,13 +78,13 @@
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
- <a class="current reference internal nav-link" href="#">
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="guides.html">
   Guides
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
+<li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="api_reference.html">
   API reference
  </a>
@@ -125,14 +125,14 @@
 <li class="toctree-l2"><a class="reference internal" href="install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Guides</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general">General</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Data preparation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#feature-generation">Feature generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#statistics">Statistics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#statistics">Statistics</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="api_reference.html">API reference</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cfc.html">Cross frequency connectivity (cfc)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cleansing.html">Cleansing</a></li>
@@ -140,7 +140,7 @@
 <li class="toctree-l2"><a class="reference internal" href="filters.html">Filters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="misc.html">Misc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sfc.html">Same frequency coupling (sfc)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="source_reconstruction.html">Source reconstruction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Source reconstruction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="statistical.html">Statistical</a></li>
 <li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
 </ul>
@@ -149,7 +149,7 @@
 
 <h3>Branches</h3>
 <ul>
-  <li><a href="guides.html">develop</a></li>
+  <li><a href="source_reconstruction.html">develop</a></li>
   <li><a href="../stable/index.html">stable</a></li>
 </ul>
 
@@ -167,34 +167,9 @@
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
-    <i class="fas fa-list"></i> On this page
-</div>
 
 <nav id="bd-toc-nav">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#general">
-   General
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-preparation">
-   Data preparation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#feature-generation">
-   Feature generation
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#statistics">
-   Statistics
-  </a>
- </li>
-</ul>
-
+    
 </nav>
               </div>
               
@@ -214,25 +189,10 @@
               
               <div>
                 
-  <section id="guides">
-<h1>Guides<a class="headerlink" href="#guides" title="Permalink to this heading">¶</a></h1>
-<p>Although FinnPy provides numerous tools for the analysis of electropohysiological data, the quality of the results derived using these tools equally depends on correct application and configuration of the former. This section contains guides tackling specific topics from the field of electropohysiological data analysis, providing guide to users of this and other frameworks.</p>
-<section id="general">
-<h2>General<a class="headerlink" href="#general" title="Permalink to this heading">¶</a></h2>
-<p>&lt;To be added&gt;</p>
-</section>
-<section id="data-preparation">
-<h2>Data preparation<a class="headerlink" href="#data-preparation" title="Permalink to this heading">¶</a></h2>
-<p>&lt;To be added&gt;</p>
-</section>
-<section id="feature-generation">
-<h2>Feature generation<a class="headerlink" href="#feature-generation" title="Permalink to this heading">¶</a></h2>
-<p><a class="reference internal" href="guides/dac_configurator.html#dac-configurator-label"><span class="std std-ref">DAC configurator</span></a></p>
-</section>
-<section id="statistics">
-<h2>Statistics<a class="headerlink" href="#statistics" title="Permalink to this heading">¶</a></h2>
-<p>&lt;To be added&gt;</p>
-</section>
+  <section id="module-source_reconstruction">
+<span id="source-reconstruction"></span><h1>Source reconstruction<a class="headerlink" href="#module-source_reconstruction" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 
 
@@ -241,17 +201,17 @@
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="install_guide.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="sfc/cc.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Installation guide</p>
+            <p class="prev-next-title">Complex coherency</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="api_reference.html" title="next page">
+    <a class='right-next' id="next-link" href="statistical.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">FiNNPy API</p>
+        <p class="prev-next-title">Statistical</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
