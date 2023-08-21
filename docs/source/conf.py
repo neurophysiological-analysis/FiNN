@@ -259,3 +259,7 @@ smv_outputdir_format = '{ref.name}'
 
 # Determines whether remote or local git branches/tags are preferred if their output dirs conflict
 smv_prefer_remote_refs = False
+
+#Ignore import mayavi as sphinx doesn't like it
+autodoc_mock_imports = ["mayavi"]
+
