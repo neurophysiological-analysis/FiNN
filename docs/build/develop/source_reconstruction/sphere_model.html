@@ -36,7 +36,7 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Sphere models" href="utils.html" />
+    <link rel="next" title="Utility functions" href="utils.html" />
     <link rel="prev" title="Source space region clustering" href="source_region_model.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
@@ -167,9 +167,59 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sphere_model.calculate_sphere_from_octahedron">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calculate_sphere_from_octahedron()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sphere_model.calculate_sphere_from_icosahedron">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calculate_sphere_from_icosahedron()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     read_sphere_from_icosahedron_in_fs_order()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sphere_model.prune_closeby_vert">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     prune_closeby_vert()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sphere_model._tessellate_sphere">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _tessellate_sphere()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -191,7 +241,32 @@
                 
   <section id="sphere-models">
 <h1>Sphere models<a class="headerlink" href="#sphere-models" title="Permalink to this heading">¶</a></h1>
-<p>This module may be employed to cluster source areas into distinct regions.</p>
+<p>This module may be employed to generate spheric models.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sphere_model.calculate_sphere_from_octahedron">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">calculate_sphere_from_octahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.calculate_sphere_from_octahedron" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sphere_model.calculate_sphere_from_icosahedron">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">calculate_sphere_from_icosahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.calculate_sphere_from_icosahedron" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">read_sphere_from_icosahedron_in_fs_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sphere_model.prune_closeby_vert">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">prune_closeby_vert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.prune_closeby_vert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sphere_model._tessellate_sphere">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">_tessellate_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model._tessellate_sphere" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 
 
@@ -210,7 +285,7 @@
     <a class='right-next' id="next-link" href="utils.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Sphere models</p>
+        <p class="prev-next-title">Utility functions</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

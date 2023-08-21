@@ -167,9 +167,86 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy.extract_anatomy_from_mri_using_fs">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     extract_anatomy_from_mri_using_fs()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy.copy_fs_avg_anatomy">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     copy_fs_avg_anatomy()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy.scale_anatomy">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     scale_anatomy()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy.visualize_anatomy_from_mri_using_fs">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     visualize_anatomy_from_mri_using_fs()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._create_fiducials">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _create_fiducials()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._load_scale_save_fiducials">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_scale_save_fiducials()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._load_scale_save_surfaces">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_scale_save_surfaces()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._load_scale_save_mri">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _load_scale_save_mri()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -192,6 +269,121 @@
   <section id="mri-anatomy-extraction">
 <h1>MRI anatomy extraction<a class="headerlink" href="#mri-anatomy-extraction" title="Permalink to this heading">¶</a></h1>
 <p>This module may be employed to extract anatomical information from MRI scans.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy.extract_anatomy_from_mri_using_fs">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">extract_anatomy_from_mri_using_fs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_scan_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fiducials_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fiducials_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy.extract_anatomy_from_mri_using_fs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts anatomical structures from an mri scan using freesurfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+<li><p><strong>t1_scan_file</strong> – Name of the mri file.</p></li>
+<li><p><strong>fiducials_file</strong> – Name of the fiducials file. If none is present, default fiducials are morphed from fs-average.</p></li>
+<li><p><strong>overwrite</strong> – Flag whether to overwrite the files of the respective subject folder already exists.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy.copy_fs_avg_anatomy">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">copy_fs_avg_anatomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy.copy_fs_avg_anatomy" title="Permalink to this definition">¶</a></dt>
+<dd><p>In case no mri scans are available for this subject, fs-average is used as a reference template.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fs_path</strong> – Path to the freesurfer files (containing fs average).</p></li>
+<li><p><strong>subj_path</strong> – Folder name of the subject.</p></li>
+<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy.scale_anatomy">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">scale_anatomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy.scale_anatomy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales anatomy for a perfect fit between fiducials and anatomy. If files are already scaled, an .is_scaled file created. This flag can be ignore via setting overwrite to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_path</strong> – Path to the freesurfer created subject specific files.</p></li>
+<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+<li><p><strong>scale</strong> – Scaling to be applied (x, y, z).</p></li>
+<li><p><strong>overwrite</strong> – Flag to apply scaling even if scaling is already applied.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy.visualize_anatomy_from_mri_using_fs">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">visualize_anatomy_from_mri_using_fs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy.visualize_anatomy_from_mri_using_fs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Employ freesurfer to visualize anatomy results extracted from freesurfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subj_path</strong> – Path to the subject’s freesurfer created files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy._create_fiducials">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">_create_fiducials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy._create_fiducials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads fiducials from fs-average and transforms them from fs-average space into subject space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_path</strong> – Path to the src folder.</p></li>
+<li><p><strong>out_path</strong> – Path to the tgt folder.</p></li>
+<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy._load_scale_save_fiducials">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">_load_scale_save_fiducials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy._load_scale_save_fiducials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads, scales, and saves fiducials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Path to the fiducials file.</p></li>
+<li><p><strong>scale</strong> – Scale to be applied (x, y, z).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy._load_scale_save_surfaces">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">_load_scale_save_surfaces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy._load_scale_save_surfaces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load, scale, and save surfaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Path to the subject’s freesurfer created surface surfaces.</p></li>
+<li><p><strong>scale</strong> – Scale to be applied (x, y, z).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy._load_scale_save_mri">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">_load_scale_save_mri</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy._load_scale_save_mri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load, scale, and save MRI information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – Path to the subject’s freesurfer created mri files.</p></li>
+<li><p><strong>scale</strong> – Scale to be applied (x, y, z).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Sphere models &#8212; FiNNPy 1.2.0 documentation</title>
+    <title>Utility functions &#8212; FiNNPy 1.2.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -167,9 +167,194 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.format_fiducials">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     format_fiducials()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.run_subprocess_in_custom_working_directory">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     run_subprocess_in_custom_working_directory()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.init_fs_paths">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     init_fs_paths()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.fast_cross_product">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     fast_cross_product()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.norm_vert">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     norm_vert()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.find_nearest_neighbor">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     find_nearest_neighbor()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.find_valid_vertices">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     find_valid_vertices()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.magn_of_vec">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     magn_of_vec()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.apply_inv_transformation">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     apply_inv_transformation()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_quat_angle">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_quat_angle()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.orient_mat_to_block_format">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     orient_mat_to_block_format()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.get_eigenbasis">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_eigenbasis()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_acc_hem_normals">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_acc_hem_normals()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.find_vertex_clusters">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     find_vertex_clusters()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.cortical_surface_reorient_fwd_model">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     cortical_surface_reorient_fwd_model()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_mri_maps">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_mri_maps()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_small_to_default_vertices_proj">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_small_to_default_vertices_proj()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_mri_subj_to_fs_avg_trans_mat()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     apply_mri_subj_to_fs_avg_trans_mat()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_whitener">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_whitener()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -189,9 +374,334 @@
               
               <div>
                 
-  <section id="sphere-models">
-<h1>Sphere models<a class="headerlink" href="#sphere-models" title="Permalink to this heading">¶</a></h1>
-<p>This module may be employed to cluster source areas into distinct regions.</p>
+  <section id="utility-functions">
+<h1>Utility functions<a class="headerlink" href="#utility-functions" title="Permalink to this heading">¶</a></h1>
+<p>This module serves as a collection for methods not strictly limited to a singular application case.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.format_fiducials">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">format_fiducials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre_mri_ref_pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.format_fiducials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms an mne-fiducials object into an dictionary containing the fiducials.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pre_mri_ref_pts</strong> – The mne-fiducials object in question.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing the fiducial points.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.run_subprocess_in_custom_working_directory">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">run_subprocess_in_custom_working_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.run_subprocess_in_custom_working_directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a custom work directory to run a freesurfer command within.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subject_id</strong> – Name of the subject whose data is worked on.</p></li>
+<li><p><strong>cmd</strong> – The freesurfer command to be executed in the custom environment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.init_fs_paths">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">init_fs_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subjects_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.init_fs_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs some freesurfer initialization steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subjects_path</strong> – Path to the subject folder.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.fast_cross_product">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">fast_cross_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.fast_cross_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cross product between two vectors. Seemingly numpy has too much overhead here to be fast.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – The 1st vector in the cross product.</p></li>
+<li><p><strong>b</strong> – The 2nd vector in the cross product.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Crossproduct of vectors a x b.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.norm_vert">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">norm_vert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.norm_vert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes a vector. Seemingly numpy has too much overhead here to be fast.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vert</strong> – The to be normalized vector.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normalized vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.find_nearest_neighbor">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_nearest_neighbor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kdtree'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_nearest_neighbor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Employs two methods to find the nearest neighbors. In case a src_model a list of points is provided, a model is trained, otherwise, pretrained models are used if a (KDTree or BallTree objects) are provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_model</strong> – Either a list of data points or a kdtree/balltree object.</p></li>
+<li><p><strong>tgt_pt</strong> – The tgt_point to be queried.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The nearest neighbor of the respective point.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.find_valid_vertices">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_valid_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mri_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighborhood_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_valid_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matches freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mri_vert</strong> – Freesurfer based vertices (sphere).</p></li>
+<li><p><strong>vert</strong> (<em>model</em>) – Octahedron based vertices.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.magn_of_vec">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">magn_of_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.magn_of_vec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the magnitude of a vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> – The vector in question.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The magnitude of vec.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.apply_inv_transformation">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">apply_inv_transformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.apply_inv_transformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the inverse of trans to data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – The data to be transformed.</p></li>
+<li><p><strong>trans</strong> – The transformation matrix (4x4 matrix; rotation + translation only).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.calc_quat_angle">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_quat_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_quat_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the angle between two quaternions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – The 1st quaternion.</p></li>
+<li><p><strong>b</strong> – The 2nd quaternion.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The angle between a and b.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.orient_mat_to_block_format">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">orient_mat_to_block_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orient_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.orient_mat_to_block_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms an orientation matrix (rotation matrix) into (sparse) block format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>orient_mat</strong> – The orientation matrix in question.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The transformed orientation matrix.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.get_eigenbasis">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">get_eigenbasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_grp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.get_eigenbasis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates an orthonormal basis of eigenvector/values for each supporting/valid point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vortex_normals</strong> – Normals of the supporting vertices.</p></li>
+<li><p><strong>valid_vert</strong> – List of valid/supporting vertices.</p></li>
+<li><p><strong>cluster_grp</strong> – Clusters represented by a single vortex.</p></li>
+<li><p><strong>cluster_indices</strong> – Cluster indices.</p></li>
+<li><p><strong>mri_to_head_trans</strong> – Transformation from MRI to head coordinates.</p></li>
+<li><p><strong>double_precision</strong> – Numerical precision of the eigenvectors/values (default: 40 digits).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Orthonormal eigenbasis.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.calc_acc_hem_normals">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_acc_hem_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_acc_hem_normals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generatoes vertex normals from accumulated face normals. See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">https://en.wikipedia.org/wiki/Vertex_normal</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geom_white_vert</strong> – Array of vertices.</p></li>
+<li><p><strong>geom_white_faces</strong> – Array of faces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of surface normals for the input faces/vertices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.find_vertex_clusters">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_vertex_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_geom_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_vertex_clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies which input vertices (geom_white_vert) are presented by which valid vortex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geom_white_vert</strong> – To be clustered vertices.</p></li>
+<li><p><strong>valid_geom_vert</strong> – Binary list of valid vertices.</p></li>
+<li><p><strong>geom_white_faces</strong> – Corresponding faces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(cluster_grp, cluster_indices) - Information on clusters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.cortical_surface_reorient_fwd_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">cortical_surface_reorient_fwd_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_geom_white_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_geom_lh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_geom_white_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_geom_rh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.cortical_surface_reorient_fwd_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster; allowing for cortically constrained inverse modeling) and shrinks it by making closeby channels project to the same destination. This is different from a ‘default’ 3D transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lh_geom_white_vert</strong> – Lh vertices.</p></li>
+<li><p><strong>lh_geom_white_faces</strong> – Lh faces.</p></li>
+<li><p><strong>valid_geom_lh_vert</strong> – Valid/supporting lh vertices.</p></li>
+<li><p><strong>rh_geom_white_vert</strong> – Rh vertices.</p></li>
+<li><p><strong>rh_geom_white_faces</strong> – Rh faces.</p></li>
+<li><p><strong>valid_geom_rh_vert</strong> – Valid/supporting rh vertices.</p></li>
+<li><p><strong>fwd_sol</strong> – Previous forward solution.</p></li>
+<li><p><strong>mri_to_head_trans</strong> – MRI to head transformation matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Transformed surface model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.calc_mri_maps">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_mri_maps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisphere</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_mri_maps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the subject space points corresponding to fs avg space points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>subj_path</strong> – Path to subject freesurfer files.</p></li>
+<li><p><strong>fs_avg_path</strong> – Path fo fs average freesurfer files.</p></li>
+<li><p><strong>hemisphere</strong> – hemisphere to compute for.</p></li>
+<li><p><strong>overwrite</strong> – Flag whether to overwrite preexisting mri maps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.calc_small_to_default_vertices_proj">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_small_to_default_vertices_proj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_small_to_default_vertices_proj" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">get_mri_subj_to_fs_avg_trans_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valid_lh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_rh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a subject to fs average transformation matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>valid_lh_vert</strong> – Valid lh vertices (subject space).</p></li>
+<li><p><strong>valid_rh_vert</strong> – Valid rh vertices (subject space).</p></li>
+<li><p><strong>model_vert</strong> – Model vertices.</p></li>
+<li><p><strong>subj_path</strong> – Path to subject’s freesurfer files.</p></li>
+<li><p><strong>fs_avg_path</strong> – Path to fs average’s freesurfer files.</p></li>
+<li><p><strong>overwrite</strong> – Flag whether to overwrite MRI maps.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(trans_mat, valid_avg_lh_vert, valid_avg_rh_vert) - Transformation matrix, valid/supporting vertices for left &amp; right hemisphere</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">apply_mri_subj_to_fs_avg_trans_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trans_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms data from subject space to fs_average space</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trans_mat</strong> – Transformation from subject to fs average space.</p></li>
+<li><p><strong>data</strong> – Data in subject space.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Data in fs avg space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.calc_whitener">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_whitener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigen_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigen_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_whitener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate PCA based whitener from provided eigenvalues and eigenvectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eigen_val</strong> – Eigenvalues.</p></li>
+<li><p><strong>eigen_vec</strong> – Eigenvectors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whitener.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

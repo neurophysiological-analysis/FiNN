@@ -167,9 +167,50 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.source_region_model.apply_source_region_model">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     apply_source_region_model()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.source_region_model._read_freesurfer_annotation">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _read_freesurfer_annotation()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.source_region_model._get_sphere_faces">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _get_sphere_faces()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.source_region_model._get_mri_to_model_trans">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _get_mri_to_model_trans()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -192,6 +233,42 @@
   <section id="source-space-region-clustering">
 <h1>Source space region clustering<a class="headerlink" href="#source-space-region-clustering" title="Permalink to this heading">¶</a></h1>
 <p>This module may be employed to cluster source areas into distinct regions.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.source_region_model.apply_source_region_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">apply_source_region_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs_avg_src_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_fs_avg_valid_lh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_fs_avg_valid_rh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model.apply_source_region_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Averages activity from individual areas in source space to parcellation of the Desikan-Killiany cortical atlas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fs_avg_src_data</strong> – Data in fs average source space.</p></li>
+<li><p><strong>src_fs_avg_valid_lh_vert</strong> – List of left hemisphere valid/supporting vertices in fs average space.</p></li>
+<li><p><strong>src_fs_avg_valid_rh_vert</strong> – List of right hemisphere valid/supporting vertices in fs average space.</p></li>
+<li><p><strong>model_vert</strong> – Model vertices.</p></li>
+<li><p><strong>model</strong> – Model faces.</p></li>
+<li><p><strong>fs_avg_path</strong> – Path to fs average’s freesurfer  files.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(morphed_epoch_data, morphed_epoch_channels, morphed_region_names) - Data, src space vertices’ ids, and channel names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.source_region_model._read_freesurfer_annotation">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_read_freesurfer_annotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._read_freesurfer_annotation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.source_region_model._get_sphere_faces">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_get_sphere_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisphere</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._get_sphere_faces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.source_region_model._get_mri_to_model_trans">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_get_mri_to_model_trans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mri_neigh_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._get_mri_to_model_trans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </section>
 
 

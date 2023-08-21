@@ -167,9 +167,50 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sensor_covariance.get_sensor_covariance">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     get_sensor_covariance()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sensor_covariance._get_bio_channel_type_idx">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _get_bio_channel_type_idx()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sensor_covariance._empirically_estimate_cov">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _empirically_estimate_cov()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.sensor_covariance._calc_sensor_noise_cov">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _calc_sensor_noise_cov()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -192,6 +233,55 @@
   <section id="sensor-covariance">
 <h1>Sensor covariance<a class="headerlink" href="#sensor-covariance" title="Permalink to this heading">¶</a></h1>
 <p>This module may be employed to calculate the sensor covariance matrix.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sensor_covariance.get_sensor_covariance">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">get_sensor_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance.get_sensor_covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>#Determines eigenvectors/values from the sensor noise covariance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.</p></li>
+<li><p><strong>cov_path</strong> – Path to a the covariance file. If none exists, the covariance will be saved in this location.</p></li>
+<li><p><strong>method</strong> – Method to be employed, either “empirically”, “shrinkage”, or “factor_analysis” (default: shrinkage).</p></li>
+<li><p><strong>method_params</strong> – Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis (default: {“shrinkage” : 0.2,} - epoch size in s).</p></li>
+<li><p><strong>overwrite</strong> – Flag to overwrite covariance calculation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(cov, ch_names) - Covariance and channel names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._get_bio_channel_type_idx">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_get_bio_channel_type_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._get_bio_channel_type_idx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._empirically_estimate_cov">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_empirically_estimate_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._empirically_estimate_cov" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._calc_sensor_noise_cov">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_calc_sensor_noise_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_sz_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._calc_sensor_noise_cov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the sensor noise covariance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_file</strong> – The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.</p></li>
+<li><p><strong>method</strong> – Method to be employed, either “empirically”, “shrinkage”, or “factor_analysis”.</p></li>
+<li><p><strong>method_params</strong> – Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis.</p></li>
+<li><p><strong>epoch_sz_s</strong> – Epoch size for covariance calculation in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(cov, ch_names) - Covariance and channel names.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 

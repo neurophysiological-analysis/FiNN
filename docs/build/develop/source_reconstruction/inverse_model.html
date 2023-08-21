@@ -167,9 +167,41 @@
               
               <div class="toc-item">
                 
+<div class="tocsection onthispage pt-5 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
 
 <nav id="bd-toc-nav">
-    
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.inverse_model.calc_inverse_model">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     calc_inverse_model()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.inverse_model.apply_inverse_model">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     apply_inverse_model()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.inverse_model._get_meg_channel_type_idx">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _get_meg_channel_type_idx()
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
 </nav>
               </div>
               
@@ -192,6 +224,43 @@
   <section id="inverse-model">
 <h1>Inverse model<a class="headerlink" href="#inverse-model" title="Permalink to this heading">¶</a></h1>
 <p>This module inverts the forward model.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.inverse_model.calc_inverse_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.inverse_model.</span></span><span class="sig-name descname"><span class="pre">calc_inverse_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor_cov_eigen_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor_cov_eigen_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor_cov_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dSPM'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.inverse_model.calc_inverse_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.inverse_model.apply_inverse_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.inverse_model.</span></span><span class="sig-name descname"><span class="pre">apply_inverse_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inv_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.inverse_model.apply_inverse_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies an inverse model and noise normalization vector to sensor space data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sensor_data</strong> – Data in the sensor space.</p></li>
+<li><p><strong>inv_model</strong> – Inverse model.</p></li>
+<li><p><strong>noise_norm</strong> – Noise normalization vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Data is source space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.inverse_model._get_meg_channel_type_idx">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.inverse_model.</span></span><span class="sig-name descname"><span class="pre">_get_meg_channel_type_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.inverse_model._get_meg_channel_type_idx" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the channel names of the MEG channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rec_meta_info</strong> – MEG recording meta info.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Channel names.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
