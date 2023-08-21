@@ -117,7 +117,7 @@ def add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosma
     pc = np.empty((len(white_vertices) * 3, len(meg_ch_infos)))
     for (vortex_idx, vortex) in enumerate(white_vertices):
         #Calculates the magnetic field at a vortex from all MEG sensors.
-        pp = finnpy.source_reconstruction.bem_model.calc_bem_fields(vortex, rmags, cosmags)
+        pp = finnpy.source_reconstruction.bem_model._calc_bem_fields(vortex, rmags, cosmags)
         pp *= ws # Adds MEG coil weight
         pp = pp.squeeze(0)
         

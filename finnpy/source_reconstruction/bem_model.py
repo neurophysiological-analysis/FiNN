@@ -69,7 +69,7 @@ def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
     :param subject_path: Subject's freesurfer path.
     """
     
-    (t1_data_trans, ras_to_mri) = load_and_orient_t1(subject_path)
+    (t1_data_trans, ras_to_mri) = _load_and_orient_t1(subject_path)
     mri_to_ras = np.linalg.inv(ras_to_mri)
     
     ws_in_skull_vert_trans = np.dot(ws_in_skull_vert, mri_to_ras[:3, :3].transpose()); ws_in_skull_vert_trans += mri_to_ras[:3, 3]
@@ -86,10 +86,10 @@ def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
         surfaces = [["inner_skull", "#FF0000", ws_in_skull_vert_trans, ws_in_skull_faces],]
     
     (_, axes) = plt.subplots(3, 4, gridspec_kw = {'wspace':0.025, 'hspace':0.025})
-    plot_skull_and_skin_subplots(t1_data_trans, axes, surfaces)
+    _plot_skull_and_skin_subplots(t1_data_trans, axes, surfaces)
     plt.show(block = True)
 
-def load_and_orient_t1(subject_path):
+def _load_and_orient_t1(subject_path):
     """
     Loads and orients an MRI scan.
     
@@ -110,7 +110,7 @@ def load_and_orient_t1(subject_path):
     
     return (t1_image_trans.get_fdata(), ras_to_mri)
 
-def plot_skull_and_skin_subplots(data, axes, surfaces):
+def _plot_skull_and_skin_subplots(data, axes, surfaces):
     """
     Adds splices from the MRI scan onto the plot.
     
@@ -174,8 +174,8 @@ def calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahe
     double_faces_area = finnpy.source_reconstruction.utils.magn_of_vec(faces_normal)
     n_faces_normal = np.linalg.norm(faces_normal, axis = 1)
     faces_normal[n_faces_normal > 0] = faces_normal[n_faces_normal > 0] / np.expand_dims(n_faces_normal[n_faces_normal > 0], axis = 1)
-    omega = find_non_diag_omega(ws_in_skull_faces, trans_ws_in_skill_vert, double_faces_area, faces_normal)
-    omega = find_diag_omega(omega, ws_in_skull_faces)
+    omega = _find_non_diag_omega(ws_in_skull_faces, trans_ws_in_skill_vert, double_faces_area, faces_normal)
+    omega = _find_diag_omega(omega, ws_in_skull_faces)
     
     #The matrix "bem_solution" contains all linear basis functions
     #A "deflation" factor is added to replace the "zero" eigenvalue within to ensure invertability
@@ -187,7 +187,7 @@ def calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahe
     
     return (trans_ws_in_skill_vert, ws_in_skull_faces, double_faces_area/2, faces_normal, bem_solution)
 
-def find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
+def _find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
     """
     Calculates the non-diagonal elements of omega, see function calc_bem_model.
     
@@ -250,7 +250,7 @@ def find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
     
     return omega
 
-def find_diag_omega(omega, faces):
+def _find_diag_omega(omega, faces):
     """
     Calculates the diagonal elements of omega as these cannot be calculated as the non-diagonal ones due to the auto solid angle problem.
     
@@ -275,7 +275,7 @@ def find_diag_omega(omega, faces):
     
     return omega
 
-def calc_bem_fields(vortex, rmags, cosmags):
+def _calc_bem_fields(vortex, rmags, cosmags):
     """
     Calculates the magnetic field at a vortex from all MEG sensors.
     
