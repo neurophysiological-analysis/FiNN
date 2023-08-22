@@ -361,7 +361,8 @@ def calc_coreg(subj_name : str, subj_path, rec_meta_info, registration_scale_typ
     """
     Coregisters MRI data (src) to MEG data (tgt).
     
-    :param subj_name: Name of the subject.
+    :param subj_name: string
+    Name of the subject.
     :param subj_path: Path to the subject's freesurfer folder.
     :param rec_meta_info: MEG scan meta info.
     :param registration_scale_type: Can be either "free" or "restricted". If free, the initial registration may be scaled with a uniform factor, no scaling with restricted.
