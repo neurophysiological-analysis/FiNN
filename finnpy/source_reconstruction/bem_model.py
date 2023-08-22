@@ -38,7 +38,8 @@ def calc_skull_and_skin_models(subject_path, subject_id, preflood_height = 25, o
 
 def read_skull_and_skin_models(subject_path, subj_name):
     """
-    Reads skull and skin models extracted via freesurfer's watershed algorithm.
+    Reads skull and skin models extracted
+    via freesurfer's watershed algorithm.
     
     :param subject_path: Subject's freesurfer path.
     :param subj_name: Subject name.

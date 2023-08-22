@@ -27,6 +27,7 @@ Statistics
 
 .. toctree::
    :hidden:
+   
    guides/dac_configurator
 
 
