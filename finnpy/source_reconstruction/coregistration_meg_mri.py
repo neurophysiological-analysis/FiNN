@@ -356,7 +356,7 @@ def _get_ref_ptn_cnt(meg_pts):
             hsp_cnt = len(meg_pts["hsp"])
     return (ptn_cnt, hsp_cnt)
     
-def calc_coreg(subj_name, subj_path, rec_meta_info, registration_scale_type = "restricted",
+def calc_coreg(subj_name : str, subj_path, rec_meta_info, registration_scale_type = "restricted",
         max_number_of_iterations = 500):
     """
     Coregisters MRI data (src) to MEG data (tgt).
