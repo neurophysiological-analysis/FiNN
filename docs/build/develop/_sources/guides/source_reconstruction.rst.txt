@@ -1,5 +1,5 @@
 
-.. _source_reconstruction_label:
+.. _source_reconstruction:
 
 Source reconstruction
 =====================

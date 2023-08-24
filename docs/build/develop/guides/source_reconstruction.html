@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Inverse model &#8212; FiNNPy 1.2.0 documentation</title>
+    <title>Source reconstruction &#8212; FiNNPy 1.2.0 documentation</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -36,8 +36,8 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="MRI anatomy extraction" href="mri_anatomy.html" />
-    <link rel="prev" title="Forward model" href="forward_model.html" />
+    <link rel="next" title="FiNNPy API" href="../api_reference.html" />
+    <link rel="prev" title="DAC configurator" href="dac_configurator.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en">
     
@@ -78,13 +78,13 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
+<li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../guides.html">
   Guides
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../api_reference.html">
   API reference
  </a>
@@ -125,15 +125,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="../guides.html">Guides</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
@@ -141,7 +141,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../source_reconstruction.html">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../source_reconstruction.html">Source reconstruction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
 </ul>
@@ -150,7 +150,7 @@
 
 <h3>Branches</h3>
 <ul>
-  <li><a href="inverse_model.html">develop</a></li>
+  <li><a href="source_reconstruction.html">develop</a></li>
   <li><a href="../../stable/index.html">stable</a></li>
 </ul>
 
@@ -175,30 +175,23 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.inverse_model.calc_inverse_model">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_inverse_model()
-    </span>
-   </code>
+  <a class="reference internal nav-link" href="#skull-model-processing">
+   Skull model processing
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.inverse_model.apply_inverse_model">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     apply_inverse_model()
-    </span>
-   </code>
+  <a class="reference internal nav-link" href="#cortical-model-processing">
+   Cortical model processing
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.inverse_model._get_meg_channel_type_idx">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     _get_meg_channel_type_idx()
-    </span>
-   </code>
+  <a class="reference internal nav-link" href="#model-fusion">
+   Model fusion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#model-application">
+   Model application
   </a>
  </li>
 </ul>
@@ -222,67 +215,22 @@
               
               <div>
                 
-  <section id="inverse-model">
-<h1>Inverse model<a class="headerlink" href="#inverse-model" title="Permalink to this heading">¶</a></h1>
-<p>This module inverts the forward model.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.inverse_model.calc_inverse_model">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.inverse_model.</span></span><span class="sig-name descname"><span class="pre">calc_inverse_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor_cov_eigen_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor_cov_eigen_vec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensor_cov_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dSPM'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.inverse_model.calc_inverse_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts a forward model into an inverse model.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sensor_cov_eigen_val</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>ch_cnt</em><em>,</em><em>)</em>) – Eigenvalues of the sensor noise covariance (eigenvector matrix).</p></li>
-<li><p><strong>sensor_cov_eigen_vec</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>ch_cnt</em><em>, </em><em>ch_cnt</em><em>)</em>) – Sensor noise covariance.</p></li>
-<li><p><strong>sensor_cov_names</strong> (<em>list</em><em>, </em><em>len</em><em>(</em><em>ch_cnt</em><em>,</em><em>)</em><em>, </em><em>string</em>) – Names of the channels in the sensor covariance matrix.</p></li>
-<li><p><strong>fwd_sol</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>valid_vtx_cnt</em><em>)</em>) – Forward model.</p></li>
-<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta information, obtainable through mne.io.read_info.</p></li>
-<li><p><strong>method</strong> (<em>string</em>) – Method used to calculate the noise normalization vector,
-defaults to “dSPM”.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>inv_trans</strong> (<em>numpy.ndarray, shape(valid_vtx_cnt, meg_ch_cnt)</em>) – Inverse model.</p></li>
-<li><p><strong>noise_norm</strong> (<em>numpy.ndarray, shape(valid_vtx_cnt,)</em>) – Noise normalization vector.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.inverse_model.apply_inverse_model">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.inverse_model.</span></span><span class="sig-name descname"><span class="pre">apply_inverse_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inv_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_norm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.inverse_model.apply_inverse_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies an inverse model and noise normalization vector to sensor space data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>sensor_data</strong> (<em>TYPE</em><em>, </em><em>shape</em><em>(</em><em>TEXT</em><em>)</em>) – TEXT</p></li>
-<li><p><strong>inv_model</strong> (<em>TYPE</em><em>, </em><em>shape</em><em>(</em><em>TEXT</em><em>)</em>) – TEXT</p></li>
-<li><p><strong>noise_norm</strong> (<em>TYPE</em><em>, </em><em>shape</em><em>(</em><em>TEXT</em><em>)</em>) – TEXT</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>source_data</strong> (<em>TYPE, shape(TEXT)</em>) – TEXT</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.inverse_model._get_meg_channel_type_idx">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.inverse_model.</span></span><span class="sig-name descname"><span class="pre">_get_meg_channel_type_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.inverse_model._get_meg_channel_type_idx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the channel names of the MEG channels.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta information, obtainable through mne.io.read_info.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>sensor_cov_names</strong> (<em>list, len(ch_cnt,), string</em>) – Names of the channels.</p>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="source-reconstruction">
+<span id="id1"></span><h1>Source reconstruction<a class="headerlink" href="#source-reconstruction" title="Permalink to this heading">¶</a></h1>
+<p>This guide explains how to apply source reconstruction for MEG using FiNNPy.</p>
+<a class="reference internal image-reference" href="images/MEG_source_reconstruction_simplified.png"><img alt="alternate text" class="align-right" src="images/MEG_source_reconstruction_simplified.png" style="width: 100.0px; height: 50.0px;" /></a>
+<section id="skull-model-processing">
+<h2>Skull model processing<a class="headerlink" href="#skull-model-processing" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="cortical-model-processing">
+<h2>Cortical model processing<a class="headerlink" href="#cortical-model-processing" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="model-fusion">
+<h2>Model fusion<a class="headerlink" href="#model-fusion" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="model-application">
+<h2>Model application<a class="headerlink" href="#model-application" title="Permalink to this heading">¶</a></h2>
+</section>
 </section>
 
 
@@ -291,17 +239,17 @@ defaults to “dSPM”.</p></li>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="forward_model.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="dac_configurator.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Forward model</p>
+            <p class="prev-next-title">DAC configurator</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="mri_anatomy.html" title="next page">
+    <a class='right-next' id="next-link" href="../api_reference.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">MRI anatomy extraction</p>
+        <p class="prev-next-title">FiNNPy API</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
