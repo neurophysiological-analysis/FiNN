@@ -32,6 +32,7 @@ An application example of source reconstruction for MEG is provided below.
 
 
 .. code-block::
+
        rec_meta_info = mne.io.read_info(data_path)
        
        print("Setting up freesurfer paths")
