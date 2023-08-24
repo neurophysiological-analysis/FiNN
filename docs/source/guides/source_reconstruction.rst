@@ -31,8 +31,12 @@ Model application
 Model application is outlined in the code below.
 
 
-Common fallpits
----------------
+.. code-block::
+
+       TEST
+
+Common errors
+-------------
 
 MEG and MRI coregistration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

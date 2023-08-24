@@ -180,19 +180,41 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cortical-model-processing">
-   Cortical model processing
+  <a class="reference internal nav-link" href="#cortex-model-processing">
+   Cortex model processing
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#model-fusion">
-   Model fusion
+  <a class="reference internal nav-link" href="#skull-and-cortex-model-fusion">
+   Skull and cortex model fusion
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#model-application">
    Model application
   </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#common-fallpits">
+   Common fallpits
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#meg-and-mri-coregistration">
+     MEG and MRI coregistration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensor-noise-covariance">
+     Sensor noise covariance
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#improper-skull-model">
+     Improper skull model
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -221,15 +243,34 @@
 <a class="reference internal image-reference" href="images/MEG_source_reconstruction_simplified.png"><img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_simplified.png" /></a>
 <section id="skull-model-processing">
 <h2>Skull model processing<a class="headerlink" href="#skull-model-processing" title="Permalink to this heading">¶</a></h2>
+<p>The skull model is a geometrical description of the skull surface. For MEG analyses, a single layer model suffices (option for EEG source reconstruction to be added soon). The skull model is derived from T1 scans and extracted using the watershed algorithm of FreeSurfer. Its density is reduced to increase computeability and mathematical stability. Herein, it is employed to project MEG data from sensor space onto the skull surface.</p>
 </section>
-<section id="cortical-model-processing">
-<h2>Cortical model processing<a class="headerlink" href="#cortical-model-processing" title="Permalink to this heading">¶</a></h2>
+<section id="cortex-model-processing">
+<h2>Cortex model processing<a class="headerlink" href="#cortex-model-processing" title="Permalink to this heading">¶</a></h2>
+<p>The cortical model is a geometric description of the cortical structure. The cortical model may be directly extracted (using FreeSurfer) from T1 scans. Akin to the skull model, its density is reduced to increase computeability and mathematical stability. Herein, it will be employed to MEG activity from the skull surface onto the cortex proper.</p>
 </section>
-<section id="model-fusion">
-<h2>Model fusion<a class="headerlink" href="#model-fusion" title="Permalink to this heading">¶</a></h2>
+<section id="skull-and-cortex-model-fusion">
+<h2>Skull and cortex model fusion<a class="headerlink" href="#skull-and-cortex-model-fusion" title="Permalink to this heading">¶</a></h2>
+<p>Skull and cortical models are fused to create the forward model. While the skull model describes the transition from sensor space to skull space, the cortex model may be employed to transition further into cortical space.</p>
 </section>
 <section id="model-application">
 <h2>Model application<a class="headerlink" href="#model-application" title="Permalink to this heading">¶</a></h2>
+<p>Model application is outlined in the code below.</p>
+</section>
+<section id="common-fallpits">
+<h2>Common fallpits<a class="headerlink" href="#common-fallpits" title="Permalink to this heading">¶</a></h2>
+<section id="meg-and-mri-coregistration">
+<h3>MEG and MRI coregistration<a class="headerlink" href="#meg-and-mri-coregistration" title="Permalink to this heading">¶</a></h3>
+<p>The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified</p>
+</section>
+<section id="sensor-noise-covariance">
+<h3>Sensor noise covariance<a class="headerlink" href="#sensor-noise-covariance" title="Permalink to this heading">¶</a></h3>
+<p>The sensor noise covariance is faulty. This may be investigated by adding a power spike to a sensor-space channel and investigate where it is projected.</p>
+</section>
+<section id="improper-skull-model">
+<h3>Improper skull model<a class="headerlink" href="#improper-skull-model" title="Permalink to this heading">¶</a></h3>
+<p>The skull model was improperly extracted. This step must be manually verified</p>
+</section>
 </section>
 </section>
 
