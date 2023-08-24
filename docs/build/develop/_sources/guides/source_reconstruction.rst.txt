@@ -32,13 +32,60 @@ An application example of source reconstruction for MEG is provided below.
 
 
 .. code-block::
-
-		 print("Setting up freesurfer paths")
-       finnpy.source_reconstruction.utils.init_fs_paths(loc_fs_path)
-       TEST
-       TEST
-       TEST
-       TEST
+    rec_meta_info = mne.io.read_info(data_path)
+    
+    print("Setting up freesurfer paths")
+    finnpy.source_reconstruction.utils.init_fs_paths(loc_fs_path)
+        
+    print("Calibrating anatomy")
+    coreg_rotors = calibrate_anatomy(loc_fs_path, fs_subj_path, subj_name + rec_folder, rec_meta_info, visualize_coregistration)
+    rigid_mri_to_meg_trans = finnpy.source_reconstruction.coregistration_meg_mri.get_rigid_transform(coreg_rotors)
+    rigid_meg_to_mri_trans = scipy.linalg.inv(rigid_mri_to_meg_trans)
+       
+    print("Getting skull and skin models")
+    (in_skull_vert, in_skull_faces,
+     out_skull_vert, out_skull_faces,
+     out_skin_vect, out_skin_faces) = get_skin_skull_model(fs_subj_path, subj_name + rec_folder, visualize_skull_skin_plots)
+    del out_skull_vert; del out_skull_faces; del out_skin_vect; del out_skin_faces
+     
+    print("Setting up source model")
+    (lh_white_vert, lh_white_faces,
+     rh_white_vert, rh_white_faces,
+     lh_white_valid_vert, rh_white_valid_vert,
+     octa_model_vert, octa_model_faces) = finnpy.source_reconstruction.source_mesh_model.create_source_mesh_model(fs_subj_path)
+       
+    print("Calculating BEM model")
+    (in_skull_reduced_vert, in_skull_faces, 
+     in_skull_faces_area, in_skull_faces_normal, 
+     bem_solution) = finnpy.source_reconstruction.bem_model.calc_bem_model_linear_basis(in_skull_vert, in_skull_faces)
+    
+    print("Calculate forward solution")
+    (fwd_sol,
+     lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.forward_model.calc_forward_model(lh_white_vert, rh_white_vert,
+                                                                                                               rigid_meg_to_mri_trans, rigid_mri_to_meg_trans, rec_meta_info,
+                                                                                                               in_skull_reduced_vert, in_skull_faces,
+                                                                                                               in_skull_faces_normal, in_skull_faces_area, bem_solution,
+                                                                                                              lh_white_valid_vert, rh_white_valid_vert)
+    
+    print("Optimize forward model orientation")
+    reset_fwd_sol = finnpy.source_reconstruction.forward_model.optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
+                                                                                  rh_white_vert, rh_white_faces, rh_white_valid_vert,
+                                                                                  fwd_sol, rigid_mri_to_meg_trans)
+       
+    print("Calculate sensor covariance")
+    (sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names) = finnpy.source_reconstruction.sensor_covariance.get_sensor_covariance(file_path = SENSOR_COV_PATH,
+                                                                                                                                           cov_path = loc_fs_path + "cov_data/",
+                                                                                                                                           overwrite = overwrite_sensor_cov)
+    
+    print("Calculate inverse model")
+    (inv_trans, noise_norm) = finnpy.source_reconstruction.inverse_model.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names,
+                                                                                            reset_fwd_sol, rec_meta_info)
+    
+    print("Calculate transformation to fs-average")
+    (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert,
+                                                                                                                                                 octa_model_vert,
+                                                                                                                                                 fs_subj_path, loc_fs_path + "fsaverage/",
+                                                                                                                                                 overwrite = overwrite_mri_trans)
 
 Common errors
 -------------
