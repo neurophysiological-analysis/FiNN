@@ -25,15 +25,16 @@ Skull and cortex model fusion
 -----------------------------
 Skull and cortical models are fused to create the forward model. While the skull model describes the transition from sensor space to skull space, the cortex model may be employed to transition further into cortical space.
 
-Model application
------------------
+Application
+-----------
 
-Model application is outlined in the code below.
+An application example of source reconstruction for MEG is provided below.
 
 
 .. code-block::
 
-       TEST
+		 print("Setting up freesurfer paths")
+       finnpy.source_reconstruction.utils.init_fs_paths(loc_fs_path)
        TEST
        TEST
        TEST

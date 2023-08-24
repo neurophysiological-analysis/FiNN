@@ -190,8 +190,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#model-application">
-   Model application
+  <a class="reference internal nav-link" href="#application">
+   Application
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -253,10 +253,11 @@
 <h2>Skull and cortex model fusion<a class="headerlink" href="#skull-and-cortex-model-fusion" title="Permalink to this heading">¶</a></h2>
 <p>Skull and cortical models are fused to create the forward model. While the skull model describes the transition from sensor space to skull space, the cortex model may be employed to transition further into cortical space.</p>
 </section>
-<section id="model-application">
-<h2>Model application<a class="headerlink" href="#model-application" title="Permalink to this heading">¶</a></h2>
-<p>Model application is outlined in the code below.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TEST</span>
+<section id="application">
+<h2>Application<a class="headerlink" href="#application" title="Permalink to this heading">¶</a></h2>
+<p>An application example of source reconstruction for MEG is provided below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>          <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting up freesurfer paths&quot;</span><span class="p">)</span>
+<span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">loc_fs_path</span><span class="p">)</span>
 <span class="n">TEST</span>
 <span class="n">TEST</span>
 <span class="n">TEST</span>
