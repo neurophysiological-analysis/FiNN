@@ -123,17 +123,17 @@ def apply_inverse_model(sensor_data, inv_model, noise_norm):
     
     Parameters
     ----------
-    sensor_data : TYPE, shape(TEXT)
-                     TEXT
-    inv_model : TYPE, shape(TEXT)
-                     TEXT
-    noise_norm : TYPE, shape(TEXT)
-                     TEXT
+    sensor_data : numpy.ndarray, shape(sensor_ch_cnt, samp_cnt)
+                  Sensor space data
+    inv_model : numpy.ndarray, shape(source_ch_cnt, sensor_ch_cnt)
+                Inverse model
+    noise_norm : numpy.ndarray, shape(source_ch_cnt,)
+                 Noise normalization vector.
                
     Returns
     -------
-    source_data : TYPE, shape(TEXT)
-                     TEXT
+    source_data : numpy.ndarray, shape(source_ch_cnt, samp_cnt)
+                  Source space data.
     """
     source_data = np.dot(inv_model, sensor_data)
     source_data *= np.expand_dims(noise_norm, axis = 1)

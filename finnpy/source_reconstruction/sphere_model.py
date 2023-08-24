@@ -11,6 +11,26 @@ import scipy.spatial
 import finnpy.source_reconstruction.utils
 
 def _tessellate_sphere(vert, faces, level):
+    """    
+    Inflates the sphere.
+    
+    Parameters
+    ----------
+    vert : numpy.ndarray, shape(initial_vtx_cnt, 3)
+           Vertices of the sphere seed.
+    faces : numpy.ndarray, shape(initial_face_cnt, 3)
+            Faces of the sphere seed.
+    level : int
+            Target level of the sphere model.
+               
+    Returns
+    -------
+    vert : numpy.ndarray, shape(inflated_vtx_cnt, 3)
+           Inflated vertices of the sphere.
+    faces : numpy.ndarray, shape(inflated_face_cnt, 3)
+            Inflated faces of the sphere.
+    """
+
     new_vert = [None, None, None]
     new_vert_len = [None, None, None]
     new_faces = [None, None, None, None]
@@ -38,16 +58,45 @@ def _tessellate_sphere(vert, faces, level):
     return (vert, faces)
 
 def calculate_sphere_from_octahedron(level):
+    """    
+    Inflates the sphere.
+    
+    Parameters
+    ----------
+    level : int
+            Target level of the sphere model.
+               
+    Returns
+    -------
+    vert : numpy.ndarray, shape(inflated_vtx_cnt, 3)
+           Vertices of the sphere.
+    faces : numpy.ndarray, shape(inflated_face_cnt, 3)
+            Faces of the sphere.
+    """
     vert = np.asarray([[1., 0., 0.],[0., 1., 0.], [0., 0., 1.], [-1., 0., 0.], [0., -1., 0.], [0., 0., -1.]], dtype = float)
     faces = np.asarray([[0, 1, 2], [0, 1, 5], [0, 4, 2], [0, 4, 5], [3, 1, 2], [3, 1, 5], [3, 4, 2], [3, 4, 5]], dtype = int)
-    
-    #faces = faces[:, ::-1] #Triangle point order is reversed whyever??
-    
+        
     (vert, faces) = _tessellate_sphere(vert, faces, level)
     
     return (vert, faces)
 
 def read_sphere_from_icosahedron_in_fs_order(level):
+    """
+    Reads an icosahedron from freesurfer.
+    
+    Parameters
+    ----------
+    level : int
+            Level of the icosahedron
+               
+    Returns
+    -------
+    vert : numpy.ndarray, shape(model_vtx_cnt, 3)
+           Vertices of the icosahedron.
+    faces : numpy.ndarray, shape(model_face_cnt, 3)
+            Faces of the icosahedron.
+    """
+    
     file = open(os.environ["FREESURFER_HOME"] + "lib/bem/ic" + str(level) + ".tri", "r")
     
     vert_cnt = int(file.readline().replace("\n", ""))
@@ -73,6 +122,21 @@ def read_sphere_from_icosahedron_in_fs_order(level):
     return (vert, faces)
 
 def calculate_sphere_from_icosahedron(level):
+    """
+    Calculates an icosahedron from a specific seed.
+    
+    Parameters
+    ----------
+    level : int
+            Level of the icosahedron
+               
+    Returns
+    -------
+    vert : numpy.ndarray, shape(model_vtx_cnt, 3)
+           Vertices of the icosahedron.
+    faces : numpy.ndarray, shape(model_face_cnt, 3)
+            Faces of the icosahedron.
+    """
     vert = np.asarray([[.0000, .0000, 1.0000], [.8944, .0000, .4472], [.2764, .8507, .4472], [-.7236, .5257, .4472],
                        [-.7236, -.5257, .4472], [.2764, -.8507, .4472], [.7236, -.5257, -.4472], [.7236, .5257, -.4472],
                        [-.2764, .8507, -.4472], [-.8944, .0000, -.4472], [-.2764, -.8507, -.4472], [.0000, .0000, -1.0000]], dtype = float)
@@ -88,6 +152,25 @@ def calculate_sphere_from_icosahedron(level):
     return (vert, faces)
 
 def prune_closeby_vert(vert, faces, threshold = 1e-6):
+    """
+    Prunes below threshold vertices from the model.
+    
+    Parameters
+    ----------
+    vert : numpy.ndarray, shape(model_vtx_cnt, 3)
+           Vertices of the icosahedron.
+    faces : numpy.ndarray, shape(model_face_cnt, 3)
+            Faces of the icosahedron.
+    level : float
+            Distance threshold.
+               
+    Returns
+    -------
+    vert : numpy.ndarray, shape(pruned_vtx_cnt, 3)
+           Vertices of the icosahedron.
+    faces : numpy.ndarray, shape(pruned_face_cnt, 3)
+            Faces of the icosahedron.
+    """
     distances = scipy.spatial.distance_matrix(vert, vert, p = 2)
     distances = distances < threshold
     np.fill_diagonal(distances, False)

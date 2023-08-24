@@ -134,10 +134,10 @@ def fast_cross_product(a, b):
     
     Parameters
     ----------
-    NAME : numpy.ndarray, shape(n,)
-           The 1st vector in the cross product.
-    NAME : numpy.ndarray(n,)
-           The 2nd vector in the cross product.
+    a : numpy.ndarray, shape(n,)
+        The 1st vector in the cross product.
+    b : numpy.ndarray(n,)
+        The 2nd vector in the cross product.
                
     Returns
     -------
@@ -222,8 +222,8 @@ def find_valid_vertices(vertices_a, vertices_b, max_neighborhood_size = 5):
                
     Returns
     -------
-    NAME : numpy.ndarray, shape(m,)
-           Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).
+    vert_valid : numpy.ndarray, shape(m,)
+                 Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).
     """    
     (nearest, nearest_tree) = find_nearest_neighbor(vertices_a, vertices_b)
     vert_valid = np.zeros((vertices_a.shape[0]))
@@ -757,7 +757,7 @@ def get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert,
                           Valid lh vertices (subject space).
     rh_white_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
                           Valid rh vertices (subject space).
-    model_vert : numpy.ndarray, shape(DEBUG)
+    model_vert : numpy.ndarray, shape(model_vtx_cnt, 3)
                  Model vertices.
     subj_path : string
                 Path to subject's freesurfer files.
@@ -802,10 +802,17 @@ def apply_mri_subj_to_fs_avg_trans_mat(trans_mat, data):
     """
     Transforms data from subject space to fs_average space
     
-    :param trans_mat: Transformation from subject to fs average space.
-    :param data: Data in subject space.
-    
-    :return: Data in fs avg space. 
+    Parameters
+    ----------
+    trans_mat : scipy.sparse.csr_matrix, shape(source_space_ch_cnt, source_space_ch_cnt)
+                Subject to fs-average transformation matrix.
+    data : numpy.ndarray, shape(source_space_ch_cnt, samp_cnt)
+           Source space (subject) data.
+               
+    Returns
+    -------
+    transformed_data : numpy.ndarray, shape(source_space_ch_cnt, samp_cnt)
+                       Source space (fs-average) data.
     """
     return trans_mat * data
 

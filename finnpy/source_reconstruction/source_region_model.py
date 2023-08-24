@@ -11,6 +11,19 @@ import finnpy.source_reconstruction.utils
 import warnings
 
 def _read_freesurfer_annotation(path):
+    """
+    Averages source space regions to areas defined by the Desikan-Killiany atlas.
+    
+    Parameters
+    ----------
+    path : string
+           Path to the annotation file.
+               
+    Returns
+    -------
+    regions : dict, {regions : [vtx_ids]}
+              Dictionary of regions containing vortex ids.
+    """
     (annot, _, labels) = nibabel.freesurfer.read_annot(path)
     np.where(annot == 1)
     regions = dict()
@@ -20,37 +33,87 @@ def _read_freesurfer_annotation(path):
     
     return regions
 
-def _get_sphere_faces(fs_avg_path, hemisphere, model_vert, model_faces):
+def _get_sphere_faces(fs_avg_path, hemisphere, octa_model_vert, octa_model_faces):
+    """
+    Mimics the original downscaling as this is later needed for region averaging, 
+    yet, this time in reference to fs-average instead of subject specific.
+    
+    Parameters
+    ----------
+    fs_avg_path : string
+                  Path to fs average's freesurfer  files.
+    hemisphere : string
+                 hemisphere to be operated on.
+    octa_model_vert : numpy.ndarray, shape(octa_vtx_cnt, 3)
+                      Octahedron model vertices.
+    octa_model_faces : numpy.ndarray, shape(octa_face_cnt, 3)
+                       Octahedron model faces.
+               
+    Returns
+    -------
+    neigh_faces : numpy.ndarray, shape(octa_face_cnt, 3)
+                  Faces most closeby to model faces.
+    """
     (fs_avg_surf_sph_vert, _) = nibabel.freesurfer.read_geometry(fs_avg_path + "surf/" + hemisphere + ".sphere")
-    neigh_indices = finnpy.source_reconstruction.utils.find_nearest_neighbor(fs_avg_surf_sph_vert/100, model_vert)[0]
-    neigh_faces = [neigh_indices[face] for face in model_faces]; neigh_faces = np.asarray(neigh_faces, dtype = int)
+    neigh_indices = finnpy.source_reconstruction.utils.find_nearest_neighbor(fs_avg_surf_sph_vert/100, octa_model_vert)[0]
+    neigh_faces = [neigh_indices[face] for face in octa_model_faces]; neigh_faces = np.asarray(neigh_faces, dtype = int)
 
     return neigh_faces
 
 def _get_mri_to_model_trans(mri_neigh_faces):
+    """
+    Limits MRI vertices by employing the reduced face list to reduce vortex count. 
+    
+    Parameters
+    ----------
+    mri_neigh_faces : numpy.ndarray, shape(face_cnt, 3)
+                      Faces most closeby to model faces.
+               
+    Returns
+    -------
+    mri_to_model_trans : numpy.ndarray, shape(vtx_cnt, )
+                         Region names.
+    """
     reshaped_mri_neigh_faces = mri_neigh_faces.reshape(-1)
     (_, unique_reshaped_mri_neigh_face_indices) = np.unique(reshaped_mri_neigh_faces, return_index = True)
-    mri_to_model_trans = np.ones((np.max(reshaped_mri_neigh_faces) + 1)) * np.nan
+    mri_to_model_trans = np.ones((np.max(reshaped_mri_neigh_faces) + 1)) * np.nan #Theoretically the size of this is vtx_cnt, however, the highest id of all valid vertices suffices.
     for (idx, value) in enumerate(unique_reshaped_mri_neigh_face_indices):
-        mri_to_model_trans[reshaped_mri_neigh_faces[value]] = idx        
+        mri_to_model_trans[reshaped_mri_neigh_faces[value]] = idx
+    mri_to_model_trans = np.nan_to_num(mri_to_model_trans, nan = -1)
     mri_to_model_trans = np.asarray(mri_to_model_trans, dtype = int)
+    mri_to_model_trans[np.argwhere(mri_to_model_trans == -1).squeeze(1)] = np.iinfo(int).min #There is no nan for integer typed arrays, however "-int max" should raise an error in every conceivable situation.
     
     return mri_to_model_trans
 
-def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert,
-                              model_vert, model_faces, fs_avg_path):
-    
+def apply_source_region_model(src_data, lh_white_valid_vert, rh_white_valid_vert,
+                              octa_model_vert, octa_model_faces, fs_avg_path):
     """
-    Averages activity from individual areas in source space to parcellation of the Desikan-Killiany cortical atlas.
+    Averages source space regions to areas defined by the Desikan-Killiany atlas.
     
-    :param fs_avg_src_data: Data in fs average source space.
-    :param src_fs_avg_valid_lh_vert: List of left hemisphere valid/supporting vertices in fs average space.
-    :param src_fs_avg_valid_rh_vert: List of right hemisphere valid/supporting vertices in fs average space.
-    :param model_vert: Model vertices.
-    :param model: Model faces.
-    :param fs_avg_path: Path to fs average's freesurfer  files.
-    
-    :return: (morphed_epoch_data, morphed_epoch_channels, morphed_region_names) - Data, src space vertices' ids, and channel names.
+    Parameters
+    ----------
+    src_data : numpy.ndarray, shape(sensor_ch_cnt, samp_cnt)
+               Source space data.
+    lh_white_valid_vert : numpy.ndarray, shape(sensor_ch_cnt, samp_cnt)
+                          Binary list of valid/supporting lh vertices.
+    rh_white_valid_vert : numpy.ndarray, shape(sensor_ch_cnt, samp_cnt)
+                          Binary list of valid/supporting rh vertices.
+    octa_model_vert : numpy.ndarray, shape(octa_vtx_cnt, 3)
+                      Octahedron model vertices.
+    octa_model_faces : numpy.ndarray, shape(octa_face_cnt, 3)
+                       Octahedron model faces.
+    fs_avg_path : numpy.ndarray, shape(source_ch_cnt,)
+                  Path to fs average's freesurfer  files.
+               
+    Returns
+    -------
+    morphed_epoch_data : numpy.ndarray, shape(src_region_cnt, epoch_cnt, samples)
+                         Average source space data.
+    morphed_epoch_channels : list of lists, len(source_ch_cnt,)
+                             List of channel ids, clustered by source space region.
+                             Identifies which channel supports which region.
+    morphed_region_names : list, len(source_ch_cnt,)
+                           Region names.
     """
     
     morphed_epoch_data = list()
@@ -58,11 +121,11 @@ def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_
     morphed_region_names = list()
     
     for hemisphere in ["lh", "rh"]:
-        mri_neigh_faces = _get_sphere_faces(fs_avg_path, hemisphere, model_vert, model_faces)
+        mri_neigh_faces = _get_sphere_faces(fs_avg_path, hemisphere, octa_model_vert, octa_model_faces)
         mri_to_model_trans = _get_mri_to_model_trans(mri_neigh_faces)
         
         #### Translates from vertex id to the nth-channel, e.g. vertex ids [0, 11, 24, ..., 163825] to model ids [0, 1, 2, ..., 4097]
-        hem_data = fs_avg_src_data[:len(np.where(src_fs_avg_valid_lh_vert)[0]), :] if (hemisphere == "lh") else fs_avg_src_data[len(np.where(src_fs_avg_valid_rh_vert)[0]):, :]
+        hem_data = src_data[:len(np.where(lh_white_valid_vert)[0]), :] if (hemisphere == "lh") else src_data[len(np.where(rh_white_valid_vert)[0]):, :]
         
         regions = _read_freesurfer_annotation(fs_avg_path + "label/" + hemisphere + ".aparc.annot")
         for region_name in regions.keys():
@@ -70,7 +133,7 @@ def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_
                 continue
             
             #Gets the vertex ids for a specific region
-            mri_region_vertices_ids = np.where(src_fs_avg_valid_lh_vert)[0][np.in1d(np.where(src_fs_avg_valid_lh_vert)[0], regions[region_name])]
+            mri_region_vertices_ids = np.where(lh_white_valid_vert)[0][np.in1d(np.where(lh_white_valid_vert)[0], regions[region_name])]
             model_region_vertices_ids = mri_to_model_trans[mri_region_vertices_ids]
             if (len(hem_data[model_region_vertices_ids, :]) == 0):
                 continue #In case there is no channel within a region, skip it
@@ -79,6 +142,7 @@ def apply_source_region_model(fs_avg_src_data, src_fs_avg_valid_lh_vert, src_fs_
             morphed_epoch_channels.append(model_region_vertices_ids)
             morphed_region_names.append(hemisphere + "_" + region_name)
     
+    morphed_epoch_data = np.asarray(morphed_epoch_data)
     return (morphed_epoch_data, morphed_epoch_channels, morphed_region_names)
 
 
