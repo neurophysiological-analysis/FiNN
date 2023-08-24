@@ -367,12 +367,11 @@
 <section id="meg-and-mri-coregistration">
 <h3>MEG and MRI coregistration<a class="headerlink" href="#meg-and-mri-coregistration" title="Permalink to this heading">¶</a></h3>
 <p>The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified. This may be done as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculate transformation to fs-average&quot;</span><span class="p">)</span>
-<span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span> <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">,</span> <span class="n">fs_subj_path</span><span class="p">,</span> <span class="n">loc_fs_path</span> <span class="o">+</span> <span class="s2">&quot;fsaverage/&quot;</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_mri_trans</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">coregistration_meg_mri</span><span class="o">.</span><span class="n">plot_coregistration</span><span class="p">(</span><span class="n">rigid_mri_to_meg_trans</span><span class="p">,</span> <span class="n">rec_meta_info</span><span class="p">,</span> <span class="n">meg_pts</span><span class="p">,</span> <span class="n">fs_subj_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Producing the following output:</p>
-<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="guides/docs/source/guides/images/MEG_source_reconstruction_simplified.png" />
+<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_coreg.png" />
 </section>
 <section id="sensor-noise-covariance">
 <h3>Sensor noise covariance<a class="headerlink" href="#sensor-noise-covariance" title="Permalink to this heading">¶</a></h3>
@@ -381,12 +380,18 @@
 <section id="improper-skull-model">
 <h3>Improper skull model<a class="headerlink" href="#improper-skull-model" title="Permalink to this heading">¶</a></h3>
 <p>The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculate transformation to fs-average&quot;</span><span class="p">)</span>
-<span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span> <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">,</span> <span class="n">fs_subj_path</span><span class="p">,</span> <span class="n">loc_fs_path</span> <span class="o">+</span> <span class="s2">&quot;fsaverage/&quot;</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_mri_trans</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
+ <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
+ <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">bem_model</span><span class="o">.</span><span class="n">read_skull_and_skin_models</span><span class="p">(</span><span class="n">fs_subj_path</span><span class="p">,</span> <span class="n">subj_name</span> <span class="o">+</span> <span class="n">rec_folder</span><span class="p">)</span>
+
+<span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">bem_model</span><span class="o">.</span><span class="n">plot_skull_and_skin_models</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
+                                                                  <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
+                                                                  <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">,</span>
+                                                                  <span class="n">fs_subj_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Producing the following output:</p>
-<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_simplified.png" />
+<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_ws.png" />
 </section>
 </section>
 </section>
