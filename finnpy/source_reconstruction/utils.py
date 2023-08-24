@@ -20,7 +20,15 @@ def format_fiducials(pre_mri_ref_pts):
     """
     Transforms an mne-fiducials object into an dictionary containing the fiducials.
     
-    :param pre_mri_ref_pts: The mne-fiducials object in question.
+    Parameters
+    ----------
+    pre_mri_ref_pts : list of dict(), obtained via mne.io.read_fiducials
+                      MNE-formatted list of MRI fiducials.
+                      
+    Returns
+    -------
+    mri_ref_pts : dict(), ('LPA', 'NASION', 'RPA')
+                  MRI reference points for coregistration.
     
     :return: Dictionary containing the fiducial points.
     """
@@ -40,8 +48,12 @@ def run_subprocess_in_custom_working_directory(subject_id, cmd):
     """
     Creates a custom work directory to run a freesurfer command within. 
     
-    :param subject_id: Name of the subject whose data is worked on.
-    :param cmd: The freesurfer command to be executed in the custom environment. 
+    Parameters
+    ----------
+    subject_id : string
+                 Name of the subject whose data is worked on.
+    cmd : string
+          The freesurfer command to be executed in the custom environment. 
     """
     path_to_tmp_cwd = "finnpy_" + subject_id + "_freesurfer_tmp_dir/" # A temporary working directory is needed as freesurfer saves intermediate results in files.
         
@@ -62,7 +74,10 @@ def init_fs_paths(subjects_path):
     """
     Runs some freesurfer initialization steps.
     
-    :param subjects_path: Path to the subject folder.
+    Parameters
+    ----------
+    subjects_path : string
+                    Path to the subject folder.
     """
     os.environ["FREESURFER_HOME"]   = "/usr/local/freesurfer/7.2.0/"
     os.environ["FSFAST_HOME"]       = "/usr/local/freesurfer/7.2.0/fsfast/"
@@ -75,12 +90,20 @@ def init_fs_paths(subjects_path):
 
 def fast_cross_product(a, b):
     """
-    Calculates the cross product between two vectors. Seemingly numpy has too much overhead here to be fast.
+    Calculates the cross product between two vectors. 
+    Seemingly numpy has too much overhead here to be fast.
     
-    :param a: The 1st vector in the cross product.
-    :param b: The 2nd vector in the cross product.
-    
-    :return: Crossproduct of vectors a x b.
+    Parameters
+    ----------
+    NAME : numpy.ndarray, shape(n,)
+           The 1st vector in the cross product.
+    NAME : numpy.ndarray(n,)
+           The 2nd vector in the cross product.
+               
+    Returns
+    -------
+    res : numpy.ndarray, shape(n,)
+          Crossproduct of vectors a x b.
     """
     
     res = np.empty(a.shape)
@@ -94,39 +117,54 @@ def norm_vert(vert):
     """
     Normalizes a vector. Seemingly numpy has too much overhead here to be fast.
     
-    :param vert: The to be normalized vector.
-    
-    :return: The normalized vector.
+    Parameters
+    ----------
+    vert : numpy.ndarray, shape(n,)
+           The to be normalized vector.
+               
+    Returns
+    -------
+    vert : numpy.ndarray, shape(n,)
+           The normalized vector.
     """
     size = np.sqrt(vert[:, 0]*vert[:, 0]+vert[:, 1]*vert[:, 1]+vert[:, 2]*vert[:, 2])
     vert[size > 0] /= size[size > 0, np.newaxis]
     return vert
 
-def find_nearest_neighbor(src_model, tgt_pt, method = "kdtree"):
+def find_nearest_neighbor(src_pts, tgt_pts, method = "kdtree"):
     """
-    Employs two methods to find the nearest neighbors. In case a src_model a list of points is provided, a model is trained, otherwise, pretrained models are used if a (KDTree or BallTree objects) are provided.
+    Employs two methods to find the nearest neighbors. In case a src_pts a list of points is provided, a model is trained, otherwise, pretrained models are used if a (KDTree or BallTree objects) are provided.
     
-    :param src_model: Either a list of data points or a kdtree/balltree object.
-    :param tgt_pt: The tgt_point to be queried.
-    
-    :return: The nearest neighbor of the respective point.
+    Parameters:
+    -----------
+    src_pts : numpy.ndarray, shape(m, 3)
+              Points to build the kd-tree from.
+    tgt_pts : numpy.ndarray, shape(n, 3)
+              Point to match to the kd-tree.
+               
+    Results
+    -------
+    neigh_indices : np.ndarray, shape(n,)
+                    Indices of the nearest neighbors.
+    tree : sklearn.neighbors.KDTree or sklearn.neighbors.BallTree
+           Tree build from the src pts. To be used in subsequently method calls to avoid rebuilding the tree.
     """
     
-    if (type(src_model) == sklearn.neighbors.KDTree or type(src_model) == sklearn.neighbors.BallTree):
-        tree = src_model
+    if (type(src_pts) == sklearn.neighbors.KDTree or type(src_pts) == sklearn.neighbors.BallTree):
+        tree = src_pts
         if (method == "kdtree"):
-            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
+            neigh_indices = tree.query(tgt_pts, k = 1)[1].squeeze(1)
         elif(method == "balltree"):
-            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
+            neigh_indices = tree.query(tgt_pts, k = 1)[1].squeeze(1)
         else:
             raise NotImplementedError("This type of tree is not implemented.")
     else:
         if (method == "kdtree"):
-            tree = sklearn.neighbors.KDTree(src_model)
-            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
+            tree = sklearn.neighbors.KDTree(src_pts)
+            neigh_indices = tree.query(tgt_pts, k = 1)[1].squeeze(1)
         elif(method == "balltree"):
-            tree = sklearn.neighbors.BallTree(src_model)
-            neigh_indices = tree.query(tgt_pt, k = 1)[1].squeeze(1)
+            tree = sklearn.neighbors.BallTree(src_pts)
+            neigh_indices = tree.query(tgt_pts, k = 1)[1].squeeze(1)
         else:
             raise NotImplementedError("This type of tree is not implemented.")
 
@@ -136,10 +174,17 @@ def find_valid_vertices(mri_vert, model_vert, max_neighborhood_size = 5):
     """
     Matches freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron).
     
-    :param mri_vert: Freesurfer based vertices (sphere).
-    :param model vert: Octahedron based vertices.
-    
-    :return: Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).
+    Parameters
+    ----------
+    mri_vert : numpy.ndarray, shape(m, 3)
+               Freesurfer based vertices (sphere).
+    model_vert : numpy.ndarray, shape(n, 3)
+                 Octahedron based vertices.
+               
+    Returns
+    -------
+    NAME : numpy.ndarray, shape(m,)
+           Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).
     """    
     (nearest, nearest_tree) = find_nearest_neighbor(mri_vert, model_vert)
     vert_valid = np.zeros((mri_vert.shape[0]))
@@ -166,9 +211,15 @@ def magn_of_vec(vec):
     """
     Calculates the magnitude of a vector
     
-    :param vec: The vector in question.
-    
-    :return: The magnitude of vec.
+    Parameters
+    ----------
+    vec : numpy.ndarray, shape(n,)
+          The vector in question.
+               
+    Returns
+    -------
+    magn : float
+           The magnitude of vec.
     """
     
     return np.sqrt(vec[:, 0]*vec[:, 0]+vec[:, 1]*vec[:, 1]+vec[:, 2]*vec[:, 2])
@@ -177,10 +228,17 @@ def apply_inv_transformation(data, trans):
     """
     Applies the inverse of trans to data.
     
-    :param data: The data to be transformed.
-    :param trans: The transformation matrix (4x4 matrix; rotation + translation only).
-    
-    :return: The transformed data.    
+    Parameters:
+    -----------
+    data : np.ndarray, shape(n, 3)
+           The data to be transformed.
+    trans : np.ndarray, shape(4, 4)
+            Transformation matrix.
+               
+    Results
+    -------
+    data : np.ndarray, shape(n, 3)
+           Transformed data.
     """
     inv_trans = np.linalg.inv(trans)
     tmp = np.dot(inv_trans[:3, :3], data.T).T
@@ -190,10 +248,17 @@ def calc_quat_angle(a, b):
     """
     Calculate the angle between two quaternions.
     
-    :param a: The 1st quaternion.
-    :param b: The 2nd quaternion.
-    
-    :return: The angle between a and b.
+    Parameters
+    ----------
+    a : numpy.ndarray, shape(4,)
+        The 1st quaternion.
+    b : numpy.ndarray, shape(4,)
+        The 2nd quaternion.
+               
+    Returns
+    -------
+    angle : float
+            The angle between a and b. (scale: radians)
     """
     w = a[3]*b[3] + a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
     x = a[3]*b[0] - a[0]*b[3] - a[1]*b[2] + a[2]*b[1]
@@ -206,9 +271,15 @@ def orient_mat_to_block_format(orient_mat):
     """
     Transforms an orientation matrix (rotation matrix) into (sparse) block format.
     
-    :param orient_mat: The orientation matrix in question.
-    
-    :return: The transformed orientation matrix.
+    Parameters
+    ----------
+    orient_mat : numpy.ndarray, shape(valid_vtx_cnt, 3)
+                 The non-block matrix formatted orientation matrix.
+               
+    Returns
+    -------
+    rot : numpy.ndarray, shape(valid_vtx_cnt * 3, valid_vtx_cnt)
+          The block matrix formatted orientation matrix.
     """
     bdn = orient_mat.shape[0]
     tmp = np.arange(orient_mat.shape[1] * bdn, dtype=np.int64).reshape(bdn, orient_mat.shape[1])
@@ -230,14 +301,26 @@ def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
     """
     Calculates an orthonormal basis of eigenvector/values for each supporting/valid point.
     
-    :param vortex_normals: Normals of the supporting vertices.
-    :param valid_vert: List of valid/supporting vertices.
-    :param cluster_grp: Clusters represented by a single vortex.
-    :param cluster_indices: Cluster indices.
-    :param mri_to_head_trans: Transformation from MRI to head coordinates.
-    :param double_precision: Numerical precision of the eigenvectors/values (default: 40 digits).
-    
-    :return: Orthonormal eigenbasis.
+    Parameters
+    ----------
+    vortex_normals : numpy.ndarray, shape(vtx_cnt, 3)
+                     Normals of the supporting vertices.
+    valid_vert : numpy.ndarray, shape(vtx_cnt,)
+                 List of valid/supporting vertices.
+    cluster_grp : list, len(n,)
+                  Clusters represented by a single vortex.
+    cluster_indices : list, len(n,)
+                      Cluster indices.
+    mri_to_head_trans : numpy.ndarray, shape(4, 4)
+                        Transformation from MRI to head coordinates.
+    double_precision : double
+                       Numerical precision of the eigenvectors/values, 
+                       defaults to 40 digits.
+               
+    Returns
+    -------
+    evec : numpy.ndarray, shape(valid_vtx_cnt * 3, 3)
+           Orthonormal eigenbasis.
     """
     
     #Transforms normals into head space
@@ -249,7 +332,7 @@ def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
         weighed_normals[vertex_idx] = np.sum(rot_vortex_normals[cluster_grp[cluster_indices[vertex_id]], :], axis = 0)
     weighed_normals /= np.linalg.norm(weighed_normals, axis = 1, keepdims = True)
     
-    #Calculate an orthonormal eigenvector basis for each accumulated/weighted normals, resulting in (normals x 3) eigenvectors/values.
+    #Calculate an orthonormal eigenvector basis for each accumulated/weighted normals, resulting in (valid vortices  x 3) eigenvectors/values.
     pre_ev = np.empty((weighed_normals.shape[0], 3, 3))
     for idx in range(pre_ev.shape[0]):
         pre_ev[idx, :, :] = np.matmul(weighed_normals[[idx], :].T, weighed_normals[[idx], :])
@@ -279,12 +362,21 @@ def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
 
 def calc_acc_hem_normals(geom_white_vert, geom_white_faces):
     """
-    Generatoes vertex normals from accumulated face normals. See https://en.wikipedia.org/wiki/Vertex_normal.
+    Generatoes vertex normals from accumulated face normals.
+    See https://en.wikipedia.org/wiki/Vertex_normal.
     
-    :param geom_white_vert: Array of vertices. 
-    :param geom_white_faces: Array of faces. 
+    Parameters
+    ----------
+    geom_white_vert : numpy.ndarray, shape(vert_cnt, 3)
+                         MRI model vertices.
     
-    :return: Array of surface normals for the input faces/vertices.
+    geom_white_faces : numpy.ndarray, shape(face_cnt, 3)
+                          MRI model faces.
+               
+    Returns
+    -------
+    acc_normals : numpy.ndarray, shape(vert_cnt, 3)
+                  Array of surface normals for the input faces/vertices.
     """
     
     #Calculate surface normals
@@ -314,11 +406,21 @@ def find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
     """
     Identifies which input vertices (geom_white_vert) are presented by which valid vortex.
     
-    :param geom_white_vert: To be clustered vertices.
-    :param valid_geom_vert: Binary list of valid vertices.
-    :param geom_white_faces: Corresponding faces.
+    Parameters
+    ----------
+    geom_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
+                      MRI model vertices.
+    valid_geom_vert : numpy.ndarray, shape(lh_vert_cnt,)
+                      Valid/supporting vertices.
+    geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
+                       MRI model faces.
     
-    :return: (cluster_grp, cluster_indices) - Information on clusters.
+    Returns
+    -------
+    cluster_grp : list, len(n,)
+                  Transformed surface model.
+    cluster_indices : list, len(n,)
+                      Transformed surface model.
     """
     
     #Get adjacency matrix to identify nearest valid vortex
@@ -351,18 +453,35 @@ def cortical_surface_reorient_fwd_model(lh_geom_white_vert, lh_geom_white_faces,
                                         rh_geom_white_vert, rh_geom_white_faces, valid_geom_rh_vert,
                                         fwd_sol, mri_to_head_trans):
     """
-    Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster; allowing for cortically constrained inverse modeling) and shrinks it by making closeby channels project to the same destination. This is different from a 'default' 3D transformation. 
+    Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
+    allowing for cortically constrained inverse modeling)
+    and shrinks it by making closeby channels project to the same destination.
+    This is different from a 'default' 3D transformation. 
     
-    :param lh_geom_white_vert: Lh vertices.
-    :param lh_geom_white_faces: Lh faces.
-    :param valid_geom_lh_vert: Valid/supporting lh vertices.
-    :param rh_geom_white_vert: Rh vertices.
-    :param rh_geom_white_faces: Rh faces.
-    :param valid_geom_rh_vert: Valid/supporting rh vertices.
-    :param fwd_sol: Previous forward solution.
-    :param mri_to_head_trans: MRI to head transformation matrix.
+    Parameters
+    ----------
+    lh_geom_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
+                         Lh vertices.
+    lh_geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
+                          Lh faces.
+    valid_geom_lh_vert : numpy.ndarray, shape(lh_vert_cnt,)
+                         Valid/supporting lh vertices.
+    rh_geom_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
+                         Rh vertices.
+    rh_geom_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
+                          Rh faces.
+    valid_geom_rh_vert : numpy.ndarray, shape(rh_vert_cnt,)
+                         Valid/supporting rh vertices.
+    fwd_sol : TYPE, shape(meg_ch_cnt, valid_vtx_cnt * 3)
+              Forward solution with default orientation.
     
-    :return: Transformed surface model.
+    mri_to_head_trans : numpy.ndarray, shape(4, 4)
+                        MRI to head transformation matrix.
+    
+    Returns
+    -------
+    fwd_sol * rot : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt)
+                    Transformed surface model.
     """
      
     #Computes vertex normals
@@ -390,12 +509,27 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
     """
     Find the subject space points corresponding to fs avg space points.
     
-    :param subj_path: Path to subject freesurfer files.
-    :param fs_avg_path: Path fo fs average freesurfer files.
-    :param hemisphere: hemisphere to compute for.
-    :param overwrite: Flag whether to overwrite preexisting mri maps.
-    
-    :return: 
+    Parameters
+    ----------
+    subj_path : string
+                Path to subject freesurfer files.
+    fs_avg_path : string
+                  Path for fs average freesurfer files.
+    hemisphere : string
+                Hemisphere to compute for.
+    overwrite : boolean
+                Flag whether to overwrite preexisting mri maps.
+               
+    Returns
+    -------
+    sub_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+               Vertices of the MRI model.
+    sub_faces : numpy.ndarray, shape(mri_face_cnt, 3)
+                Faces of the MRI model.
+    avg_vert : numpy.ndarray, shape(fs_avg_vtx_cnt, 3)
+               Vertices of fs-avg's sphere model.
+    mri_map : numpy.ndarray, shape(fs_avg_vtx_cnt, mri_vtx_cnt)
+              Translation from subject mri to fs-average sphere model.
     """
     (sub_vert, sub_faces) = nibabel.freesurfer.read_geometry(subj_path + "surf/" + hemisphere + ".sphere.reg")
     (avg_vert, _) = nibabel.freesurfer.read_geometry(fs_avg_path + "surf/" + hemisphere + ".sphere.reg")
@@ -434,10 +568,6 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
         match_idx = np.ones((avg_vert.shape[0]), dtype = int) * -1; 
         weights = np.zeros((avg_vert.shape[0], avg_vert.shape[1])); 
         for (avg_vert_idx, avg_vortex) in enumerate(avg_vert):
-            #===================================================================
-            # if (avg_vert_idx % 10000 == 0):
-            #     print(avg_vert_idx)
-            #===================================================================
             for sub_face_idx in avg_neigh_faces[avg_vert_idx]:
                 sub_face = sub_faces[sub_face_idx]
                  
@@ -517,7 +647,22 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
     
 def calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     """
-    Identifies 
+    Calculates projection from subject vertices to small sphere vertices.
+    
+    Parameters
+    ----------
+    valid_vert : numpy.ndarray, shape(mri_vtx_cnt,)
+                 Valid vertices
+    sub_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+               High-definition vertices.
+    sub_faces : numpy.ndarray, shape(mri_face_cnt, 3)
+                High-definition faces.
+               
+    Returns
+    -------
+    proj : numpy.ndarray, shape(mri_face_cnt, valid_vtx_cnt)
+           Projection from all vertices to valid vertices.
+
     """
     #Create an adjacency graph for use below
     adj_mat = scipy.sparse.lil_matrix((np.unique(sub_faces).shape[0], np.unique(sub_faces).shape[0]))
@@ -567,14 +712,29 @@ def get_mri_subj_to_fs_avg_trans_mat(valid_lh_vert, valid_rh_vert,
     """
     Create a subject to fs average transformation matrix.
     
-    :param valid_lh_vert: Valid lh vertices (subject space).
-    :param valid_rh_vert: Valid rh vertices (subject space).
-    :param model_vert: Model vertices.
-    :param subj_path: Path to subject's freesurfer files.
-    :param fs_avg_path: Path to fs average's freesurfer files.
-    :param overwrite: Flag whether to overwrite MRI maps.
-    
-    :return: (trans_mat, valid_avg_lh_vert, valid_avg_rh_vert) - Transformation matrix, valid/supporting vertices for left & right hemisphere 
+    Parameters
+    ----------
+    valid_lh_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+                    Valid lh vertices (subject space).
+    valid_rh_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+                    Valid rh vertices (subject space).
+    model_vert : numpy.ndarray, shape(DEBUG)
+                 Model vertices.
+    subj_path : string
+                Path to subject's freesurfer files.
+    fs_avg_path : string
+                  Path to fs average's freesurfer files.
+    overwrite : boolean
+                Flag whether to overwrite MRI maps.
+               
+    Returns
+    -------
+    trans_mat : numpy.ndarray, shape(valid_subj_vtx_cnt, valid_subj_vtx_cnt)
+                Transformation matrix
+    valid_avg_lh_vert : numpy.ndarray, shape(fs_avg_vtx_cnt,)
+                        Valid/supporting vertices for left hemisphere.
+    valid_avg_rh_vert : numpy.ndarray, shape(fs_avg_vtx_cnt,)
+                        Valid/supporting vertices for right hemisphere.
     """
     
     #Find a transformation for all points
@@ -612,12 +772,19 @@ def apply_mri_subj_to_fs_avg_trans_mat(trans_mat, data):
 
 def calc_whitener(eigen_val, eigen_vec):
     """
-    Calculate PCA based whitener from provided eigenvalues and eigenvectors.
+    alculate PCA based whitener from provided eigenvalues and eigenvectors.
     
-    :param eigen_val: Eigenvalues.
-    :param eigen_vec: Eigenvectors.
-    
-    :return: Whitener.
+    Parameters
+    ----------
+    eigen_val : numpy.ndarray, shape(n,)
+                Eigenvalues.
+    eigen_vec : numpy.ndarray, shape(n, n)
+                Eigenvectors.
+               
+    Returns
+    -------
+    whitener : numpy.ndarray, shape(n, n)
+               Whitener.
     """
     eigen_val_white = np.copy(eigen_val)
     eigen_val_white[eigen_val_white < 0] = 0 #Cannot be negative in a cov-matrix; may happen due to numerical innaccuracy

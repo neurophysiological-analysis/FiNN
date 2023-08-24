@@ -17,6 +17,26 @@ import sklearn.covariance
 import sklearn.decomposition
 
 def _get_bio_channel_type_idx(raw_file, mask = None):
+    """
+    
+    Identifies bio channel types.
+    
+    Parameters
+    ----------
+    NAME : mne.io.read_raw_fif
+           Scanned MRI file.
+               
+    Returns
+    -------
+    valid_ch_indices : numpy.ndarray, shape(ch_cnt,)
+           Binary list identifying channels as valid/invalid.
+    meg_ch_indices : list, int
+                     Indices of magnetometer channels.
+    grad_ch_indices : list, int
+                      Indices of gradiometer channels.
+    ch_names : list, string
+               channel names.
+    """
     valid_ch_indices = np.zeros((len(raw_file.info["chs"]), ), dtype = bool)
     meg_ch_indices = list()
     grad_ch_indices = list()
@@ -50,6 +70,26 @@ def _get_bio_channel_type_idx(raw_file, mask = None):
     return (valid_ch_indices, meg_ch_indices, grad_ch_indices, ch_names)
 
 def _empirically_estimate_cov(cov_data, meg_ch_indices, grad_ch_indices, valid_ch_indices):
+    """
+    Calculates the sensor noise covariance
+    
+    Parameters
+    ----------
+    cov_data : numpy.ndarray, shape(samples, channels)
+               An (empty room) file to use for sensor noise covariance calculations.
+               Important: Evaluate a number of different files to identify a good example.
+    meg_ch_indices : list, int
+                     Indices of magnetometer channels.
+    grad_ch_indices : list, int
+                      Indices of gradiometer channels.
+    valid_ch_indices : numpy.ndarray, shape(ch_cnt,)
+           Binary list identifying channels as valid/invalid.
+               
+    Returns
+    -------
+    cov : numpy.ndarray, shape(meg_ch_cnt, meg_ch_cnt)
+          Covariance
+    """
     reject_thresholds = {"meg" : 4e-12, "grad" : 4e-10}
     mu = 0; samp_cnt = 0; cov = 0
     for segment_idx in range(cov_data.shape[0]):
@@ -75,12 +115,25 @@ def _calc_sensor_noise_cov(raw_file, method = None, method_params = None, epoch_
     """
     Calculates the sensor noise covariance
     
-    :param raw_file: The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example. 
-    :param method: Method to be employed, either "empirically", "shrinkage", or "factor_analysis".
-    :param method_params: Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis.
-    :param epoch_sz_s: Epoch size for covariance calculation in seconds.
-    
-    :return: (cov, ch_names) - Covariance and channel names.
+    Parameters
+    ----------
+    file_path : string
+                The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.
+    cov_path : string
+               Path to a the covariance file. If none exists, the covariance will be saved in this location.
+    method : string
+             Method to be employed, either "empirically",
+             "shrinkage", or "factor_analysis" (default: shrinkage).
+    epoch_sz_s : 0.2
+                 Size of individual epochs, scaled in s.
+               
+    Returns
+    -------
+    cov : numpy.ndarray, shape(meg_ch_cnt, meg_ch_cnt)
+          Covariance
+           
+    ch_names : list, string
+               Channel names.
     """
     (valid_ch_indices, meg_ch_indices, grad_ch_indices, ch_names) = _get_bio_channel_type_idx(raw_file)
     
@@ -103,13 +156,31 @@ def get_sensor_covariance(file_path, cov_path, method = None, method_params = No
     """
     #Determines eigenvectors/values from the sensor noise covariance
     
-    :param file_path: The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example. 
-    :param cov_path: Path to a the covariance file. If none exists, the covariance will be saved in this location.
-    :param method: Method to be employed, either "empirically", "shrinkage", or "factor_analysis" (default: shrinkage).
-    :param method_params: Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis (default: {"shrinkage" : 0.2,} - epoch size in s).
-    :param overwrite: Flag to overwrite covariance calculation.
-    
-    :return: (cov, ch_names) - Covariance and channel names.
+    Parameters
+    ----------
+    file_path : string
+                The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.
+    cov_path : string
+               Path to a the covariance file. If none exists, the covariance will be saved in this location.
+    method : string
+             Method to be employed, either "empirically",
+             "shrinkage", or "factor_analysis" (default: shrinkage).
+    method_params : dict()
+                    Method specific parameters.
+                    Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis, 
+                    defaults to "shrinkage" : 0.2 - epoch size in s.
+    overwrite : boolean
+                Flag to overwrite covariance calculation.
+               
+    Returns
+    -------
+    eigen_values: numpy.ndarray, shape(ch_cnt,)
+                  Eigenvalues.
+    cov : numpy.ndarray, shape(ch_cnt, ch_cnt)
+          Covariance matrix
+           
+    ch_names : list, string
+               Channel names.
     """
     
     if ((os.path.exists(cov_path + "eval.npy") == False or 

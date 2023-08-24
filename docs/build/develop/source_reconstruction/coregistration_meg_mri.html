@@ -307,20 +307,27 @@
 <p>This module may be employed to coregister MEG to MRI images.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri.calc_coreg">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">calc_coreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'restricted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri.calc_coreg" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">calc_coreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'restricted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri.calc_coreg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coregisters MRI data (src) to MEG data (tgt).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
-<li><p><strong>subj_path</strong> – Path to the subject’s freesurfer folder.</p></li>
-<li><p><strong>rec_meta_info</strong> – MEG scan meta info.</p></li>
-<li><p><strong>registration_scale_type</strong> – Can be either “free” or “restricted”. If free, the initial registration may be scaled with a uniform factor, no scaling with restricted.</p></li>
-<li><p><strong>max_number_of_iterations</strong> – Number of iterations per registration step (total 3).</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Path to the subject’s freesurfer folder.</p></li>
+<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
+<li><p><strong>registration_scale_type</strong> (<em>string</em>) – Can be either “free” or “restricted”.
+If free, the initial registration may be scaled with
+a uniform factor, no scaling with restricted.</p></li>
+<li><p><strong>max_number_of_iterations</strong> (<em>int</em>) – Number of iterations per registration step (total 3),
+defaults to 500 per registration step.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Coregistration rotors, and coregistered MEG/MRI points.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>coreg_rotors</strong> (<em>numpy.ndarray, shape (9,)</em>) – Coregistration rotors</p></li>
+<li><p><strong>meg_pts</strong> (<em>dict, (‘nasion’, ‘lpa’, ‘rpa’, ‘hsp’, ‘coord_frame’)</em>) – coregistered MEG/MRI points</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -328,13 +335,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri.get_rigid_transform">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">get_rigid_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri.get_rigid_transform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms rotors into a rigid transformation.</p>
+<dd><p>Transforms coregistration rotors into a rigid transformation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rotors</strong> – Input rotors.</p>
+<dd class="field-odd"><p><strong>rotors</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Rotors to derive a rigid transformation from.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Transformation matrix.</p>
+<dd class="field-even"><p><strong>rigid_transform</strong> (<em>numpy.ndarray, shape(4, 4)</em>) – Rigid transformation matrix.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -346,10 +353,10 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>coreg</strong> – Coregistration matrix.</p></li>
-<li><p><strong>rec_meta_info</strong> – Meta info from MRI scan.</p></li>
-<li><p><strong>meg_pts</strong> – MEG pts used in the coregistration.</p></li>
-<li><p><strong>subj_path</strong> – Path to the subject’s freesurfer files.</p></li>
+<li><p><strong>coreg</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MEG to MRI coregistration matrix.</p></li>
+<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta information, obtainable through mne.io.read_info.</p></li>
+<li><p><strong>meg_pts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>4</em><em>)</em>) – MEG pts used in the coregistration.</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Path to the subject’s freesurfer files.</p></li>
 </ul>
 </dd>
 </dl>
@@ -358,13 +365,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._load_meg_ref_pts">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_load_meg_ref_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._load_meg_ref_pts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load meg references points.</p>
+<dd><p>Load MEG reference points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rec_meta_info</strong> – Meta information from the MEG scan.</p>
+<dd class="field-odd"><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Reference points in the meg scan.</p>
+<dd class="field-even"><p><strong>meg_pts</strong> (<em>dict, (‘nasion’, ‘lpa’, ‘rpa’, ‘hsp’, ‘coord_frame’)</em>) – MEG reference points for coregistration.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -376,12 +383,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_name</strong> – Name of the subject</p></li>
-<li><p><strong>subj_path</strong> – Path to the subject’s head model data. In case this doesn’t exists, it is created.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Subject name.</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Path to the subject’s head model data. In case this doesn’t exists, it is created.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>HD surface vertices (head model).</p>
+<dd class="field-even"><p><strong>hd_surf_vert</strong> (<em>numpy.ndarray, shape (n, 3)</em>) – High resulution surface model generated via freesurfer.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,8 +400,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
-<li><p><strong>subj_path</strong> – Path to the subject’s freesurfer folder.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Path to the subject’s freesurfer folder.</p></li>
 </ul>
 </dd>
 </dl>
@@ -403,16 +410,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._load_mri_ref_pts">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_load_mri_ref_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._load_mri_ref_pts" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load mri reference points.</p>
+<dd><p>Load MEG reference points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_path</strong> – Path to subject files.</p></li>
-<li><p><strong>subj_name</strong> – Subject name.</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Path to subject files.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Subject name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>MRI reference points.</p>
+<dd class="field-even"><p><strong>meg_pts</strong> (<em>dict, (‘nasion’, ‘lpa’, ‘rpa’, ‘hsp’, ‘coord_frame’)</em>) – MRI reference points for coregistration.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -424,14 +431,19 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src_pts</strong> – Array/list of 3d src pts.</p></li>
-<li><p><strong>tgt_pts</strong> – Array/list of 3d tgt pts.</p></li>
-<li><p><strong>weights</strong> – Weights of the individual pts.</p></li>
-<li><p><strong>initial_guess</strong> – Initial transformation guess. Defaults to no translation/rotation/scaling.</p></li>
+<li><p><strong>src_pts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>4</em><em>)</em>) – Source points for the registration.</p></li>
+<li><p><strong>tgt_pts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>4</em><em>)</em>) – Target points for the registration.</p></li>
+<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>1</em><em>)</em>) – (Source) weights for the registration.</p></li>
+<li><p><strong>initial_guess</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em> or </em><em>tuple</em><em> or </em><em>None</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Initial transformation guess,
+defaults to None for no translation/rotation/scaling.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Estimated rotors and transformation matrix (4x4).</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>est_rotors</strong> (<em>numpy.ndarray, shape(9,)</em>) – Updated rotor estimate.</p></li>
+<li><p><strong>est_mat</strong> (<em>numpy.ndarray, shape(4, 4)</em>) – Updated transformation matrix.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -443,39 +455,52 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src_pts</strong> – Array/list of 3d src pts.</p></li>
-<li><p><strong>tgt_pts</strong> – Array/list of 3d tgt pts.</p></li>
-<li><p><strong>weights</strong> – Weights of the individual pts.</p></li>
-<li><p><strong>scale</strong> – Flag whether to apply uniform scaling. Defaults to False.</p></li>
+<li><p><strong>src_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Source points for the coregistration.</p></li>
+<li><p><strong>tgt_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Target points for the coregistration.</p></li>
+<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>)</em>) – Weights of the individual pts.</p></li>
+<li><p><strong>scale</strong> (<em>boolean</em><em>,</em>) – Flag whether to apply uniform scaling,
+defaults to False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Estimated rotors and transformation matrix (4x4).</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>est_rotors</strong> (<em>np.ndarray, shape(9,)</em>) – Rotors of the estimated transformation.</p></li>
+<li><p><strong>est_mat</strong> (<em>np.ndarray, shape(4, 4)</em>) – Rotation matrix of the estimated transformation.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.coregistration_meg_mri._refine_registration">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_refine_registration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_rotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'free'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._refine_registration" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.coregistration_meg_mri.</span></span><span class="sig-name descname"><span class="pre">_refine_registration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_rotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'free'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.coregistration_meg_mri._refine_registration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refines an initial registration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>meg_pts</strong> – MEG pts.</p></li>
-<li><p><strong>mri_vert</strong> – MRI pts.</p></li>
-<li><p><strong>last_rotors</strong> – Guessed rotos.</p></li>
-<li><p><strong>last_mat</strong> – Guessed transformation matrix.</p></li>
-<li><p><strong>weights</strong> – Weights to be applied.</p></li>
-<li><p><strong>trans_thresh</strong> – Translation error threshold.</p></li>
-<li><p><strong>angle_thresh</strong> – Rotation error threshold.</p></li>
-<li><p><strong>scale_thresh</strong> – Scaling error threshold.</p></li>
-<li><p><strong>max_number_of_iterations</strong> – Number of iterations.</p></li>
-<li><p><strong>registration_scale_type</strong> – If “free”, scaling is estimated across 3 axis, if “reduced”, scaling is uniform. Defaults to “free”.</p></li>
+<li><p><strong>src_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Source points for the coregistration.</p></li>
+<li><p><strong>tgt_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Target points for the coregistration.</p></li>
+<li><p><strong>last_rotors</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Original rotor estimates.</p></li>
+<li><p><strong>last_mat</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Original rotation matrix estimate.</p></li>
+<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>,</em><em>)</em>) – Weights for the coregistration.</p></li>
+<li><p><strong>trans_thresh</strong> (<em>float</em>) – Translation error threshold.</p></li>
+<li><p><strong>angle_thresh</strong> (<em>float</em>) – Rotation error threshold.</p></li>
+<li><p><strong>scale_thresh</strong> (<em>float</em>) – Scaling error threshold.</p></li>
+<li><p><strong>max_number_of_iterations</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>registration_scale_type</strong> (<em>string</em>) – If “free”, scaling is estimated across 3 axis,
+if “reduced”, scaling is uniform,
+defaults to “free”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Updated rotors and transformation matrices.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>last_rotors</strong> (<em>np.ndarray, shape(9,)</em>) – Updated rotor estimates.</p></li>
+<li><p><strong>last_mat</strong> (<em>np.ndarray, shape(4, 4)</em>) – Updated rotation matrix estimate.</p></li>
+<li><p><strong>tgt_pts_full</strong> (<em>np.ndarray, shape(m2, 3)</em>) – Target points used for the coregistration.</p></li>
+<li><p><strong>src_pts_full</strong> (<em>np.ndarray, shape(n2, 3)</em>) – Source points used for the coregistration.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -487,14 +512,14 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>meg_pts</strong> – MEG pts.</p></li>
-<li><p><strong>mri_pts</strong> – MRI pts.</p></li>
-<li><p><strong>trans_mat</strong> – MRI to MEG transformation matrix.</p></li>
-<li><p><strong>distance_threshold</strong> – Maximum distance. Defaults to 5 mm.</p></li>
+<li><p><strong>meg_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>(</em><em>m</em><em>, </em><em>3</em><em>)</em>) – MEG reference points.</p></li>
+<li><p><strong>mri_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – MRI reference points.</p></li>
+<li><p><strong>trans_mat</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MEG to MRI transformation matrix.</p></li>
+<li><p><strong>distance_threshold</strong> (<em>float</em>) – Maximum distance. Defaults to 5 mm.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Pruned list of MEG pts.</p>
+<dd class="field-even"><p><strong>meg_pts</strong> (<em>np.ndarray, shape(m - x, 3)</em>) – Pruned list of MEG pts.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -505,10 +530,14 @@
 <dd><p>Get the total and hsp counts from MEG pts.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>meg_pts</strong> – MEG pts.</p>
+<dd class="field-odd"><p><strong>meg_pts</strong> (<em>dict</em><em>, </em><em>(</em><em>'lpa'</em><em>, </em><em>rpa'</em><em>, </em><em>'nasion'</em><em>, </em><em>'hpi'</em><em>, </em><em>'hsp'</em><em>, </em><em>'coord_frame'</em><em>)</em>) – Reference MEG points for the coregistration.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Total point count and hsp point count.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ptn_cnt</strong> (<em>int</em>) – Number of points without hsp-points.</p></li>
+<li><p><strong>hsp_cnt</strong> (<em>int</em>) – Number of hsp-points.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

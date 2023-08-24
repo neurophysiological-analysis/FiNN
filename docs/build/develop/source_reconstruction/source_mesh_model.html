@@ -230,10 +230,20 @@
 <dd><p>Creates a source mesh model by warping an octahedron towards the surface sphere created by freesurfer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subject_path</strong> – Subject’s freesurfer path.</p>
+<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Vertices and faces of the freesurfer extracted cortical white matter surface models, a list of matched freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron), and octahedron vertices and faces.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
+<li><p><strong>lh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n1, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
+<li><p><strong>rh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
+<li><p><strong>rh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
+<li><p><strong>valid_geom_lh_vert</strong> (<em>numpy.ndarray, shape(m1,)</em>) – Vertices with a match in the spherical model (left hemisphere).</p></li>
+<li><p><strong>valid_geom_rh_vert</strong> (<em>numpy.ndarray, shape(m2,)</em>) – Vertices with a match in the spherical model (right hemisphere).</p></li>
+<li><p><strong>model_vert</strong> (<em>numpy.ndarray, shape(n3, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
+<li><p><strong>model_faces</strong> (<em>numpy.ndarray, shape(m3, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -244,10 +254,14 @@
 <dd><p>Creates a sphere from an octahedron and prunes duplicate vertices/faces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>octahedron_level</strong> – Order (recursions) of the octahedron.</p>
+<dd class="field-odd"><p><strong>octahedron_level</strong> (<em>int</em>) – Level of the octahedron used as the mesh model.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Vertices and faces of the octahedron.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(n3, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(m3, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -258,10 +272,18 @@
 <dd><p>Reads cortical freesurfer data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subject_path</strong> – Subject’s freesurfer path.</p>
+<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Vertices and faces of the cortical white matter for left and right hemisphere. Additionally, vertices of freesurfer’s sphere model.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
+<li><p><strong>lh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n1, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
+<li><p><strong>rh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
+<li><p><strong>rh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
+<li><p><strong>lh_geom_sphere_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – Spherical freesurfer head model vertices (left hemisphere).</p></li>
+<li><p><strong>rh_geom_sphere_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Spherical freesurfer head model vertices (right hemisphere).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

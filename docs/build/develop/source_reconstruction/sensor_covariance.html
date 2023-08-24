@@ -240,15 +240,23 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_path</strong> – The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.</p></li>
-<li><p><strong>cov_path</strong> – Path to a the covariance file. If none exists, the covariance will be saved in this location.</p></li>
-<li><p><strong>method</strong> – Method to be employed, either “empirically”, “shrinkage”, or “factor_analysis” (default: shrinkage).</p></li>
-<li><p><strong>method_params</strong> – Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis (default: {“shrinkage” : 0.2,} - epoch size in s).</p></li>
-<li><p><strong>overwrite</strong> – Flag to overwrite covariance calculation.</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) – The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.</p></li>
+<li><p><strong>cov_path</strong> (<em>string</em>) – Path to a the covariance file. If none exists, the covariance will be saved in this location.</p></li>
+<li><p><strong>method</strong> (<em>string</em>) – Method to be employed, either “empirically”,
+“shrinkage”, or “factor_analysis” (default: shrinkage).</p></li>
+<li><p><strong>method_params</strong> (<em>dict</em><em>(</em><em>)</em>) – Method specific parameters.
+Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis,
+defaults to “shrinkage” : 0.2 - epoch size in s.</p></li>
+<li><p><strong>overwrite</strong> (<em>boolean</em>) – Flag to overwrite covariance calculation.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(cov, ch_names) - Covariance and channel names.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>eigen_values</strong> (<em>numpy.ndarray, shape(ch_cnt,)</em>) – Eigenvalues.</p></li>
+<li><p><strong>cov</strong> (<em>numpy.ndarray, shape(ch_cnt, ch_cnt)</em>) – Covariance matrix</p></li>
+<li><p><strong>ch_names</strong> (<em>list, string</em>) – Channel names.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -256,12 +264,42 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._get_bio_channel_type_idx">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_get_bio_channel_type_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._get_bio_channel_type_idx" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Identifies bio channel types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NAME</strong> (<em>mne.io.read_raw_fif</em>) – Scanned MRI file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>valid_ch_indices</strong> (<em>numpy.ndarray, shape(ch_cnt,)</em>) – Binary list identifying channels as valid/invalid.</p></li>
+<li><p><strong>meg_ch_indices</strong> (<em>list, int</em>) – Indices of magnetometer channels.</p></li>
+<li><p><strong>grad_ch_indices</strong> (<em>list, int</em>) – Indices of gradiometer channels.</p></li>
+<li><p><strong>ch_names</strong> (<em>list, string</em>) – channel names.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._empirically_estimate_cov">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_empirically_estimate_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._empirically_estimate_cov" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates the sensor noise covariance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cov_data</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>samples</em><em>, </em><em>channels</em><em>)</em>) – An (empty room) file to use for sensor noise covariance calculations.
+Important: Evaluate a number of different files to identify a good example.</p></li>
+<li><p><strong>meg_ch_indices</strong> (<em>list</em><em>, </em><em>int</em>) – Indices of magnetometer channels.</p></li>
+<li><p><strong>grad_ch_indices</strong> (<em>list</em><em>, </em><em>int</em>) – Indices of gradiometer channels.</p></li>
+<li><p><strong>valid_ch_indices</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>ch_cnt</em><em>,</em><em>)</em>) – Binary list identifying channels as valid/invalid.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>cov</strong> (<em>numpy.ndarray, shape(meg_ch_cnt, meg_ch_cnt)</em>) – Covariance</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._calc_sensor_noise_cov">
@@ -270,14 +308,19 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>raw_file</strong> – The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.</p></li>
-<li><p><strong>method</strong> – Method to be employed, either “empirically”, “shrinkage”, or “factor_analysis”.</p></li>
-<li><p><strong>method_params</strong> – Method specific parameters. Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis.</p></li>
-<li><p><strong>epoch_sz_s</strong> – Epoch size for covariance calculation in seconds.</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) – The (empty room) file to use for sensor noise covariance calculations. Important: Evaluate a number of different files to identify a good example.</p></li>
+<li><p><strong>cov_path</strong> (<em>string</em>) – Path to a the covariance file. If none exists, the covariance will be saved in this location.</p></li>
+<li><p><strong>method</strong> (<em>string</em>) – Method to be employed, either “empirically”,
+“shrinkage”, or “factor_analysis” (default: shrinkage).</p></li>
+<li><p><strong>epoch_sz_s</strong> (<em>0.2</em>) – Size of individual epochs, scaled in s.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(cov, ch_names) - Covariance and channel names.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>cov</strong> (<em>numpy.ndarray, shape(meg_ch_cnt, meg_ch_cnt)</em>) – Covariance</p></li>
+<li><p><strong>ch_names</strong> (<em>list, string</em>) – Channel names.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

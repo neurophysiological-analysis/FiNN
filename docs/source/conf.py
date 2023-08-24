@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.abspath('/mnt/data/Professional/projects/finnpy/lates
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc', 'sphinx_multiversion']
+extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc', 'sphinx_multiversion', 'sphinx.ext.napoleon']
 
 
 # Add any paths that contain templates here, relative to this directory.
@@ -263,3 +263,6 @@ smv_prefer_remote_refs = False
 #Ignore import mayavi as sphinx doesn't like it
 autodoc_mock_imports = ["mayavi"]
 
+#Napoleon settings
+napoleon_numpy_docstring = True
+napoleon_use_rtype = False

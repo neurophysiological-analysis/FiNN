@@ -15,9 +15,15 @@ def _get_meg_channel_type_idx(rec_meta_info):
     """
     Returns the channel names of the MEG channels.
     
-    :param rec_meta_info: MEG recording meta info.
-    
-    :return: Channel names.
+    Parameters
+    ----------
+    rec_meta_info : mne.io.read_info
+                    MEG scan meta information, obtainable through mne.io.read_info.
+               
+    Returns
+    -------
+    sensor_cov_names : list, len(ch_cnt,), string
+                       Names of the channels.
     """
     ch_names = list()
     
@@ -40,6 +46,31 @@ def _get_meg_channel_type_idx(rec_meta_info):
 
 def calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names,
                        fwd_sol, rec_meta_info, method = "dSPM"):
+    """
+    Converts a forward model into an inverse model.
+        
+    Parameters
+    ----------
+    sensor_cov_eigen_val : numpy.ndarray, shape(ch_cnt,)
+                           Eigenvalues of the sensor noise covariance (eigenvector matrix).
+    sensor_cov_eigen_vec : numpy.ndarray, shape(ch_cnt, ch_cnt)
+                           Sensor noise covariance.
+    sensor_cov_names : list, len(ch_cnt,), string
+                       Names of the channels in the sensor covariance matrix.
+    fwd_sol : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt)
+              Forward model.
+    rec_meta_info : mne.io.read_info
+                    MEG scan meta information, obtainable through mne.io.read_info.
+    method : string
+             Method used to calculate the noise normalization vector. 
+               
+    Returns
+    -------
+    inv_trans : numpy.ndarray, shape(valid_vtx_cnt, meg_ch_cnt)
+                Inverse model.
+    noise_norm : numpy.ndarray, shape(valid_vtx_cnt,)
+                 Noise normalization vector.
+    """
      
      
     data_meg_ch_names = _get_meg_channel_type_idx(rec_meta_info)
@@ -89,11 +120,19 @@ def apply_inverse_model(sensor_data, inv_model, noise_norm):
     """
     Applies an inverse model and noise normalization vector to sensor space data.
     
-    :param sensor_data: Data in the sensor space.
-    :param inv_model: Inverse model.
-    :param noise_norm: Noise normalization vector.
-    
-    :return: Data is source space.
+    Parameters
+    ----------
+    sensor_data : TYPE, shape(TEXT)
+                     TEXT
+    inv_model : TYPE, shape(TEXT)
+                     TEXT
+    noise_norm : TYPE, shape(TEXT)
+                     TEXT
+               
+    Returns
+    -------
+    source_data : TYPE, shape(TEXT)
+                     TEXT
     """
     source_data = np.dot(inv_model, sensor_data)
     source_data *= np.expand_dims(noise_norm, axis = 1)

@@ -19,10 +19,21 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     """
     Extracts anatomical structures from an mri scan using freesurfer.
     
-    :param subj_name: Name of the subject.
-    :param t1_scan_file: Name of the mri file.
-    :param fiducials_file: Name of the fiducials file. If none is present, default fiducials are morphed from fs-average.
-    :param overwrite: Flag whether to overwrite the files of the respective subject folder already exists.
+    Parameters
+    ----------
+    subj_name : string
+                Name of the subject.
+    t1_scan_file : string
+                   Name of the mri file.
+    fiducials_file : string
+                     Name of the fiducials file. If none is present, default fiducials are morphed from fs-average, 
+                     defaults to None.
+    fiducials_path : string
+                     Path to the fiducials file. If none is present, default fiducials are morphed from fs-average, 
+                     defaults to None. 
+    Var_name : boolean
+               Flag whether to overwrite the files of the respective subject folder already exists, 
+               defaults to False.
     """
     if (subj_name[-1] == "/"):
         patient_id = subj_name[:-1]
@@ -72,9 +83,16 @@ def _create_fiducials(in_path, out_path, subj_name):
     """
     Reads fiducials from fs-average and transforms them from fs-average space into subject space.
     
-    :param in_path: Path to the src folder.
-    :param out_path: Path to the tgt folder.
-    :param subj_name: Name of the subject.
+    Parameters
+    ----------
+    in_path : string
+              Path to the src folder.
+               
+    out_path : string
+               Path to the tgt folder.
+               
+    subj_name : string
+                Name of the subject.
     """
     
     #===========================================================================
@@ -127,9 +145,15 @@ def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
     """
     In case no mri scans are available for this subject, fs-average is used as a reference template.
     
-    :param fs_path: Path to the freesurfer files (containing fs average).
-    :param subj_path: Folder name of the subject.
-    :param subj_name: Name of the subject.
+    Parameters
+    ----------
+    fs_path : string
+              Path to the freesurfer files (containing fs average).
+    subj_path : string
+                Folder name of the subject.
+    subj_name : string
+                Name of the subject.
+               
     """
     old_base_dir = fs_path + "fsaverage" + "/"
     new_base_dir = fs_path + subj_name + "/"
@@ -164,10 +188,18 @@ def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
     """
     Scales anatomy for a perfect fit between fiducials and anatomy. If files are already scaled, an .is_scaled file created. This flag can be ignore via setting overwrite to True. 
     
-    :param subj_path: Path to the freesurfer created subject specific files.
-    :param subj_name: Name of the subject.
-    :param scale: Scaling to be applied (x, y, z). 
-    :param overwrite: Flag to apply scaling even if scaling is already applied.
+    Parameters
+    ----------
+    subj_path : string
+                Path to the freesurfer created subject specific files.
+    subj_name : string
+                Name of the subject.
+    scale : float
+            Scaling to be applied (x, y, z). 
+    overwrite : boolean
+                Flag to apply scaling even if scaling is already applied,
+                defaults to False.
+               
     """
     
     if (os.path.exists(subj_path + ".is_scaled") == True and overwrite == False):
@@ -190,8 +222,13 @@ def _load_scale_save_fiducials(path, scale):
     """
     Loads, scales, and saves fiducials.
     
-    :param path: Path to the fiducials file.
-    :param scale: Scale to be applied (x, y, z).
+    Parameters
+    ----------
+    path : string
+           Path to the fiducials file.
+    scale : float
+            Scale to be applied (x, y, z).
+
     """
     
     if (os.path.exists(path + "_unscaled")):
@@ -210,8 +247,12 @@ def _load_scale_save_surfaces(path, scale):
     """
     Load, scale, and save surfaces.
     
-    :param path: Path to the subject's freesurfer created surface surfaces.
-    :param scale: Scale to be applied (x, y, z).
+    Parameters
+    ----------
+    path : string
+           Path to the subject's freesurfer created surface surfaces.
+    scale : Scale to be applied (x, y, z).
+            Descriptor
     """
     
     if (os.path.exists(path + "_unscaled")):
@@ -226,9 +267,13 @@ def _load_scale_save_surfaces(path, scale):
 def _load_scale_save_mri(path, scale):
     """
     Load, scale, and save MRI information.
-    
-    :param path: Path to the subject's freesurfer created mri files.
-    :param scale: Scale to be applied (x, y, z).
+
+    Parameters
+    ----------
+    path : string
+           Path to the subject's freesurfer created mri files.
+    scale : float
+            Scale to be applied (x, y, z).
     """
     
     if (os.path.exists(path + "_unscaled")):
@@ -248,8 +293,11 @@ def _load_scale_save_mri(path, scale):
 def visualize_anatomy_from_mri_using_fs(subj_path):
     """
     Employ freesurfer to visualize anatomy results extracted from freesurfer.
-    
-    :param subj_path: Path to the subject's freesurfer created files.
+
+    Parameters
+    ----------
+    subj_path : string
+                Path to the subject's freesurfer created files.Parameters
     """
     if (subj_path[-1] == "/"):
         patient_id = subj_path[:-1]

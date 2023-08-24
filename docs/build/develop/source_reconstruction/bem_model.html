@@ -245,15 +245,6 @@
    </code>
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.bem_model._calc_bem_fields">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     _calc_bem_fields()
-    </span>
-   </code>
-  </a>
- </li>
 </ul>
 
 </nav>
@@ -286,12 +277,20 @@ via freesurfer’s watershed algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subject_path</strong> – Subject’s freesurfer path.</p></li>
-<li><p><strong>subj_name</strong> – Subject name.</p></li>
+<li><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Subject name.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Vertices and faces of the inner skull, outer skull, and skin models.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ws_in_skull_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – Vertices of the inner skull model.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray, shape(n1, 3)</em>) – Faces of the inner skull model.</p></li>
+<li><p><strong>ws_out_skull_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Vertices of the outer skull model.</p></li>
+<li><p><strong>ws_out_skull_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – Faces of the outer skull model.</p></li>
+<li><p><strong>ws_out_skin_vect</strong> (<em>numpy.ndarray, shape(m3, 3)</em>) – Vertices of the skin model.</p></li>
+<li><p><strong>ws_out_skin_faces</strong> (<em>numpy.ndarray, shape(n3, 3)</em>) – Faces of the skin model.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -303,10 +302,10 @@ via freesurfer’s watershed algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subject_path</strong> – Subjects freesurfer path.</p></li>
-<li><p><strong>subject_id</strong> – Subject name.</p></li>
-<li><p><strong>preflood_height</strong> – Freesurfer parameter. May need adjusting if segmentation doesn’t work properly.</p></li>
-<li><p><strong>overwrite</strong> – Flag to overwrite if files are already present. Defaults to False.</p></li>
+<li><p><strong>subject_path</strong> (<em>string</em>) – Subjects freesurfer path.</p></li>
+<li><p><strong>subject_id</strong> (<em>string</em>) – Subject name.</p></li>
+<li><p><strong>preflood_height</strong> (<em>int</em>) – Freesurfer parameter. May need adjusting if segmentation doesn’t work properly.</p></li>
+<li><p><strong>overwrite</strong> (<em>boolean</em>) – Flag to overwrite if files are already present. Defaults to False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -315,17 +314,25 @@ via freesurfer’s watershed algorithm.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_bem_model_linear_basis">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calcuates the BEM linear basis coefficients from the collocation method.</p>
+<dd><p>Calcuates the BEM linear basis coefficients using the linear collocation method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ws_in_skull_vert</strong> – Inner skull vertices.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> – Inner skull faces.</p></li>
-<li><p><strong>tgt_icosahedron_level</strong> – Order of the icosahedron employed herein.</p></li>
+<li><p><strong>ws_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m1</em><em>, </em><em>3</em><em>)</em>) – Inner skull vertices.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Inner skull faces.</p></li>
+<li><p><strong>tgt_icosahedron_level</strong> (<em>int</em>) – Order of the icosahedron employed herein,
+defaults to 4.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Scaled and filtered MRI vertices/faces, face area, face normals, and bem_solution.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>trans_ws_in_skill_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Remaining inner skull vertices.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – Remaining inner skull faces.</p></li>
+<li><p><strong>faces_area</strong> (<em>numpy.ndarray, shape(m2)</em>) – Surface area of the remaining faces.</p></li>
+<li><p><strong>faces_normal</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Normals of the individual remaining inner skull faces.</p></li>
+<li><p><strong>bem_solution</strong> (<em>numpy.ndarray, shape(n2, n2)</em>) – BEM solution (preliminary step for the calculation of the forward model).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -337,13 +344,13 @@ via freesurfer’s watershed algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ws_in_skull_vert</strong> – Vertices of the inner skull model.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> – Faces of the inner skull model.</p></li>
-<li><p><strong>ws_out_skull_vert</strong> – Vertices of the outer skull model.</p></li>
-<li><p><strong>ws_out_skull_faces</strong> – Faces of the outer skull model.</p></li>
-<li><p><strong>ws_out_skin_vert</strong> – Vertices of the skin model.</p></li>
-<li><p><strong>ws_out_skin_faces</strong> – Faces of the skin model.</p></li>
-<li><p><strong>subject_path</strong> – Subject’s freesurfer path.</p></li>
+<li><p><strong>ws_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m1</em><em>, </em><em>3</em><em>)</em>) – Vertices of the inner skull model.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Faces of the inner skull model.</p></li>
+<li><p><strong>ws_out_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>, </em><em>3</em><em>)</em>) – Vertices of the outer skull model.</p></li>
+<li><p><strong>ws_out_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>3</em><em>)</em>) – Faces of the outer skull model.</p></li>
+<li><p><strong>ws_out_skin_vect</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m3</em><em>, </em><em>3</em><em>)</em>) – Vertices of the skin model.</p></li>
+<li><p><strong>ws_out_skin_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n3</em><em>, </em><em>3</em><em>)</em>) – Faces of the skin model.</p></li>
+<li><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p></li>
 </ul>
 </dd>
 </dl>
@@ -355,10 +362,14 @@ via freesurfer’s watershed algorithm.</p>
 <dd><p>Loads and orients an MRI scan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subject_path</strong> – Subject’s freesurfer path.</p>
+<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Path to the subject’s T1 scan.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Data and orientation of the scan.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>t1_image_trans.get_fdata()</strong> (<em>numpy.ndarray, shape(a, b, c)</em>) – Reoriented T1 scan.</p></li>
+<li><p><strong>ras_to_mri</strong> (<em>numpy.ndarray, shape(a, b, c)</em>) – RAS (right, anterior, superior) to MRI transformation.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -370,9 +381,9 @@ via freesurfer’s watershed algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – The transformed data for plotting.</p></li>
-<li><p><strong>axes</strong> – Axes do plot data onto.</p></li>
-<li><p><strong>surfaces</strong> – Surfaces (inner skull, skin, and/or outer skull models.</p></li>
+<li><p><strong>data</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>a</em><em>, </em><em>b</em><em>, </em><em>c</em><em>)</em>) – RAS oriented data.</p></li>
+<li><p><strong>axes</strong> (<em>list</em><em> of </em><em>matplotlib.axes</em>) – Axes for plotting.</p></li>
+<li><p><strong>surfaces</strong> (<em>list</em><em> of </em><em>surfaces</em><em>, </em><em>(</em><em>&quot;Name&quot;</em><em>, </em><em>&quot;Color&quot;</em><em>, </em><em>vertices</em><em>, </em><em>faces</em><em>)</em>) – List of surfices to draw.</p></li>
 </ul>
 </dd>
 </dl>
@@ -381,18 +392,19 @@ via freesurfer’s watershed algorithm.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model._find_non_diag_omega">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_non_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces_normal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_non_diag_omega" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the non-diagonal elements of omega, see function calc_bem_model.</p>
+<dd><p>Calculates the non-diagonal elements of omega (linear basis factors), see function calc_bem_model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>faces</strong> – Individual faces.</p></li>
-<li><p><strong>vert</strong> – Individual vertices.</p></li>
-<li><p><strong>double_faces_area</strong> – Precomputed double face area.</p></li>
-<li><p><strong>faces_normal</strong> – Normales of each face.</p></li>
+<li><p><strong>trans_ws_in_skill_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>, </em><em>3</em><em>)</em>) – Remaining inner skull vertices.</p></li>
+<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>3</em><em>)</em>) – Remaining inner skull faces.</p></li>
+<li><p><strong>faces_area</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>)</em>) – Surface area of the remaining faces.</p></li>
+<li><p><strong>faces_normal</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>, </em><em>3</em><em>)</em>) – Normals of the individual remaining inner skull faces.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Thre respective omega elements.</p>
+<dd class="field-even"><p><strong>omega</strong> (<em>numpy.ndarray, shape(n2, n2)</em>) – Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
+Warning, diagonal elements are invalid!</p>
 </dd>
 </dl>
 </dd></dl>
@@ -406,30 +418,13 @@ See function calc_bem_model for a more general description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>omega</strong> – The omega matrix with non-diagonal elements populated.</p></li>
-<li><p><strong>faces</strong> – Respective faces.</p></li>
+<li><p><strong>omega</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>n2</em><em>)</em>) – Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
+Warning, diagonal elements are currently invalid!</p></li>
+<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>3</em><em>)</em>) – Remaining inner skull faces.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The respective omega elements.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.bem_model._calc_bem_fields">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_calc_bem_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._calc_bem_fields" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the magnetic field at a vortex from all MEG sensors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vortex</strong> – Position of the vortex.</p></li>
-<li><p><strong>rmags</strong> – 3D position of the MEG coils.</p></li>
-<li><p><strong>cosmags</strong> – MEG coil direction.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The magnetic field of all MEG sensors at a vortex.</p>
+<dd class="field-even"><p><strong>omega</strong> (<em>numpy.ndarray, shape(n2, n2)</em>) – “Omega” elements of the BEM solution with proper diagonal elements.</p>
 </dd>
 </dl>
 </dd></dl>

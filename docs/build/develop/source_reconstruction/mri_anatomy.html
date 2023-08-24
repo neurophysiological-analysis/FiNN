@@ -276,10 +276,14 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
-<li><p><strong>t1_scan_file</strong> – Name of the mri file.</p></li>
-<li><p><strong>fiducials_file</strong> – Name of the fiducials file. If none is present, default fiducials are morphed from fs-average.</p></li>
-<li><p><strong>overwrite</strong> – Flag whether to overwrite the files of the respective subject folder already exists.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+<li><p><strong>t1_scan_file</strong> (<em>string</em>) – Name of the mri file.</p></li>
+<li><p><strong>fiducials_file</strong> (<em>string</em>) – Name of the fiducials file. If none is present, default fiducials are morphed from fs-average,
+defaults to None.</p></li>
+<li><p><strong>fiducials_path</strong> (<em>string</em>) – Path to the fiducials file. If none is present, default fiducials are morphed from fs-average,
+defaults to None.</p></li>
+<li><p><strong>Var_name</strong> (<em>boolean</em>) – Flag whether to overwrite the files of the respective subject folder already exists,
+defaults to False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -292,9 +296,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fs_path</strong> – Path to the freesurfer files (containing fs average).</p></li>
-<li><p><strong>subj_path</strong> – Folder name of the subject.</p></li>
-<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+<li><p><strong>fs_path</strong> (<em>string</em>) – Path to the freesurfer files (containing fs average).</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Folder name of the subject.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
 </ul>
 </dd>
 </dl>
@@ -307,10 +311,11 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_path</strong> – Path to the freesurfer created subject specific files.</p></li>
-<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
-<li><p><strong>scale</strong> – Scaling to be applied (x, y, z).</p></li>
-<li><p><strong>overwrite</strong> – Flag to apply scaling even if scaling is already applied.</p></li>
+<li><p><strong>subj_path</strong> (<em>string</em>) – Path to the freesurfer created subject specific files.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – Scaling to be applied (x, y, z).</p></li>
+<li><p><strong>overwrite</strong> (<em>boolean</em>) – Flag to apply scaling even if scaling is already applied,
+defaults to False.</p></li>
 </ul>
 </dd>
 </dl>
@@ -322,7 +327,7 @@
 <dd><p>Employ freesurfer to visualize anatomy results extracted from freesurfer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subj_path</strong> – Path to the subject’s freesurfer created files.</p>
+<dd class="field-odd"><p><strong>subj_path</strong> (<em>string</em>) – Path to the subject’s freesurfer created files.Parameters</p>
 </dd>
 </dl>
 </dd></dl>
@@ -334,9 +339,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>in_path</strong> – Path to the src folder.</p></li>
-<li><p><strong>out_path</strong> – Path to the tgt folder.</p></li>
-<li><p><strong>subj_name</strong> – Name of the subject.</p></li>
+<li><p><strong>in_path</strong> (<em>string</em>) – Path to the src folder.</p></li>
+<li><p><strong>out_path</strong> (<em>string</em>) – Path to the tgt folder.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
 </ul>
 </dd>
 </dl>
@@ -349,8 +354,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Path to the fiducials file.</p></li>
-<li><p><strong>scale</strong> – Scale to be applied (x, y, z).</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path to the fiducials file.</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – Scale to be applied (x, y, z).</p></li>
 </ul>
 </dd>
 </dl>
@@ -363,8 +368,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Path to the subject’s freesurfer created surface surfaces.</p></li>
-<li><p><strong>scale</strong> – Scale to be applied (x, y, z).</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path to the subject’s freesurfer created surface surfaces.</p></li>
+<li><p><strong>scale</strong> (<em>Scale to be applied</em><em> (</em><em>x</em><em>, </em><em>y</em><em>, </em><em>z</em><em>)</em><em>.</em>) – Descriptor</p></li>
 </ul>
 </dd>
 </dl>
@@ -377,8 +382,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> – Path to the subject’s freesurfer created mri files.</p></li>
-<li><p><strong>scale</strong> – Scale to be applied (x, y, z).</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path to the subject’s freesurfer created mri files.</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – Scale to be applied (x, y, z).</p></li>
 </ul>
 </dd>
 </dl>

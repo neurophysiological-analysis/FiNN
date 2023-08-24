@@ -22,4 +22,7 @@ This module may be employed to calculate the forward model for the source recons
 .. currentmodule:: source_reconstruction.forward_model
 .. autofunction:: _add_current_distribution
 
+.. currentmodule:: source_reconstruction.forward_model
+.. autofunction:: _calc_bem_fields
+
 
