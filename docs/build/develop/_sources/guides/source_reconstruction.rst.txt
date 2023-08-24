@@ -167,6 +167,7 @@ Producing the following output:
 
 .. image:: img/MEG_source_reconstruction_coreg.png
    :alt: MEG and MRI coregistration example
+   :width: 600
    :align: center
 
 
@@ -193,6 +194,7 @@ Producing the following output:
 
 .. image:: img/MEG_source_reconstruction_ws.png
    :alt: Skull model example
+   :width: 600
    :align: center
 
 
