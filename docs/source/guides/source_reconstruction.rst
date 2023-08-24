@@ -49,6 +49,7 @@ Initially, free surfer paths need to be configured for subsequent freesurfer cal
 Subsequently, freesurfer may be used to either extract anatomical information from subject specific MRI scans or copy data from fs-average, an averaged MRI scan provided through freesurfer.
 
 .. code-block::
+
        print("Extract anatomy")
        if (t1_scan_file is None):
            finnpy.source_reconstruction.mri_anatomy.copy_fs_avg_anatomy(fs_path, subj_path, subj_name)

@@ -64,6 +64,9 @@ This module serves as a collection for methods not strictly limited to a singula
 .. currentmodule:: source_reconstruction.utils
 .. autofunction:: calc_whitener
 
+.. currentmodule:: source_reconstruction.utils
+.. autofunction:: read_cortical_models
+
 
 
 

@@ -192,15 +192,6 @@
    </code>
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.source_mesh_model._read_cortical_data">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     _read_cortical_data()
-    </span>
-   </code>
-  </a>
- </li>
 </ul>
 
 </nav>
@@ -227,20 +218,11 @@
 <p>This module may be employed to calculate a (source space) mesh model.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.source_mesh_model.create_source_mesh_model">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_mesh_model.</span></span><span class="sig-name descname"><span class="pre">create_source_mesh_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_mesh_model.create_source_mesh_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_mesh_model.</span></span><span class="sig-name descname"><span class="pre">create_source_mesh_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_mesh_model.create_source_mesh_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a source mesh model by warping an octahedron towards the surface sphere created by freesurfer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
-<li><p><strong>lh_white_faces</strong> (<em>numpy.ndarray, shape(lh_white_face_cnt, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
-<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
-<li><p><strong>rh_white_faces</strong> (<em>numpy.ndarray, shape(rh_white_face_cnt, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
-<li><p><strong>lh_white_valid_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt,)</em>) – Vertices with a match in the spherical model (left hemisphere).</p></li>
-<li><p><strong>rh_white_valid_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt,)</em>) – Vertices with a match in the spherical model (right hemisphere).</p></li>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
 <li><p><strong>octa_model_vert</strong> (<em>numpy.ndarray, shape(octa_vtx_cnt, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
 <li><p><strong>octa_model_faces</strong> (<em>numpy.ndarray, shape(octa_face_cnt, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
 </ul>
@@ -261,28 +243,6 @@
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>vert</strong> (<em>numpy.ndarray, shape(octa_vtx_cnt, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
 <li><p><strong>faces</strong> (<em>numpy.ndarray, shape(octa_face_cnt, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.source_mesh_model._read_cortical_data">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_mesh_model.</span></span><span class="sig-name descname"><span class="pre">_read_cortical_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_mesh_model._read_cortical_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads cortical freesurfer data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
-<li><p><strong>lh_white_faces</strong> (<em>numpy.ndarray, shape(lh_white_face_cnt, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
-<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
-<li><p><strong>rh_white_faces</strong> (<em>numpy.ndarray, shape(rh_white_face_cnt, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
-<li><p><strong>lh_sphere_vert</strong> (<em>numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)</em>) – Spherical freesurfer head model vertices (left hemisphere).</p></li>
-<li><p><strong>rh_sphere_vert</strong> (<em>numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)</em>) – Spherical freesurfer head model vertices (right hemisphere).</p></li>
 </ul>
 </p>
 </dd>

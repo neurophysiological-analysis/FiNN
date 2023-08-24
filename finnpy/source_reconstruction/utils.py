@@ -16,7 +16,7 @@ import warnings
 
 import mne.io
 
-def read_surface_model(subject_path):
+def read_cortical_models(subject_path):
     """
     Reads cortical freesurfer data.
     
