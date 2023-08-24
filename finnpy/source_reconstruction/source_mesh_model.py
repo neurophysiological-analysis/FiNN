@@ -21,9 +21,9 @@ def _create_mesh(octahedron_level = 6):
                
     Returns
     -------
-    vert : numpy.ndarray, shape(n3, 3)
+    vert : numpy.ndarray, shape(octa_vtx_cnt, 3)
            Vertices of the spherical model (octahedron).
-    faces : numpy.ndarray, shape(m3, 3)
+    faces : numpy.ndarray, shape(octa_face_cnt, 3)
             Faces of the spherical model (octahedron).
     """
     (vert, faces) = finnpy.source_reconstruction.sphere_model.calculate_sphere_from_octahedron(octahedron_level)
@@ -42,29 +42,29 @@ def _read_cortical_data(subject_path):
                
     Returns
     -------
-    lh_geom_white_vert : numpy.ndarray, shape(m1, 3)
-                         White matter surface model vertices (left hemisphere).
-    lh_geom_white_faces : numpy.ndarray, shape(n1, 3)
-                          White matter surface model faces (left hemisphere).
-    rh_geom_white_vert : numpy.ndarray, shape(m2, 3)
-                         White matter surface model vertices (right hemisphere).
-    rh_geom_white_faces : numpy.ndarray, shape(n2, 3)
-                          White matter surface model faces (right hemisphere).
-    lh_geom_sphere_vert : numpy.ndarray, shape(m1, 3)
-                          Spherical freesurfer head model vertices (left hemisphere).
-    rh_geom_sphere_vert : numpy.ndarray, shape(m2, 3)
-                          Spherical freesurfer head model vertices (right hemisphere).
+    lh_white_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
+                    White matter surface model vertices (left hemisphere).
+    lh_white_faces : numpy.ndarray, shape(lh_white_face_cnt, 3)
+                     White matter surface model faces (left hemisphere).
+    rh_white_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
+                    White matter surface model vertices (right hemisphere).
+    rh_white_faces : numpy.ndarray, shape(rh_white_face_cnt, 3)
+                     White matter surface model faces (right hemisphere).
+    lh_sphere_vert : numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)
+                     Spherical freesurfer head model vertices (left hemisphere).
+    rh_sphere_vert : numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)
+                     Spherical freesurfer head model vertices (right hemisphere).
     """
-    (lh_geom_white_vert, lh_geom_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.white")
-    (rh_geom_white_vert, rh_geom_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.white")
+    (lh_white_vert, lh_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.white")
+    (rh_white_vert, rh_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.white")
     
-    (lh_geom_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.sphere")
-    (rh_geom_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.sphere")
+    (lh_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.sphere")
+    (rh_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.sphere")
     
-    return (lh_geom_white_vert, lh_geom_white_faces,
-            rh_geom_white_vert, rh_geom_white_faces,
-            lh_geom_sphere_vert,
-            rh_geom_sphere_vert)
+    return (lh_white_vert, lh_white_faces,
+            rh_white_vert, rh_white_faces,
+            lh_sphere_vert,
+            rh_sphere_vert)
 
 def create_source_mesh_model(subject_path):
     """
@@ -77,43 +77,43 @@ def create_source_mesh_model(subject_path):
                
     Returns
     -------
-    lh_geom_white_vert : numpy.ndarray, shape(m1, 3)
-                         White matter surface model vertices (left hemisphere).
-    lh_geom_white_faces : numpy.ndarray, shape(n1, 3)
-                          White matter surface model faces (left hemisphere).
-    rh_geom_white_vert : numpy.ndarray, shape(m2, 3)
-                         White matter surface model vertices (right hemisphere).
-    rh_geom_white_faces : numpy.ndarray, shape(n2, 3)
-                          White matter surface model faces (right hemisphere).
-    valid_geom_lh_vert : numpy.ndarray, shape(m1,)
-                         Vertices with a match in the spherical model (left hemisphere).
-    valid_geom_rh_vert : numpy.ndarray, shape(m2,)
-                         Vertices with a match in the spherical model (right hemisphere).
-    model_vert : numpy.ndarray, shape(n3, 3)
-                 Vertices of the spherical model (octahedron).
-    model_faces : numpy.ndarray, shape(m3, 3)
-                  Faces of the spherical model (octahedron).               
+    lh_white_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
+                    White matter surface model vertices (left hemisphere).
+    lh_white_faces : numpy.ndarray, shape(lh_white_face_cnt, 3)
+                     White matter surface model faces (left hemisphere).
+    rh_white_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
+                    White matter surface model vertices (right hemisphere).
+    rh_white_faces : numpy.ndarray, shape(rh_white_face_cnt, 3)
+                     White matter surface model faces (right hemisphere).
+    lh_white_valid_vert : numpy.ndarray, shape(lh_white_vtx_cnt,)
+                          Vertices with a match in the spherical model (left hemisphere).
+    rh_white_valid_vert : numpy.ndarray, shape(rh_white_vtx_cnt,)
+                          Vertices with a match in the spherical model (right hemisphere).
+    octa_model_vert : numpy.ndarray, shape(octa_vtx_cnt, 3)
+                      Vertices of the spherical model (octahedron).
+    octa_model_faces : numpy.ndarray, shape(octa_face_cnt, 3)
+                       Faces of the spherical model (octahedron).               
     """
     #Get reference mesh
-    (model_vert, model_faces) = _create_mesh()
+    (octa_model_vert, octa_model_faces) = _create_mesh()
     
     #Load surface data from freesurfer reconstructions
-    (lh_geom_white_vert, lh_geom_white_faces,
-     rh_geom_white_vert, rh_geom_white_faces,
-     lh_geom_sphere_vert,
-     rh_geom_sphere_vert) = _read_cortical_data(subject_path)
+    (lh_white_vert, lh_white_faces,
+     rh_white_vert, rh_white_faces,
+     lh_sphere_vert,
+     rh_sphere_vert) = _read_cortical_data(subject_path)
         
     #Normalize geometric
-    lh_geom_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(lh_geom_sphere_vert)
-    rh_geom_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(rh_geom_sphere_vert)
+    lh_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(lh_sphere_vert)
+    rh_sphere_vert = finnpy.source_reconstruction.utils.norm_vert(rh_sphere_vert)
     
     #Get valid vertices
-    valid_geom_lh_vert = finnpy.source_reconstruction.utils.find_valid_vertices(lh_geom_sphere_vert, model_vert)
-    valid_geom_rh_vert = finnpy.source_reconstruction.utils.find_valid_vertices(rh_geom_sphere_vert, model_vert)
+    lh_white_valid_vert = finnpy.source_reconstruction.utils.find_valid_vertices(lh_sphere_vert, octa_model_vert)
+    rh_white_valid_vert = finnpy.source_reconstruction.utils.find_valid_vertices(rh_sphere_vert, octa_model_vert)
     
-    return (lh_geom_white_vert, lh_geom_white_faces,
-            rh_geom_white_vert, rh_geom_white_faces,
-            valid_geom_lh_vert, valid_geom_rh_vert,
-            model_vert, model_faces)
+    return (lh_white_vert, lh_white_faces,
+            rh_white_vert, rh_white_faces,
+            lh_white_valid_vert, rh_white_valid_vert,
+            octa_model_vert, octa_model_faces)
 
 

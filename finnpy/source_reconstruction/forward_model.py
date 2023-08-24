@@ -15,7 +15,7 @@ import mne.forward
 import mne.io.constants
 
 
-def _get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
+def _get_meg_coil_positions(rec_meta_info, meg_to_mri_trans):
     """
     Gets MEG coil spatial information,
     such as coils' individual integration points (rmag), 
@@ -25,8 +25,8 @@ def _get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
     ----------
     rec_meta_info : mne.io.read_info
                     MEG scan meta info, obtailable via mne.io.read_info
-    head_to_mri_trans : numpy.ndarray, shape(4, 4)
-                        Transformation from MEG to MRI space.
+    meg_to_mri_trans : numpy.ndarray, shape(4, 4)
+                       Transformation from MEG to MRI space.
                
     Returns
     -------
@@ -67,71 +67,71 @@ def _get_meg_coil_positions(rec_meta_info, head_to_mri_trans):
             meg_ch["rmag"] = np.dot(meg_ch["rmag"], loc_trans[:3,:3].T) + loc_trans[:3, 3]
             meg_ch["cosmag"] = np.dot(meg_ch["cosmag"], loc_trans[:3,:3].T)
             
-            meg_ch["rmag_mri"] = np.dot(meg_ch["rmag"], head_to_mri_trans[:3,:3].T) + head_to_mri_trans[:3, 3]
-            meg_ch["cosmag_mri"] = np.dot(meg_ch["cosmag"], head_to_mri_trans[:3,:3].T)
+            meg_ch["rmag_mri"] = np.dot(meg_ch["rmag"], meg_to_mri_trans[:3,:3].T) + meg_to_mri_trans[:3, 3]
+            meg_ch["cosmag_mri"] = np.dot(meg_ch["cosmag"], meg_to_mri_trans[:3,:3].T)
             
             meg_chs.append(meg_ch)
             
     return meg_chs
 
-def _apply_coreg_to_vertices(geom_white_vert, coreg_trans_mat):
+def _apply_coreg_to_vertices(white_vert, coreg_trans_mat):
     """
     Scales and transforms vertices from MRI space to MEG space.
     
     Parameters
     ----------
-    geom_white_vert : numpy.ndarray, shape(n, 3)
-                      White matter surface vertices in MRI space.
+    white_vert : numpy.ndarray, shape(white_vtx_cnt, 3)
+                 White matter surface vertices in MRI space.
                
     Returns
     -------
-    trans_geom_white_vert : numpy.ndarray, shape(n, 3)
-                            Transformed vertices.
+    trans_white_vert : numpy.ndarray, shape(white_vtx_cnt, 3)
+                       Transformed vertices.
     """
-    geom_white_vert /= 1000 #Scale from m to mm
-    trans_geom_white_vert = np.dot(geom_white_vert, coreg_trans_mat[:3,:3].T) + coreg_trans_mat[:3, 3]
+    white_vert /= 1000 #Scale from m to mm
+    trans_white_vert = np.dot(white_vert, coreg_trans_mat[:3,:3].T) + coreg_trans_mat[:3, 3]
     
-    return trans_geom_white_vert
+    return trans_white_vert
 
-def _update_invalid_vertices(approx_surface, geom_white_vert, valid_geom_vert):
+def _update_invalid_vertices(approx_surface, geom_white_vert, white_valid_vert):
     """
     Updates invalid vertices
     """
-    data = geom_white_vert[np.asarray(valid_geom_vert, dtype=bool)]
+    data = geom_white_vert[np.asarray(white_valid_vert, dtype=bool)]
     inside_check = (approx_surface.find_simplex(data) != -1)
-    valid_geom_vert[np.where(valid_geom_vert)[0][~inside_check]] = False
+    white_valid_vert[np.where(white_valid_vert)[0][~inside_check]] = False
     
-    return valid_geom_vert
+    return white_valid_vert
 
-def _calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, coreg_trans_mat, pre_fwd_solution):
+def _calc_magnetic_fields(white_vertices_mri, reduced_in_skull_vert, meg_to_mri_trans, pre_fwd_solution):
     """
     Computes infinite medium potentials.
     
     Parameters
     ----------
-    white_vertices_mri : numpy.ndarray, shape(m, 3)
+    white_vertices_mri : numpy.ndarray, shape(valid_white_vtx_cnt, 3)
                          White matter vertices.
-    bem_trans_ws_in_skull_vert : numpy.ndarray, shape(n, 3)
-                                 Inner skull model vertices.
-    coreg_trans_mat : numpy.ndarray, shape(4, 4)
+    reduced_in_skull_vert : numpy.ndarray, shape(reduced_in_skull_vtx_cnt, 3)
+                            Inner skull model vertices.
+    meg_to_mri_trans : numpy.ndarray, shape(4, 4)
                       Transformatio matrix from the coregistration.
-    pre_fwd_solution : numpy.ndarray, shape(meg_ch_cnt, m * 3)
+    pre_fwd_solution : numpy.ndarray, shape(meg_ch_cnt, reduced_in_skull_vtx_cnt)
                        Fwd solution precursor.
                
     Returns
     -------
-    fwd_sol : numpy.ndarray, shape(4, meg_ch_cnt, n)
+    fwd_sol : numpy.ndarray, shape(valid_white_vtx_cnt * 3, meg_ch_cnt)
               Forward solution with infinite medium potentials.
     """
-    fwd_sol = np.zeros((len(white_vertices_mri), 3, len(bem_trans_ws_in_skull_vert)))
+    fwd_sol = np.zeros((len(white_vertices_mri), 3, len(reduced_in_skull_vert)))
     
     #See Mosher et al, 1999, equation #8 for reference
     for (white_vortex_mri_idx, white_vortex_mri) in enumerate(white_vertices_mri):
-        magnitude = np.power(np.linalg.norm(bem_trans_ws_in_skull_vert - white_vortex_mri, axis=1), 3)
+        magnitude = np.power(np.linalg.norm(reduced_in_skull_vert - white_vortex_mri, axis=1), 3)
         magnitude[magnitude == 0] = 1
         
         #Move diff from MRI space to head space
-        diff = np.dot((bem_trans_ws_in_skull_vert - white_vortex_mri), coreg_trans_mat[:3,:3])
+        diff = np.dot((reduced_in_skull_vert - white_vortex_mri), meg_to_mri_trans[:3,:3])
         diff /= np.expand_dims(magnitude, axis=1)
         
         fwd_sol[white_vortex_mri_idx] = diff.T
@@ -154,13 +154,13 @@ def _add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosm
                      Valid white matter vertices.
     meg_ch_infos : list of dictionaries, ('coil_type', 'rmag', 'cosmag', 'w', 'ch_trans', 'rmag_mri', 'cosmag_mri')
                    MEG recording meta into.
-    rmags : numpy.ndarray, shape(n, 3)
+    rmags : numpy.ndarray, shape(meg_ch_integration_pt_cnt, 3)
             3D positions of MEG coil integration points (MEG space).
-    cosmags : numpy.ndarray, shape(n, 3)
+    cosmags : numpy.ndarray, shape(meg_ch_integration_pt_cnt, 3)
               Direction of the MEG coil integration points (MEG space).
-    ws : Var_type, shape(n,)
+    ws : Var_type, shape(meg_ch_integration_pt_cnt,)
          Weights for MEG coil integration points.
-    meg_ch_indices : Var_type, shape(n,)
+    meg_ch_indices : Var_type, shape(meg_ch_integration_pt_cnt,)
                      Indices of MEG channels.
                
     Returns
@@ -195,14 +195,14 @@ def _calc_bem_fields(vortex, rmags, cosmags):
     ----------
     vortex : numpy.ndarray, shape(3,)
              Position of the vortex
-    rmags : numpy.ndarray, shape(n, 3)
+    rmags : numpy.ndarray, shape(meg_chs_integration_pt_cnt, 3)
             3D positions of MEG coil integration points (MRI space)
-    cosmags : numpy.ndarray, shape(n, 3)
+    cosmags : numpy.ndarray, shape(meg_chs_integration_pt_cnt, 3)
               Direction of the MEG coil integration points (MEG space)
                
     Returns
     -------
-    fields : numpy.ndarray, shape(1, 3, n)
+    fields : numpy.ndarray, shape(1, 3, meg_chs_integration_pt_cnt)
              The magnetic field of all MEG sensors at a vortex.    
     """
     #See Mosher et al, 1999, equation #1.
@@ -223,60 +223,60 @@ def _calc_bem_fields(vortex, rmags, cosmags):
     
     return fields
 
-def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
-                       head_to_mri_trans, mri_to_head_trans, rec_meta_info,
-                       bem_trans_ws_in_skull_vert, bem_ws_in_skull_faces, bem_ws_in_skull_faces_normal, bem_ws_in_skull_faces_area, bem_solution,
-                       valid_lh_geom_vert, valid_rh_geom_vert,
+def calc_forward_model(lh_white_vert, rh_white_vert,
+                       meg_to_mri_trans, mri_to_meg_trans, rec_meta_info,
+                       reduced_in_skull_vert, in_skull_faces, in_skull_faces_normal, in_skull_faces_area, bem_solution,
+                       lh_white_valid_vert, rh_white_valid_vert,
                        _mag_factor=1e-7):
     """
     Calculates the forward model according to Mosher et al, 1999. 
     
     Parameters
     ----------
-    lh_geom_white_vert : numpy.ndarray, shape(m, 3)
-                         Lh white matter surface (MRI).
-    rh_geom_white_vert : numpy.ndarray, shape(n, 3)
-                         Rh white matter surface (MRI).
-    head_to_mri_trans : numpy.ndarray, shape(4, 4)
-                        Head to MRI transformation.
-    mri_to_head_trans : numpy.ndarray, shape(4, 4)
-                        MRI to head transformation.
+    lh_white_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
+                    Lh white matter surface (MRI).
+    rh_white_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
+                    Rh white matter surface (MRI).
+    meg_to_mri_trans : numpy.ndarray, shape(4, 4)
+                       MEG to MRI transformation.
+    mri_to_meg_trans : numpy.ndarray, shape(4, 4)
+                       MRI to MEG transformation.
     rec_meta_info : mne.io.read_info
                     MEG scan meta info, obtailable via mne.io.read_info
-    bem_trans_ws_in_skull_vert : numpy.ndarray, shape(x, 3)
-                                 Inner skull model vertices.
-    bem_ws_in_skull_faces : numpy.ndarray, shape(y, 3)
-                            Inner skull model faces.
-    bem_ws_in_skull_faces_normal : numpy.ndarray, shape(y, 3)
-                                   Inner skull model faces' normals.
-    bem_ws_in_skull_faces_area : numpy.ndarray, shape(y,)
-                                 Inner skull model faces' areas.
+    reduced_in_skull_vert : numpy.ndarray, shape(x, 3)
+                            Inner skull model vertices.
+    in_skull_faces : numpy.ndarray, shape(y, 3)
+                     Inner skull model faces.
+    in_skull_faces_normal : numpy.ndarray, shape(y, 3)
+                            Inner skull model faces' normals.
+    in_skull_faces_area : numpy.ndarray, shape(y,)
+                          Inner skull model faces' areas.
     bem_solution : numpy.ndarray, shape(x, x)
                    BEM linear basis functions.
-    valid_lh_geom_vert : numpy.ndarray, shape(m, 3)
-                         Binary list of Freesurfer lh vertices that have a match in the model vertices (octahedron).
-    valid_rh_geom_vert : numpy.ndarray, shape(n, 3)
-                         Binary list of Freesurfer rh vertices that have a match in the model vertices (octahedron).
+    lh_white_valid_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
+                          Binary list of Freesurfer lh vertices that have a match in the model vertices (octahedron).
+    rh_white_valid_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
+                          Binary list of Freesurfer rh vertices that have a match in the model vertices (octahedron).
                
     Returns
     -------
     fwd_sol : Var_type, shape(meg_ch_cnt, remaining_vertices * 3)
               Forward model, transforming from MEG space into valid MRI space.
-    valid_lh_geom_vert : Var_type, shape
-                         Remaining valid lh vertices.
-    valid_rh_geom_vert : Var_type, shape
-                         Remaining valid rh vertices.
+    lh_white_valid_vert : numpy.ndarray, shape(vtx_cnt, 3)
+                          Remaining valid lh vertices.
+    rh_white_valid_vert : numpy.ndarray, shape(vtx_cnt, 3)
+                          Remaining valid rh vertices.
     """
 
     #Transform anatomy into head space
-    trans_lh_geom_white_vert = _apply_coreg_to_vertices(lh_geom_white_vert, mri_to_head_trans)
-    trans_rh_geom_white_vert = _apply_coreg_to_vertices(rh_geom_white_vert, mri_to_head_trans)
+    trans_lh_white_vert = _apply_coreg_to_vertices(lh_white_vert, mri_to_meg_trans)
+    trans_rh_white_vert = _apply_coreg_to_vertices(rh_white_vert, mri_to_meg_trans)
     
     #Flag cortical points outside of the skull as invalid and concatenate all vertices
-    approx_surface = scipy.spatial.Delaunay(bem_trans_ws_in_skull_vert)
-    valid_lh_geom_vert = _update_invalid_vertices(approx_surface, lh_geom_white_vert, valid_lh_geom_vert)
-    valid_rh_geom_vert = _update_invalid_vertices(approx_surface, rh_geom_white_vert, valid_rh_geom_vert)
-    white_vertices = np.concatenate((trans_lh_geom_white_vert[np.where(valid_lh_geom_vert)[0]], trans_rh_geom_white_vert[np.where(valid_rh_geom_vert)[0]]))
+    approx_surface = scipy.spatial.Delaunay(reduced_in_skull_vert)
+    lh_white_valid_vert = _update_invalid_vertices(approx_surface, lh_white_vert, lh_white_valid_vert)
+    rh_white_valid_vert = _update_invalid_vertices(approx_surface, rh_white_vert, rh_white_valid_vert)
+    white_vertices = np.concatenate((trans_lh_white_vert[np.where(lh_white_valid_vert)[0]], trans_rh_white_vert[np.where(rh_white_valid_vert)[0]]))
     
     #Configure constants
     conductivity = (.3,)
@@ -285,7 +285,7 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     field_mult = sigma - 0
     
     #Load MEG coil meta information (e.g. direction)
-    meg_ch_infos = _get_meg_coil_positions(rec_meta_info, head_to_mri_trans)    
+    meg_ch_infos = _get_meg_coil_positions(rec_meta_info, meg_to_mri_trans)    
     meg_ch_comp = np.zeros((len(rec_meta_info["chs"],)))
     for (meg_ch_idx, meg_ch) in enumerate(meg_ch_infos):
         meg_ch_comp[meg_ch_idx] = int(meg_ch["coil_type"]) >> 16
@@ -312,15 +312,15 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     #Based on Mosher, 1999, formula #3 µ/(4*pi)(normals x tau)/norm³ ...
     #extended with additional weights for MEG coil direction, MEG coil weight
     #Integration simplified as multiplication with surface area, see "Multiple Interface Brain and Head Models for EEG: A Surface Charge Approach", Solis and Papandreou-Suppappola
-    meg_lin_pot_basis = np.zeros((len(meg_ch_infos), bem_trans_ws_in_skull_vert.shape[0]))
+    meg_lin_pot_basis = np.zeros((len(meg_ch_infos), reduced_in_skull_vert.shape[0]))
     w_cosmags = np.expand_dims(ws, axis=1) * cosmags_mri # Weighted directions
-    tau = np.expand_dims(rmags_mri, axis=1) - bem_trans_ws_in_skull_vert
+    tau = np.expand_dims(rmags_mri, axis=1) - reduced_in_skull_vert
     den = np.sum(tau * tau, axis=2) # This equates to ||x||^3, from sqrt(x¹+x²+...+x^n)³ = z³ to (x¹+x²+...+x^n) * sqrt((x¹+x²+...+x^n)) = z * z^(0.5) = z^(1 + 0.5)  
     den *= np.sqrt(den) * 3
-    for (face_idx, face) in enumerate(bem_ws_in_skull_faces):
-        num = np.cross(tau[:, face], bem_ws_in_skull_faces_normal[face_idx, :]) * np.expand_dims(w_cosmags, axis=1)
+    for (face_idx, face) in enumerate(in_skull_faces):
+        num = np.cross(tau[:, face], in_skull_faces_normal[face_idx, :]) * np.expand_dims(w_cosmags, axis=1)
         for vert_idx in range(3):
-            loc_effects = np.sum(num[:, vert_idx], axis=1) * bem_ws_in_skull_faces_area[face_idx] / den[:, face[vert_idx]]
+            loc_effects = np.sum(num[:, vert_idx], axis=1) * in_skull_faces_area[face_idx] / den[:, face[vert_idx]]
             effects_on_vert = np.zeros((len(meg_ch_infos),))
             for (effect_idx, effect_value) in enumerate(loc_effects):
                 effects_on_vert[meg_ch_indices[effect_idx]] += effect_value
@@ -329,10 +329,10 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     pre_fwd_solution = np.dot(meg_lin_pot_basis, bem_solution) * source_mult / (4 * np.pi)
     
     #Transform vertices into MRI space
-    white_vertices_mri = np.dot(head_to_mri_trans[:3,:3], white_vertices.T).T + head_to_mri_trans[:3, 3]
+    white_vertices_mri = np.dot(meg_to_mri_trans[:3,:3], white_vertices.T).T + meg_to_mri_trans[:3, 3]
     
     # Calculate magnetic potentials/fields
-    fwd_sol = _calc_magnetic_fields(white_vertices_mri, bem_trans_ws_in_skull_vert, head_to_mri_trans, pre_fwd_solution)
+    fwd_sol = _calc_magnetic_fields(white_vertices_mri, reduced_in_skull_vert, meg_to_mri_trans, pre_fwd_solution)
     
     # Calculate primary current distribution
     fwd_sol = _add_current_distribution(fwd_sol, white_vertices, meg_ch_infos, rmags, cosmags, ws, meg_ch_indices)
@@ -341,11 +341,11 @@ def calc_forward_model(lh_geom_white_vert, rh_geom_white_vert,
     fwd_sol *= _mag_factor
     fwd_sol = fwd_sol.T
     
-    return (fwd_sol, valid_lh_geom_vert, valid_rh_geom_vert)
+    return (fwd_sol, lh_white_valid_vert, rh_white_valid_vert)
         
-def optimize_fwd_model(lh_geom_white_vert, lh_geom_white_faces, valid_geom_lh_vert,
-                       rh_geom_white_vert, rh_geom_white_faces, valid_geom_rh_vert,
-                       fwd_sol, mri_to_head_trans):
+def optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
+                       rh_white_vert, rh_white_faces, rh_white_valid_vert,
+                       fwd_sol, mri_to_meg_trans):
     """
     Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
     allowing for cortically constrained inverse modeling)
@@ -354,23 +354,23 @@ def optimize_fwd_model(lh_geom_white_vert, lh_geom_white_faces, valid_geom_lh_ve
     
     Parameters
     ----------
-    lh_geom_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
-                         Lh vertices.
-    lh_geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
-                          Lh faces.
-    valid_geom_lh_vert : numpy.ndarray, shape(lh_vert_cnt,)
-                         Valid/supporting lh vertices.
-    rh_geom_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
-                         Rh vertices.
-    rh_geom_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
-                          Rh faces.
-    valid_geom_rh_vert : numpy.ndarray, shape(rh_vert_cnt,)
-                         Valid/supporting rh vertices.
+    lh_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
+                    Lh vertices.
+    lh_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
+                     Lh faces.
+    lh_white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+                          Valid/supporting lh vertices.
+    rh_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
+                    Rh vertices.
+    rh_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
+                     Rh faces.
+    rh_white_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
+                          Valid/supporting rh vertices.
     fwd_sol : TYPE, shape(meg_ch_cnt, valid_vtx_cnt * 3)
               Forward solution with default orientation.
     
-    mri_to_head_trans : numpy.ndarray, shape(4, 4)
-                        MRI to head transformation matrix.
+    mri_to_meg_trans : numpy.ndarray, shape(4, 4)
+                       MRI to meg transformation matrix.
     
     Returns
     -------
@@ -379,16 +379,16 @@ def optimize_fwd_model(lh_geom_white_vert, lh_geom_white_faces, valid_geom_lh_ve
     """
      
     #Computes vertex normals
-    lh_acc_normals = _calc_acc_hem_normals(lh_geom_white_vert, lh_geom_white_faces)
-    rh_acc_normals = _calc_acc_hem_normals(rh_geom_white_vert, rh_geom_white_faces)
+    lh_acc_normals = _calc_acc_hem_normals(lh_white_vert, lh_white_faces)
+    rh_acc_normals = _calc_acc_hem_normals(rh_white_vert, rh_white_faces)
      
     # Figures out which real vertices are represented by the same model vortex
-    (lh_cluster_grp, lh_cluster_indices) = _find_vertex_clusters(lh_geom_white_vert, valid_geom_lh_vert, lh_geom_white_faces)
-    (rh_cluster_grp, rh_cluster_indices) = _find_vertex_clusters(rh_geom_white_vert, valid_geom_rh_vert, rh_geom_white_faces)
+    (lh_cluster_grp, lh_cluster_indices) = _find_vertex_clusters(lh_white_vert, lh_white_valid_vert, lh_white_faces)
+    (rh_cluster_grp, rh_cluster_indices) = _find_vertex_clusters(rh_white_vert, rh_white_valid_vert, rh_white_faces)
     
     #Determines the orientation 
-    lh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(lh_acc_normals, valid_geom_lh_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
-    rh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(rh_acc_normals, valid_geom_rh_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
+    lh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(lh_acc_normals, lh_white_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_meg_trans)
+    rh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(rh_acc_normals, rh_white_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_meg_trans)
     
     #Concatenates the eigenvector bases 
     orient = np.concatenate((lh_orient, rh_orient), axis = 0)
@@ -399,18 +399,18 @@ def optimize_fwd_model(lh_geom_white_vert, lh_geom_white_faces, valid_geom_lh_ve
     #Applies rotation matrix to the fwd solution 
     return fwd_sol * rot
     
-def _calc_acc_hem_normals(geom_white_vert, geom_white_faces):
+def _calc_acc_hem_normals(white_vert, white_faces):
     """
     Generatoes vertex normals from accumulated face normals.
     See https://en.wikipedia.org/wiki/Vertex_normal.
     
     Parameters
     ----------
-    geom_white_vert : numpy.ndarray, shape(vert_cnt, 3)
-                         MRI model vertices.
+    white_vert : numpy.ndarray, shape(vert_cnt, 3)
+                 MRI model vertices.
     
-    geom_white_faces : numpy.ndarray, shape(face_cnt, 3)
-                          MRI model faces.
+    white_faces : numpy.ndarray, shape(face_cnt, 3)
+                  MRI model faces.
                
     Returns
     -------
@@ -419,20 +419,20 @@ def _calc_acc_hem_normals(geom_white_vert, geom_white_faces):
     """
     
     #Calculate surface normals
-    vert0 = geom_white_vert[geom_white_faces[:, 0], :]
-    vert1 = geom_white_vert[geom_white_faces[:, 1], :]
-    vert2 = geom_white_vert[geom_white_faces[:, 2], :]
+    vert0 = white_vert[white_faces[:, 0], :]
+    vert1 = white_vert[white_faces[:, 1], :]
+    vert2 = white_vert[white_faces[:, 2], :]
     vortex_normals = finnpy.source_reconstruction.utils.fast_cross_product(vert1 - vert0, vert2 - vert1)
     len_vortex_normals = np.linalg.norm(vortex_normals, axis = 1)
     vortex_normals[len_vortex_normals > 0] /= np.expand_dims(len_vortex_normals[len_vortex_normals > 0], axis = 1)
     
     #Accumulate face normals
-    acc_normals = np.zeros((geom_white_vert.shape[0], 3))
+    acc_normals = np.zeros((white_vert.shape[0], 3))
     for outer_idx in range(3):
         for inner_idx in range(3):
-            value = np.zeros((geom_white_vert.shape[0],))
-            for vertex_idx in range(geom_white_faces.shape[0]):
-                value[geom_white_faces[vertex_idx, outer_idx]] += vortex_normals[vertex_idx, inner_idx]
+            value = np.zeros((white_vert.shape[0],))
+            for vertex_idx in range(white_faces.shape[0]):
+                value[white_faces[vertex_idx, outer_idx]] += vortex_normals[vertex_idx, inner_idx]
             acc_normals[:, inner_idx] += value
     
     #Normalize face normals
@@ -441,18 +441,18 @@ def _calc_acc_hem_normals(geom_white_vert, geom_white_faces):
     
     return acc_normals
    
-def _find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
+def _find_vertex_clusters(white_vert, white_valid_vert, white_faces):
     """
-    Identifies which input vertices (geom_white_vert) are presented by which valid vortex.
+    Identifies which input vertices (white_vert) are presented by which valid vortex.
     
     Parameters
     ----------
-    geom_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
-                      MRI model vertices.
-    valid_geom_vert : numpy.ndarray, shape(lh_vert_cnt,)
-                      Valid/supporting vertices.
-    geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
-                       MRI model faces.
+    white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
+                 MRI model vertices.
+    white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+                       Valid/supporting vertices.
+    white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
+                  MRI model faces.
     
     Returns
     -------
@@ -463,16 +463,16 @@ def _find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
     """
     
     #Get adjacency matrix to identify nearest valid vortex
-    edges = scipy.sparse.coo_matrix((np.ones(3 * geom_white_faces.shape[0]),
-                                        (np.concatenate((geom_white_faces[:, 0], geom_white_faces[:, 1], geom_white_faces[:, 2])),
-                                         np.concatenate((geom_white_faces[:, 1], geom_white_faces[:, 2], geom_white_faces[:, 0])))),
-                                        shape = (geom_white_vert.shape[0], geom_white_vert.shape[0]))
+    edges = scipy.sparse.coo_matrix((np.ones(3 * white_faces.shape[0]),
+                                        (np.concatenate((white_faces[:, 0], white_faces[:, 1], white_faces[:, 2])),
+                                         np.concatenate((white_faces[:, 1], white_faces[:, 2], white_faces[:, 0])))),
+                                        shape = (white_vert.shape[0], white_vert.shape[0]))
     edges = edges.tocsr()
     edges += edges.T
     edges = edges.tocoo()
-    edges_dists = np.linalg.norm(geom_white_vert[edges.row, :] - geom_white_vert[edges.col, :], axis = 1)
+    edges_dists = np.linalg.norm(white_vert[edges.row, :] - white_vert[edges.col, :], axis = 1)
     edges_adjacency = scipy.sparse.csr_matrix((edges_dists, (edges.row, edges.col)), shape = edges.shape)
-    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(valid_geom_vert)[0], min_only = True, return_predecessors = True)
+    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(white_valid_vert)[0], min_only = True, return_predecessors = True)
     
     #Accumulates the clusters
     sort_near_idx = np.argsort(min_idx)
@@ -484,7 +484,7 @@ def _find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
     for cluster_idx in range(len(starts)):
         cluster_grp.append(np.sort(sort_near_idx[starts[cluster_idx]:ends[cluster_idx]]))
     pre_cluster_indices = sort_min_idx[breaks - 1]
-    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(valid_geom_vert)[0])
+    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(white_valid_vert)[0])
     
     return (cluster_grp, cluster_indices)
 

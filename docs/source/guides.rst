@@ -24,11 +24,17 @@ Statistics
 
 <To be added>
 
+Source reconstruction
+---------------------
+
+:ref:`source_reconstruction_label`
+
 
 .. toctree::
    :hidden:
    
    guides/dac_configurator
+   guides/source_reconstruction
 
 
 

@@ -23,13 +23,13 @@ def _get_bio_channel_type_idx(raw_file, mask = None):
     
     Parameters
     ----------
-    NAME : mne.io.read_raw_fif
-           Scanned MRI file.
+    raw_file : mne.io.read_raw_fif
+               Scanned MRI file.
                
     Returns
     -------
     valid_ch_indices : numpy.ndarray, shape(ch_cnt,)
-           Binary list identifying channels as valid/invalid.
+                       Binary list identifying channels as valid/invalid.
     meg_ch_indices : list, int
                      Indices of magnetometer channels.
     grad_ch_indices : list, int

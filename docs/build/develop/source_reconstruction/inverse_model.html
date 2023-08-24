@@ -236,7 +236,8 @@
 <li><p><strong>sensor_cov_names</strong> (<em>list</em><em>, </em><em>len</em><em>(</em><em>ch_cnt</em><em>,</em><em>)</em><em>, </em><em>string</em>) – Names of the channels in the sensor covariance matrix.</p></li>
 <li><p><strong>fwd_sol</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>valid_vtx_cnt</em><em>)</em>) – Forward model.</p></li>
 <li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta information, obtainable through mne.io.read_info.</p></li>
-<li><p><strong>method</strong> (<em>string</em>) – Method used to calculate the noise normalization vector.</p></li>
+<li><p><strong>method</strong> (<em>string</em>) – Method used to calculate the noise normalization vector,
+defaults to “dSPM”.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

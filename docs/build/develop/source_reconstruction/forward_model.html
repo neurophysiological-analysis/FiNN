@@ -227,6 +227,15 @@
    </code>
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.forward_model._calc_bem_fields">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     _calc_bem_fields()
+    </span>
+   </code>
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -253,30 +262,30 @@
 <p>This module may be employed to calculate the forward model for the source reconstruction.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.forward_model.calc_forward_model">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">calc_forward_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_to_mri_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_trans_ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_ws_in_skull_faces_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_ws_in_skull_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_solution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_lh_geom_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_rh_geom_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mag_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model.calc_forward_model" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">calc_forward_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_to_mri_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_meg_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_skull_faces_normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_skull_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_solution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mag_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model.calc_forward_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the forward model according to Mosher et al, 1999.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lh_geom_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>3</em><em>)</em>) – Lh white matter surface (MRI).</p></li>
-<li><p><strong>rh_geom_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Rh white matter surface (MRI).</p></li>
-<li><p><strong>head_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Head to MRI transformation.</p></li>
-<li><p><strong>mri_to_head_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MRI to head transformation.</p></li>
+<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Lh white matter surface (MRI).</p></li>
+<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Rh white matter surface (MRI).</p></li>
+<li><p><strong>meg_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MEG to MRI transformation.</p></li>
+<li><p><strong>mri_to_meg_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MRI to MEG transformation.</p></li>
 <li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
-<li><p><strong>bem_trans_ws_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>x</em><em>, </em><em>3</em><em>)</em>) – Inner skull model vertices.</p></li>
-<li><p><strong>bem_ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>y</em><em>, </em><em>3</em><em>)</em>) – Inner skull model faces.</p></li>
-<li><p><strong>bem_ws_in_skull_faces_normal</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>y</em><em>, </em><em>3</em><em>)</em>) – Inner skull model faces’ normals.</p></li>
-<li><p><strong>bem_ws_in_skull_faces_area</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>y</em><em>,</em><em>)</em>) – Inner skull model faces’ areas.</p></li>
+<li><p><strong>reduced_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>x</em><em>, </em><em>3</em><em>)</em>) – Inner skull model vertices.</p></li>
+<li><p><strong>in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>y</em><em>, </em><em>3</em><em>)</em>) – Inner skull model faces.</p></li>
+<li><p><strong>in_skull_faces_normal</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>y</em><em>, </em><em>3</em><em>)</em>) – Inner skull model faces’ normals.</p></li>
+<li><p><strong>in_skull_faces_area</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>y</em><em>,</em><em>)</em>) – Inner skull model faces’ areas.</p></li>
 <li><p><strong>bem_solution</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>x</em><em>, </em><em>x</em><em>)</em>) – BEM linear basis functions.</p></li>
-<li><p><strong>valid_lh_geom_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>3</em><em>)</em>) – Binary list of Freesurfer lh vertices that have a match in the model vertices (octahedron).</p></li>
-<li><p><strong>valid_rh_geom_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Binary list of Freesurfer rh vertices that have a match in the model vertices (octahedron).</p></li>
+<li><p><strong>lh_white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Binary list of Freesurfer lh vertices that have a match in the model vertices (octahedron).</p></li>
+<li><p><strong>rh_white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Binary list of Freesurfer rh vertices that have a match in the model vertices (octahedron).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>fwd_sol</strong> (<em>Var_type, shape(meg_ch_cnt, remaining_vertices * 3)</em>) – Forward model, transforming from MEG space into valid MRI space.</p></li>
-<li><p><strong>valid_lh_geom_vert</strong> (<em>Var_type, shape</em>) – Remaining valid lh vertices.</p></li>
-<li><p><strong>valid_rh_geom_vert</strong> (<em>Var_type, shape</em>) – Remaining valid rh vertices.</p></li>
+<li><p><strong>lh_white_valid_vert</strong> (<em>numpy.ndarray, shape(vtx_cnt, 3)</em>) – Remaining valid lh vertices.</p></li>
+<li><p><strong>rh_white_valid_vert</strong> (<em>numpy.ndarray, shape(vtx_cnt, 3)</em>) – Remaining valid rh vertices.</p></li>
 </ul>
 </p>
 </dd>
@@ -285,7 +294,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.forward_model._get_meg_coil_positions">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_get_meg_coil_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head_to_mri_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._get_meg_coil_positions" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_get_meg_coil_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_to_mri_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._get_meg_coil_positions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets MEG coil spatial information,
 such as coils’ individual integration points (rmag),
 their directions (cosmag), and weights for these integration points.</p>
@@ -293,7 +302,7 @@ their directions (cosmag), and weights for these integration points.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
-<li><p><strong>head_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformation from MEG to MRI space.</p></li>
+<li><p><strong>meg_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformation from MEG to MRI space.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -304,39 +313,39 @@ their directions (cosmag), and weights for these integration points.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.forward_model._apply_coreg_to_vertices">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_apply_coreg_to_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg_trans_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._apply_coreg_to_vertices" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_apply_coreg_to_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg_trans_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._apply_coreg_to_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scales and transforms vertices from MRI space to MEG space.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>geom_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – White matter surface vertices in MRI space.</p>
+<dd class="field-odd"><p><strong>white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – White matter surface vertices in MRI space.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>trans_geom_white_vert</strong> (<em>numpy.ndarray, shape(n, 3)</em>) – Transformed vertices.</p>
+<dd class="field-even"><p><strong>trans_white_vert</strong> (<em>numpy.ndarray, shape(white_vtx_cnt, 3)</em>) – Transformed vertices.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.forward_model._update_invalid_vertices">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_update_invalid_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">approx_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_geom_vert</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._update_invalid_vertices" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_update_invalid_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">approx_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_valid_vert</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._update_invalid_vertices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Updates invalid vertices</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.forward_model._calc_magnetic_fields">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_calc_magnetic_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vertices_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_trans_ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg_trans_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_fwd_solution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._calc_magnetic_fields" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_calc_magnetic_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vertices_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_to_mri_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_fwd_solution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._calc_magnetic_fields" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes infinite medium potentials.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>white_vertices_mri</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>3</em><em>)</em>) – White matter vertices.</p></li>
-<li><p><strong>bem_trans_ws_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Inner skull model vertices.</p></li>
-<li><p><strong>coreg_trans_mat</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformatio matrix from the coregistration.</p></li>
-<li><p><strong>pre_fwd_solution</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>m * 3</em><em>)</em>) – Fwd solution precursor.</p></li>
+<li><p><strong>white_vertices_mri</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>valid_white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – White matter vertices.</p></li>
+<li><p><strong>reduced_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>reduced_in_skull_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Inner skull model vertices.</p></li>
+<li><p><strong>meg_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformatio matrix from the coregistration.</p></li>
+<li><p><strong>pre_fwd_solution</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>reduced_in_skull_vtx_cnt</em><em>)</em>) – Fwd solution precursor.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fwd_sol</strong> (<em>numpy.ndarray, shape(4, meg_ch_cnt, n)</em>) – Forward solution with infinite medium potentials.</p>
+<dd class="field-even"><p><strong>fwd_sol</strong> (<em>numpy.ndarray, shape(valid_white_vtx_cnt * 3, meg_ch_cnt)</em>) – Forward solution with infinite medium potentials.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -351,14 +360,32 @@ their directions (cosmag), and weights for these integration points.</p>
 <li><p><strong>fwd_sol</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>number_of_valid_vertices * 3</em><em>, </em><em>meg_ch_cnt</em><em>)</em>) – Previously calcualted (preliminary) forward solution.</p></li>
 <li><p><strong>white_vertices</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>number_of_valid_vertices</em><em>, </em><em>3</em><em>)</em>) – Valid white matter vertices.</p></li>
 <li><p><strong>meg_ch_infos</strong> (<em>list</em><em> of </em><em>dictionaries</em><em>, </em><em>(</em><em>'coil_type'</em><em>, </em><em>'rmag'</em><em>, </em><em>'cosmag'</em><em>, </em><em>'w'</em><em>, </em><em>'ch_trans'</em><em>, </em><em>'rmag_mri'</em><em>, </em><em>'cosmag_mri'</em><em>)</em>) – MEG recording meta into.</p></li>
-<li><p><strong>rmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MEG space).</p></li>
-<li><p><strong>cosmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space).</p></li>
-<li><p><strong>ws</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>,</em><em>)</em>) – Weights for MEG coil integration points.</p></li>
-<li><p><strong>meg_ch_indices</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>,</em><em>)</em>) – Indices of MEG channels.</p></li>
+<li><p><strong>rmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MEG space).</p></li>
+<li><p><strong>cosmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space).</p></li>
+<li><p><strong>ws</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>,</em><em>)</em>) – Weights for MEG coil integration points.</p></li>
+<li><p><strong>meg_ch_indices</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>,</em><em>)</em>) – Indices of MEG channels.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>fwd_sol</strong> (<em>numpy.ndarray, shape(number_of_valid_vertices * 3, meg_ch_cnt)</em>) – Forward solution with current distribution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._calc_bem_fields">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_calc_bem_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._calc_bem_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the magnetic field at a vortex from all MEG sensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vortex</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>,</em><em>)</em>) – Position of the vortex</p></li>
+<li><p><strong>rmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_chs_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MRI space)</p></li>
+<li><p><strong>cosmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_chs_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fields</strong> (<em>numpy.ndarray, shape(1, 3, meg_chs_integration_pt_cnt)</em>) – The magnetic field of all MEG sensors at a vortex.</p>
 </dd>
 </dl>
 </dd></dl>

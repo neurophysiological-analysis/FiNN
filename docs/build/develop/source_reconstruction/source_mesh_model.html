@@ -234,14 +234,14 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>lh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
-<li><p><strong>lh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n1, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
-<li><p><strong>rh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
-<li><p><strong>rh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
-<li><p><strong>valid_geom_lh_vert</strong> (<em>numpy.ndarray, shape(m1,)</em>) – Vertices with a match in the spherical model (left hemisphere).</p></li>
-<li><p><strong>valid_geom_rh_vert</strong> (<em>numpy.ndarray, shape(m2,)</em>) – Vertices with a match in the spherical model (right hemisphere).</p></li>
-<li><p><strong>model_vert</strong> (<em>numpy.ndarray, shape(n3, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
-<li><p><strong>model_faces</strong> (<em>numpy.ndarray, shape(m3, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
+<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
+<li><p><strong>lh_white_faces</strong> (<em>numpy.ndarray, shape(lh_white_face_cnt, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
+<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
+<li><p><strong>rh_white_faces</strong> (<em>numpy.ndarray, shape(rh_white_face_cnt, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
+<li><p><strong>lh_white_valid_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt,)</em>) – Vertices with a match in the spherical model (left hemisphere).</p></li>
+<li><p><strong>rh_white_valid_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt,)</em>) – Vertices with a match in the spherical model (right hemisphere).</p></li>
+<li><p><strong>octa_model_vert</strong> (<em>numpy.ndarray, shape(octa_vtx_cnt, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
+<li><p><strong>octa_model_faces</strong> (<em>numpy.ndarray, shape(octa_face_cnt, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
 </ul>
 </p>
 </dd>
@@ -258,8 +258,8 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(n3, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
-<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(m3, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(octa_vtx_cnt, 3)</em>) – Vertices of the spherical model (octahedron).</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(octa_face_cnt, 3)</em>) – Faces of the spherical model (octahedron).</p></li>
 </ul>
 </p>
 </dd>
@@ -276,12 +276,12 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>lh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
-<li><p><strong>lh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n1, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
-<li><p><strong>rh_geom_white_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
-<li><p><strong>rh_geom_white_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
-<li><p><strong>lh_geom_sphere_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – Spherical freesurfer head model vertices (left hemisphere).</p></li>
-<li><p><strong>rh_geom_sphere_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Spherical freesurfer head model vertices (right hemisphere).</p></li>
+<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
+<li><p><strong>lh_white_faces</strong> (<em>numpy.ndarray, shape(lh_white_face_cnt, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
+<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
+<li><p><strong>rh_white_faces</strong> (<em>numpy.ndarray, shape(rh_white_face_cnt, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
+<li><p><strong>lh_sphere_vert</strong> (<em>numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)</em>) – Spherical freesurfer head model vertices (left hemisphere).</p></li>
+<li><p><strong>rh_sphere_vert</strong> (<em>numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)</em>) – Spherical freesurfer head model vertices (right hemisphere).</p></li>
 </ul>
 </p>
 </dd>

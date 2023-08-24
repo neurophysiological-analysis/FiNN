@@ -283,12 +283,12 @@ via freesurfer’s watershed algorithm.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>ws_in_skull_vert</strong> (<em>numpy.ndarray, shape(m1, 3)</em>) – Vertices of the inner skull model.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray, shape(n1, 3)</em>) – Faces of the inner skull model.</p></li>
-<li><p><strong>ws_out_skull_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Vertices of the outer skull model.</p></li>
-<li><p><strong>ws_out_skull_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – Faces of the outer skull model.</p></li>
-<li><p><strong>ws_out_skin_vect</strong> (<em>numpy.ndarray, shape(m3, 3)</em>) – Vertices of the skin model.</p></li>
-<li><p><strong>ws_out_skin_faces</strong> (<em>numpy.ndarray, shape(n3, 3)</em>) – Faces of the skin model.</p></li>
+<li><p><strong>in_skull_vert</strong> (<em>numpy.ndarray, shape(in_skull_vtx_cnt, 3)</em>) – Vertices of the inner skull model.</p></li>
+<li><p><strong>in_skull_faces</strong> (<em>numpy.ndarray, shape(in_skull_face_cnt, 3)</em>) – Faces of the inner skull model.</p></li>
+<li><p><strong>out_skull_vert</strong> (<em>numpy.ndarray, shape(out_skull_vtx_cnt, 3)</em>) – Vertices of the outer skull model.</p></li>
+<li><p><strong>out_skull_faces</strong> (<em>numpy.ndarray, shape(out_skull_face_cnt, 3)</em>) – Faces of the outer skull model.</p></li>
+<li><p><strong>out_skin_vect</strong> (<em>numpy.ndarray, shape(out_skin_vtx_cnt, 3)</em>) – Vertices of the skin model.</p></li>
+<li><p><strong>out_skin_faces</strong> (<em>numpy.ndarray, shape(out_skull_face_cnt, 3)</em>) – Faces of the skin model.</p></li>
 </ul>
 </p>
 </dd>
@@ -313,24 +313,24 @@ via freesurfer’s watershed algorithm.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_bem_model_linear_basis">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcuates the BEM linear basis coefficients using the linear collocation method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ws_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m1</em><em>, </em><em>3</em><em>)</em>) – Inner skull vertices.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Inner skull faces.</p></li>
+<li><p><strong>vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices of a skin/skull model.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces of a skin/skull model.</p></li>
 <li><p><strong>tgt_icosahedron_level</strong> (<em>int</em>) – Order of the icosahedron employed herein,
 defaults to 4.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>trans_ws_in_skill_vert</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Remaining inner skull vertices.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray, shape(n2, 3)</em>) – Remaining inner skull faces.</p></li>
-<li><p><strong>faces_area</strong> (<em>numpy.ndarray, shape(m2)</em>) – Surface area of the remaining faces.</p></li>
-<li><p><strong>faces_normal</strong> (<em>numpy.ndarray, shape(m2, 3)</em>) – Normals of the individual remaining inner skull faces.</p></li>
-<li><p><strong>bem_solution</strong> (<em>numpy.ndarray, shape(n2, n2)</em>) – BEM solution (preliminary step for the calculation of the forward model).</p></li>
+<li><p><strong>reduced_vert</strong> (<em>numpy.ndarray, shape(scaled_vtx_cnt, 3)</em>) – Remaining Vertices of a skin/skull model vertices.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(scaled_face_cnt, 3)</em>) – Remaining Vertices of a skin/skull model faces.</p></li>
+<li><p><strong>faces_area</strong> (<em>numpy.ndarray, shape(scaled_face_cnt)</em>) – Surface area of the remaining faces.</p></li>
+<li><p><strong>faces_normal</strong> (<em>numpy.ndarray, shape(scaled_face_cnt, 3)</em>) – Normals of the individual remaining inner skull faces.</p></li>
+<li><p><strong>bem_solution</strong> (<em>numpy.ndarray, shape(scaled_vtx_cnt, scaled_vtx_cnt)</em>) – BEM solution (preliminary step for the calculation of the forward model).</p></li>
 </ul>
 </p>
 </dd>
@@ -339,17 +339,17 @@ defaults to 4.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.plot_skull_and_skin_models">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">plot_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skin_vect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_out_skin_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.plot_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">plot_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skin_vect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skin_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.plot_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot skull and skin models for visual confirmation of proper alignment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ws_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m1</em><em>, </em><em>3</em><em>)</em>) – Vertices of the inner skull model.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Faces of the inner skull model.</p></li>
-<li><p><strong>ws_out_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>, </em><em>3</em><em>)</em>) – Vertices of the outer skull model.</p></li>
-<li><p><strong>ws_out_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>3</em><em>)</em>) – Faces of the outer skull model.</p></li>
-<li><p><strong>ws_out_skin_vect</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m3</em><em>, </em><em>3</em><em>)</em>) – Vertices of the skin model.</p></li>
-<li><p><strong>ws_out_skin_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n3</em><em>, </em><em>3</em><em>)</em>) – Faces of the skin model.</p></li>
+<li><p><strong>in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>in_skull_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices of the inner skull model.</p></li>
+<li><p><strong>in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>in_skull_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces of the inner skull model.</p></li>
+<li><p><strong>out_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>out_skull_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices of the outer skull model.</p></li>
+<li><p><strong>out_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>out_skull_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces of the outer skull model.</p></li>
+<li><p><strong>out_skin_vect</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>out_skin_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices of the skin model.</p></li>
+<li><p><strong>out_skin_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>out_skull_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces of the skin model.</p></li>
 <li><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p></li>
 </ul>
 </dd>
@@ -391,19 +391,19 @@ defaults to 4.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model._find_non_diag_omega">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_non_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces_normal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_non_diag_omega" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_non_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces_normal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_non_diag_omega" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the non-diagonal elements of omega (linear basis factors), see function calc_bem_model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>trans_ws_in_skill_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>, </em><em>3</em><em>)</em>) – Remaining inner skull vertices.</p></li>
-<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>3</em><em>)</em>) – Remaining inner skull faces.</p></li>
-<li><p><strong>faces_area</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>)</em>) – Surface area of the remaining faces.</p></li>
-<li><p><strong>faces_normal</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m2</em><em>, </em><em>3</em><em>)</em>) – Normals of the individual remaining inner skull faces.</p></li>
+<li><p><strong>vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>reduced_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices used for linear basis function calculation.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices used for linear basis function calculation.</p></li>
+<li><p><strong>double_faces_area</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>)</em>) – Surface area of the remaining skin/skull model faces.</p></li>
+<li><p><strong>faces_normal</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – Normals of the individual remaining skin/skull model faces.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>omega</strong> (<em>numpy.ndarray, shape(n2, n2)</em>) – Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
+<dd class="field-even"><p><strong>omega</strong> (<em>numpy.ndarray, shape(reduced_vtx_cnt, reduced_vtx_cnt)</em>) – Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
 Warning, diagonal elements are invalid!</p>
 </dd>
 </dl>
@@ -418,13 +418,13 @@ See function calc_bem_model for a more general description.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>omega</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>n2</em><em>)</em>) – Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
+<li><p><strong>omega</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>reduced_vtx_cnt</em><em>, </em><em>reduced_vtx_cnt</em><em>)</em>) – Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
 Warning, diagonal elements are currently invalid!</p></li>
-<li><p><strong>ws_in_skull_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n2</em><em>, </em><em>3</em><em>)</em>) – Remaining inner skull faces.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – Remaining skin/skull model faces.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>omega</strong> (<em>numpy.ndarray, shape(n2, n2)</em>) – “Omega” elements of the BEM solution with proper diagonal elements.</p>
+<dd class="field-even"><p><strong>omega</strong> (<em>numpy.ndarray, shape(reduced_vtx_cnt, reduced_vtx_cnt)</em>) – Linear basis factor elements of the BEM solution with proper diagonal elements.</p>
 </dd>
 </dl>
 </dd></dl>

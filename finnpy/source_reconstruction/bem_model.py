@@ -57,48 +57,48 @@ def read_skull_and_skin_models(subject_path, subj_name):
                
     Returns
     -------
-    ws_in_skull_vert : numpy.ndarray, shape(m1, 3)
-                       Vertices of the inner skull model.
-    ws_in_skull_faces : numpy.ndarray, shape(n1, 3)
-                        Faces of the inner skull model.
-    ws_out_skull_vert : numpy.ndarray, shape(m2, 3)
-                        Vertices of the outer skull model.
-    ws_out_skull_faces : numpy.ndarray, shape(n2, 3)
-                         Faces of the outer skull model.
-    ws_out_skin_vect : numpy.ndarray, shape(m3, 3)
-                       Vertices of the skin model.
-    ws_out_skin_faces : numpy.ndarray, shape(n3, 3)
-                        Faces of the skin model.
+    in_skull_vert : numpy.ndarray, shape(in_skull_vtx_cnt, 3)
+                    Vertices of the inner skull model.
+    in_skull_faces : numpy.ndarray, shape(in_skull_face_cnt, 3)
+                     Faces of the inner skull model.
+    out_skull_vert : numpy.ndarray, shape(out_skull_vtx_cnt, 3)
+                     Vertices of the outer skull model.
+    out_skull_faces : numpy.ndarray, shape(out_skull_face_cnt, 3)
+                      Faces of the outer skull model.
+    out_skin_vect : numpy.ndarray, shape(out_skin_vtx_cnt, 3)
+                    Vertices of the skin model.
+    out_skin_faces : numpy.ndarray, shape(out_skull_face_cnt, 3)
+                     Faces of the skin model.
     """
-    (ws_in_skull_vert, ws_in_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_inner_skull_surface")
-    (ws_out_skull_vert, ws_out_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skull_surface")
-    (ws_out_skin_vect, ws_out_skin_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skin_surface")
+    (in_skull_vert, in_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_inner_skull_surface")
+    (out_skull_vert, out_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skull_surface")
+    (out_skin_vect, out_skin_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skin_surface")
     
-    return (ws_in_skull_vert, ws_in_skull_faces,
-            ws_out_skull_vert, ws_out_skull_faces,
-            ws_out_skin_vect, ws_out_skin_faces)
+    return (in_skull_vert, in_skull_faces,
+            out_skull_vert, out_skull_faces,
+            out_skin_vect, out_skin_faces)
     
-def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces, 
-                               ws_out_skull_vert, ws_out_skull_faces,
-                               ws_out_skin_vect, ws_out_skin_faces, 
+def plot_skull_and_skin_models(in_skull_vert, in_skull_faces, 
+                               out_skull_vert, out_skull_faces,
+                               out_skin_vect, out_skin_faces, 
                                subject_path):
     """
     Plot skull and skin models for visual confirmation of proper alignment.
                
     Parameters
     ----------
-    ws_in_skull_vert : numpy.ndarray, shape(m1, 3)
-                       Vertices of the inner skull model.
-    ws_in_skull_faces : numpy.ndarray, shape(n1, 3)
-                        Faces of the inner skull model.
-    ws_out_skull_vert : numpy.ndarray, shape(m2, 3)
-                        Vertices of the outer skull model.
-    ws_out_skull_faces : numpy.ndarray, shape(n2, 3)
-                         Faces of the outer skull model.
-    ws_out_skin_vect : numpy.ndarray, shape(m3, 3)
-                       Vertices of the skin model.
-    ws_out_skin_faces : numpy.ndarray, shape(n3, 3)
-                        Faces of the skin model.
+    in_skull_vert : numpy.ndarray, shape(in_skull_vtx_cnt, 3)
+                    Vertices of the inner skull model.
+    in_skull_faces : numpy.ndarray, shape(in_skull_face_cnt, 3)
+                     Faces of the inner skull model.
+    out_skull_vert : numpy.ndarray, shape(out_skull_vtx_cnt, 3)
+                     Vertices of the outer skull model.
+    out_skull_faces : numpy.ndarray, shape(out_skull_face_cnt, 3)
+                      Faces of the outer skull model.
+    out_skin_vect : numpy.ndarray, shape(out_skin_vtx_cnt, 3)
+                    Vertices of the skin model.
+    out_skin_faces : numpy.ndarray, shape(out_skull_face_cnt, 3)
+                     Faces of the skin model.
     subject_path : string
                    Subject's freesurfer path.
     """
@@ -106,18 +106,18 @@ def plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
     (t1_data_trans, ras_to_mri) = _load_and_orient_t1(subject_path)
     mri_to_ras = np.linalg.inv(ras_to_mri)
     
-    ws_in_skull_vert_trans = np.dot(ws_in_skull_vert, mri_to_ras[:3, :3].transpose()); ws_in_skull_vert_trans += mri_to_ras[:3, 3]
-    if (ws_out_skull_vert is not None):
-        ws_out_skull_vert_trans = np.dot(ws_out_skull_vert, mri_to_ras[:3, :3].transpose()); ws_out_skull_vert_trans += mri_to_ras[:3, 3]
-    if (ws_out_skin_vect is not None):
-        ws_out_skin_vect_trans = np.dot(ws_out_skin_vect, mri_to_ras[:3, :3].transpose()); ws_out_skin_vect_trans += mri_to_ras[:3, 3]
+    in_skull_vert_trans = np.dot(in_skull_vert, mri_to_ras[:3, :3].transpose()); in_skull_vert_trans += mri_to_ras[:3, 3]
+    if (out_skull_vert is not None):
+        out_skull_vert_trans = np.dot(out_skull_vert, mri_to_ras[:3, :3].transpose()); out_skull_vert_trans += mri_to_ras[:3, 3]
+    if (out_skin_vect is not None):
+        out_skin_vect_trans = np.dot(out_skin_vect, mri_to_ras[:3, :3].transpose()); out_skin_vect_trans += mri_to_ras[:3, 3]
     
-    if (ws_out_skull_vert is not None and ws_out_skull_vert is not None):
-        surfaces = [["inner_skull", "#FF0000", ws_in_skull_vert_trans, ws_in_skull_faces],
-                    ["outer_skull", "#FFFF00", ws_out_skull_vert_trans, ws_out_skull_faces],
-                    ["outer_skin", "#FFAA80", ws_out_skin_vect_trans, ws_out_skin_faces]]
+    if (out_skull_vert is not None and out_skull_vert is not None):
+        surfaces = [["inner_skull", "#FF0000", in_skull_vert_trans, in_skull_faces],
+                    ["outer_skull", "#FFFF00", out_skull_vert_trans, out_skull_faces],
+                    ["outer_skin", "#FFAA80", out_skin_vect_trans, out_skin_faces]]
     else:
-        surfaces = [["inner_skull", "#FF0000", ws_in_skull_vert_trans, ws_in_skull_faces],]
+        surfaces = [["inner_skull", "#FF0000", in_skull_vert_trans, in_skull_faces],]
     
     (_, axes) = plt.subplots(3, 4, gridspec_kw = {'wspace':0.025, 'hspace':0.025})
     _plot_skull_and_skin_subplots(t1_data_trans, axes, surfaces)
@@ -189,34 +189,34 @@ def _plot_skull_and_skin_subplots(data, axes, surfaces):
                                                   zorder = 1)
     warnings.simplefilter('default')
 
-def calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahedron_level = 4):
+def calc_bem_model_linear_basis(vert, faces, tgt_icosahedron_level = 4):
     """
     Calcuates the BEM linear basis coefficients using the linear collocation method.
     
     Parameters
     ----------
-    ws_in_skull_vert : numpy.ndarray, shape(m1, 3)
-                       Inner skull vertices.
-    ws_in_skull_faces : numpy.ndarray, shape(n1, 3)
-                        Inner skull faces.
+    vert : numpy.ndarray, shape(vtx_cnt, 3)
+           Vertices of a skin/skull model.
+    faces : numpy.ndarray, shape(face_cnt, 3)
+            Faces of a skin/skull model.
     tgt_icosahedron_level : int
                             Order of the icosahedron employed herein,
                             defaults to 4.
                
     Returns
     -------
-    trans_ws_in_skill_vert : numpy.ndarray, shape(m2, 3)
-                             Remaining inner skull vertices.
-    ws_in_skull_faces : numpy.ndarray, shape(n2, 3)
-                        Remaining inner skull faces.
-    faces_area : numpy.ndarray, shape(m2)
+    reduced_vert : numpy.ndarray, shape(scaled_vtx_cnt, 3)
+                   Remaining Vertices of a skin/skull model vertices.
+    faces : numpy.ndarray, shape(scaled_face_cnt, 3)
+            Remaining Vertices of a skin/skull model faces.
+    faces_area : numpy.ndarray, shape(scaled_face_cnt)
                  Surface area of the remaining faces.
-    faces_normal : numpy.ndarray, shape(m2, 3)
+    faces_normal : numpy.ndarray, shape(scaled_face_cnt, 3)
                    Normals of the individual remaining inner skull faces.
-    bem_solution : numpy.ndarray, shape(n2, n2)
+    bem_solution : numpy.ndarray, shape(scaled_vtx_cnt, scaled_vtx_cnt)
                    BEM solution (preliminary step for the calculation of the forward model).
     """
-    src_icosahedron_level = int(np.log(ws_in_skull_faces.shape[0] / 20) / np.log(2) / 2)
+    src_icosahedron_level = int(np.log(faces.shape[0] / 20) / np.log(2) / 2)
     
     #Creates a model 
     #Icosahedrons are provided by freesurfer and reading those is faster than computing.
@@ -224,22 +224,22 @@ def calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahe
     (tgt_vert, tgt_faces) = finnpy.source_reconstruction.sphere_model.calculate_sphere_from_icosahedron(tgt_icosahedron_level)
     
     #Reduce anatomy vertices/faces to relevant ones
-    trans_ws_in_skill_vert = np.copy(ws_in_skull_vert)[finnpy.source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
-    ws_in_skull_faces = tgt_faces
+    reduced_vert = np.copy(vert)[finnpy.source_reconstruction.utils.find_nearest_neighbor(src_vert, tgt_vert)[0]]
+    faces = tgt_faces
     
     #Calculate matrix omega, containing "the solid angles subtended at the center of each triangle by all other triangles", see "Error Analysis of a New Galerkin Method to
     #Solve the Forward Problem in MEG and EEG Using the Boundary Element Method" by Satu Tissari, Jussi Rahola for more details equation #17.
     #In short, to calculate potentials using a BEM model, its coefficients/weights have to be calculated beforehand. 
-    trans_ws_in_skill_vert /= 1000 # Scale from m to mm
-    x_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 0], :]
-    y_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 1], :]
-    z_pos = trans_ws_in_skill_vert[ws_in_skull_faces[:, 2], :]
+    reduced_vert /= 1000 # Scale from m to mm
+    x_pos = reduced_vert[faces[:, 0], :]
+    y_pos = reduced_vert[faces[:, 1], :]
+    z_pos = reduced_vert[faces[:, 2], :]
     faces_normal = finnpy.source_reconstruction.utils.fast_cross_product((y_pos - x_pos), (z_pos - x_pos))
     double_faces_area = finnpy.source_reconstruction.utils.magn_of_vec(faces_normal)
     n_faces_normal = np.linalg.norm(faces_normal, axis = 1)
     faces_normal[n_faces_normal > 0] = faces_normal[n_faces_normal > 0] / np.expand_dims(n_faces_normal[n_faces_normal > 0], axis = 1)
-    omega = _find_non_diag_omega(ws_in_skull_faces, trans_ws_in_skill_vert, double_faces_area, faces_normal)
-    omega = _find_diag_omega(omega, ws_in_skull_faces)
+    omega = _find_non_diag_omega(reduced_vert, faces, double_faces_area, faces_normal)
+    omega = _find_diag_omega(omega, faces)
     
     #The matrix "bem_solution" contains all linear basis functions
     #A "deflation" factor is added to replace the "zero" eigenvalue within to ensure invertability
@@ -249,26 +249,26 @@ def calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces, tgt_icosahe
     #Left part of equation #6 by Satu Tissari, Jussi Rahola (see above). 
     bem_solution = np.linalg.inv(np.eye(omega.shape[0]) + deflation_factor - omega / (2*np.pi))
     
-    return (trans_ws_in_skill_vert, ws_in_skull_faces, double_faces_area/2, faces_normal, bem_solution)
+    return (reduced_vert, faces, double_faces_area/2, faces_normal, bem_solution)
 
-def _find_non_diag_omega(faces, vert, double_faces_area, faces_normal):
+def _find_non_diag_omega(vert, faces, double_faces_area, faces_normal):
     """
     Calculates the non-diagonal elements of omega (linear basis factors), see function calc_bem_model.
     
     Parameters
     ----------
-    trans_ws_in_skill_vert : numpy.ndarray, shape(m2, 3)
-                             Remaining inner skull vertices.
-    ws_in_skull_faces : numpy.ndarray, shape(n2, 3)
-                        Remaining inner skull faces.
-    faces_area : numpy.ndarray, shape(m2)
-                 Surface area of the remaining faces.
-    faces_normal : numpy.ndarray, shape(m2, 3)
-                   Normals of the individual remaining inner skull faces.
+    vert : numpy.ndarray, shape(reduced_vtx_cnt, 3)
+           Vertices used for linear basis function calculation.
+    faces : numpy.ndarray, shape(face_cnt, 3)
+            Vertices used for linear basis function calculation.
+    double_faces_area : numpy.ndarray, shape(face_cnt)
+                        Surface area of the remaining skin/skull model faces.
+    faces_normal : numpy.ndarray, shape(face_cnt, 3)
+                   Normals of the individual remaining skin/skull model faces.
                
     Returns
     -------
-    omega : numpy.ndarray, shape(n2, n2)
+    omega : numpy.ndarray, shape(reduced_vtx_cnt, reduced_vtx_cnt)
             Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
             Warning, diagonal elements are invalid!
     """
@@ -333,16 +333,16 @@ def _find_diag_omega(omega, faces):
     
     Parameters
     ----------
-    omega : numpy.ndarray, shape(n2, n2)
+    omega : numpy.ndarray, shape(reduced_vtx_cnt, reduced_vtx_cnt)
             Linear basis factor elements of the BEM solution, precurser to the BEM solution proper.
             Warning, diagonal elements are currently invalid!
-    ws_in_skull_faces : numpy.ndarray, shape(n2, 3)
-                        Remaining inner skull faces.
+    faces : numpy.ndarray, shape(face_cnt, 3)
+            Remaining skin/skull model faces.
     
     Returns
     -------
-    omega : numpy.ndarray, shape(n2, n2)
-            "Omega" elements of the BEM solution with proper diagonal elements.
+    omega : numpy.ndarray, shape(reduced_vtx_cnt, reduced_vtx_cnt)
+            Linear basis factor elements of the BEM solution with proper diagonal elements.
     """
     half_missing_omega = (((2.0*np.pi) - np.sum(omega, axis = 1)) / 2)
     

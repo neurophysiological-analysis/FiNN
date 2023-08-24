@@ -170,15 +170,15 @@ def find_nearest_neighbor(src_pts, tgt_pts, method = "kdtree"):
 
     return (neigh_indices, tree)
 
-def find_valid_vertices(mri_vert, model_vert, max_neighborhood_size = 5):
+def find_valid_vertices(vertices_a, vertices_b, max_neighborhood_size = 5):
     """
     Matches freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron).
     
     Parameters
     ----------
-    mri_vert : numpy.ndarray, shape(m, 3)
-               Freesurfer based vertices (sphere).
-    model_vert : numpy.ndarray, shape(n, 3)
+    vertices_a : numpy.ndarray, shape(m, 3)
+                 Freesurfer based vertices (sphere).
+    vertices_b : numpy.ndarray, shape(n, 3)
                  Octahedron based vertices.
                
     Returns
@@ -186,8 +186,8 @@ def find_valid_vertices(mri_vert, model_vert, max_neighborhood_size = 5):
     NAME : numpy.ndarray, shape(m,)
            Binary list of Freesurfer vertices that have a match in the model vertices (octahedron).
     """    
-    (nearest, nearest_tree) = find_nearest_neighbor(mri_vert, model_vert)
-    vert_valid = np.zeros((mri_vert.shape[0]))
+    (nearest, nearest_tree) = find_nearest_neighbor(vertices_a, vertices_b)
+    vert_valid = np.zeros((vertices_a.shape[0]))
     vert_valid[nearest] = 1
     (unique_nearest, duplicate_cnt) = np.unique(nearest, return_counts = True)
     for duplicate_idx in np.argwhere(duplicate_cnt > 1):
@@ -360,18 +360,18 @@ def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
      
     return evec
 
-def calc_acc_hem_normals(geom_white_vert, geom_white_faces):
+def calc_acc_hem_normals(white_vert, geom_white_faces):
     """
     Generatoes vertex normals from accumulated face normals.
     See https://en.wikipedia.org/wiki/Vertex_normal.
     
     Parameters
     ----------
-    geom_white_vert : numpy.ndarray, shape(vert_cnt, 3)
-                         MRI model vertices.
+    white_vert : numpy.ndarray, shape(vert_cnt, 3)
+                 MRI model vertices.
     
     geom_white_faces : numpy.ndarray, shape(face_cnt, 3)
-                          MRI model faces.
+                       MRI model faces.
                
     Returns
     -------
@@ -380,18 +380,18 @@ def calc_acc_hem_normals(geom_white_vert, geom_white_faces):
     """
     
     #Calculate surface normals
-    vert0 = geom_white_vert[geom_white_faces[:, 0], :]
-    vert1 = geom_white_vert[geom_white_faces[:, 1], :]
-    vert2 = geom_white_vert[geom_white_faces[:, 2], :]
+    vert0 = white_vert[geom_white_faces[:, 0], :]
+    vert1 = white_vert[geom_white_faces[:, 1], :]
+    vert2 = white_vert[geom_white_faces[:, 2], :]
     vortex_normals = fast_cross_product(vert1 - vert0, vert2 - vert1)
     len_vortex_normals = np.linalg.norm(vortex_normals, axis = 1)
     vortex_normals[len_vortex_normals > 0] /= np.expand_dims(len_vortex_normals[len_vortex_normals > 0], axis = 1)
     
     #Accumulate face normals
-    acc_normals = np.zeros((geom_white_vert.shape[0], 3))
+    acc_normals = np.zeros((white_vert.shape[0], 3))
     for outer_idx in range(3):
         for inner_idx in range(3):
-            value = np.zeros((geom_white_vert.shape[0],))
+            value = np.zeros((white_vert.shape[0],))
             for vertex_idx in range(geom_white_faces.shape[0]):
                 value[geom_white_faces[vertex_idx, outer_idx]] += vortex_normals[vertex_idx, inner_idx]
             acc_normals[:, inner_idx] += value
@@ -402,16 +402,16 @@ def calc_acc_hem_normals(geom_white_vert, geom_white_faces):
     
     return acc_normals
 
-def find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
+def find_vertex_clusters(white_vert, white_valid_vert, geom_white_faces):
     """
-    Identifies which input vertices (geom_white_vert) are presented by which valid vortex.
+    Identifies which input vertices (white_vert) are presented by which valid vortex.
     
     Parameters
     ----------
-    geom_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
-                      MRI model vertices.
-    valid_geom_vert : numpy.ndarray, shape(lh_vert_cnt,)
-                      Valid/supporting vertices.
+    white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
+                 MRI model vertices.
+    white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+                       Valid/supporting vertices.
     geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
                        MRI model faces.
     
@@ -427,13 +427,13 @@ def find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
     edges = scipy.sparse.coo_matrix((np.ones(3 * geom_white_faces.shape[0]),
                                         (np.concatenate((geom_white_faces[:, 0], geom_white_faces[:, 1], geom_white_faces[:, 2])),
                                          np.concatenate((geom_white_faces[:, 1], geom_white_faces[:, 2], geom_white_faces[:, 0])))),
-                                        shape = (geom_white_vert.shape[0], geom_white_vert.shape[0]))
+                                        shape = (white_vert.shape[0], white_vert.shape[0]))
     edges = edges.tocsr()
     edges += edges.T
     edges = edges.tocoo()
-    edges_dists = np.linalg.norm(geom_white_vert[edges.row, :] - geom_white_vert[edges.col, :], axis = 1)
+    edges_dists = np.linalg.norm(white_vert[edges.row, :] - white_vert[edges.col, :], axis = 1)
     edges_adjacency = scipy.sparse.csr_matrix((edges_dists, (edges.row, edges.col)), shape = edges.shape)
-    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(valid_geom_vert)[0], min_only = True, return_predecessors = True)
+    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(white_valid_vert)[0], min_only = True, return_predecessors = True)
     
     #Accumulates the clusters
     sort_near_idx = np.argsort(min_idx)
@@ -445,12 +445,12 @@ def find_vertex_clusters(geom_white_vert, valid_geom_vert, geom_white_faces):
     for cluster_idx in range(len(starts)):
         cluster_grp.append(np.sort(sort_near_idx[starts[cluster_idx]:ends[cluster_idx]]))
     pre_cluster_indices = sort_min_idx[breaks - 1]
-    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(valid_geom_vert)[0])
+    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(white_valid_vert)[0])
     
     return (cluster_grp, cluster_indices)
 
-def cortical_surface_reorient_fwd_model(lh_geom_white_vert, lh_geom_white_faces, valid_geom_lh_vert,
-                                        rh_geom_white_vert, rh_geom_white_faces, valid_geom_rh_vert,
+def cortical_surface_reorient_fwd_model(lh_white_vert, lh_geom_white_faces, lh_white_valid_vert,
+                                        rh_white_vert, rh_geom_white_faces, rh_white_valid_vert,
                                         fwd_sol, mri_to_head_trans):
     """
     Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
@@ -460,19 +460,19 @@ def cortical_surface_reorient_fwd_model(lh_geom_white_vert, lh_geom_white_faces,
     
     Parameters
     ----------
-    lh_geom_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
-                         Lh vertices.
+    lh_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
+                    Lh vertices.
     lh_geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
                           Lh faces.
-    valid_geom_lh_vert : numpy.ndarray, shape(lh_vert_cnt,)
-                         Valid/supporting lh vertices.
-    rh_geom_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
-                         Rh vertices.
+    lh_white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+                          Valid/supporting lh vertices.
+    rh_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
+                    Rh vertices.
     rh_geom_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
                           Rh faces.
-    valid_geom_rh_vert : numpy.ndarray, shape(rh_vert_cnt,)
-                         Valid/supporting rh vertices.
-    fwd_sol : TYPE, shape(meg_ch_cnt, valid_vtx_cnt * 3)
+    rh_white_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
+                          Valid/supporting rh vertices.
+    fwd_sol : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt * 3)
               Forward solution with default orientation.
     
     mri_to_head_trans : numpy.ndarray, shape(4, 4)
@@ -485,16 +485,16 @@ def cortical_surface_reorient_fwd_model(lh_geom_white_vert, lh_geom_white_faces,
     """
      
     #Computes vertex normals
-    lh_acc_normals = calc_acc_hem_normals(lh_geom_white_vert, lh_geom_white_faces)
-    rh_acc_normals = calc_acc_hem_normals(rh_geom_white_vert, rh_geom_white_faces)
+    lh_acc_normals = calc_acc_hem_normals(lh_white_vert, lh_geom_white_faces)
+    rh_acc_normals = calc_acc_hem_normals(rh_white_vert, rh_geom_white_faces)
      
     # Figures out which real vertices are represented by the same model vortex
-    (lh_cluster_grp, lh_cluster_indices) = find_vertex_clusters(lh_geom_white_vert, valid_geom_lh_vert, lh_geom_white_faces)
-    (rh_cluster_grp, rh_cluster_indices) = find_vertex_clusters(rh_geom_white_vert, valid_geom_rh_vert, rh_geom_white_faces)
+    (lh_cluster_grp, lh_cluster_indices) = find_vertex_clusters(lh_white_vert, lh_white_valid_vert, lh_geom_white_faces)
+    (rh_cluster_grp, rh_cluster_indices) = find_vertex_clusters(rh_white_vert, rh_white_valid_vert, rh_geom_white_faces)
     
     #Determines the orientation 
-    lh_orient = get_eigenbasis(lh_acc_normals, valid_geom_lh_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
-    rh_orient = get_eigenbasis(rh_acc_normals, valid_geom_rh_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
+    lh_orient = get_eigenbasis(lh_acc_normals, lh_white_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
+    rh_orient = get_eigenbasis(rh_acc_normals, rh_white_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
     
     #Concatenates the eigenvector bases 
     orient = np.concatenate((lh_orient, rh_orient), axis = 0)
@@ -707,17 +707,17 @@ def calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     
     return proj
 
-def get_mri_subj_to_fs_avg_trans_mat(valid_lh_vert, valid_rh_vert,
+def get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert,
                                      model_vert, subj_path, fs_avg_path, overwrite):
     """
     Create a subject to fs average transformation matrix.
     
     Parameters
     ----------
-    valid_lh_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
-                    Valid lh vertices (subject space).
-    valid_rh_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
-                    Valid rh vertices (subject space).
+    lh_white_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+                          Valid lh vertices (subject space).
+    rh_white_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+                          Valid rh vertices (subject space).
     model_vert : numpy.ndarray, shape(DEBUG)
                  Model vertices.
     subj_path : string
@@ -742,8 +742,8 @@ def get_mri_subj_to_fs_avg_trans_mat(valid_lh_vert, valid_rh_vert,
     (rh_sub_vert, rh_sub_faces, avg_rh_vert, rh_mri_map) = calc_mri_maps(subj_path, fs_avg_path, "rh", overwrite)
     
     #Calculate a projection from valid/supporting points to all points (subject space only)
-    lh_proj = calc_small_to_default_vertices_proj(valid_lh_vert, lh_sub_vert, lh_sub_faces)
-    rh_proj = calc_small_to_default_vertices_proj(valid_rh_vert, rh_sub_vert, rh_sub_faces)
+    lh_proj = calc_small_to_default_vertices_proj(lh_white_valid_vert, lh_sub_vert, lh_sub_faces)
+    rh_proj = calc_small_to_default_vertices_proj(rh_white_valid_vert, rh_sub_vert, rh_sub_faces)
     
     #Combine to derive transformation between subject space and fs average space
     valid_avg_lh_vert = find_valid_vertices(avg_lh_vert, model_vert)

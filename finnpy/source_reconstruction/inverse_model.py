@@ -62,7 +62,8 @@ def calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_na
     rec_meta_info : mne.io.read_info
                     MEG scan meta information, obtainable through mne.io.read_info.
     method : string
-             Method used to calculate the noise normalization vector. 
+             Method used to calculate the noise normalization vector,
+             defaults to "dSPM".
                
     Returns
     -------

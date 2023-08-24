@@ -28,7 +28,4 @@ This module may be employed to calcualte the boundary element model for EEG/MEG 
 .. currentmodule:: source_reconstruction.bem_model
 .. autofunction:: _find_diag_omega
 
-.. currentmodule:: source_reconstruction.bem_model
-.. autofunction:: _calc_bem_fields
-
 
