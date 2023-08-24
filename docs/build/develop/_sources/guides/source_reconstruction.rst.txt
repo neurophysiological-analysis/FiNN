@@ -195,9 +195,5 @@ Producing the following output:
    :alt: Skull model example
    :align: center
 
-.. image:: ../images/MEG_source_reconstruction_simplified.png
-   :alt: Graphic presentation of the relationship between skull & cortical model
-   :align: center
-
 
 
