@@ -354,6 +354,15 @@
    </code>
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source_reconstruction.utils.read_cortical_models">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     read_cortical_models()
+    </span>
+   </code>
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -744,6 +753,28 @@ This is different from a ‘default’ 3D transformation.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>whitener</strong> (<em>numpy.ndarray, shape(n, n)</em>) – Whitener.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.utils.read_cortical_models">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">read_cortical_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.read_cortical_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads cortical freesurfer data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray, shape(lh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (left hemisphere).</p></li>
+<li><p><strong>lh_white_faces</strong> (<em>numpy.ndarray, shape(lh_white_face_cnt, 3)</em>) – White matter surface model faces (left hemisphere).</p></li>
+<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray, shape(rh_white_vtx_cnt, 3)</em>) – White matter surface model vertices (right hemisphere).</p></li>
+<li><p><strong>rh_white_faces</strong> (<em>numpy.ndarray, shape(rh_white_face_cnt, 3)</em>) – White matter surface model faces (right hemisphere).</p></li>
+<li><p><strong>lh_sphere_vert</strong> (<em>numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)</em>) – Spherical freesurfer head model vertices (left hemisphere).</p></li>
+<li><p><strong>rh_sphere_vert</strong> (<em>numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)</em>) – Spherical freesurfer head model vertices (right hemisphere).</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

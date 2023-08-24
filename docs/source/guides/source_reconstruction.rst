@@ -7,7 +7,6 @@ Source reconstruction
 This guide explains how to apply source reconstruction for MEG using FiNNPy.
 
 .. image:: ../images/MEG_source_reconstruction_simplified.png
-   :scale: 100 %
    :alt: Graphic presentation of the relationship between skull & cortical model
    :align: center
 
@@ -105,7 +104,7 @@ With these models, the BEM (boundary elements model) is computed.
         in_skull_faces_area, in_skull_faces_normal, 
         bem_solution) = finnpy.source_reconstruction.bem_model.calc_bem_model_linear_basis(in_skull_vert, in_skull_faces)
 
-To prepare cortical models, those are loaded and downscaled accordingly.
+This concludes the skull model specific parts. To prepare cortical models, those are loaded and downscaled accordingly.
        
 .. code-block::
 
@@ -116,7 +115,7 @@ To prepare cortical models, those are loaded and downscaled accordingly.
        (octa_model_vert, octa_model_faces) = finnpy.source_reconstruction.source_mesh_model.create_source_mesh_model()
        (lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.source_mesh_model.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
 
-The next step is to calculate the forward model, fusing information from the skull and cortical models
+This concludes the cortical surface model specific parts. The next step is to calculate the forward model, fusing information from the skull and cortical models
 
 .. code-block::
 
@@ -151,12 +150,26 @@ Additionally, herein we compute a source level transformation from subject sourc
        print("Calculate transformation to fs-average")
        (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert, fs_subj_path, loc_fs_path + "fsaverage/", overwrite = overwrite_mri_trans)
 
-Common errors
--------------
+Important factors
+-----------------
+
+This section lists common pitfalls where unexperienced users may proceed despite improper data processing results.
 
 MEG and MRI coregistration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified
+The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified. This may be done as follows:
+
+.. code-block::
+
+       print("Calculate transformation to fs-average")
+       (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert, fs_subj_path, loc_fs_path + "fsaverage/", overwrite = overwrite_mri_trans)
+       
+Producing the following output:
+
+.. image:: docs/source/guides/images/MEG_source_reconstruction_simplified.png
+   :alt: Graphic presentation of the relationship between skull & cortical model
+   :align: center
+
 
 Sensor noise covariance
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -164,8 +177,18 @@ The sensor noise covariance is faulty. This may be investigated by adding a powe
 
 Improper skull model
 ^^^^^^^^^^^^^^^^^^^^
-The skull model was improperly extracted. This step must be manually verified
+The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:
 
+.. code-block::
+
+       print("Calculate transformation to fs-average")
+       (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert, fs_subj_path, loc_fs_path + "fsaverage/", overwrite = overwrite_mri_trans)
+       
+Producing the following output:
+
+.. image:: ../images/MEG_source_reconstruction_simplified.png
+   :alt: Graphic presentation of the relationship between skull & cortical model
+   :align: center
 
 
 
