@@ -191,7 +191,7 @@ The skull model was improperly extracted. This step must be manually verified.  
        
 Producing the following output:
 
-.. image:: ../images/MEG_source_reconstruction_simplified2.png
+.. image:: ../images/MEG_source_reconstruction_simplified3.png
    :alt: Skull model example
    :align: center
 
