@@ -6,7 +6,7 @@ Source reconstruction
 
 This guide explains how to apply source reconstruction for MEG using FiNNPy.
 
-.. image:: ../images/MEG_source_reconstruction_simplified.png
+.. image:: img/MEG_source_reconstruction_simplified.png
    :alt: Graphic presentation of the relationship between skull & cortical model
    :align: center
 
@@ -165,7 +165,7 @@ The coregistration between MEG and MRI space has been left unchecked. This step 
        
 Producing the following output:
 
-.. image:: ../images/MEG_source_reconstruction_coreg.png
+.. image:: img/MEG_source_reconstruction_coreg.png
    :alt: MEG and MRI coregistration example
    :align: center
 
@@ -191,7 +191,7 @@ The skull model was improperly extracted. This step must be manually verified.  
        
 Producing the following output:
 
-.. image:: ../images/MEG_source_reconstruction_simplified3.png
+.. image:: img/MEG_source_reconstruction_ws.png
    :alt: Skull model example
    :align: center
 
