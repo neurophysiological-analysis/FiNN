@@ -160,13 +160,12 @@ MEG and MRI coregistration
 The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified. This may be done as follows:
 
 .. code-block::
-
-       print("Calculate transformation to fs-average")
-       (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert, fs_subj_path, loc_fs_path + "fsaverage/", overwrite = overwrite_mri_trans)
+       
+       finnpy.source_reconstruction.coregistration_meg_mri.plot_coregistration(rigid_mri_to_meg_trans, rec_meta_info, meg_pts, fs_subj_path)
        
 Producing the following output:
 
-.. image:: docs/source/guides/images/MEG_source_reconstruction_simplified.png
+.. image:: ../images/MEG_source_reconstruction_coreg.png
    :alt: Graphic presentation of the relationship between skull & cortical model
    :align: center
 
@@ -180,13 +179,19 @@ Improper skull model
 The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:
 
 .. code-block::
-
-       print("Calculate transformation to fs-average")
-       (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert, fs_subj_path, loc_fs_path + "fsaverage/", overwrite = overwrite_mri_trans)
+       
+       (ws_in_skull_vert, ws_in_skull_faces, 
+        ws_out_skull_vert, ws_out_skull_faces,
+        ws_out_skin_vect, ws_out_skin_faces) = finnpy.source_reconstruction.bem_model.read_skull_and_skin_models(fs_subj_path, subj_name + rec_folder)
+       
+       finnpy.source_reconstruction.bem_model.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
+                                                                         ws_out_skull_vert, ws_out_skull_faces,
+                                                                         ws_out_skin_vect, ws_out_skin_faces,
+                                                                         fs_subj_path)
        
 Producing the following output:
 
-.. image:: ../images/MEG_source_reconstruction_simplified.png
+.. image:: ../images/MEG_source_reconstruction_ws.png
    :alt: Graphic presentation of the relationship between skull & cortical model
    :align: center
 

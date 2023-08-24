@@ -207,8 +207,8 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#common-errors">
-   Common errors
+  <a class="reference internal nav-link" href="#important-factors">
+   Important factors
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
@@ -252,7 +252,7 @@
   <section id="source-reconstruction">
 <span id="source-reconstruction-label"></span><h1>Source reconstruction<a class="headerlink" href="#source-reconstruction" title="Permalink to this heading">¶</a></h1>
 <p>This guide explains how to apply source reconstruction for MEG using FiNNPy.</p>
-<a class="reference internal image-reference" href="images/MEG_source_reconstruction_simplified.png"><img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_simplified.png" /></a>
+<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_simplified.png" />
 <section id="skull-model-processing">
 <h2>Skull model processing<a class="headerlink" href="#skull-model-processing" title="Permalink to this heading">¶</a></h2>
 <p>The skull model is a geometrical description of the skull surface. For MEG analyses, a single layer model suffices (option for EEG source reconstruction to be added soon). The skull model is derived from T1 scans and extracted using the watershed algorithm of FreeSurfer. Its density is reduced to increase computeability and mathematical stability. Herein, it is employed to project MEG data from sensor space onto the skull surface.</p>
@@ -325,7 +325,7 @@
  <span class="n">bem_solution</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">bem_model</span><span class="o">.</span><span class="n">calc_bem_model_linear_basis</span><span class="p">(</span><span class="n">in_skull_vert</span><span class="p">,</span> <span class="n">in_skull_faces</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To prepare cortical models, those are loaded and downscaled accordingly.</p>
+<p>This concludes the skull model specific parts. To prepare cortical models, those are loaded and downscaled accordingly.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">lh_white_faces</span><span class="p">,</span>
 <span class="n">rh_white_vert</span><span class="p">,</span> <span class="n">rh_white_faces</span><span class="p">,</span>
 <span class="n">lh_sphere_vert</span><span class="p">,</span>
@@ -334,7 +334,7 @@
 <span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">source_mesh_model</span><span class="o">.</span><span class="n">match_source_mesh_model</span><span class="p">(</span><span class="n">lh_sphere_vert</span><span class="p">,</span> <span class="n">rh_sphere_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The next step is to calculate the forward model, fusing information from the skull and cortical models</p>
+<p>This concludes the cortical surface model specific parts. The next step is to calculate the forward model, fusing information from the skull and cortical models</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">fwd_sol</span><span class="p">,</span>
  <span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">forward_model</span><span class="o">.</span><span class="n">calc_forward_model</span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">rh_white_vert</span><span class="p">,</span> <span class="n">rigid_meg_to_mri_trans</span><span class="p">,</span> <span class="n">rigid_mri_to_meg_trans</span><span class="p">,</span> <span class="n">rec_meta_info</span><span class="p">,</span> <span class="n">in_skull_reduced_vert</span><span class="p">,</span> <span class="n">in_skull_faces</span><span class="p">,</span> <span class="n">in_skull_faces_normal</span><span class="p">,</span> <span class="n">in_skull_faces_area</span><span class="p">,</span> <span class="n">bem_solution</span><span class="p">,</span> <span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">)</span>
 </pre></div>
@@ -361,11 +361,18 @@
 </div>
 </section>
 </section>
-<section id="common-errors">
-<h2>Common errors<a class="headerlink" href="#common-errors" title="Permalink to this heading">¶</a></h2>
+<section id="important-factors">
+<h2>Important factors<a class="headerlink" href="#important-factors" title="Permalink to this heading">¶</a></h2>
+<p>This section lists common pitfalls where unexperienced users may proceed despite improper data processing results.</p>
 <section id="meg-and-mri-coregistration">
 <h3>MEG and MRI coregistration<a class="headerlink" href="#meg-and-mri-coregistration" title="Permalink to this heading">¶</a></h3>
-<p>The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified</p>
+<p>The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified. This may be done as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculate transformation to fs-average&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span> <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">,</span> <span class="n">fs_subj_path</span><span class="p">,</span> <span class="n">loc_fs_path</span> <span class="o">+</span> <span class="s2">&quot;fsaverage/&quot;</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_mri_trans</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Producing the following output:</p>
+<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="guides/docs/source/guides/images/MEG_source_reconstruction_simplified.png" />
 </section>
 <section id="sensor-noise-covariance">
 <h3>Sensor noise covariance<a class="headerlink" href="#sensor-noise-covariance" title="Permalink to this heading">¶</a></h3>
@@ -373,7 +380,13 @@
 </section>
 <section id="improper-skull-model">
 <h3>Improper skull model<a class="headerlink" href="#improper-skull-model" title="Permalink to this heading">¶</a></h3>
-<p>The skull model was improperly extracted. This step must be manually verified</p>
+<p>The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculate transformation to fs-average&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span> <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">,</span> <span class="n">fs_subj_path</span><span class="p">,</span> <span class="n">loc_fs_path</span> <span class="o">+</span> <span class="s2">&quot;fsaverage/&quot;</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_mri_trans</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Producing the following output:</p>
+<img alt="Graphic presentation of the relationship between skull &amp; cortical model" class="align-center" src="images/MEG_source_reconstruction_simplified.png" />
 </section>
 </section>
 </section>
