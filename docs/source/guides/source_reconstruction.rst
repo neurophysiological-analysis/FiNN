@@ -6,12 +6,10 @@ Source reconstruction
 
 This guide explains how to apply source reconstruction for MEG using FiNNPy.
 
-.. image:: /images/MEG_source_reconstruction_simplified.png
-   :width: 200px
-   :height: 100px
-   :scale: 50 %
-   :alt: alternate text
-   :align: right
+.. image:: ../images/MEG_source_reconstruction_simplified.png
+   :scale: 100 %
+   :alt: Graphic presentation of the relationship between skull & cortical model
+   :align: centers
 
 
 Skull model processing
