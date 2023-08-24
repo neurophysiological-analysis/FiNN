@@ -54,8 +54,6 @@ def read_cortical_models(subject_path):
             rh_white_vert, rh_white_faces,
             lh_sphere_vert,
             rh_sphere_vert)
-    
-    
 
 def format_fiducials(pre_mri_ref_pts):
     """

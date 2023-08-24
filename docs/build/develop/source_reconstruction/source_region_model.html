@@ -236,21 +236,27 @@
 <p>This module may be employed to cluster source areas into distinct regions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.source_region_model.apply_source_region_model">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">apply_source_region_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs_avg_src_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_fs_avg_valid_lh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_fs_avg_valid_rh_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model.apply_source_region_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Averages activity from individual areas in source space to parcellation of the Desikan-Killiany cortical atlas.</p>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">apply_source_region_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octa_model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octa_model_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model.apply_source_region_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Averages source space regions to areas defined by the Desikan-Killiany atlas.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>fs_avg_src_data</strong> – Data in fs average source space.</p></li>
-<li><p><strong>src_fs_avg_valid_lh_vert</strong> – List of left hemisphere valid/supporting vertices in fs average space.</p></li>
-<li><p><strong>src_fs_avg_valid_rh_vert</strong> – List of right hemisphere valid/supporting vertices in fs average space.</p></li>
-<li><p><strong>model_vert</strong> – Model vertices.</p></li>
-<li><p><strong>model</strong> – Model faces.</p></li>
-<li><p><strong>fs_avg_path</strong> – Path to fs average’s freesurfer  files.</p></li>
+<li><p><strong>src_data</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>sensor_ch_cnt</em><em>, </em><em>samp_cnt</em><em>)</em>) – Source space data.</p></li>
+<li><p><strong>lh_white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>sensor_ch_cnt</em><em>, </em><em>samp_cnt</em><em>)</em>) – Binary list of valid/supporting lh vertices.</p></li>
+<li><p><strong>rh_white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>sensor_ch_cnt</em><em>, </em><em>samp_cnt</em><em>)</em>) – Binary list of valid/supporting rh vertices.</p></li>
+<li><p><strong>octa_model_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>octa_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Octahedron model vertices.</p></li>
+<li><p><strong>octa_model_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>octa_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Octahedron model faces.</p></li>
+<li><p><strong>fs_avg_path</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>source_ch_cnt</em><em>,</em><em>)</em>) – Path to fs average’s freesurfer  files.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>(morphed_epoch_data, morphed_epoch_channels, morphed_region_names) - Data, src space vertices’ ids, and channel names.</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>morphed_epoch_data</strong> (<em>numpy.ndarray, shape(src_region_cnt, epoch_cnt, samples)</em>) – Average source space data.</p></li>
+<li><p><strong>morphed_epoch_channels</strong> (<em>list of lists, len(source_ch_cnt,)</em>) – List of channel ids, clustered by source space region.
+Identifies which channel supports which region.</p></li>
+<li><p><strong>morphed_region_names</strong> (<em>list, len(source_ch_cnt,)</em>) – Region names.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -258,17 +264,50 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.source_region_model._read_freesurfer_annotation">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_read_freesurfer_annotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._read_freesurfer_annotation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Averages source space regions to areas defined by the Desikan-Killiany atlas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – Path to the annotation file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>regions</strong> (<em>dict, {regions : [vtx_ids]}</em>) – Dictionary of regions containing vortex ids.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.source_region_model._get_sphere_faces">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_get_sphere_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisphere</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._get_sphere_faces" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_get_sphere_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisphere</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octa_model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octa_model_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._get_sphere_faces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimics the original downscaling as this is later needed for region averaging,
+yet, this time in reference to fs-average instead of subject specific.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fs_avg_path</strong> (<em>string</em>) – Path to fs average’s freesurfer  files.</p></li>
+<li><p><strong>hemisphere</strong> (<em>string</em>) – hemisphere to be operated on.</p></li>
+<li><p><strong>octa_model_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>octa_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Octahedron model vertices.</p></li>
+<li><p><strong>octa_model_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>octa_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Octahedron model faces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>neigh_faces</strong> (<em>numpy.ndarray, shape(octa_face_cnt, 3)</em>) – Faces most closeby to model faces.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.source_region_model._get_mri_to_model_trans">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_get_mri_to_model_trans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mri_neigh_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._get_mri_to_model_trans" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Limits MRI vertices by employing the reduced face list to reduce vortex count.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mri_neigh_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces most closeby to model faces.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>mri_to_model_trans</strong> (<em>numpy.ndarray, shape(vtx_cnt, )</em>) – Region names.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 

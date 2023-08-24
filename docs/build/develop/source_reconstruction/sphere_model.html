@@ -246,27 +246,100 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sphere_model.calculate_sphere_from_octahedron">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">calculate_sphere_from_octahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.calculate_sphere_from_octahedron" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Inflates the sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> (<em>int</em>) – Target level of the sphere model.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(inflated_vtx_cnt, 3)</em>) – Vertices of the sphere.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(inflated_face_cnt, 3)</em>) – Faces of the sphere.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sphere_model.calculate_sphere_from_icosahedron">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">calculate_sphere_from_icosahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.calculate_sphere_from_icosahedron" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates an icosahedron from a specific seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> (<em>int</em>) – Level of the icosahedron</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(model_vtx_cnt, 3)</em>) – Vertices of the icosahedron.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(model_face_cnt, 3)</em>) – Faces of the icosahedron.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">read_sphere_from_icosahedron_in_fs_order</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.read_sphere_from_icosahedron_in_fs_order" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Reads an icosahedron from freesurfer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> (<em>int</em>) – Level of the icosahedron</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(model_vtx_cnt, 3)</em>) – Vertices of the icosahedron.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(model_face_cnt, 3)</em>) – Faces of the icosahedron.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sphere_model.prune_closeby_vert">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">prune_closeby_vert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model.prune_closeby_vert" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Prunes below threshold vertices from the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>model_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices of the icosahedron.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>model_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces of the icosahedron.</p></li>
+<li><p><strong>level</strong> (<em>float</em>) – Distance threshold.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(pruned_vtx_cnt, 3)</em>) – Vertices of the icosahedron.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(pruned_face_cnt, 3)</em>) – Faces of the icosahedron.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sphere_model._tessellate_sphere">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.sphere_model.</span></span><span class="sig-name descname"><span class="pre">_tessellate_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sphere_model._tessellate_sphere" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Inflates the sphere.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>initial_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Vertices of the sphere seed.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>initial_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Faces of the sphere seed.</p></li>
+<li><p><strong>level</strong> (<em>int</em>) – Target level of the sphere model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vert</strong> (<em>numpy.ndarray, shape(inflated_vtx_cnt, 3)</em>) – Inflated vertices of the sphere.</p></li>
+<li><p><strong>faces</strong> (<em>numpy.ndarray, shape(inflated_face_cnt, 3)</em>) – Inflated faces of the sphere.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 
