@@ -16,6 +16,47 @@ import warnings
 
 import mne.io
 
+def read_surface_model(subject_path):
+    """
+    Reads cortical freesurfer data.
+    
+    Parameters
+    ----------
+    subject_path : string
+                   Subject's freesurfer path.
+               
+    Returns
+    -------
+    lh_white_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
+                    White matter surface model vertices (left hemisphere).
+    lh_white_faces : numpy.ndarray, shape(lh_white_face_cnt, 3)
+                     White matter surface model faces (left hemisphere).
+    rh_white_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
+                    White matter surface model vertices (right hemisphere).
+    rh_white_faces : numpy.ndarray, shape(rh_white_face_cnt, 3)
+                     White matter surface model faces (right hemisphere).
+    lh_sphere_vert : numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)
+                     Spherical freesurfer head model vertices (left hemisphere).
+    rh_sphere_vert : numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)
+                     Spherical freesurfer head model vertices (right hemisphere).
+    """
+    (lh_white_vert, lh_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.white")
+    (rh_white_vert, rh_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.white")
+    
+    (lh_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.sphere")
+    (rh_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.sphere")
+        
+    #Normalize geometric
+    lh_sphere_vert = norm_vert(lh_sphere_vert)
+    rh_sphere_vert = norm_vert(rh_sphere_vert)
+    
+    return (lh_white_vert, lh_white_faces,
+            rh_white_vert, rh_white_faces,
+            lh_sphere_vert,
+            rh_sphere_vert)
+    
+    
+
 def format_fiducials(pre_mri_ref_pts):
     """
     Transforms an mne-fiducials object into an dictionary containing the fiducials.
@@ -29,8 +70,6 @@ def format_fiducials(pre_mri_ref_pts):
     -------
     mri_ref_pts : dict(), ('LPA', 'NASION', 'RPA')
                   MRI reference points for coregistration.
-    
-    :return: Dictionary containing the fiducial points.
     """
     mri_ref_pts = {"LPA" : None, "NASION" : None, "RPA" : None}
         
