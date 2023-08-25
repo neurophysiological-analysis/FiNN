@@ -8,6 +8,7 @@ This guide explains how to visualize source reconstructed results using Blender.
 
 .. image:: img/blender_demo.png
    :alt: Blender demo
+   :width: 600
    :align: center
 
 Background: Blender
@@ -22,6 +23,7 @@ Results source-reconstructed via FinnPy may be either (almost) directly visualiz
 
 .. image:: img/blender_demo3.png
    :alt: Blender demo result
+   :width: 400
    :align: center
 
 
@@ -37,6 +39,7 @@ To execute Python code from within blender, a text window needs to be opened wit
 
 .. image:: img/blender_demo2.png
    :alt: Blender demo
+   :width: 500
    :align: center
 
 Code explanation
