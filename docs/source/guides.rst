@@ -27,7 +27,9 @@ Statistics
 Source reconstruction
 ---------------------
 
-:ref:`source_reconstruction_label`
+:ref:`source_reconstruction_compute_label`
+
+:ref:`source_reconstruction_visualize_label`
 
 
 .. toctree::
@@ -35,6 +37,7 @@ Source reconstruction
    
    guides/dac_configurator
    guides/source_reconstruction
+   guides/source_reconstruction_visualization
 
 
 

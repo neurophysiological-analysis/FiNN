@@ -226,7 +226,7 @@ def _calc_bem_fields(vortex, rmags, cosmags):
 def calc_forward_model(lh_white_vert, rh_white_vert,
                        meg_to_mri_trans, mri_to_meg_trans, rec_meta_info,
                        reduced_in_skull_vert, in_skull_faces, in_skull_faces_normal, in_skull_faces_area, bem_solution,
-                       lh_white_valid_vert, rh_white_valid_vert,
+                       lh_valid_vert, rh_valid_vert,
                        _mag_factor=1e-7):
     """
     Calculates the forward model according to Mosher et al, 1999. 
@@ -253,18 +253,18 @@ def calc_forward_model(lh_white_vert, rh_white_vert,
                           Inner skull model faces' areas.
     bem_solution : numpy.ndarray, shape(x, x)
                    BEM linear basis functions.
-    lh_white_valid_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
+    lh_valid_vert : numpy.ndarray, shape(lh_white_vtx_cnt, 3)
                           Binary list of Freesurfer lh vertices that have a match in the model vertices (octahedron).
-    rh_white_valid_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
+    rh_valid_vert : numpy.ndarray, shape(rh_white_vtx_cnt, 3)
                           Binary list of Freesurfer rh vertices that have a match in the model vertices (octahedron).
                
     Returns
     -------
     fwd_sol : Var_type, shape(meg_ch_cnt, remaining_vertices * 3)
               Forward model, transforming from MEG space into valid MRI space.
-    lh_white_valid_vert : numpy.ndarray, shape(vtx_cnt, 3)
+    lh_valid_vert : numpy.ndarray, shape(vtx_cnt, 3)
                           Remaining valid lh vertices.
-    rh_white_valid_vert : numpy.ndarray, shape(vtx_cnt, 3)
+    rh_valid_vert : numpy.ndarray, shape(vtx_cnt, 3)
                           Remaining valid rh vertices.
     """
 
@@ -274,9 +274,9 @@ def calc_forward_model(lh_white_vert, rh_white_vert,
     
     #Flag cortical points outside of the skull as invalid and concatenate all vertices
     approx_surface = scipy.spatial.Delaunay(reduced_in_skull_vert)
-    lh_white_valid_vert = _update_invalid_vertices(approx_surface, lh_white_vert, lh_white_valid_vert)
-    rh_white_valid_vert = _update_invalid_vertices(approx_surface, rh_white_vert, rh_white_valid_vert)
-    white_vertices = np.concatenate((trans_lh_white_vert[np.where(lh_white_valid_vert)[0]], trans_rh_white_vert[np.where(rh_white_valid_vert)[0]]))
+    lh_valid_vert = _update_invalid_vertices(approx_surface, lh_white_vert, lh_valid_vert)
+    rh_valid_vert = _update_invalid_vertices(approx_surface, rh_white_vert, rh_valid_vert)
+    white_vertices = np.concatenate((trans_lh_white_vert[np.where(lh_valid_vert)[0]], trans_rh_white_vert[np.where(rh_valid_vert)[0]]))
     
     #Configure constants
     conductivity = (.3,)
@@ -341,10 +341,10 @@ def calc_forward_model(lh_white_vert, rh_white_vert,
     fwd_sol *= _mag_factor
     fwd_sol = fwd_sol.T
     
-    return (fwd_sol, lh_white_valid_vert, rh_white_valid_vert)
+    return (fwd_sol, lh_valid_vert, rh_valid_vert)
         
-def optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
-                       rh_white_vert, rh_white_faces, rh_white_valid_vert,
+def optimize_fwd_model(lh_white_vert, lh_white_faces, lh_valid_vert,
+                       rh_white_vert, rh_white_faces, rh_valid_vert,
                        fwd_sol, mri_to_meg_trans):
     """
     Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
@@ -358,13 +358,13 @@ def optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
                     Lh vertices.
     lh_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
                      Lh faces.
-    lh_white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+    lh_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
                           Valid/supporting lh vertices.
     rh_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
                     Rh vertices.
     rh_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
                      Rh faces.
-    rh_white_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
+    rh_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
                           Valid/supporting rh vertices.
     fwd_sol : TYPE, shape(meg_ch_cnt, valid_vtx_cnt * 3)
               Forward solution with default orientation.
@@ -383,12 +383,12 @@ def optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
     rh_acc_normals = _calc_acc_hem_normals(rh_white_vert, rh_white_faces)
      
     # Figures out which real vertices are represented by the same model vortex
-    (lh_cluster_grp, lh_cluster_indices) = _find_vertex_clusters(lh_white_vert, lh_white_valid_vert, lh_white_faces)
-    (rh_cluster_grp, rh_cluster_indices) = _find_vertex_clusters(rh_white_vert, rh_white_valid_vert, rh_white_faces)
+    (lh_cluster_grp, lh_cluster_indices) = _find_vertex_clusters(lh_white_vert, lh_valid_vert, lh_white_faces)
+    (rh_cluster_grp, rh_cluster_indices) = _find_vertex_clusters(rh_white_vert, rh_valid_vert, rh_white_faces)
     
     #Determines the orientation 
-    lh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(lh_acc_normals, lh_white_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_meg_trans)
-    rh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(rh_acc_normals, rh_white_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_meg_trans)
+    lh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(lh_acc_normals, lh_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_meg_trans)
+    rh_orient = finnpy.source_reconstruction.utils.get_eigenbasis(rh_acc_normals, rh_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_meg_trans)
     
     #Concatenates the eigenvector bases 
     orient = np.concatenate((lh_orient, rh_orient), axis = 0)

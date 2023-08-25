@@ -56,7 +56,8 @@ def _get_sphere_faces(fs_avg_path, hemisphere, octa_model_vert, octa_model_faces
     """
     (fs_avg_surf_sph_vert, _) = nibabel.freesurfer.read_geometry(fs_avg_path + "surf/" + hemisphere + ".sphere")
     neigh_indices = finnpy.source_reconstruction.utils.find_nearest_neighbor(fs_avg_surf_sph_vert/100, octa_model_vert)[0]
-    neigh_faces = [neigh_indices[face] for face in octa_model_faces]; neigh_faces = np.asarray(neigh_faces, dtype = int)
+    neigh_faces = [neigh_indices[face] for face in octa_model_faces]
+    neigh_faces = np.asarray(neigh_faces, dtype = int)
 
     return neigh_faces
 
@@ -124,6 +125,8 @@ def apply_source_region_model(src_data, lh_white_valid_vert, rh_white_valid_vert
         mri_neigh_faces = _get_sphere_faces(fs_avg_path, hemisphere, octa_model_vert, octa_model_faces)
         mri_to_model_trans = _get_mri_to_model_trans(mri_neigh_faces)
         
+        loc_valid_vert = lh_white_valid_vert if (hemisphere == "lh") else rh_white_valid_vert
+        
         #### Translates from vertex id to the nth-channel, e.g. vertex ids [0, 11, 24, ..., 163825] to model ids [0, 1, 2, ..., 4097]
         hem_data = src_data[:len(np.where(lh_white_valid_vert)[0]), :] if (hemisphere == "lh") else src_data[len(np.where(rh_white_valid_vert)[0]):, :]
         
@@ -133,12 +136,13 @@ def apply_source_region_model(src_data, lh_white_valid_vert, rh_white_valid_vert
                 continue
             
             #Gets the vertex ids for a specific region
-            mri_region_vertices_ids = np.where(lh_white_valid_vert)[0][np.in1d(np.where(lh_white_valid_vert)[0], regions[region_name])]
+            mri_region_vertices_ids = np.where(loc_valid_vert)[0][np.in1d(np.where(loc_valid_vert)[0], regions[region_name])]
             model_region_vertices_ids = mri_to_model_trans[mri_region_vertices_ids]
             if (len(hem_data[model_region_vertices_ids, :]) == 0):
                 continue #In case there is no channel within a region, skip it
             
             morphed_epoch_data.append(np.mean(np.abs(hem_data[model_region_vertices_ids, :]), axis = 0))
+            #This, hem_data[model_region_vertices_ids, :], works as the original downscaled spherical data is an inflated version of the surface data.
             morphed_epoch_channels.append(model_region_vertices_ids)
             morphed_region_names.append(hemisphere + "_" + region_name)
     

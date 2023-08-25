@@ -486,8 +486,8 @@ def find_vertex_clusters(white_vert, white_valid_vert, geom_white_faces):
     
     return (cluster_grp, cluster_indices)
 
-def cortical_surface_reorient_fwd_model(lh_white_vert, lh_geom_white_faces, lh_white_valid_vert,
-                                        rh_white_vert, rh_geom_white_faces, rh_white_valid_vert,
+def cortical_surface_reorient_fwd_model(lh_white_vert, lh_geom_white_faces, lh_valid_vert,
+                                        rh_white_vert, rh_geom_white_faces, rh_valid_vert,
                                         fwd_sol, mri_to_head_trans):
     """
     Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
@@ -501,13 +501,13 @@ def cortical_surface_reorient_fwd_model(lh_white_vert, lh_geom_white_faces, lh_w
                     Lh vertices.
     lh_geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
                           Lh faces.
-    lh_white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+    lh_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
                           Valid/supporting lh vertices.
     rh_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
                     Rh vertices.
     rh_geom_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
                           Rh faces.
-    rh_white_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
+    rh_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
                           Valid/supporting rh vertices.
     fwd_sol : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt * 3)
               Forward solution with default orientation.
@@ -526,12 +526,12 @@ def cortical_surface_reorient_fwd_model(lh_white_vert, lh_geom_white_faces, lh_w
     rh_acc_normals = calc_acc_hem_normals(rh_white_vert, rh_geom_white_faces)
      
     # Figures out which real vertices are represented by the same model vortex
-    (lh_cluster_grp, lh_cluster_indices) = find_vertex_clusters(lh_white_vert, lh_white_valid_vert, lh_geom_white_faces)
-    (rh_cluster_grp, rh_cluster_indices) = find_vertex_clusters(rh_white_vert, rh_white_valid_vert, rh_geom_white_faces)
+    (lh_cluster_grp, lh_cluster_indices) = find_vertex_clusters(lh_white_vert, lh_valid_vert, lh_geom_white_faces)
+    (rh_cluster_grp, rh_cluster_indices) = find_vertex_clusters(rh_white_vert, rh_valid_vert, rh_geom_white_faces)
     
     #Determines the orientation 
-    lh_orient = get_eigenbasis(lh_acc_normals, lh_white_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
-    rh_orient = get_eigenbasis(rh_acc_normals, rh_white_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
+    lh_orient = get_eigenbasis(lh_acc_normals, lh_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
+    rh_orient = get_eigenbasis(rh_acc_normals, rh_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
     
     #Concatenates the eigenvector bases 
     orient = np.concatenate((lh_orient, rh_orient), axis = 0)
@@ -744,16 +744,16 @@ def calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     
     return proj
 
-def get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert,
+def get_mri_subj_to_fs_avg_trans_mat(lh_valid_vert, rh_valid_vert,
                                      model_vert, subj_path, fs_avg_path, overwrite):
     """
     Create a subject to fs average transformation matrix.
     
     Parameters
     ----------
-    lh_white_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+    lh_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
                           Valid lh vertices (subject space).
-    rh_white_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+    rh_valid_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
                           Valid rh vertices (subject space).
     model_vert : numpy.ndarray, shape(model_vtx_cnt, 3)
                  Model vertices.
@@ -779,8 +779,8 @@ def get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert,
     (rh_sub_vert, rh_sub_faces, avg_rh_vert, rh_mri_map) = calc_mri_maps(subj_path, fs_avg_path, "rh", overwrite)
     
     #Calculate a projection from valid/supporting points to all points (subject space only)
-    lh_proj = calc_small_to_default_vertices_proj(lh_white_valid_vert, lh_sub_vert, lh_sub_faces)
-    rh_proj = calc_small_to_default_vertices_proj(rh_white_valid_vert, rh_sub_vert, rh_sub_faces)
+    lh_proj = calc_small_to_default_vertices_proj(lh_valid_vert, lh_sub_vert, lh_sub_faces)
+    rh_proj = calc_small_to_default_vertices_proj(rh_valid_vert, rh_sub_vert, rh_sub_faces)
     
     #Combine to derive transformation between subject space and fs average space
     valid_avg_lh_vert = find_valid_vertices(avg_lh_vert, model_vert)

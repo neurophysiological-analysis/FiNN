@@ -63,16 +63,16 @@ def match_source_mesh_model(lh_sphere_vert, rh_sphere_vert,
                
     Returns
     -------
-    lh_white_valid_vert : numpy.ndarray, shape(lh_white_vtx_cnt,)
+    lh_valid_vert : numpy.ndarray, shape(lh_white_vtx_cnt,)
                           Vertices with a match in the spherical model (left hemisphere).
-    rh_white_valid_vert : numpy.ndarray, shape(rh_white_vtx_cnt,)
+    rh_valid_vert : numpy.ndarray, shape(rh_white_vtx_cnt,)
                           Vertices with a match in the spherical model (right hemisphere).            
     """
     
     #Get valid vertices
-    lh_white_valid_vert = finnpy.source_reconstruction.utils.find_valid_vertices(lh_sphere_vert, octa_model_vert)
-    rh_white_valid_vert = finnpy.source_reconstruction.utils.find_valid_vertices(rh_sphere_vert, octa_model_vert)
+    lh_valid_vert = finnpy.source_reconstruction.utils.find_valid_vertices(lh_sphere_vert, octa_model_vert)
+    rh_valid_vert = finnpy.source_reconstruction.utils.find_valid_vertices(rh_sphere_vert, octa_model_vert)
     
-    return (lh_white_valid_vert, rh_white_valid_vert)
+    return (lh_valid_vert, rh_valid_vert)
 
 
