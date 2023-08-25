@@ -174,28 +174,28 @@
   <a class="reference internal nav-link" href="#background-blender">
    Background: Blender
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#visualization-guide">
-   Visualization guide
-  </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#important">
-     Important
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#executing-python-code-in-blender">
-     Executing Python code in Blender
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#code-explanation">
-     Code explanation
+    <a class="reference internal nav-link" href="#visualization-guide">
+     Visualization guide
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#important">
+   Important
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#executing-python-code-in-blender">
+   Executing Python code in Blender
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#code-explanation">
+   Code explanation
+  </a>
  </li>
 </ul>
 
@@ -226,21 +226,22 @@
 <h2>Background: Blender<a class="headerlink" href="#background-blender" title="Link to this heading">¶</a></h2>
 <p>Blender is an open source and free available software suite for 3D visualization &amp; animation. It is available at <a class="reference external" href="https://www.blender.org/">https://www.blender.org/</a>.</p>
 <a class="reference internal image-reference" href="../_images/blender_demo.png"><img alt="Blender demo" class="align-center" src="../_images/blender_demo.png" style="width: 600px;" /></a>
-</section>
 <section id="visualization-guide">
-<h2>Visualization guide<a class="headerlink" href="#visualization-guide" title="Link to this heading">¶</a></h2>
+<h3>Visualization guide<a class="headerlink" href="#visualization-guide" title="Link to this heading">¶</a></h3>
 <p>Results source-reconstructed via FinnPy may be either (almost) directly visualized in blender or after subsequent postprocessing (e.g. power estimation, connectivity estimation). The following code will be employed to visualize results in blender. It provides a number of pre-configured perspectives, but images may be rendered from any freely chosen perspective.</p>
+</section>
+</section>
 <section id="important">
-<h3>Important<a class="headerlink" href="#important" title="Link to this heading">¶</a></h3>
+<h2>Important<a class="headerlink" href="#important" title="Link to this heading">¶</a></h2>
 <p>Unlike other functionality of this framework, this code has to be executed from within blender, as explained below. A blender template file (blender_template) is provided within the github repository.</p>
 </section>
 <section id="executing-python-code-in-blender">
-<h3>Executing Python code in Blender<a class="headerlink" href="#executing-python-code-in-blender" title="Link to this heading">¶</a></h3>
+<h2>Executing Python code in Blender<a class="headerlink" href="#executing-python-code-in-blender" title="Link to this heading">¶</a></h2>
 <p>To execute Python code from within blender, a text window needs to be opened within blender (either in the main or a <em>swiped in</em> window). Code within this window is executed by pressing the rightwards pointing triangle.</p>
 <a class="reference internal image-reference" href="../_images/blender_demo2.png"><img alt="Blender demo" class="align-center" src="../_images/blender_demo2.png" style="width: 500px;" /></a>
 </section>
 <section id="code-explanation">
-<h3>Code explanation<a class="headerlink" href="#code-explanation" title="Link to this heading">¶</a></h3>
+<h2>Code explanation<a class="headerlink" href="#code-explanation" title="Link to this heading">¶</a></h2>
 <p>The code will have to be subtly adapted to use, as usual.</p>
 <p>Initially, supportive functions are defined. The call to <em>reset_hemispheres</em> resets all nodes to an equal color, defined by the RGBA tuple (1, .738, .665, 1).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -485,7 +486,6 @@
 </div>
 <p>print(“terminated successfully”)</p>
 </details></section>
-</section>
 </section>
 
 

@@ -12,7 +12,7 @@ This guide explains how to visualize source reconstructed results using Blender.
    :align: center
 
 Background: Blender
-^^^^^^^^^^^^^^^^^^^
+-------------------
 
 Blender is an open source and free available software suite for 3D visualization & animation. It is available at https://www.blender.org/.
 
