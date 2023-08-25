@@ -22,7 +22,6 @@ def calc_skull_and_skin_models(subject_path, subject_id, preflood_height = 25, o
     """
     Employs freesufers watershed algorithm to calculate skull and skin models.
     
-    
     Parameters
     ----------
     subject_path : string
@@ -34,6 +33,7 @@ def calc_skull_and_skin_models(subject_path, subject_id, preflood_height = 25, o
     overwrite : boolean
                 Flag to overwrite if files are already present. Defaults to False.
     """
+    
     if (overwrite == True or os.path.exists(subject_path + "bem/watershed/" + subject_id + "_inner_skull_surface") == False):
         
         cmd = ["mri_watershed", "-h", str(preflood_height), "-useSRAS", "-surf", subject_path + "bem/watershed/" + subject_id, subject_path + "mri/T1.mgz", subject_path + "bem/watershed/ws.mgz"]

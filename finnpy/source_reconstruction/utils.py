@@ -105,7 +105,7 @@ def run_subprocess_in_custom_working_directory(subject_id, cmd):
     for c in iter(lambda: process.stderr.read(1), b""):
         print(c.decode(), end = "")
     
-    shutil.rmtree(path_to_tmp_cwd) # And removed alter on
+    shutil.rmtree(path_to_tmp_cwd) # And removed later on
 
 def init_fs_paths(subjects_path):
     """
@@ -274,8 +274,8 @@ def apply_inv_transformation(data, trans):
                
     Results
     -------
-    data : np.ndarray, shape(n, 3)
-           Transformed data.
+    trans_data : np.ndarray, shape(n, 3)
+                 Transformed data.
     """
     inv_trans = np.linalg.inv(trans)
     tmp = np.dot(inv_trans[:3, :3], data.T).T
@@ -396,151 +396,6 @@ def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
     evec = evec.reshape(-1, 3)
      
     return evec
-
-def calc_acc_hem_normals(white_vert, geom_white_faces):
-    """
-    Generatoes vertex normals from accumulated face normals.
-    See https://en.wikipedia.org/wiki/Vertex_normal.
-    
-    Parameters
-    ----------
-    white_vert : numpy.ndarray, shape(vert_cnt, 3)
-                 MRI model vertices.
-    
-    geom_white_faces : numpy.ndarray, shape(face_cnt, 3)
-                       MRI model faces.
-               
-    Returns
-    -------
-    acc_normals : numpy.ndarray, shape(vert_cnt, 3)
-                  Array of surface normals for the input faces/vertices.
-    """
-    
-    #Calculate surface normals
-    vert0 = white_vert[geom_white_faces[:, 0], :]
-    vert1 = white_vert[geom_white_faces[:, 1], :]
-    vert2 = white_vert[geom_white_faces[:, 2], :]
-    vortex_normals = fast_cross_product(vert1 - vert0, vert2 - vert1)
-    len_vortex_normals = np.linalg.norm(vortex_normals, axis = 1)
-    vortex_normals[len_vortex_normals > 0] /= np.expand_dims(len_vortex_normals[len_vortex_normals > 0], axis = 1)
-    
-    #Accumulate face normals
-    acc_normals = np.zeros((white_vert.shape[0], 3))
-    for outer_idx in range(3):
-        for inner_idx in range(3):
-            value = np.zeros((white_vert.shape[0],))
-            for vertex_idx in range(geom_white_faces.shape[0]):
-                value[geom_white_faces[vertex_idx, outer_idx]] += vortex_normals[vertex_idx, inner_idx]
-            acc_normals[:, inner_idx] += value
-    
-    #Normalize face normals
-    len_acc_normals = np.linalg.norm(acc_normals, axis = 1)
-    acc_normals[len_acc_normals > 0] /= np.expand_dims(len_acc_normals[len_acc_normals > 0], axis = 1)
-    
-    return acc_normals
-
-def find_vertex_clusters(white_vert, white_valid_vert, geom_white_faces):
-    """
-    Identifies which input vertices (white_vert) are presented by which valid vortex.
-    
-    Parameters
-    ----------
-    white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
-                 MRI model vertices.
-    white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
-                       Valid/supporting vertices.
-    geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
-                       MRI model faces.
-    
-    Returns
-    -------
-    cluster_grp : list, len(n,)
-                  Transformed surface model.
-    cluster_indices : list, len(n,)
-                      Transformed surface model.
-    """
-    
-    #Get adjacency matrix to identify nearest valid vortex
-    edges = scipy.sparse.coo_matrix((np.ones(3 * geom_white_faces.shape[0]),
-                                        (np.concatenate((geom_white_faces[:, 0], geom_white_faces[:, 1], geom_white_faces[:, 2])),
-                                         np.concatenate((geom_white_faces[:, 1], geom_white_faces[:, 2], geom_white_faces[:, 0])))),
-                                        shape = (white_vert.shape[0], white_vert.shape[0]))
-    edges = edges.tocsr()
-    edges += edges.T
-    edges = edges.tocoo()
-    edges_dists = np.linalg.norm(white_vert[edges.row, :] - white_vert[edges.col, :], axis = 1)
-    edges_adjacency = scipy.sparse.csr_matrix((edges_dists, (edges.row, edges.col)), shape = edges.shape)
-    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(white_valid_vert)[0], min_only = True, return_predecessors = True)
-    
-    #Accumulates the clusters
-    sort_near_idx = np.argsort(min_idx)
-    sort_min_idx = min_idx[sort_near_idx]
-    breaks = np.where(sort_min_idx[1:] != sort_min_idx[:-1])[0] + 1
-    starts = [0] + breaks.tolist()
-    ends = breaks.tolist() + [len(min_idx)]
-    cluster_grp = list()
-    for cluster_idx in range(len(starts)):
-        cluster_grp.append(np.sort(sort_near_idx[starts[cluster_idx]:ends[cluster_idx]]))
-    pre_cluster_indices = sort_min_idx[breaks - 1]
-    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(white_valid_vert)[0])
-    
-    return (cluster_grp, cluster_indices)
-
-def cortical_surface_reorient_fwd_model(lh_white_vert, lh_geom_white_faces, lh_valid_vert,
-                                        rh_white_vert, rh_geom_white_faces, rh_valid_vert,
-                                        fwd_sol, mri_to_head_trans):
-    """
-    Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
-    allowing for cortically constrained inverse modeling)
-    and shrinks it by making closeby channels project to the same destination.
-    This is different from a 'default' 3D transformation. 
-    
-    Parameters
-    ----------
-    lh_white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
-                    Lh vertices.
-    lh_geom_white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
-                          Lh faces.
-    lh_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
-                          Valid/supporting lh vertices.
-    rh_white_vert : numpy.ndarray, shape(rh_vert_cnt, 3)
-                    Rh vertices.
-    rh_geom_white_faces : numpy.ndarray, shape(rh_face_cnt, 3)
-                          Rh faces.
-    rh_valid_vert : numpy.ndarray, shape(rh_vert_cnt,)
-                          Valid/supporting rh vertices.
-    fwd_sol : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt * 3)
-              Forward solution with default orientation.
-    
-    mri_to_head_trans : numpy.ndarray, shape(4, 4)
-                        MRI to head transformation matrix.
-    
-    Returns
-    -------
-    fwd_sol * rot : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt)
-                    Transformed surface model.
-    """
-     
-    #Computes vertex normals
-    lh_acc_normals = calc_acc_hem_normals(lh_white_vert, lh_geom_white_faces)
-    rh_acc_normals = calc_acc_hem_normals(rh_white_vert, rh_geom_white_faces)
-     
-    # Figures out which real vertices are represented by the same model vortex
-    (lh_cluster_grp, lh_cluster_indices) = find_vertex_clusters(lh_white_vert, lh_valid_vert, lh_geom_white_faces)
-    (rh_cluster_grp, rh_cluster_indices) = find_vertex_clusters(rh_white_vert, rh_valid_vert, rh_geom_white_faces)
-    
-    #Determines the orientation 
-    lh_orient = get_eigenbasis(lh_acc_normals, lh_valid_vert, lh_cluster_grp, lh_cluster_indices, mri_to_head_trans)
-    rh_orient = get_eigenbasis(rh_acc_normals, rh_valid_vert, rh_cluster_grp, rh_cluster_indices, mri_to_head_trans)
-    
-    #Concatenates the eigenvector bases 
-    orient = np.concatenate((lh_orient, rh_orient), axis = 0)
-     
-    #Transforms eigenvector matrix into block matrix for ease of use
-    rot = orient_mat_to_block_format(orient[2::3, :])
-    
-    #Applies rotation matrix to the fwd solution 
-    return fwd_sol * rot
     
 def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
     """

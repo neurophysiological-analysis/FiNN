@@ -93,15 +93,29 @@ def _apply_coreg_to_vertices(white_vert, coreg_trans_mat):
     
     return trans_white_vert
 
-def _update_invalid_vertices(approx_surface, geom_white_vert, white_valid_vert):
+def _update_invalid_vertices(approx_surface, white_vert, valid_vert):
     """
     Updates invalid vertices
-    """
-    data = geom_white_vert[np.asarray(white_valid_vert, dtype=bool)]
-    inside_check = (approx_surface.find_simplex(data) != -1)
-    white_valid_vert[np.where(white_valid_vert)[0][~inside_check]] = False
     
-    return white_valid_vert
+    Parameters
+    ----------
+    approx_surface : scipy.spatial._qhull.Delaunay
+                     Approximate in/out skull/skin surface.
+    white_vert : numpy.ndarray, shape(white_vtx_cnt, 3)
+                 White matter surface vertices.
+    valid_vert : numpy.ndarray, shape(white_vtx_cnt, 3)
+                 Binary list of valid vertices.
+               
+    Returns
+    -------
+    trans_white_vert : numpy.ndarray, shape(white_vtx_cnt, 3)
+                       Transformed vertices.
+    """
+    data = white_vert[np.asarray(valid_vert, dtype=bool)]
+    inside_check = (approx_surface.find_simplex(data) != -1)
+    valid_vert[np.where(valid_vert)[0][~inside_check]] = False
+    
+    return valid_vert
 
 def _calc_magnetic_fields(white_vertices_mri, reduced_in_skull_vert, meg_to_mri_trans, pre_fwd_solution):
     """
@@ -441,7 +455,7 @@ def _calc_acc_hem_normals(white_vert, white_faces):
     
     return acc_normals
    
-def _find_vertex_clusters(white_vert, white_valid_vert, white_faces):
+def _find_vertex_clusters(white_vert, valid_vert, white_faces):
     """
     Identifies which input vertices (white_vert) are presented by which valid vortex.
     
@@ -449,7 +463,7 @@ def _find_vertex_clusters(white_vert, white_valid_vert, white_faces):
     ----------
     white_vert : numpy.ndarray, shape(lh_vert_cnt, 3)
                  MRI model vertices.
-    white_valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
+    valid_vert : numpy.ndarray, shape(lh_vert_cnt,)
                        Valid/supporting vertices.
     white_faces : numpy.ndarray, shape(lh_face_cnt, 3)
                   MRI model faces.
@@ -472,7 +486,7 @@ def _find_vertex_clusters(white_vert, white_valid_vert, white_faces):
     edges = edges.tocoo()
     edges_dists = np.linalg.norm(white_vert[edges.row, :] - white_vert[edges.col, :], axis = 1)
     edges_adjacency = scipy.sparse.csr_matrix((edges_dists, (edges.row, edges.col)), shape = edges.shape)
-    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(white_valid_vert)[0], min_only = True, return_predecessors = True)
+    _, _, min_idx = scipy.sparse.csgraph.dijkstra(edges_adjacency, indices = np.where(valid_vert)[0], min_only = True, return_predecessors = True)
     
     #Accumulates the clusters
     sort_near_idx = np.argsort(min_idx)
@@ -484,7 +498,7 @@ def _find_vertex_clusters(white_vert, white_valid_vert, white_faces):
     for cluster_idx in range(len(starts)):
         cluster_grp.append(np.sort(sort_near_idx[starts[cluster_idx]:ends[cluster_idx]]))
     pre_cluster_indices = sort_min_idx[breaks - 1]
-    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(white_valid_vert)[0])
+    cluster_indices = np.searchsorted(pre_cluster_indices, np.where(valid_vert)[0])
     
     return (cluster_grp, cluster_indices)
 

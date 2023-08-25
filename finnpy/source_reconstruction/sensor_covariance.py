@@ -18,7 +18,6 @@ import sklearn.decomposition
 
 def _get_bio_channel_type_idx(raw_file, mask = None):
     """
-    
     Identifies bio channel types.
     
     Parameters
@@ -83,7 +82,7 @@ def _empirically_estimate_cov(cov_data, meg_ch_indices, grad_ch_indices, valid_c
     grad_ch_indices : list, int
                       Indices of gradiometer channels.
     valid_ch_indices : numpy.ndarray, shape(ch_cnt,)
-           Binary list identifying channels as valid/invalid.
+                       Binary list identifying channels as valid/invalid.
                
     Returns
     -------

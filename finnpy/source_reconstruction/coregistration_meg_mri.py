@@ -149,7 +149,6 @@ def _registrate_3d_points_free(src_pts, tgt_pts, weights = [1., 10., 1.], initia
                     Initial transformation guess, 
                     defaults to None for no translation/rotation/scaling.
                     
-               
     Returns
     -------
     est_rotors : numpy.ndarray, shape(9,)
