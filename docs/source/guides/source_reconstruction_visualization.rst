@@ -28,7 +28,7 @@ Unlike other functionality of this framework, this code has to be executed from 
 Executing Python code in Blender
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To execute Python code from within blender, a text window needs to be opened within blender (either in the main or a ´swiped in´ window). Code within this window is executed by pressing the rightwards pointing triangle. 
+To execute Python code from within blender, a text window needs to be opened within blender (either in the main or a *swiped in* window). Code within this window is executed by pressing the rightwards pointing triangle. 
 
 .. image:: img/blender_demo2.png
    :alt: Blender demo
@@ -39,7 +39,7 @@ Code explanation
 
 The code will have to be subtly adapted to use, as usual.
 
-Initially, supportive functions are defined. The call to ´reset_hemispheres´ resets all nodes to an equal color, defined by the RGBA tuple (1, .738, .665, 1).
+Initially, supportive functions are defined. The call to *reset_hemispheres* resets all nodes to an equal color, defined by the RGBA tuple (1, .738, .665, 1).
 
 .. code-block::
 
@@ -53,7 +53,7 @@ Initially, supportive functions are defined. The call to ´reset_hemispheres´ r
            for region_name in REF_REGIONS:
                bpy.data.materials[region_name].node_tree.nodes["Principled BSDF"].inputs[0].default_value = tuple(np.asarray([1, .738, .665, 1]).tolist())
 
-In this example, effect sizes of significant results are visualized. To this end, ´update_hemisphere´ is provided with a path to an array/list with significance values, effect size values, and region names. The region names correspond to those earlier established in the source reconstruction. Subsequently, regions are colored where a stronger cyan coloring indicates a stronger effect and vice versa.
+In this example, effect sizes of significant results are visualized. To this end, *update_hemisphere* is provided with a path to an array/list with significance values, effect size values, and region names. The region names correspond to those earlier established in the source reconstruction. Subsequently, regions are colored where a stronger cyan coloring indicates a stronger effect and vice versa.
 
 .. code-block::
        
