@@ -1,8 +1,8 @@
 
-.. _source_reconstruction_label:
+.. _source_reconstruction_compute_label:
 
-Source reconstruction
-=====================
+Model computation & application
+===============================
 
 This guide explains how to apply source reconstruction for MEG using FiNNPy.
 
