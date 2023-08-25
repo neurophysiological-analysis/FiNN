@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Sensor covariance &#8212; FiNNPy 1.2.0 documentation</title>
     
@@ -23,17 +22,14 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css?v=c4c5097c" />
     
   <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=872021ae"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Source mesh model" href="source_mesh_model.html" />
@@ -232,11 +228,11 @@
               <div>
                 
   <section id="sensor-covariance">
-<h1>Sensor covariance<a class="headerlink" href="#sensor-covariance" title="Permalink to this heading">¶</a></h1>
+<h1>Sensor covariance<a class="headerlink" href="#sensor-covariance" title="Link to this heading">¶</a></h1>
 <p>This module may be employed to calculate the sensor covariance matrix.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance.get_sensor_covariance">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">get_sensor_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance.get_sensor_covariance" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">get_sensor_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance.get_sensor_covariance" title="Link to this definition">¶</a></dt>
 <dd><p>#Determines eigenvectors/values from the sensor noise covariance</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -264,7 +260,7 @@ defaults to “shrinkage” : 0.2 - epoch size in s.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._get_bio_channel_type_idx">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_get_bio_channel_type_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._get_bio_channel_type_idx" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_get_bio_channel_type_idx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._get_bio_channel_type_idx" title="Link to this definition">¶</a></dt>
 <dd><p>Identifies bio channel types.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -284,7 +280,7 @@ defaults to “shrinkage” : 0.2 - epoch size in s.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._empirically_estimate_cov">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_empirically_estimate_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._empirically_estimate_cov" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_empirically_estimate_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cov_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._empirically_estimate_cov" title="Link to this definition">¶</a></dt>
 <dd><p>Calculates the sensor noise covariance</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -304,7 +300,7 @@ Important: Evaluate a number of different files to identify a good example.</p><
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.sensor_covariance._calc_sensor_noise_cov">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_calc_sensor_noise_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_sz_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._calc_sensor_noise_cov" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.sensor_covariance.</span></span><span class="sig-name descname"><span class="pre">_calc_sensor_noise_cov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch_sz_s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.sensor_covariance._calc_sensor_noise_cov" title="Link to this definition">¶</a></dt>
 <dd><p>Calculates the sensor noise covariance</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -368,7 +364,7 @@ Important: Evaluate a number of different files to identify a good example.</p><
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.3.<br>
 </p>
     </div>
     

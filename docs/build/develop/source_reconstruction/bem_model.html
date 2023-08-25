@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Boundary element model (BEM) &#8212; FiNNPy 1.2.0 documentation</title>
     
@@ -23,17 +22,14 @@
       
 
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css?v=c4c5097c" />
     
   <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/documentation_options.js?v=872021ae"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Coregistration, MEG to MRI" href="coregistration_meg_mri.html" />
@@ -268,11 +264,11 @@
               <div>
                 
   <section id="boundary-element-model-bem">
-<h1>Boundary element model (BEM)<a class="headerlink" href="#boundary-element-model-bem" title="Permalink to this heading">¶</a></h1>
+<h1>Boundary element model (BEM)<a class="headerlink" href="#boundary-element-model-bem" title="Link to this heading">¶</a></h1>
 <p>This module may be employed to calcualte the boundary element model for EEG/MEG source reconstruction.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.read_skull_and_skin_models">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">read_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.read_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">read_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.read_skull_and_skin_models" title="Link to this definition">¶</a></dt>
 <dd><p>Reads skull and skin models extracted
 via freesurfer’s watershed algorithm.</p>
 <dl class="field-list simple">
@@ -298,7 +294,7 @@ via freesurfer’s watershed algorithm.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_skull_and_skin_models">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preflood_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preflood_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_skull_and_skin_models" title="Link to this definition">¶</a></dt>
 <dd><p>Employs freesufers watershed algorithm to calculate skull and skin models.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -314,7 +310,7 @@ via freesurfer’s watershed algorithm.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.calc_bem_model_linear_basis">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">calc_bem_model_linear_basis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_icosahedron_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.calc_bem_model_linear_basis" title="Link to this definition">¶</a></dt>
 <dd><p>Calcuates the BEM linear basis coefficients using the linear collocation method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -340,7 +336,7 @@ defaults to 4.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model.plot_skull_and_skin_models">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">plot_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skin_vect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skin_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.plot_skull_and_skin_models" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">plot_skull_and_skin_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skull_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skin_vect</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_skin_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model.plot_skull_and_skin_models" title="Link to this definition">¶</a></dt>
 <dd><p>Plot skull and skin models for visual confirmation of proper alignment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -359,7 +355,7 @@ defaults to 4.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model._load_and_orient_t1">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_load_and_orient_t1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._load_and_orient_t1" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_load_and_orient_t1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._load_and_orient_t1" title="Link to this definition">¶</a></dt>
 <dd><p>Loads and orients an MRI scan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -377,7 +373,7 @@ defaults to 4.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model._plot_skull_and_skin_subplots">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_plot_skull_and_skin_subplots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfaces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._plot_skull_and_skin_subplots" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_plot_skull_and_skin_subplots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surfaces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._plot_skull_and_skin_subplots" title="Link to this definition">¶</a></dt>
 <dd><p>Adds splices from the MRI scan onto the plot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -392,7 +388,7 @@ defaults to 4.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model._find_non_diag_omega">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_non_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces_normal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_non_diag_omega" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_non_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_faces_area</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces_normal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_non_diag_omega" title="Link to this definition">¶</a></dt>
 <dd><p>Calculates the non-diagonal elements of omega (linear basis factors), see function calc_bem_model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -412,7 +408,7 @@ Warning, diagonal elements are invalid!</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.bem_model._find_diag_omega">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_diag_omega" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.bem_model.</span></span><span class="sig-name descname"><span class="pre">_find_diag_omega</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">omega</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.bem_model._find_diag_omega" title="Link to this definition">¶</a></dt>
 <dd><p>Calculates the diagonal elements of omega as these cannot be calculated as the non-diagonal ones due to the auto solid angle problem.</p>
 <p>See “Error Analysis of a New Galerkin Method to Solve the Forward Problem in MEG and EEG Using the Boundary Element Method” by Satu Tissari, Jussi Rahola for reference.
 See function calc_bem_model for a more general description.</p>
@@ -472,7 +468,7 @@ Warning, diagonal elements are currently invalid!</p></li>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.3.<br>
 </p>
     </div>
     

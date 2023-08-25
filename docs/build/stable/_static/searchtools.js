@@ -4,7 +4,7 @@
  *
  * Sphinx JavaScript utilities for the full-text search.
  *
- * :copyright: Copyright 2007-2022 by the Sphinx team, see AUTHORS.
+ * :copyright: Copyright 2007-2023 by the Sphinx team, see AUTHORS.
  * :license: BSD, see LICENSE for details.
  *
  */
@@ -59,10 +59,10 @@ const _escapeRegExp = (string) =>
 
 const _displayItem = (item, searchTerms, highlightTerms) => {
   const docBuilder = DOCUMENTATION_OPTIONS.BUILDER;
-  const docUrlRoot = DOCUMENTATION_OPTIONS.URL_ROOT;
   const docFileSuffix = DOCUMENTATION_OPTIONS.FILE_SUFFIX;
   const docLinkSuffix = DOCUMENTATION_OPTIONS.LINK_SUFFIX;
   const showSearchSummary = DOCUMENTATION_OPTIONS.SHOW_SEARCH_SUMMARY;
+  const contentRoot = document.documentElement.dataset.content_root;
 
   const [docName, title, anchor, descr, score, _filename] = item;
 
@@ -75,25 +75,23 @@ const _displayItem = (item, searchTerms, highlightTerms) => {
     if (dirname.match(/\/index\/$/))
       dirname = dirname.substring(0, dirname.length - 6);
     else if (dirname === "index/") dirname = "";
-    requestUrl = docUrlRoot + dirname;
+    requestUrl = contentRoot + dirname;
     linkUrl = requestUrl;
   } else {
     // normal html builders
-    requestUrl = docUrlRoot + docName + docFileSuffix;
+    requestUrl = contentRoot + docName + docFileSuffix;
     linkUrl = docName + docLinkSuffix;
   }
   let linkEl = listItem.appendChild(document.createElement("a"));
   linkEl.href = linkUrl + anchor;
   linkEl.dataset.score = score;
   linkEl.innerHTML = title;
-  const rehighlightListItem = () => window.setTimeout(() => {
-    if (SPHINX_HIGHLIGHT_ENABLED)  // set in sphinx_highlight.js
-      highlightTerms.forEach((term) => _highlightText(listItem, term, "highlighted"));
-  }, 10);
   if (descr) {
     listItem.appendChild(document.createElement("span")).innerHTML =
       " (" + descr + ")";
-    rehighlightListItem();
+    // highlight search terms in the description
+    if (SPHINX_HIGHLIGHT_ENABLED)  // set in sphinx_highlight.js
+      highlightTerms.forEach((term) => _highlightText(listItem, term, "highlighted"));
   }
   else if (showSearchSummary)
     fetch(requestUrl)
@@ -103,7 +101,9 @@ const _displayItem = (item, searchTerms, highlightTerms) => {
           listItem.appendChild(
             Search.makeSearchSummary(data, searchTerms)
           );
-        rehighlightListItem();
+        // highlight search terms in the summary
+        if (SPHINX_HIGHLIGHT_ENABLED)  // set in sphinx_highlight.js
+          highlightTerms.forEach((term) => _highlightText(listItem, term, "highlighted"));
       });
   Search.output.appendChild(listItem);
 };
@@ -434,14 +434,11 @@ const Search = {
         filenames[match[0]],
       ]);
     };
-    Object.keys(objects).forEach((prefix) => {
-      if (!(objects[prefix] instanceof Array)) {
-        objects[prefix] = Object.entries(objects[prefix]).map(([name, match]) => [...match, name]);
-      }
+    Object.keys(objects).forEach((prefix) =>
       objects[prefix].forEach((array) =>
         objectSearchCallback(prefix, array)
-      );
-    });
+      )
+    );
     return results;
   },
 
