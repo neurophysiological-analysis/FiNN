@@ -6,9 +6,9 @@ Visualization
 
 This guide explains how to visualize source reconstructed results using Blender.
 
-.. image:: img/blender_demo.png
-   :alt: Blender demo
-   :width: 600
+.. image:: img/blender_demo3.png
+   :alt: Blender demo result
+   :width: 400
    :align: center
 
 Background: Blender
@@ -16,15 +16,15 @@ Background: Blender
 
 Blender is an open source and free available software suite for 3D visualization & animation. It is available at https://www.blender.org/.
 
+.. image:: img/blender_demo.png
+   :alt: Blender demo
+   :width: 600
+   :align: center
+
 Visualization guide
 -------------------
 
 Results source-reconstructed via FinnPy may be either (almost) directly visualized in blender or after subsequent postprocessing (e.g. power estimation, connectivity estimation). The following code will be employed to visualize results in blender. It provides a number of pre-configured perspectives, but images may be rendered from any freely chosen perspective.
-
-.. image:: img/blender_demo3.png
-   :alt: Blender demo result
-   :width: 400
-   :align: center
 
 
 Important
