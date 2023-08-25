@@ -4,7 +4,7 @@
 Visualization
 =============
 
-This guide explains how to visualize source reconstructed results using Blender. 
+This guide explains how to visualize source reconstructed results using Blender.
 
 .. image:: img/blender_demo.png
    :alt: Blender demo
@@ -19,6 +19,11 @@ Visualization guide
 -------------------
 
 Results source-reconstructed via FinnPy may be either (almost) directly visualized in blender or after subsequent postprocessing (e.g. power estimation, connectivity estimation). The following code will be employed to visualize results in blender. It provides a number of pre-configured perspectives, but images may be rendered from any freely chosen perspective.
+
+.. image:: img/blender_demo3.png
+   :alt: Blender demo result
+   :align: center
+
 
 Important
 ^^^^^^^^^
