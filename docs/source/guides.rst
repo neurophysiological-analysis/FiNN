@@ -19,17 +19,17 @@ Feature generation
 
 :ref:`dac_configurator_label`
 
-Statistics
-----------
-
-<To be added>
-
 Source reconstruction
 ---------------------
 
 :ref:`source_reconstruction_compute_label`
 
 :ref:`source_reconstruction_visualize_label`
+
+Statistics
+----------
+
+<To be added>
 
 
 .. toctree::

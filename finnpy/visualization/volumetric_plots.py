@@ -94,6 +94,8 @@ def plot_volumetric_data(data, magnification = None,
                      c_pos[idx_x][idx_y][idx_z] = np.median(c_pos[idx_x][idx_y][idx_z]) if (len(c_pos[idx_x][idx_y][idx_z]) != 0) else 0
         c_pos = np.asarray(c_pos, dtype = float)
     
+    #print(np.min(c_pos[c_pos>0]), np.max(c_pos))
+    
     x_pos = (x_pos - res/2-.5)/magnification+mean_x
     y_pos = (y_pos - res/2-.5)/magnification+mean_y
     z_pos = (z_pos - res/2-.5)/magnification+mean_z
@@ -107,6 +109,8 @@ def plot_volumetric_data(data, magnification = None,
         c_pos = scipy.ndimage.generic_filter(c_pos, np.nanmean, nanmean_filter_sz)
         c_pos[np.isnan(c_pos)] = 0
         c_pos = scipy.ndimage.gaussian_filter(c_pos, sigma = gaussian_filter_sz)
+    
+    #print(np.min(c_pos[c_pos>0]), np.max(c_pos))
     
     c_pos -= np.min(c_pos)
     c_pos /= np.max(c_pos)

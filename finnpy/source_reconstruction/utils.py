@@ -107,7 +107,7 @@ def run_subprocess_in_custom_working_directory(subject_id, cmd):
     
     shutil.rmtree(path_to_tmp_cwd) # And removed later on
 
-def init_fs_paths(subjects_path):
+def init_fs_paths(subjects_path, fs_path = "/usr/local/freesurfer/7.2.0/"):
     """
     Runs some freesurfer initialization steps.
     
@@ -115,12 +115,14 @@ def init_fs_paths(subjects_path):
     ----------
     subjects_path : string
                     Path to the subject folder.
+    fs_path : string
+              Path to the freesurfer folder.
     """
-    os.environ["FREESURFER_HOME"]   = "/usr/local/freesurfer/7.2.0/"
-    os.environ["FSFAST_HOME"]       = "/usr/local/freesurfer/7.2.0/fsfast/"
+    os.environ["FREESURFER_HOME"]   = fs_path
+    os.environ["FSFAST_HOME"]       = fs_path + "fsfast/"
     os.environ["FSF_OUTPUT_FORMAT"] = "nii.gz"
     os.environ["SUBJECTS_DIR"]      = subjects_path[:-1] if (subjects_path[-1] == "/") else subjects_path
-    os.environ["MNI_DIR"]           = "/usr/local/freesurfer/7.2.0/mni/"
+    os.environ["MNI_DIR"]           = fs_path + "mni/"
     
     os.environ["PATH"] = os.environ["PATH"]+":"+os.environ['FREESURFER_HOME']+"bin/"
     os.environ["PATH"] = os.environ["PATH"]+":"+os.environ['FSFAST_HOME']+"bin/"

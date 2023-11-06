@@ -59,7 +59,7 @@ class test_sfc(unittest.TestCase):
         
         
     def calc_from_time_domain(self, signal_1, signal_2, fmin, fmax, frequency_sampling, nperseg, nfft, return_signed_conn, minimal_angle_thresh):
-        return sfc_td.run_dac(signal_1, signal_2, fmin , fmax, frequency_sampling, nperseg, nfft, return_signed_conn, minimal_angle_thresh)[1]
+        return sfc_td.run_dac(signal_1, signal_2, fmin , fmax, frequency_sampling, nperseg, nfft, return_signed_conn, minimal_angle_thresh)
     
     def calc_from_frequency_domain(self, signal_1, signal_2, fmin, fmax, frequency_sampling, nperseg, nfft, return_signed_conn, minimal_angle_thresh):
         seg_data_X = sfc_misc._segment_data(signal_1, nperseg, pad_type = "zero")
