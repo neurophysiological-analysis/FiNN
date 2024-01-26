@@ -33,15 +33,21 @@ Improper skull model
 The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:
 
 .. code-block::
+   
+  import finnpy.source_reconstruction.bem_model as finnpy_sr_bem
+  
+  (ws_in_skull_vert,
+   ws_in_skull_faces, 
+   ws_out_skull_vert,
+   ws_out_skull_faces,
+   ws_out_skin_vect,
+   ws_out_skin_faces) = finnpy_sr_bem.read_skull_and_skin_models.(fs_subj_path,
+   								  subj_name + rec_folder)
        
-       (ws_in_skull_vert, ws_in_skull_faces, 
-        ws_out_skull_vert, ws_out_skull_faces,
-        ws_out_skin_vect, ws_out_skin_faces) = finnpy.source_reconstruction.bem_model.read_skull_and_skin_models(fs_subj_path, subj_name + rec_folder)
-       
-       finnpy.source_reconstruction.bem_model.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
-                                                                         ws_out_skull_vert, ws_out_skull_faces,
-                                                                         ws_out_skin_vect, ws_out_skin_faces,
-                                                                         fs_subj_path)
+  finnpy_sr_bem.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
+  					   ws_out_skull_vert, ws_out_skull_faces,
+  					   ws_out_skin_vect, ws_out_skin_faces,
+  					   fs_subj_path)
        
 Producing the following output:
 

@@ -402,16 +402,20 @@ document.write(`
 <span class="kn">import</span> <span class="nn">finnpy.source_reconstruction.forward_model</span> <span class="k">as</span> <span class="nn">finnpy_sr_fwd</span>
 <span class="kn">import</span> <span class="nn">finnpy.source_reconstruction.inverse_model</span> <span class="k">as</span> <span class="nn">finnpy_sr_inv</span>
 
-<span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">)</span> <span class="c1">#Optional, please only executed if not execuded previously</span>
+<span class="c1">#Optional, please only executed if not execuded previously</span>
+<span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">)</span>
 
 <span class="n">rec_meta_info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_info</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
-<span class="p">(</span><span class="n">coreg_rotors</span><span class="p">,</span> <span class="n">meg_pts</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">calc_coreg</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span><span class="n">anatomy_path</span><span class="p">,</span>
-                                                     <span class="n">rec_meta_info</span><span class="p">,</span>
-                                                     <span class="n">registration_scale_type</span> <span class="o">=</span> <span class="s2">&quot;free&quot;</span><span class="p">)</span>
-<span class="n">finnpy_sr_mri_anat</span><span class="o">.</span><span class="n">scale_anatomy</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">coreg_rotors</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">])</span>
-<span class="p">(</span><span class="n">coreg_rotors</span><span class="p">,</span> <span class="n">meg_pts</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">calc_coreg</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">,</span>
-                                                     <span class="n">rec_meta_info</span><span class="p">,</span>
-                                                     <span class="n">registration_scale_type</span> <span class="o">=</span> <span class="s2">&quot;restricted&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="n">coreg_rotors</span><span class="p">,</span>
+ <span class="n">meg_pts</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">calc_coreg</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span><span class="n">anatomy_path</span><span class="p">,</span>
+                                       <span class="n">rec_meta_info</span><span class="p">,</span>
+                                       <span class="n">registration_scale_type</span> <span class="o">=</span> <span class="s2">&quot;free&quot;</span><span class="p">)</span>
+<span class="n">finnpy_sr_mri_anat</span><span class="o">.</span><span class="n">scale_anatomy</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span>
+                                 <span class="n">subj_name</span><span class="p">,</span> <span class="n">coreg_rotors</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">9</span><span class="p">])</span>
+<span class="p">(</span><span class="n">coreg_rotors</span><span class="p">,</span>
+ <span class="n">meg_pts</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">calc_coreg</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">,</span>
+                                       <span class="n">rec_meta_info</span><span class="p">,</span>
+                                       <span class="n">registration_scale_type</span> <span class="o">=</span> <span class="s2">&quot;restricted&quot;</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="n">visualize_coregistration</span><span class="p">):</span>
   <span class="n">rigid_mri_to_meg_trans</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">get_rigid_transform</span><span class="p">(</span><span class="n">coreg_rotors</span><span class="p">)</span>
@@ -420,27 +424,39 @@ document.write(`
 
 <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">calc_skull_and_skin_models</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span>
                                          <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_ws_extract</span><span class="p">)</span>
-<span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
- <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
- <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">read_skull_and_skin_models</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
+<span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span>
+ <span class="n">ws_in_skull_faces</span><span class="p">,</span>
+ <span class="n">ws_out_skull_vert</span><span class="p">,</span>
+ <span class="n">ws_out_skull_faces</span><span class="p">,</span>
+ <span class="n">ws_out_skin_vect</span><span class="p">,</span>
+ <span class="n">ws_out_skin_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">read_skull_and_skin_models</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span>
+                                                               <span class="n">subj_name</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="n">visualize_skull_skin_plots</span><span class="p">):</span>
-  <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">plot_skull_and_skin_models</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
-                                                                    <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
-                                                                    <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">,</span>
-                                                                    <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
-<span class="k">del</span> <span class="n">ws_out_skull_vert</span><span class="p">;</span> <span class="k">del</span> <span class="n">ws_out_skull_faces</span><span class="p">;</span> <span class="k">del</span> <span class="n">ws_out_skin_vect</span><span class="p">;</span> <span class="k">del</span> <span class="n">ws_out_skin_faces</span>
+  <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">plot_skull_and_skin_models</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span>
+                                           <span class="n">ws_in_skull_faces</span><span class="p">,</span>
+                                           <span class="n">ws_out_skull_vert</span><span class="p">,</span>
+                                           <span class="n">ws_out_skull_faces</span><span class="p">,</span>
+                                           <span class="n">ws_out_skin_vect</span><span class="p">,</span>
+                                           <span class="n">ws_out_skin_faces</span><span class="p">,</span>
+                                           <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">ws_out_skull_vert</span><span class="p">;</span> <span class="k">del</span> <span class="n">ws_out_skull_faces</span>
+<span class="k">del</span> <span class="n">ws_out_skin_vect</span><span class="p">;</span> <span class="k">del</span> <span class="n">ws_out_skin_faces</span>
 
 <span class="p">(</span><span class="n">in_skull_reduced_vert</span><span class="p">,</span> <span class="n">in_skull_faces</span><span class="p">,</span>
  <span class="n">in_skull_faces_area</span><span class="p">,</span> <span class="n">in_skull_faces_normal</span><span class="p">,</span>
- <span class="n">bem_solution</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">calc_bem_model_linear_basis</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">)</span>
+ <span class="n">bem_solution</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">calc_bem_model_linear_basis</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span>
+                                                           <span class="n">ws_in_skull_faces</span><span class="p">)</span>
 
 <span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">lh_white_faces</span><span class="p">,</span>
  <span class="n">rh_white_vert</span><span class="p">,</span> <span class="n">rh_white_faces</span><span class="p">,</span>
  <span class="n">lh_sphere_vert</span><span class="p">,</span>
  <span class="n">rh_sphere_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">read_cortical_models</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
 <span class="p">(</span><span class="n">octa_model_vert</span><span class="p">,</span> <span class="n">octa_model_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_smm</span><span class="o">.</span><span class="n">create_source_mesh_model</span><span class="p">()</span>
-<span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_smm</span><span class="o">.</span><span class="n">match_source_mesh_model</span><span class="p">(</span><span class="n">lh_sphere_vert</span><span class="p">,</span> <span class="n">rh_sphere_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">)</span>
+<span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span>
+ <span class="n">rh_white_valid_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_smm</span><span class="o">.</span><span class="n">match_source_mesh_model</span><span class="p">(</span><span class="n">lh_sphere_vert</span><span class="p">,</span>
+                                                              <span class="n">rh_sphere_vert</span><span class="p">,</span>
+                                                              <span class="n">octa_model_vert</span><span class="p">)</span>
 
 <span class="n">rec_meta_info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_info</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
 <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">)</span>
@@ -448,20 +464,38 @@ document.write(`
 <span class="n">rigid_mri_to_meg_trans</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">get_rigid_transform</span><span class="p">(</span><span class="n">coreg_rotors</span><span class="p">)</span>
 <span class="n">rigid_meg_to_mri_trans</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">rigid_mri_to_meg_trans</span><span class="p">)</span>
 <span class="p">(</span><span class="n">fwd_sol</span><span class="p">,</span>
-<span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_fwd</span><span class="o">.</span><span class="n">calc_forward_model</span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">rh_white_vert</span><span class="p">,</span>
-                                                                                                                <span class="n">rigid_meg_to_mri_trans</span><span class="p">,</span> <span class="n">rigid_mri_to_meg_trans</span><span class="p">,</span>
-                                                                                                                <span class="n">rec_meta_info</span><span class="p">,</span> <span class="n">in_skull_reduced_vert</span><span class="p">,</span> <span class="n">in_skull_faces</span><span class="p">,</span>
-                                                                                                                <span class="n">in_skull_faces_normal</span><span class="p">,</span> <span class="n">in_skull_faces_area</span><span class="p">,</span>
-                                                                                                                <span class="n">bem_solution</span><span class="p">,</span> <span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">)</span>
-<span class="n">optimized_fwd_sol</span> <span class="o">=</span> <span class="n">finnpy_sr_fwd</span><span class="o">.</span><span class="n">optimize_fwd_model</span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">lh_white_faces</span><span class="p">,</span> <span class="n">lh_white_valid_vert</span><span class="p">,</span>
-                                                                                <span class="n">rh_white_vert</span><span class="p">,</span> <span class="n">rh_white_faces</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span>
-                                                                                <span class="n">fwd_sol</span><span class="p">,</span> <span class="n">rigid_mri_to_meg_trans</span><span class="p">)</span>
-<span class="p">(</span><span class="n">inv_trans</span><span class="p">,</span> <span class="n">noise_norm</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_inv</span><span class="o">.</span><span class="n">calc_inverse_model</span><span class="p">(</span><span class="n">sensor_cov_eigen_val</span><span class="p">,</span> <span class="n">sensor_cov_eigen_vec</span><span class="p">,</span> <span class="n">sensor_cov_names</span><span class="p">,</span> <span class="n">optimized_fwd_sol</span><span class="p">,</span> <span class="n">rec_meta_info</span><span class="p">)</span>
+ <span class="n">lh_white_valid_vert</span><span class="p">,</span>
+ <span class="n">rh_white_valid_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_fwd</span><span class="o">.</span><span class="n">calc_forward_model</span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span>
+                                                         <span class="n">rh_white_vert</span><span class="p">,</span>
+                                                         <span class="n">rigid_meg_to_mri_trans</span><span class="p">,</span>
+                                                         <span class="n">rigid_mri_to_meg_trans</span><span class="p">,</span>
+                                                         <span class="n">rec_meta_info</span><span class="p">,</span>
+                                                         <span class="n">in_skull_reduced_vert</span><span class="p">,</span>
+                                                         <span class="n">in_skull_faces</span><span class="p">,</span>
+                                                         <span class="n">in_skull_faces_normal</span><span class="p">,</span>
+                                                         <span class="n">in_skull_faces_area</span><span class="p">,</span>
+                                                         <span class="n">bem_solution</span><span class="p">,</span>
+                                                         <span class="n">lh_white_valid_vert</span><span class="p">,</span>
+                                                         <span class="n">rh_white_valid_vert</span><span class="p">)</span>
+<span class="n">optimized_fwd_sol</span> <span class="o">=</span> <span class="n">finnpy_sr_fwd</span><span class="o">.</span><span class="n">optimize_fwd_model</span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">lh_white_faces</span><span class="p">,</span>
+                                                     <span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_vert</span><span class="p">,</span>
+                                                     <span class="n">rh_white_faces</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span>
+                                                     <span class="n">fwd_sol</span><span class="p">,</span> <span class="n">rigid_mri_to_meg_trans</span><span class="p">)</span>
+<span class="p">(</span><span class="n">inv_trans</span><span class="p">,</span>
+ <span class="n">noise_norm</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_inv</span><span class="o">.</span><span class="n">calc_inverse_model</span><span class="p">(</span><span class="n">sensor_cov_eigen_val</span><span class="p">,</span> <span class="n">sensor_cov_eigen_vec</span><span class="p">,</span>
+                                                <span class="n">sensor_cov_names</span><span class="p">,</span> <span class="n">optimized_fwd_sol</span><span class="p">,</span>
+                                                <span class="n">rec_meta_info</span><span class="p">)</span>
 
 
 
-<span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span> <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">get_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span> <span class="n">rh_white_valid_vert</span><span class="p">,</span> <span class="n">octa_model_vert</span><span class="p">,</span>
-                                                                                                                                                   <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_mri_trans</span><span class="p">)</span>
+<span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span>
+ <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span>
+ <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">get_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span>
+                                                                              <span class="n">rh_white_valid_vert</span><span class="p">,</span>
+                                                                              <span class="n">octa_model_vert</span><span class="p">,</span>
+                                                                              <span class="n">anatomy_path</span><span class="p">,</span>
+                                                                              <span class="n">subj_name</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">,</span>
+                                                                              <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_mri_trans</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If not done previously, FreeSurfer needs to be initialized.</p>

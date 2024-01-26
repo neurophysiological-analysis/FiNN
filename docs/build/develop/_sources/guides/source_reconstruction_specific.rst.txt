@@ -18,16 +18,20 @@ Herein, the individual commands of this section will be explained in a step-by-s
   import finnpy.source_reconstruction.forward_model as finnpy_sr_fwd
   import finnpy.source_reconstruction.inverse_model as finnpy_sr_inv
   
-  finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path) #Optional, please only executed if not execuded previously
+  #Optional, please only executed if not execuded previously
+  finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
 	
   rec_meta_info = mne.io.read_info(data_path)
-  (coreg_rotors, meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name,anatomy_path,
-  						       rec_meta_info,
-  						       registration_scale_type = "free")
-  finnpy_sr_mri_anat.scale_anatomy(anatomy_path, subj_name, coreg_rotors[6:9])
-  (coreg_rotors, meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name, anatomy_path,
-  						       rec_meta_info,
-  						       registration_scale_type = "restricted")
+  (coreg_rotors,
+   meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name,anatomy_path,
+   					 rec_meta_info,
+   					 registration_scale_type = "free")
+  finnpy_sr_mri_anat.scale_anatomy(anatomy_path,
+  				   subj_name, coreg_rotors[6:9])
+  (coreg_rotors,
+   meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name, anatomy_path,
+   					 rec_meta_info,
+   					 registration_scale_type = "restricted")
 
   if (visualize_coregistration):
     rigid_mri_to_meg_trans = finnpy_sr_coreg.get_rigid_transform(coreg_rotors)
@@ -36,27 +40,39 @@ Herein, the individual commands of this section will be explained in a step-by-s
 
   finnpy_sr_bem.calc_skull_and_skin_models(anatomy_path, subj_name,
   					   overwrite = overwrite_ws_extract)
-  (ws_in_skull_vert, ws_in_skull_faces, 
-   ws_out_skull_vert, ws_out_skull_faces,
-   ws_out_skin_vect, ws_out_skin_faces) = finnpy_sr_bem.read_skull_and_skin_models(anatomy_path, subj_name)
+  (ws_in_skull_vert,
+   ws_in_skull_faces, 
+   ws_out_skull_vert,
+   ws_out_skull_faces,
+   ws_out_skin_vect,
+   ws_out_skin_faces) = finnpy_sr_bem.read_skull_and_skin_models(anatomy_path,
+   								 subj_name)
 
   if (visualize_skull_skin_plots):
-    finnpy_sr_bem.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
-    		                                                      ws_out_skull_vert, ws_out_skull_faces,
-    		                                                      ws_out_skin_vect, ws_out_skin_faces,
-    		                                                      anatomy_path, subj_name)
-  del ws_out_skull_vert; del ws_out_skull_faces; del ws_out_skin_vect; del ws_out_skin_faces
+    finnpy_sr_bem.plot_skull_and_skin_models(ws_in_skull_vert,
+    					     ws_in_skull_faces,
+    					     ws_out_skull_vert,
+    					     ws_out_skull_faces,
+    					     ws_out_skin_vect,
+    					     ws_out_skin_faces,
+    					     anatomy_path, subj_name)
+  del ws_out_skull_vert; del ws_out_skull_faces
+  del ws_out_skin_vect; del ws_out_skin_faces
 
   (in_skull_reduced_vert, in_skull_faces, 
    in_skull_faces_area, in_skull_faces_normal, 
-   bem_solution) = finnpy_sr_bem.calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces)
+   bem_solution) = finnpy_sr_bem.calc_bem_model_linear_basis(ws_in_skull_vert,
+   							     ws_in_skull_faces)
 
   (lh_white_vert, lh_white_faces,
    rh_white_vert, rh_white_faces,
    lh_sphere_vert,
    rh_sphere_vert) = finnpy_sr_utils.read_cortical_models(anatomy_path, subj_name)
   (octa_model_vert, octa_model_faces) = finnpy_sr_smm.create_source_mesh_model()
-  (lh_white_valid_vert, rh_white_valid_vert) = finnpy_sr_smm.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
+  (lh_white_valid_vert,
+   rh_white_valid_vert) = finnpy_sr_smm.match_source_mesh_model(lh_sphere_vert,
+   								rh_sphere_vert,
+   								octa_model_vert)
 
   rec_meta_info = mne.io.read_info(data_path)
   finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
@@ -64,20 +80,38 @@ Herein, the individual commands of this section will be explained in a step-by-s
   rigid_mri_to_meg_trans = finnpy_sr_coreg.get_rigid_transform(coreg_rotors)
   rigid_meg_to_mri_trans = scipy.linalg.inv(rigid_mri_to_meg_trans)
   (fwd_sol,
-  lh_white_valid_vert, rh_white_valid_vert) = finnpy_sr_fwd.calc_forward_model(lh_white_vert, rh_white_vert,
-		                                                                                                  rigid_meg_to_mri_trans, rigid_mri_to_meg_trans,
-		                                                                                                  rec_meta_info, in_skull_reduced_vert, in_skull_faces,
-		                                                                                                  in_skull_faces_normal, in_skull_faces_area,
-		                                                                                                  bem_solution, lh_white_valid_vert, rh_white_valid_vert)
-  optimized_fwd_sol = finnpy_sr_fwd.optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
-  										  rh_white_vert, rh_white_faces, rh_white_valid_vert,
-  										  fwd_sol, rigid_mri_to_meg_trans)
-  (inv_trans, noise_norm) = finnpy_sr_inv.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names, optimized_fwd_sol, rec_meta_info)
+   lh_white_valid_vert,
+   rh_white_valid_vert) = finnpy_sr_fwd.calc_forward_model(lh_white_vert,
+   							   rh_white_vert,
+   							   rigid_meg_to_mri_trans,
+   							   rigid_mri_to_meg_trans,
+   							   rec_meta_info,
+   							   in_skull_reduced_vert,
+   							   in_skull_faces,
+   							   in_skull_faces_normal,
+   							   in_skull_faces_area,
+   							   bem_solution,
+   							   lh_white_valid_vert,
+   							   rh_white_valid_vert)
+  optimized_fwd_sol = finnpy_sr_fwd.optimize_fwd_model(lh_white_vert, lh_white_faces,
+  						       lh_white_valid_vert, rh_white_vert,
+  						       rh_white_faces, rh_white_valid_vert,
+  						       fwd_sol, rigid_mri_to_meg_trans)
+  (inv_trans,
+   noise_norm) = finnpy_sr_inv.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec,
+   						  sensor_cov_names, optimized_fwd_sol, 
+   						  rec_meta_info)
 
 
 
-  (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy_sr_utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
-																		     anatomy_path, subj_name, fs_path, overwrite = overwrite_mri_trans)
+  (fs_avg_trans_mat,
+   src_fs_avg_valid_lh_vert,
+   src_fs_avg_valid_rh_vert) = finnpy_sr_utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert,
+   										rh_white_valid_vert,
+   										octa_model_vert,
+   										anatomy_path,
+   										subj_name, fs_path,
+   										overwrite = overwrite_mri_trans)
 
 If not done previously, FreeSurfer needs to be initialized.
 
