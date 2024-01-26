@@ -397,6 +397,33 @@ document.write(`
 <h1>Source space region clustering<a class="headerlink" href="#source-space-region-clustering" title="Link to this heading">#</a></h1>
 <p>This module may be employed to cluster source areas into distinct regions.</p>
 <dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.source_region_model.avg_source_regions">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">avg_source_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octa_model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octa_model_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model.avg_source_regions" title="Link to this definition">#</a></dt>
+<dd><p>Averages source space regions to areas defined by the Desikan-Killiany atlas.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_data</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>sensor_ch_cnt</em><em>, </em><em>samp_cnt</em><em>)</em>) – Source space data.</p></li>
+<li><p><strong>lh_white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>sensor_ch_cnt</em><em>, </em><em>samp_cnt</em><em>)</em>) – Binary list of valid/supporting lh vertices.</p></li>
+<li><p><strong>rh_white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>sensor_ch_cnt</em><em>, </em><em>samp_cnt</em><em>)</em>) – Binary list of valid/supporting rh vertices.</p></li>
+<li><p><strong>octa_model_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>octa_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Octahedron model vertices.</p></li>
+<li><p><strong>octa_model_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>octa_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Octahedron model faces.</p></li>
+<li><p><strong>fs_path</strong> (<em>string</em>) – Path to the freesurfer folder. Should contain the ‘bin’ folder, your license.txt, and sources.sh.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>morphed_epoch_data</strong> (<em>numpy.ndarray, shape(src_region_cnt, epoch_cnt, samples)</em>) – Average source space data.</p></li>
+<li><p><strong>morphed_epoch_channels</strong> (<em>list of lists, len(source_ch_cnt,)</em>) – List of channel ids, clustered by source space region.
+Identifies which channel supports which region.</p></li>
+<li><p><strong>morphed_region_names</strong> (<em>list, len(source_ch_cnt,)</em>) – Region names.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.source_region_model._read_freesurfer_annotation">
 <span class="sig-prename descclassname"><span class="pre">source_reconstruction.source_region_model.</span></span><span class="sig-name descname"><span class="pre">_read_freesurfer_annotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.source_region_model._read_freesurfer_annotation" title="Link to this definition">#</a></dt>
 <dd><p>Averages source space regions to areas defined by the Desikan-Killiany atlas.</p>
@@ -492,6 +519,7 @@ yet, this time in reference to fs-average instead of subject specific.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.source_region_model.avg_source_regions"><code class="docutils literal notranslate"><span class="pre">avg_source_regions()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.source_region_model._read_freesurfer_annotation"><code class="docutils literal notranslate"><span class="pre">_read_freesurfer_annotation()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.source_region_model._get_sphere_faces"><code class="docutils literal notranslate"><span class="pre">_get_sphere_faces()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.source_region_model._get_mri_to_model_trans"><code class="docutils literal notranslate"><span class="pre">_get_mri_to_model_trans()</span></code></a></li>

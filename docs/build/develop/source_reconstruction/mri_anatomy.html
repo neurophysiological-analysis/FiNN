@@ -518,6 +518,20 @@ defaults to False.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.mri_anatomy._calc_head_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.mri_anatomy.</span></span><span class="sig-name descname"><span class="pre">_calc_head_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.mri_anatomy._calc_head_model" title="Link to this definition">#</a></dt>
+<dd><p>Calculate a head model to read hd surface vertices using freesurfer. Removes files not needed by this reconstruction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -574,6 +588,7 @@ defaults to False.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._load_scale_save_fiducials"><code class="docutils literal notranslate"><span class="pre">_load_scale_save_fiducials()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._load_scale_save_surfaces"><code class="docutils literal notranslate"><span class="pre">_load_scale_save_surfaces()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._load_scale_save_mri"><code class="docutils literal notranslate"><span class="pre">_load_scale_save_mri()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.mri_anatomy._calc_head_model"><code class="docutils literal notranslate"><span class="pre">_calc_head_model()</span></code></a></li>
 </ul>
   </nav></div>
 

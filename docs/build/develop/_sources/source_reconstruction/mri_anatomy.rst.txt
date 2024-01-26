@@ -28,6 +28,8 @@ This module may be employed to extract anatomical information from MRI scans.
 .. currentmodule:: source_reconstruction.mri_anatomy
 .. autofunction:: _load_scale_save_mri
 
+.. currentmodule:: source_reconstruction.mri_anatomy
+.. autofunction:: _calc_head_model
 
 
 
