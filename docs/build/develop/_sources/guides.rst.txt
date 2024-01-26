@@ -36,7 +36,12 @@ Statistics
    :hidden:
    
    guides/dac_configurator
-   guides/source_reconstruction
+   guides/source_reconstruction_main
+   guides/source_reconstruction_general
+   guides/source_reconstruction_specific
+   guides/source_reconstruction_application
+   guides/source_reconstruction_pitfalls
+   guides/source_reconstruction_installation
    guides/source_reconstruction_visualization
 
 

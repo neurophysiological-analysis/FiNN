@@ -41,15 +41,6 @@ This module serves as a collection for methods not strictly limited to a singula
 .. autofunction:: get_eigenbasis
 
 .. currentmodule:: source_reconstruction.utils
-.. autofunction:: calc_acc_hem_normals
-
-.. currentmodule:: source_reconstruction.utils
-.. autofunction:: find_vertex_clusters
-
-.. currentmodule:: source_reconstruction.utils
-.. autofunction:: cortical_surface_reorient_fwd_model
-
-.. currentmodule:: source_reconstruction.utils
 .. autofunction:: calc_mri_maps
 
 .. currentmodule:: source_reconstruction.utils

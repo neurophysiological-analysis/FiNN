@@ -20,9 +20,6 @@ This module may be employed to coregister MEG to MRI images.
 .. autofunction:: _load_hd_surf
 
 .. currentmodule:: source_reconstruction.coregistration_meg_mri
-.. autofunction:: _calc_head_model
-
-.. currentmodule:: source_reconstruction.coregistration_meg_mri
 .. autofunction:: _load_mri_ref_pts
 
 .. currentmodule:: source_reconstruction.coregistration_meg_mri

@@ -25,4 +25,11 @@ This module may be employed to calculate the forward model for the source recons
 .. currentmodule:: source_reconstruction.forward_model
 .. autofunction:: _calc_bem_fields
 
+.. currentmodule:: source_reconstruction.forward_model
+.. autofunction:: calc_acc_hem_normals
 
+.. currentmodule:: source_reconstruction.forward_model
+.. autofunction:: find_vertex_clusters
+
+.. currentmodule:: source_reconstruction.utils
+.. autofunction:: optimize_fwd_model
