@@ -538,6 +538,72 @@ their directions (cosmag), and weights for these integration points.</p>
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._calc_acc_hem_normals">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_calc_acc_hem_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._calc_acc_hem_normals" title="Link to this definition">#</a></dt>
+<dd><p>Generatoes vertex normals from accumulated face normals.
+See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">https://en.wikipedia.org/wiki/Vertex_normal</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>vert_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model vertices.</p></li>
+<li><p><strong>white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model faces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>acc_normals</strong> (<em>numpy.ndarray, shape(vert_cnt, 3)</em>) – Array of surface normals for the input faces/vertices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model._find_vertex_clusters">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">_find_vertex_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model._find_vertex_clusters" title="Link to this definition">#</a></dt>
+<dd><p>Identifies which input vertices (white_vert) are presented by which valid vortex.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model vertices.</p></li>
+<li><p><strong>valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>,</em><em>)</em>) – Valid/supporting vertices.</p></li>
+<li><p><strong>white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_face_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model faces.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>cluster_grp</strong> (<em>list, len(n,)</em>) – Transformed surface model.</p></li>
+<li><p><strong>cluster_indices</strong> (<em>list, len(n,)</em>) – Transformed surface model.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="source_reconstruction.forward_model.optimize_fwd_model">
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.forward_model.</span></span><span class="sig-name descname"><span class="pre">optimize_fwd_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_white_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_meg_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.forward_model.optimize_fwd_model" title="Link to this definition">#</a></dt>
+<dd><p>Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
+allowing for cortically constrained inverse modeling)
+and shrinks it by making closeby channels project to the same destination.
+This is different from a ‘default’ 3D transformation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>, </em><em>3</em><em>)</em>) – Lh vertices.</p></li>
+<li><p><strong>lh_white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Lh faces.</p></li>
+<li><p><strong>lh_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>,</em><em>)</em>) – Valid/supporting lh vertices.</p></li>
+<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_vert_cnt</em><em>, </em><em>3</em><em>)</em>) – Rh vertices.</p></li>
+<li><p><strong>rh_white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Rh faces.</p></li>
+<li><p><strong>rh_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_vert_cnt</em><em>,</em><em>)</em>) – Valid/supporting rh vertices.</p></li>
+<li><p><strong>fwd_sol</strong> (<em>TYPE</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>valid_vtx_cnt * 3</em><em>)</em>) – Forward solution with default orientation.</p></li>
+<li><p><strong>mri_to_meg_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MRI to meg transformation matrix.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>fwd_sol * rot</strong> (<em>numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt)</em>) – Transformed surface model.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -593,6 +659,9 @@ their directions (cosmag), and weights for these integration points.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.forward_model._calc_magnetic_fields"><code class="docutils literal notranslate"><span class="pre">_calc_magnetic_fields()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.forward_model._add_current_distribution"><code class="docutils literal notranslate"><span class="pre">_add_current_distribution()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.forward_model._calc_bem_fields"><code class="docutils literal notranslate"><span class="pre">_calc_bem_fields()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.forward_model._calc_acc_hem_normals"><code class="docutils literal notranslate"><span class="pre">_calc_acc_hem_normals()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.forward_model._find_vertex_clusters"><code class="docutils literal notranslate"><span class="pre">_find_vertex_clusters()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.forward_model.optimize_fwd_model"><code class="docutils literal notranslate"><span class="pre">optimize_fwd_model()</span></code></a></li>
 </ul>
   </nav></div>
 
