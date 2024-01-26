@@ -29,6 +29,8 @@ Herein, the individual commands of this section will be explained in a step-by-s
    							    fs_path)
   morphed_epoch_data = np.asarray(morphed_epoch_data)
 
+The *anatomy_path* and *fs_path* variables are described in detail in :ref:`source_reconstruction_general_label`. In short,  *anatomy_path* contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists. *fs_path* points towards the FreeSurfer installation. The FreeSurfer folder should contain the 'bin' folder, license.txt, and sources.sh (among other files/directories).
+
 The first step applies the inverse model to sensor space data, transforming the data into source space.
 
 .. code-block::
@@ -37,7 +39,7 @@ The first step applies the inverse model to sensor space data, transforming the 
   					       inv_trans,
   					       noise_norm)
        							 
-Having transformed the data from sensor to source space, the data has been shifted into a subject specific variant of source space. This naturally limits comparbility between individual subjects. To establish comparability, the data is subsequently transformed from subject specific source space into fsaverage source space. 
+The *sen_data* variable indicates the numpy array containing the to be transformed data. The required format is channels x samples. Having transformed the data from sensor to source space, the data has been shifted into a subject specific variant of source space. This naturally limits comparbility between individual subjects. To establish comparability, the data is subsequently transformed from subject specific source space into fsaverage source space. 
 
 .. code-block::
 

@@ -119,7 +119,9 @@ If not done previously, FreeSurfer needs to be initialized.
 
   finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
        							 
-See :ref:`source_reconstruction_general_label` for details. The next step is to compute a coregistration between the MEG recording and the anatomical scan.
+The *anatomy_path* and *fs_path* variables are described in detail in :ref:`source_reconstruction_general_label`. In short,  *anatomy_path* contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists. *fs_path* points towards the FreeSurfer installation. The FreeSurfer folder should contain the 'bin' folder, license.txt, and sources.sh (among other files/directories).
+
+The next step is to compute a coregistration between the MEG recording and the anatomical scan.
 
 .. code-block::
 
@@ -137,7 +139,7 @@ See :ref:`source_reconstruction_general_label` for details. The next step is to 
  				         rec_meta_info,
  				         registration_scale_type = "restricted")
 
-Meta information is read from the MEG recording (such as MEG-fiducial positions). These are to be aligned with the subject's anatomy through a three step process. Initially, the subject's anatomy is scaled towards the scale of the MEG-fiducials. However, this rescaling of the subject's anatomy necessitates a recomputation of the coregistration. (Background insight: As the coregistration is an iterative optimization, it's reapplication after rescaling provides a different output from the initial coregistration).
+In this step, the anatomical model will be scaled and rotated towards the anatomy (MEG-fiducials) described in the MEG file located at *data_path*. Initially, the subject's anatomy is scaled towards the scale of the MEG-fiducials. However, this rescaling of the subject's anatomy necessitates a recomputation of the coregistration. (Background insight: As the coregistration is an iterative optimization, it's reapplication after rescaling provides a different output from the initial coregistration).
 		
 .. code-block::
 
@@ -202,7 +204,7 @@ Afterwards, the anatomical section of this analysis is to reduce the number of v
   (lh_white_vert, lh_white_faces,
    rh_white_vert, rh_white_faces,
    lh_sphere_vert,
-   rh_sphere_vert) = finnpy_sr_utils.read_surface_model(fs_subj_path)
+   rh_sphere_vert) = finnpy_sr_utils.read_cortical_models(anatomy_path, subj_name)
   (octa_model_vert,
    octa_model_faces) = finnpy_sr_smm.create_source_mesh_model()
   (lh_white_valid_vert,
