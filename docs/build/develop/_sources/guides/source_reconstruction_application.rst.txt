@@ -4,7 +4,7 @@
 Model computation
 =================
 
-This part of the guide explains how the inverse model and the fsaverage source space morphing is applied. For previous steps, see :ref:`_source_reconstruction_general_label`, :ref:`_source_reconstruction_specific_label`. 
+This part of the guide explains how the inverse model and the fsaverage source space morphing is applied. For previous steps, see :ref:`source_reconstruction_general_label`, :ref:`source_reconstruction_specific_label`. 
 
 Herein, the individual commands of this section will be explained in a step-by-step fashion.
     

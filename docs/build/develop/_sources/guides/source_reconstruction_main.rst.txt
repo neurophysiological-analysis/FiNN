@@ -33,15 +33,15 @@ An application example of source reconstruction for MEG is provided below. Gener
 
 The following sections will provide examples on how to install FreeSurfer
 
-1. :ref:`_source_reconstruction_installation_label`
+1. :ref:`source_reconstruction_installation_label`
 
 and  apply finnpy to execute these steps.
 
-2. :ref:`_source_reconstruction_general_label`
-3. :ref:`_source_reconstruction_specific_label`
-4. :ref:`_source_reconstruction_application_label`
+2. :ref:`source_reconstruction_general_label`
+3. :ref:`source_reconstruction_specific_label`
+4. :ref:`source_reconstruction_application_label`
 
-Additionally, likely pitfalls in source reconstruction are discussed in :ref:`_source_reconstruction_pitfalls_label`.
+Additionally, likely pitfalls in source reconstruction are discussed in :ref:`source_reconstruction_pitfalls_label`.
 
 
 

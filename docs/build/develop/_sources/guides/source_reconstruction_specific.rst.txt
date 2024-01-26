@@ -4,7 +4,7 @@
 MEG recording specific model computation
 ========================================
 
-This part of the guide explains how the MEG recording specific model is computed. After hereon, the model is specified towards a distinct MEG recording (MEG markers). As such, if there are multiple sessions for a single subject, the output of the previous step (:ref:`_source_reconstruction_general_label`) may be duplicated to be adapted towards multiple MEG sessions to avoid recomputing.
+This part of the guide explains how the MEG recording specific model is computed. After hereon, the model is specified towards a distinct MEG recording (MEG markers). As such, if there are multiple sessions for a single subject, the output of the previous step (:ref:`source_reconstruction_general_label`) may be duplicated to be adapted towards multiple MEG sessions to avoid recomputing.
 
 Herein, the individual commands of this section will be explained in a step-by-step fashion.
     
@@ -72,7 +72,7 @@ If not done previously, FreeSurfer needs to be initialized.
 	finnpy.source_reconstruction.utils.init_fs_paths(anatomy_path,
        							 fs_path)
        							 
-See :ref:`_source_reconstruction_general_label` for details. The next step is to compute a coregistration between the MEG recording and the anatomical scan.
+See :ref:`source_reconstruction_general_label` for details. The next step is to compute a coregistration between the MEG recording and the anatomical scan.
 
 .. code-block::
 
@@ -103,7 +103,7 @@ Meta information is read from the MEG recording (such as MEG-fiducial positions)
 											anatomy_path,
 											subj_name)
 											
-Finally, after the coregistration is recomputed, it may be visualized as indicated herein. This allows for visual (manual) confirmation successful coregistration, this is expanded upon in :ref:`_source_reconstruction_pitfalls_label`. (Warning: Under mayavi 4.8.2 & vtk 9.3, the call to points3d doesn't work properly. As such, if a TraitError is raised during rendering, please downgrade vtk to 9.2.6 and/or mayavi to an earlier version.)
+Finally, after the coregistration is recomputed, it may be visualized as indicated herein. This allows for visual (manual) confirmation successful coregistration, this is expanded upon in :ref:`source_reconstruction_pitfalls_label`. (Warning: Under mayavi 4.8.2 & vtk 9.3, the call to points3d doesn't work properly. As such, if a TraitError is raised during rendering, please downgrade vtk to 9.2.6 and/or mayavi to an earlier version.)
 
 The next step is to employ the watershed algorithm of FreeSurfer to extract the *inner skull*, *outer skull* and *outer skin* models. As this example details a MEG reconstruction, only the inner skull model is needed. In the first step, the watershed algorithm is employed (provided by FreeSurfer). While this algorithm provides reasonably good results from good quality T1 images, output quality may very if the image is either over or underexposed. However, this may be compensated by adjusting the *preflood_height* parameter (default = 25). 
 To verify extraction accuracy, FiNN offers a visualization tool which may be used to inspect the results of the algorithm and adjust the *preflood_height* as needed. Finally, some of the components are not needed for MEG reconstruction (only EEG), they are deleted afterwards. Visual confirmation of correct watershed extraction is highly recommended.
@@ -179,7 +179,7 @@ To enable cross subject comparability, the data needs to be morphed from subject
 	(fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
 																		     anatomy_path, subj_name, fs_path, overwrite = overwrite_mri_trans)
 
-Having compute the inverse solution and the transformation into fsaverage source space concludes the MEG recording specific part of the source-reconstruction. The application of these matrices is explained in :ref:`_source_reconstruction_application_label`.
+Having compute the inverse solution and the transformation into fsaverage source space concludes the MEG recording specific part of the source-reconstruction. The application of these matrices is explained in :ref:`source_reconstruction_application_label`.
 
 
 

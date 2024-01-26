@@ -111,7 +111,7 @@ The final step in the MEG recording agnostic preparation is the computation of t
  	 											  overwrite = overwrite_sensor_cov)
 
 
-This concludes the MEG recording agnostic part of the source reconstruction procedure. The next steps (MEG recording specific) are explained in :ref:`_source_reconstruction_specific_label`.
+This concludes the MEG recording agnostic part of the source reconstruction procedure. The next steps (MEG recording specific) are explained in :ref:`source_reconstruction_specific_label`.
 
 
 
