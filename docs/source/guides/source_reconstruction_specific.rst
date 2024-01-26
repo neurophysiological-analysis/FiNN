@@ -11,62 +11,72 @@ Herein, the individual commands of this section will be explained in a step-by-s
 .. code-block::
 
   import finnpy.source_reconstruction.utils as finnpy_sr_utils
+  import finnpy.source_reconstruction.coregistration_meg_mri as finnpy_sr_coreg
   import finnpy.source_reconstruction.mri_anatomy as finnpy_sr_mri_anat
-  import finnpy.source_reconstruction.sensor_covariance as finnpy_sr_sc
+  import finnpy.source_reconstruction.bem_model as finnpy_sr_bem
+  import finnpy.source_reconstruction.source_mesh_model as finnpy_sr_smm
+  import finnpy.source_reconstruction.forward_model as finnpy_sr_fwd
+  import finnpy.source_reconstruction.inverse_model as finnpy_sr_inv
   
-	finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path) #Optional, please only executed if not execuded previously
+  finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path) #Optional, please only executed if not execuded previously
 	
-	rec_meta_info = mne.io.read_info(data_path)
-	(coreg_rotors, meg_pts) = finnpy.source_reconstruction.coregistration_meg_mri.calc_coreg(subj_name,anatomy_path, rec_meta_info, registration_scale_type = "free")
-	finnpy.source_reconstruction.mri_anatomy.scale_anatomy(anatomy_path, subj_name, coreg_rotors[6:9])
-	(coreg_rotors, meg_pts) = finnpy.source_reconstruction.coregistration_meg_mri.calc_coreg(subj_name, anatomy_path, rec_meta_info, registration_scale_type = "restricted")
+  rec_meta_info = mne.io.read_info(data_path)
+  (coreg_rotors, meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name,anatomy_path,
+  						       rec_meta_info,
+  						       registration_scale_type = "free")
+  finnpy_sr_mri_anat.scale_anatomy(anatomy_path, subj_name, coreg_rotors[6:9])
+  (coreg_rotors, meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name, anatomy_path,
+  						       rec_meta_info,
+  						       registration_scale_type = "restricted")
 
-	if (visualize_coregistration):
-		rigid_mri_to_meg_trans = finnpy.source_reconstruction.coregistration_meg_mri.get_rigid_transform(coreg_rotors)
-		finnpy.source_reconstruction.coregistration_meg_mri.plot_coregistration(rigid_mri_to_meg_trans, rec_meta_info, meg_pts, anatomy_path, subj_name)
+  if (visualize_coregistration):
+    rigid_mri_to_meg_trans = finnpy_sr_coreg.get_rigid_transform(coreg_rotors)
+    finnpy_sr_coreg.plot_coregistration(rigid_mri_to_meg_trans, rec_meta_info,
+    					meg_pts, anatomy_path, subj_name)
 
-	finnpy.source_reconstruction.bem_model.calc_skull_and_skin_models(anatomy_path, subj_name, overwrite = overwrite_ws_extract)
-	(ws_in_skull_vert, ws_in_skull_faces, 
-	 ws_out_skull_vert, ws_out_skull_faces,
-	 ws_out_skin_vect, ws_out_skin_faces) = finnpy.source_reconstruction.bem_model.read_skull_and_skin_models(anatomy_path, subj_name)
+  finnpy_sr_bem.calc_skull_and_skin_models(anatomy_path, subj_name,
+  					   overwrite = overwrite_ws_extract)
+  (ws_in_skull_vert, ws_in_skull_faces, 
+   ws_out_skull_vert, ws_out_skull_faces,
+   ws_out_skin_vect, ws_out_skin_faces) = finnpy_sr_bem.read_skull_and_skin_models(anatomy_path, subj_name)
 
-	if (visualize_skull_skin_plots):
-		finnpy.source_reconstruction.bem_model.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
-				                                                  ws_out_skull_vert, ws_out_skull_faces,
-				                                                  ws_out_skin_vect, ws_out_skin_faces,
-				                                                  anatomy_path, subj_name)
-	del ws_out_skull_vert; del ws_out_skull_faces; del ws_out_skin_vect; del ws_out_skin_faces
+  if (visualize_skull_skin_plots):
+    finnpy_sr_bem.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
+    		                                                      ws_out_skull_vert, ws_out_skull_faces,
+    		                                                      ws_out_skin_vect, ws_out_skin_faces,
+    		                                                      anatomy_path, subj_name)
+  del ws_out_skull_vert; del ws_out_skull_faces; del ws_out_skin_vect; del ws_out_skin_faces
 
-	(in_skull_reduced_vert, in_skull_faces, 
-	 in_skull_faces_area, in_skull_faces_normal, 
-	 bem_solution) = finnpy.source_reconstruction.bem_model.calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces)
+  (in_skull_reduced_vert, in_skull_faces, 
+   in_skull_faces_area, in_skull_faces_normal, 
+   bem_solution) = finnpy_sr_bem.calc_bem_model_linear_basis(ws_in_skull_vert, ws_in_skull_faces)
 
-	(lh_white_vert, lh_white_faces,
-	 rh_white_vert, rh_white_faces,
-	 lh_sphere_vert,
-	 rh_sphere_vert) = finnpy_sr_utils.read_cortical_models(anatomy_path, subj_name)
-	(octa_model_vert, octa_model_faces) = finnpy.source_reconstruction.source_mesh_model.create_source_mesh_model()
-	(lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.source_mesh_model.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
+  (lh_white_vert, lh_white_faces,
+   rh_white_vert, rh_white_faces,
+   lh_sphere_vert,
+   rh_sphere_vert) = finnpy_sr_utils.read_cortical_models(anatomy_path, subj_name)
+  (octa_model_vert, octa_model_faces) = finnpy_sr_smm.create_source_mesh_model()
+  (lh_white_valid_vert, rh_white_valid_vert) = finnpy_sr_smm.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
 
-	rec_meta_info = mne.io.read_info(DATA_PATH)
-	finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
+  rec_meta_info = mne.io.read_info(data_path)
+  finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
 
-	rigid_mri_to_meg_trans = finnpy.source_reconstruction.coregistration_meg_mri.get_rigid_transform(coreg_rotors)
-	rigid_meg_to_mri_trans = scipy.linalg.inv(rigid_mri_to_meg_trans)
-	(fwd_sol,
-	lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.forward_model.calc_forward_model(lh_white_vert, rh_white_vert,
+  rigid_mri_to_meg_trans = finnpy_sr_coreg.get_rigid_transform(coreg_rotors)
+  rigid_meg_to_mri_trans = scipy.linalg.inv(rigid_mri_to_meg_trans)
+  (fwd_sol,
+  lh_white_valid_vert, rh_white_valid_vert) = finnpy_sr_fwd.calc_forward_model(lh_white_vert, rh_white_vert,
 		                                                                                                  rigid_meg_to_mri_trans, rigid_mri_to_meg_trans,
 		                                                                                                  rec_meta_info, in_skull_reduced_vert, in_skull_faces,
 		                                                                                                  in_skull_faces_normal, in_skull_faces_area,
 		                                                                                                  bem_solution, lh_white_valid_vert, rh_white_valid_vert)
-	optimized_fwd_sol = finnpy.source_reconstruction.forward_model.optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
-											  rh_white_vert, rh_white_faces, rh_white_valid_vert,
-											  fwd_sol, rigid_mri_to_meg_trans)
-	(inv_trans, noise_norm) = finnpy.source_reconstruction.inverse_model.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names, optimized_fwd_sol, rec_meta_info)
+  optimized_fwd_sol = finnpy_sr_fwd.optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
+  										  rh_white_vert, rh_white_faces, rh_white_valid_vert,
+  										  fwd_sol, rigid_mri_to_meg_trans)
+  (inv_trans, noise_norm) = finnpy_sr_inv.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names, optimized_fwd_sol, rec_meta_info)
 
 
 
-	(fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy_sr_utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
+  (fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy_sr_utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
 																		     anatomy_path, subj_name, fs_path, overwrite = overwrite_mri_trans)
 
 If not done previously, FreeSurfer needs to be initialized.
@@ -82,15 +92,15 @@ See :ref:`source_reconstruction_general_label` for details. The next step is to 
 
 	rec_meta_info = mne.io.read_info(data_path)
 	(coreg_rotors,
-	 meg_pts) = finnpy.source_reconstruction.coregistration_meg_mri.calc_coreg(subj_name,
+	 meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name,
 	 									   anatomy_path,
 	 									   rec_meta_info,
 	 									   registration_scale_type = "free")
-	finnpy.source_reconstruction.mri_anatomy.scale_anatomy(anatomy_path,
+	finnpy_sr_mri_anat.scale_anatomy(anatomy_path,
 							       subj_name,
 							       coreg_rotors[6:9])
 	(coreg_rotors,
-	 meg_pts) = finnpy.source_reconstruction.coregistration_meg_mri.calc_coreg(subj_name,
+	 meg_pts) = finnpy_sr_coreg.calc_coreg(subj_name,
 	 									   anatomy_path,
 	 									   rec_meta_info,
 	 									   registration_scale_type = "restricted")
@@ -100,8 +110,8 @@ Meta information is read from the MEG recording (such as MEG-fiducial positions)
 .. code-block::
 
 	if (visualize_coregistration):
-		rigid_mri_to_meg_trans = finnpy.source_reconstruction.coregistration_meg_mri.get_rigid_transform(coreg_rotors)
-		finnpy.source_reconstruction.coregistration_meg_mri.plot_coregistration(rigid_mri_to_meg_trans,
+		rigid_mri_to_meg_trans = finnpy_sr_coreg.get_rigid_transform(coreg_rotors)
+		finnpy_sr_coreg.plot_coregistration(rigid_mri_to_meg_trans,
 											rec_meta_info,
 											meg_pts,
 											anatomy_path,
@@ -114,17 +124,17 @@ To verify extraction accuracy, FiNN offers a visualization tool which may be use
 
 .. code-block::
 
-       finnpy.source_reconstruction.bem_model.calc_skull_and_skin_models(anatomy_path, subj_name, overwrite = overwrite_ws_extract)
+       finnpy_sr_bem.calc_skull_and_skin_models(anatomy_path, subj_name, overwrite = overwrite_ws_extract)
 	(ws_in_skull_vert, ws_in_skull_faces, 
 	 ws_out_skull_vert, ws_out_skull_faces,
-	 ws_out_skin_vect, ws_out_skin_faces) = finnpy.source_reconstruction.bem_model.read_skull_and_skin_models(anatomy_path, subj_name)
+	 ws_out_skin_vect, ws_out_skin_faces) = finnpy_sr_bem.read_skull_and_skin_models(anatomy_path, subj_name)
 
 Likewise, successful extraction of surfaces with the watershed algorithm should be visually (manually) confirmed.
 
 .. code-block::
 
 	if (visualize_skull_skin_plots):
-		finnpy.source_reconstruction.bem_model.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
+		finnpy_sr_bem.plot_skull_and_skin_models(ws_in_skull_vert, ws_in_skull_faces,
 				                                                  ws_out_skull_vert, ws_out_skull_faces,
 				                                                  ws_out_skin_vect, ws_out_skin_faces,
 				                                                  anatomy_path, subj_name)
@@ -141,7 +151,7 @@ Using the skin and skull models, the BEM (boundary elements model) is computed.
 
        (in_skull_reduced_vert, in_skull_faces, 
         in_skull_faces_area, in_skull_faces_normal, 
-        bem_solution) = finnpy.source_reconstruction.bem_model.calc_bem_model_linear_basis(in_skull_vert, in_skull_faces)
+        bem_solution) = finnpy_sr_bem.calc_bem_model_linear_basis(in_skull_vert, in_skull_faces)
 
 Afterwards, the anatomical section of this analysis is to reduce the number of vertices in the FreeSurfer extracted cortical models.
        
@@ -151,22 +161,22 @@ Afterwards, the anatomical section of this analysis is to reduce the number of v
        rh_white_vert, rh_white_faces,
        lh_sphere_vert,
        rh_sphere_vert) = finnpy_sr_utils.read_surface_model(fs_subj_path)
-       (octa_model_vert, octa_model_faces) = finnpy.source_reconstruction.source_mesh_model.create_source_mesh_model()
-       (lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.source_mesh_model.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
+       (octa_model_vert, octa_model_faces) = finnpy_sr_smm.create_source_mesh_model()
+       (lh_white_valid_vert, rh_white_valid_vert) = finnpy_sr_smm.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
 
 The next step is to compute the forward model and constrain it.
 
 .. code-block::
 
-	rigid_mri_to_meg_trans = finnpy.source_reconstruction.coregistration_meg_mri.get_rigid_transform(coreg_rotors)
+	rigid_mri_to_meg_trans = finnpy_sr_coreg.get_rigid_transform(coreg_rotors)
 	rigid_meg_to_mri_trans = scipy.linalg.inv(rigid_mri_to_meg_trans)
 	(fwd_sol,
-	lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.forward_model.calc_forward_model(lh_white_vert, rh_white_vert,
+	lh_white_valid_vert, rh_white_valid_vert) = finnpy_sr_fwd.calc_forward_model(lh_white_vert, rh_white_vert,
 		                                                                                                  rigid_meg_to_mri_trans, rigid_mri_to_meg_trans,
 		                                                                                                  rec_meta_info, in_skull_reduced_vert, in_skull_faces,
 		                                                                                                  in_skull_faces_normal, in_skull_faces_area,
 		                                                                                                  bem_solution, lh_white_valid_vert, rh_white_valid_vert)
-	optimized_fwd_sol = finnpy.source_reconstruction.forward_model.optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
+	optimized_fwd_sol = finnpy_sr_fwd.optimize_fwd_model(lh_white_vert, lh_white_faces, lh_white_valid_vert,
 											  rh_white_vert, rh_white_faces, rh_white_valid_vert,
 											  fwd_sol, rigid_mri_to_meg_trans)
 
@@ -174,7 +184,7 @@ The penultimate step is to inverse the forward model and compute the noise norma
 
 .. code-block::
 
-	(inv_trans, noise_norm) = finnpy.source_reconstruction.inverse_model.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names, optimized_fwd_sol, rec_meta_info)
+	(inv_trans, noise_norm) = finnpy_sr_inv.calc_inverse_model(sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names, optimized_fwd_sol, rec_meta_info)
 
 To enable cross subject comparability, the data needs to be morphed from subject specific space into a common source space, such as the one defined by fsaverage. As such, electrophysiological features of individual subjects become directly comparable within source space.
 

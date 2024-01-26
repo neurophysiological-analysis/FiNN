@@ -401,10 +401,16 @@ document.write(`
 <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="n">t1_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-  <span class="n">finnpy_sr_mri_anat</span><span class="o">.</span><span class="n">copy_fs_avg_anatomy</span><span class="p">(</span><span class="n">fs_path</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_fs_extract</span><span class="p">)</span>
+  <span class="n">finnpy_sr_mri_anat</span><span class="o">.</span><span class="n">copy_fs_avg_anatomy</span><span class="p">(</span><span class="n">fs_path</span><span class="p">,</span>
+                                         <span class="n">anatomy_path</span><span class="p">,</span>
+                                         <span class="n">subj_name</span><span class="p">,</span>
+                                         <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_fs_extract</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
-  <span class="n">finnpy_sr_mri_anat</span><span class="o">.</span><span class="n">extract_anatomy_from_mri_using_fs</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span> <span class="n">t1_path</span><span class="p">,</span> <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_ws_extract</span><span class="p">)</span>
-<span class="p">(</span><span class="n">sensor_cov_eigen_val</span><span class="p">,</span> <span class="n">sensor_cov_eigen_vec</span><span class="p">,</span>
+  <span class="n">finnpy_sr_mri_anat</span><span class="o">.</span><span class="n">extract_anatomy_from_mri_using_fs</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span>
+                                                       <span class="n">t1_path</span><span class="p">,</span>
+                                                       <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_ws_extract</span><span class="p">)</span>
+<span class="p">(</span><span class="n">sensor_cov_eigen_val</span><span class="p">,</span>
+ <span class="n">sensor_cov_eigen_vec</span><span class="p">,</span>
  <span class="n">sensor_cov_names</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_sc</span><span class="o">.</span><span class="n">get_sensor_covariance</span><span class="p">(</span><span class="n">file_path</span> <span class="o">=</span> <span class="n">sensor_cov_path</span><span class="p">,</span>
                                                         <span class="n">cov_path</span> <span class="o">=</span> <span class="n">cov_path</span><span class="p">,</span>
                                                         <span class="n">overwrite</span> <span class="o">=</span> <span class="n">overwrite_sensor_cov</span><span class="p">)</span>

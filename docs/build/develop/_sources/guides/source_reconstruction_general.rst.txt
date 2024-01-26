@@ -17,10 +17,16 @@ Herein, the individual commands of this section will be explained in a step-by-s
   finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
 
   if (t1_path is None):
-    finnpy_sr_mri_anat.copy_fs_avg_anatomy(fs_path, anatomy_path, subj_name, overwrite = overwrite_fs_extract)
+    finnpy_sr_mri_anat.copy_fs_avg_anatomy(fs_path,
+    					   anatomy_path,
+    					   subj_name,
+    					   overwrite = overwrite_fs_extract)
   else:
-    finnpy_sr_mri_anat.extract_anatomy_from_mri_using_fs(subj_name, t1_path, overwrite = overwrite_ws_extract)
-  (sensor_cov_eigen_val, sensor_cov_eigen_vec,
+    finnpy_sr_mri_anat.extract_anatomy_from_mri_using_fs(subj_name,
+    							 t1_path,
+    							 overwrite = overwrite_ws_extract)
+  (sensor_cov_eigen_val,
+   sensor_cov_eigen_vec,
    sensor_cov_names) = finnpy_sr_sc.get_sensor_covariance(file_path = sensor_cov_path,
    							  cov_path = cov_path,
    							  overwrite = overwrite_sensor_cov)

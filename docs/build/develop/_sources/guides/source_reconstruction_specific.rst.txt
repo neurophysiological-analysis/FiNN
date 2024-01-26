@@ -10,7 +10,11 @@ Herein, the individual commands of this section will be explained in a step-by-s
     
 .. code-block::
 
-	finnpy.source_reconstruction.utils.init_fs_paths(anatomy_path, fs_path) #Optional, please only executed if not execuded previously
+  import finnpy.source_reconstruction.utils as finnpy_sr_utils
+  import finnpy.source_reconstruction.mri_anatomy as finnpy_sr_mri_anat
+  import finnpy.source_reconstruction.sensor_covariance as finnpy_sr_sc
+  
+	finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path) #Optional, please only executed if not execuded previously
 	
 	rec_meta_info = mne.io.read_info(data_path)
 	(coreg_rotors, meg_pts) = finnpy.source_reconstruction.coregistration_meg_mri.calc_coreg(subj_name,anatomy_path, rec_meta_info, registration_scale_type = "free")
@@ -40,12 +44,12 @@ Herein, the individual commands of this section will be explained in a step-by-s
 	(lh_white_vert, lh_white_faces,
 	 rh_white_vert, rh_white_faces,
 	 lh_sphere_vert,
-	 rh_sphere_vert) = finnpy.source_reconstruction.utils.read_cortical_models(anatomy_path, subj_name)
+	 rh_sphere_vert) = finnpy_sr_utils.read_cortical_models(anatomy_path, subj_name)
 	(octa_model_vert, octa_model_faces) = finnpy.source_reconstruction.source_mesh_model.create_source_mesh_model()
 	(lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.source_mesh_model.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
 
 	rec_meta_info = mne.io.read_info(DATA_PATH)
-	finnpy.source_reconstruction.utils.init_fs_paths(anatomy_path, fs_path)
+	finnpy_sr_utils.init_fs_paths(anatomy_path, fs_path)
 
 	rigid_mri_to_meg_trans = finnpy.source_reconstruction.coregistration_meg_mri.get_rigid_transform(coreg_rotors)
 	rigid_meg_to_mri_trans = scipy.linalg.inv(rigid_mri_to_meg_trans)
@@ -62,14 +66,14 @@ Herein, the individual commands of this section will be explained in a step-by-s
 
 
 
-	(fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
+	(fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy_sr_utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
 																		     anatomy_path, subj_name, fs_path, overwrite = overwrite_mri_trans)
 
 If not done previously, FreeSurfer needs to be initialized.
 
 .. code-block::
 
-	finnpy.source_reconstruction.utils.init_fs_paths(anatomy_path,
+	finnpy_sr_utils.init_fs_paths(anatomy_path,
        							 fs_path)
        							 
 See :ref:`source_reconstruction_general_label` for details. The next step is to compute a coregistration between the MEG recording and the anatomical scan.
@@ -146,7 +150,7 @@ Afterwards, the anatomical section of this analysis is to reduce the number of v
        (lh_white_vert, lh_white_faces,
        rh_white_vert, rh_white_faces,
        lh_sphere_vert,
-       rh_sphere_vert) = finnpy.source_reconstruction.utils.read_surface_model(fs_subj_path)
+       rh_sphere_vert) = finnpy_sr_utils.read_surface_model(fs_subj_path)
        (octa_model_vert, octa_model_faces) = finnpy.source_reconstruction.source_mesh_model.create_source_mesh_model()
        (lh_white_valid_vert, rh_white_valid_vert) = finnpy.source_reconstruction.source_mesh_model.match_source_mesh_model(lh_sphere_vert, rh_sphere_vert, octa_model_vert)
 
@@ -176,7 +180,7 @@ To enable cross subject comparability, the data needs to be morphed from subject
 
 .. code-block::
 
-	(fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy.source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
+	(fs_avg_trans_mat, src_fs_avg_valid_lh_vert, src_fs_avg_valid_rh_vert) = finnpy_sr_utils.get_mri_subj_to_fs_avg_trans_mat(lh_white_valid_vert, rh_white_valid_vert, octa_model_vert,
 																		     anatomy_path, subj_name, fs_path, overwrite = overwrite_mri_trans)
 
 Having compute the inverse solution and the transformation into fsaverage source space concludes the MEG recording specific part of the source-reconstruction. The application of these matrices is explained in :ref:`source_reconstruction_application_label`.
