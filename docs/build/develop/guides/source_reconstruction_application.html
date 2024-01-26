@@ -414,13 +414,14 @@ document.write(`
 <span class="n">morphed_epoch_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>The <em>anatomy_path</em> and <em>fs_path</em> variables are described in detail in <a class="reference internal" href="source_reconstruction_general.html#source-reconstruction-general-label"><span class="std std-ref">MEG recording agnostic model computation</span></a>. In short,  <em>anatomy_path</em> contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists. <em>fs_path</em> points towards the FreeSurfer installation. The FreeSurfer folder should contain the ‘bin’ folder, license.txt, and sources.sh (among other files/directories).</p>
 <p>The first step applies the inverse model to sensor space data, transforming the data into source space.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src_data</span> <span class="o">=</span> <span class="n">finnpy_sr_inv</span><span class="o">.</span><span class="n">apply_inverse_model</span><span class="p">(</span><span class="n">sen_data</span><span class="p">,</span>
                                              <span class="n">inv_trans</span><span class="p">,</span>
                                              <span class="n">noise_norm</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Having transformed the data from sensor to source space, the data has been shifted into a subject specific variant of source space. This naturally limits comparbility between individual subjects. To establish comparability, the data is subsequently transformed from subject specific source space into fsaverage source space.</p>
+<p>The <em>sen_data</em> variable indicates the numpy array containing the to be transformed data. The required format is channels x samples. Having transformed the data from sensor to source space, the data has been shifted into a subject specific variant of source space. This naturally limits comparbility between individual subjects. To establish comparability, the data is subsequently transformed from subject specific source space into fsaverage source space.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs_avg_src_data</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">apply_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span>
                                                                      <span class="n">src_data</span><span class="p">)</span>
 </pre></div>

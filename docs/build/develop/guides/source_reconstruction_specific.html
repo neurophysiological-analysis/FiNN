@@ -502,7 +502,8 @@ document.write(`
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">fs_path</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>See <a class="reference internal" href="source_reconstruction_general.html#source-reconstruction-general-label"><span class="std std-ref">MEG recording agnostic model computation</span></a> for details. The next step is to compute a coregistration between the MEG recording and the anatomical scan.</p>
+<p>The <em>anatomy_path</em> and <em>fs_path</em> variables are described in detail in <a class="reference internal" href="source_reconstruction_general.html#source-reconstruction-general-label"><span class="std std-ref">MEG recording agnostic model computation</span></a>. In short,  <em>anatomy_path</em> contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists. <em>fs_path</em> points towards the FreeSurfer installation. The FreeSurfer folder should contain the ‘bin’ folder, license.txt, and sources.sh (among other files/directories).</p>
+<p>The next step is to compute a coregistration between the MEG recording and the anatomical scan.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rec_meta_info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_info</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
 <span class="p">(</span><span class="n">coreg_rotors</span><span class="p">,</span>
  <span class="n">meg_pts</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">calc_coreg</span><span class="p">(</span><span class="n">subj_name</span><span class="p">,</span>
@@ -518,7 +519,7 @@ document.write(`
                                        <span class="n">registration_scale_type</span> <span class="o">=</span> <span class="s2">&quot;restricted&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Meta information is read from the MEG recording (such as MEG-fiducial positions). These are to be aligned with the subject’s anatomy through a three step process. Initially, the subject’s anatomy is scaled towards the scale of the MEG-fiducials. However, this rescaling of the subject’s anatomy necessitates a recomputation of the coregistration. (Background insight: As the coregistration is an iterative optimization, it’s reapplication after rescaling provides a different output from the initial coregistration).</p>
+<p>In this step, the anatomical model will be scaled and rotated towards the anatomy (MEG-fiducials) described in the MEG file located at <em>data_path</em>. Initially, the subject’s anatomy is scaled towards the scale of the MEG-fiducials. However, this rescaling of the subject’s anatomy necessitates a recomputation of the coregistration. (Background insight: As the coregistration is an iterative optimization, it’s reapplication after rescaling provides a different output from the initial coregistration).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">visualize_coregistration</span><span class="p">):</span>
   <span class="n">rigid_mri_to_meg_trans</span> <span class="o">=</span> <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">get_rigid_transform</span><span class="p">(</span><span class="n">coreg_rotors</span><span class="p">)</span>
   <span class="n">finnpy_sr_coreg</span><span class="o">.</span><span class="n">plot_coregistration</span><span class="p">(</span><span class="n">rigid_mri_to_meg_trans</span><span class="p">,</span>
@@ -569,7 +570,7 @@ To verify extraction accuracy, FiNN offers a visualization tool which may be use
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">lh_white_vert</span><span class="p">,</span> <span class="n">lh_white_faces</span><span class="p">,</span>
  <span class="n">rh_white_vert</span><span class="p">,</span> <span class="n">rh_white_faces</span><span class="p">,</span>
  <span class="n">lh_sphere_vert</span><span class="p">,</span>
- <span class="n">rh_sphere_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">read_surface_model</span><span class="p">(</span><span class="n">fs_subj_path</span><span class="p">)</span>
+ <span class="n">rh_sphere_vert</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">read_cortical_models</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
 <span class="p">(</span><span class="n">octa_model_vert</span><span class="p">,</span>
  <span class="n">octa_model_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_smm</span><span class="o">.</span><span class="n">create_source_mesh_model</span><span class="p">()</span>
 <span class="p">(</span><span class="n">lh_white_valid_vert</span><span class="p">,</span>

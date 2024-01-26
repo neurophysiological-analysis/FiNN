@@ -13,8 +13,8 @@ FreeSurfer may be directly downloaded from the FreeSurfer website (https://surfe
 In addition, the following libraries are required: bc, libjpeg6-turbo, libxp, tcsh, libpng12 (version 7.4.1 - 2024/01/26).
 It is highly recommended to move the downloaded FreeSurfer directory to a permanent location, such as /usr/local/FreeSurfer.
 
-Windows
--------
+Windows (by Prerana Keerthi)
+----------------------------
 
 As FreeSurfer does not support Windows directly, the application may be used through the WIndow Subsystem for Linux as follows:
 
