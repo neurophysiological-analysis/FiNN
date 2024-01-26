@@ -1,119 +1,300 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../">
+
+<html lang="en" data-content_root="../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Utility functions &#8212; FiNNPy 1.2.0 documentation</title>
-    
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b76e3c8a" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css?v=c4c5097c" />
-    
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script src="../_static/documentation_options.js?v=872021ae"></script>
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source_reconstruction/utils';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Statistical" href="../statistical.html" />
     <link rel="prev" title="Sphere models" href="sphere_model.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="en">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
-    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
-
-  <div id="navbar-start">
-    
-    
-<a class="navbar-brand" href="../index.html">
-<p class="title">FiNNPy</p>
-</a>
-
-    
-  </div>
-
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
   </button>
 
   
-  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
-    <div id="navbar-center" class="mr-auto">
-      
-      <div class="navbar-center-item">
-        <ul id="navbar-main-elements" class="navbar-nav">
-    <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../install_guide.html">
-  Installation
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../guides.html">
-  Guides
- </a>
-</li>
-
-<li class="toctree-l1 current active nav-item">
- <a class="reference internal nav-link" href="../api_reference.html">
-  API reference
- </a>
-</li>
-
-    
-</ul>
-      </div>
-      
-    </div>
-
-    <div id="navbar-end">
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
-      
-    </div>
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
   </div>
-</div>
-    </nav>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
     
+      <div class="navbar-item">
 
-    <div class="container-xl">
-      <div class="row">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNNPy 1.2.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install_guide.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../guides.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../api_reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
           
-            
-            <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><h3><a href="../index.html">FiNNPY</a></h3>
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install_guide.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../guides.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../api_reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
@@ -125,8 +306,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
@@ -144,7 +325,8 @@
 </li>
 </ul>
 
-<h3>Branches</h3>
+</div>
+        <div class="sidebar-primary-item"><h3>Branches</h3>
 <ul>
   <li><a href="utils.html">develop</a></li>
   <li><a href="../../stable/index.html">stable</a></li>
@@ -153,239 +335,70 @@
 <h3>Tags</h3>
 <ul>
   <li><a href="../../v0.1.5/index.html">v0.1.5</a></li>
-</ul>
-            </div>
-            
-          
+</ul></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
-          
-          <div class="d-none d-xl-block col-xl-2 bd-toc">
-            
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
               
-              <div class="toc-item">
-                
-<div class="tocsection onthispage pt-5 pb-3">
-    <i class="fas fa-list"></i> On this page
-</div>
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
 
-<nav id="bd-toc-nav">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.format_fiducials">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     format_fiducials()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.run_subprocess_in_custom_working_directory">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     run_subprocess_in_custom_working_directory()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.init_fs_paths">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     init_fs_paths()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.fast_cross_product">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     fast_cross_product()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.norm_vert">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     norm_vert()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.find_nearest_neighbor">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     find_nearest_neighbor()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.find_valid_vertices">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     find_valid_vertices()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.magn_of_vec">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     magn_of_vec()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.apply_inv_transformation">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     apply_inv_transformation()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_quat_angle">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_quat_angle()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.orient_mat_to_block_format">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     orient_mat_to_block_format()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.get_eigenbasis">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     get_eigenbasis()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_acc_hem_normals">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_acc_hem_normals()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.find_vertex_clusters">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     find_vertex_clusters()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.cortical_surface_reorient_fwd_model">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     cortical_surface_reorient_fwd_model()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_mri_maps">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_mri_maps()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_small_to_default_vertices_proj">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_small_to_default_vertices_proj()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     get_mri_subj_to_fs_avg_trans_mat()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     apply_mri_subj_to_fs_avg_trans_mat()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.calc_whitener">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     calc_whitener()
-    </span>
-   </code>
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#source_reconstruction.utils.read_cortical_models">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     read_cortical_models()
-    </span>
-   </code>
-  </a>
- </li>
-</ul>
 
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api_reference.html" class="nav-link">FiNNPy API</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../source_reconstruction.html" class="nav-link">Source reconstruction</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Utility functions</li>
+  </ul>
 </nav>
-              </div>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
               
-              <div class="toc-item">
+              
+              
                 
-              </div>
-              
-            
-          </div>
-          
-
-          
-          
-            
-          
-          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
-              
-              <div>
-                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <section id="utility-functions">
-<h1>Utility functions<a class="headerlink" href="#utility-functions" title="Link to this heading">¶</a></h1>
+<h1>Utility functions<a class="headerlink" href="#utility-functions" title="Link to this heading">#</a></h1>
 <p>This module serves as a collection for methods not strictly limited to a singular application case.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.format_fiducials">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">format_fiducials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre_mri_ref_pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.format_fiducials" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">format_fiducials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre_mri_ref_pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.format_fiducials" title="Link to this definition">#</a></dt>
 <dd><p>Transforms an mne-fiducials object into an dictionary containing the fiducials.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -399,7 +412,7 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.run_subprocess_in_custom_working_directory">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">run_subprocess_in_custom_working_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.run_subprocess_in_custom_working_directory" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">run_subprocess_in_custom_working_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.run_subprocess_in_custom_working_directory" title="Link to this definition">#</a></dt>
 <dd><p>Creates a custom work directory to run a freesurfer command within.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -413,18 +426,21 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.init_fs_paths">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">init_fs_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subjects_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.init_fs_paths" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">init_fs_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/usr/local/freesurfer/7.2.0/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.init_fs_paths" title="Link to this definition">#</a></dt>
 <dd><p>Runs some freesurfer initialization steps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subjects_path</strong> (<em>string</em>) – Path to the subject folder.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
+<li><p><strong>fs_path</strong> (<em>string</em>) – Path to the freesurfer folder. Should contain the ‘bin’ folder, your license.txt, and sources.sh.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.fast_cross_product">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">fast_cross_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.fast_cross_product" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">fast_cross_product</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.fast_cross_product" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the cross product between two vectors.
 Seemingly numpy has too much overhead here to be fast.</p>
 <dl class="field-list simple">
@@ -442,7 +458,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.norm_vert">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">norm_vert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.norm_vert" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">norm_vert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.norm_vert" title="Link to this definition">#</a></dt>
 <dd><p>Normalizes a vector. Seemingly numpy has too much overhead here to be fast.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -456,10 +472,10 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.find_nearest_neighbor">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_nearest_neighbor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kdtree'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_nearest_neighbor" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_nearest_neighbor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'kdtree'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_nearest_neighbor" title="Link to this definition">#</a></dt>
 <dd><p>Employs two methods to find the nearest neighbors. In case a src_pts a list of points is provided, a model is trained, otherwise, pretrained models are used if a (KDTree or BallTree objects) are provided.</p>
 <section id="parameters">
-<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h2>
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">#</a></h2>
 <dl class="simple">
 <dt>src_pts<span class="classifier">numpy.ndarray, shape(m, 3)</span></dt><dd><p>Points to build the kd-tree from.</p>
 </dd>
@@ -468,7 +484,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 </dl>
 </section>
 <section id="results">
-<h2>Results<a class="headerlink" href="#results" title="Link to this heading">¶</a></h2>
+<h2>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
 <dl class="simple">
 <dt>neigh_indices<span class="classifier">np.ndarray, shape(n,)</span></dt><dd><p>Indices of the nearest neighbors.</p>
 </dd>
@@ -480,7 +496,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.find_valid_vertices">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_valid_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighborhood_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_valid_vertices" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_valid_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertices_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighborhood_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_valid_vertices" title="Link to this definition">#</a></dt>
 <dd><p>Matches freesurfer reconstructed mri vertices (sphere) with model vertices (octahedron).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -497,7 +513,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.magn_of_vec">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">magn_of_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.magn_of_vec" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">magn_of_vec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.magn_of_vec" title="Link to this definition">#</a></dt>
 <dd><p>Calculates the magnitude of a vector</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -511,10 +527,10 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.apply_inv_transformation">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">apply_inv_transformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.apply_inv_transformation" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">apply_inv_transformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.apply_inv_transformation" title="Link to this definition">#</a></dt>
 <dd><p>Applies the inverse of trans to data.</p>
 <section id="id1">
-<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<h2>Parameters:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <dl class="simple">
 <dt>data<span class="classifier">np.ndarray, shape(n, 3)</span></dt><dd><p>The data to be transformed.</p>
 </dd>
@@ -523,9 +539,9 @@ Seemingly numpy has too much overhead here to be fast.</p>
 </dl>
 </section>
 <section id="id2">
-<h2>Results<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<h2>Results<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
 <dl class="simple">
-<dt>data<span class="classifier">np.ndarray, shape(n, 3)</span></dt><dd><p>Transformed data.</p>
+<dt>trans_data<span class="classifier">np.ndarray, shape(n, 3)</span></dt><dd><p>Transformed data.</p>
 </dd>
 </dl>
 </section>
@@ -533,7 +549,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.calc_quat_angle">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_quat_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_quat_angle" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_quat_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_quat_angle" title="Link to this definition">#</a></dt>
 <dd><p>Calculate the angle between two quaternions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -550,7 +566,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.orient_mat_to_block_format">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">orient_mat_to_block_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orient_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.orient_mat_to_block_format" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">orient_mat_to_block_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orient_mat</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.orient_mat_to_block_format" title="Link to this definition">#</a></dt>
 <dd><p>Transforms an orientation matrix (rotation matrix) into (sparse) block format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -564,7 +580,7 @@ Seemingly numpy has too much overhead here to be fast.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.get_eigenbasis">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">get_eigenbasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_grp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.get_eigenbasis" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">get_eigenbasis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex_normals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_grp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.get_eigenbasis" title="Link to this definition">#</a></dt>
 <dd><p>Calculates an orthonormal basis of eigenvector/values for each supporting/valid point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -585,79 +601,14 @@ defaults to 40 digits.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.utils.calc_acc_hem_normals">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_acc_hem_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_acc_hem_normals" title="Link to this definition">¶</a></dt>
-<dd><p>Generatoes vertex normals from accumulated face normals.
-See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">https://en.wikipedia.org/wiki/Vertex_normal</a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>vert_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model vertices.</p></li>
-<li><p><strong>geom_white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>face_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model faces.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>acc_normals</strong> (<em>numpy.ndarray, shape(vert_cnt, 3)</em>) – Array of surface normals for the input faces/vertices.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.utils.find_vertex_clusters">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">find_vertex_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom_white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.find_vertex_clusters" title="Link to this definition">¶</a></dt>
-<dd><p>Identifies which input vertices (white_vert) are presented by which valid vortex.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model vertices.</p></li>
-<li><p><strong>white_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>,</em><em>)</em>) – Valid/supporting vertices.</p></li>
-<li><p><strong>geom_white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_face_cnt</em><em>, </em><em>3</em><em>)</em>) – MRI model faces.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>cluster_grp</strong> (<em>list, len(n,)</em>) – Transformed surface model.</p></li>
-<li><p><strong>cluster_indices</strong> (<em>list, len(n,)</em>) – Transformed surface model.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="source_reconstruction.utils.cortical_surface_reorient_fwd_model">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">cortical_surface_reorient_fwd_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_geom_white_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_geom_white_faces</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mri_to_head_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.cortical_surface_reorient_fwd_model" title="Link to this definition">¶</a></dt>
-<dd><p>Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
-allowing for cortically constrained inverse modeling)
-and shrinks it by making closeby channels project to the same destination.
-This is different from a ‘default’ 3D transformation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lh_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>, </em><em>3</em><em>)</em>) – Lh vertices.</p></li>
-<li><p><strong>lh_geom_white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Lh faces.</p></li>
-<li><p><strong>lh_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>lh_vert_cnt</em><em>,</em><em>)</em>) – Valid/supporting lh vertices.</p></li>
-<li><p><strong>rh_white_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_vert_cnt</em><em>, </em><em>3</em><em>)</em>) – Rh vertices.</p></li>
-<li><p><strong>rh_geom_white_faces</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_face_cnt</em><em>, </em><em>3</em><em>)</em>) – Rh faces.</p></li>
-<li><p><strong>rh_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>rh_vert_cnt</em><em>,</em><em>)</em>) – Valid/supporting rh vertices.</p></li>
-<li><p><strong>fwd_sol</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>valid_vtx_cnt * 3</em><em>)</em>) – Forward solution with default orientation.</p></li>
-<li><p><strong>mri_to_head_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MRI to head transformation matrix.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>fwd_sol * rot</strong> (<em>numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt)</em>) – Transformed surface model.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.calc_mri_maps">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_mri_maps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisphere</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_mri_maps" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_mri_maps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hemisphere</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_mri_maps" title="Link to this definition">#</a></dt>
 <dd><p>Find the subject space points corresponding to fs avg space points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_path</strong> (<em>string</em>) – Path to subject freesurfer files.</p></li>
+<li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
 <li><p><strong>fs_avg_path</strong> (<em>string</em>) – Path for fs average freesurfer files.</p></li>
 <li><p><strong>hemisphere</strong> (<em>string</em>) – Hemisphere to compute for.</p></li>
 <li><p><strong>overwrite</strong> (<em>boolean</em>) – Flag whether to overwrite preexisting mri maps.</p></li>
@@ -677,7 +628,7 @@ This is different from a ‘default’ 3D transformation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.calc_small_to_default_vertices_proj">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_small_to_default_vertices_proj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_small_to_default_vertices_proj" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_small_to_default_vertices_proj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_small_to_default_vertices_proj" title="Link to this definition">#</a></dt>
 <dd><p>Calculates projection from subject vertices to small sphere vertices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -695,7 +646,7 @@ This is different from a ‘default’ 3D transformation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">get_mri_subj_to_fs_avg_trans_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_avg_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">get_mri_subj_to_fs_avg_trans_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rh_valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat" title="Link to this definition">#</a></dt>
 <dd><p>Create a subject to fs average transformation matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -703,8 +654,9 @@ This is different from a ‘default’ 3D transformation.</p>
 <li><p><strong>lh_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>mri_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Valid lh vertices (subject space).</p></li>
 <li><p><strong>rh_valid_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>mri_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Valid rh vertices (subject space).</p></li>
 <li><p><strong>model_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>model_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Model vertices.</p></li>
-<li><p><strong>subj_path</strong> (<em>string</em>) – Path to subject’s freesurfer files.</p></li>
-<li><p><strong>fs_avg_path</strong> (<em>string</em>) – Path to fs average’s freesurfer files.</p></li>
+<li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+<li><p><strong>fs_path</strong> (<em>string</em>) – Path to the freesurfer folder. Should contain the ‘bin’ folder, your license.txt, and sources.sh.</p></li>
 <li><p><strong>overwrite</strong> (<em>boolean</em>) – Flag whether to overwrite MRI maps.</p></li>
 </ul>
 </dd>
@@ -721,7 +673,7 @@ This is different from a ‘default’ 3D transformation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">apply_mri_subj_to_fs_avg_trans_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trans_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">apply_mri_subj_to_fs_avg_trans_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trans_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat" title="Link to this definition">#</a></dt>
 <dd><p>Transforms data from subject space to fs_average space</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -738,7 +690,7 @@ This is different from a ‘default’ 3D transformation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.calc_whitener">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_whitener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigen_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigen_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_whitener" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">calc_whitener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eigen_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eigen_vec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.calc_whitener" title="Link to this definition">#</a></dt>
 <dd><p>alculate PCA based whitener from provided eigenvalues and eigenvectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -755,11 +707,14 @@ This is different from a ‘default’ 3D transformation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="source_reconstruction.utils.read_cortical_models">
-<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">read_cortical_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subject_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.read_cortical_models" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">source_reconstruction.utils.</span></span><span class="sig-name descname"><span class="pre">read_cortical_models</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#source_reconstruction.utils.read_cortical_models" title="Link to this definition">#</a></dt>
 <dd><p>Reads cortical freesurfer data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>subject_path</strong> (<em>string</em>) – Subject’s freesurfer path.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
+<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
@@ -778,50 +733,135 @@ This is different from a ‘default’ 3D transformation.</p>
 </section>
 
 
-              </div>
+                </article>
               
               
-              <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="sphere_model.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Sphere models</p>
-        </div>
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="sphere_model.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Sphere models</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="../statistical.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="../statistical.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Statistical</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
               
-          </main>
-          
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-      </div>
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.format_fiducials"><code class="docutils literal notranslate"><span class="pre">format_fiducials()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.run_subprocess_in_custom_working_directory"><code class="docutils literal notranslate"><span class="pre">run_subprocess_in_custom_working_directory()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.init_fs_paths"><code class="docutils literal notranslate"><span class="pre">init_fs_paths()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.fast_cross_product"><code class="docutils literal notranslate"><span class="pre">fast_cross_product()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.norm_vert"><code class="docutils literal notranslate"><span class="pre">norm_vert()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.find_nearest_neighbor"><code class="docutils literal notranslate"><span class="pre">find_nearest_neighbor()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.find_valid_vertices"><code class="docutils literal notranslate"><span class="pre">find_valid_vertices()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.magn_of_vec"><code class="docutils literal notranslate"><span class="pre">magn_of_vec()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.apply_inv_transformation"><code class="docutils literal notranslate"><span class="pre">apply_inv_transformation()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.calc_quat_angle"><code class="docutils literal notranslate"><span class="pre">calc_quat_angle()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.orient_mat_to_block_format"><code class="docutils literal notranslate"><span class="pre">orient_mat_to_block_format()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.get_eigenbasis"><code class="docutils literal notranslate"><span class="pre">get_eigenbasis()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.calc_mri_maps"><code class="docutils literal notranslate"><span class="pre">calc_mri_maps()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.calc_small_to_default_vertices_proj"><code class="docutils literal notranslate"><span class="pre">calc_small_to_default_vertices_proj()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.get_mri_subj_to_fs_avg_trans_mat"><code class="docutils literal notranslate"><span class="pre">get_mri_subj_to_fs_avg_trans_mat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.apply_mri_subj_to_fs_avg_trans_mat"><code class="docutils literal notranslate"><span class="pre">apply_mri_subj_to_fs_avg_trans_mat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.calc_whitener"><code class="docutils literal notranslate"><span class="pre">calc_whitener()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source_reconstruction.utils.read_cortical_models"><code class="docutils literal notranslate"><span class="pre">read_cortical_models()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/source_reconstruction/utils.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022, Maximilian Scherer.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
-<footer class="footer mt-5 mt-md-0">
-  <div class="container">
-    
-    <div class="footer-item">
-      <p class="copyright">
-    &copy; Copyright 2022, Maximilian Scherer.<br>
-</p>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
     </div>
-    
-    <div class="footer-item">
-      <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 7.2.3.<br>
-</p>
-    </div>
-    
-  </div>
-</footer>
+  
+</div>
+
+  </footer>
   </body>
 </html>

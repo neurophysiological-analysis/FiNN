@@ -28,16 +28,19 @@ Windows Subsystem for Linux (WSL) Installation
 To run freesurfer on Windows you will need Windows Subsystem for Linux (WSL). If WSL is not already installed on your PC, in Windows Powershell or Windows command prompt enter the following command:
 
 .. code-block::
+
 	wsl –install
 
 If WSL is already installed, please ensure an up to date version is used. The following command indicates which distros are installed and the asterisk in the output represents the active distribution. 
 
 .. code-block::
+
 	wsl --list –verbose
 
 The following lines of code demonstrate how to install Ubuntu-22.04 as a distribution and set it as the default:
 
 .. code-block::
+
 	wsl --install -d Ubuntu-22.04
 	wsl --setdefault Ubuntu-22.04
 
@@ -49,6 +52,7 @@ This installation guide is inspired by the original from FreeSurfer, available a
 Via the following commands, FreeSurfer may be installed into the WSL.
 
 .. code-block::
+
 	cd
 	wget https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/7.4.1/freesurfer_ubuntu22-7.4.1_amd64.deb
 
@@ -61,11 +65,13 @@ Via the following commands, FreeSurfer may be installed into the WSL.
 Executing the ls command will display all items within the FreeSurfer directory, and as such should list files such as sources.sh, SetUpFreeSurfer.sh, and the bin folder.
 	
 .. code-block::
+
 	ls $FREESURFER_HOME
 
 Afterwards, a free Freesurfer license needs to be optained via the following link, https://surfer.nmr.mgh.harvard.edu/registration.html. The received license.txt needs to be moved into the FreeSurfer directory (within the WSL) and shortcuts created. 
 
 .. code-block::
+
 	mv /mnt/c/Users/username/Downloads/licence.txt $HOME
 	echo "export FS_LICENSE=$HOME/license.txt" >> $HOME/.bashrc
 	echo "export XDG_RUNTIME_DIR=$HOME/.xdg" >> $HOME/.bashrc
@@ -74,12 +80,14 @@ Afterwards, a free Freesurfer license needs to be optained via the following lin
 As such, when executing the following code
 
 .. code-block::
+
 	export FREESURFER_HOME=/usr/local/freesurfer/7.4.1 
 	source $FREESURFER_HOME/SetUpFreeSurfer.sh
 
 the corresponding output should be.
 
 .. code-block::
+
 	-------- freesurfer-linux-ubuntu22_x86_64-7.4.1-20230614-7eb8460 --------
 	Setting up environment for FreeSurfer/FS-FAST (andFSL)
 	FREESURFER_HOME		/usr/local/freesurfer/7.4.1
@@ -95,7 +103,8 @@ X-server Installation
 
 To run image viewing software such as freesurfer on WSL (for reference, see https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming), an X-server needs to be set up. The previous link describes how to set up the Xming X-server. Once Xming is installed, correct installation may be verified via the following WSL terminal command.
 
-.. code-block::
+.. code-block:: python
+
 	freeview
 
 If the command fails, potential troubleshooting is described below.
@@ -103,6 +112,7 @@ If the command fails, potential troubleshooting is described below.
 If the following error occurs
 
 .. code-block::
+
 	QXcbConnection: Could not connect to display :0 
 	Could not connect to any X display.
 
@@ -111,6 +121,7 @@ Resolution details are provided in https://surfer.nmr.mgh.harvard.edu/fswiki/FS7
 The error
 
 .. code-block::
+
 	qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
 	This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
 
