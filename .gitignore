@@ -11,3 +11,5 @@ dist/
 *.pkl
 *#
 *.doctree
+
+finnpy/data/source_reconstruction/*

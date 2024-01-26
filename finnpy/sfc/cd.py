@@ -12,7 +12,7 @@ import finnpy.sfc._wpli as calc_wpli
 import finnpy.sfc._psi as calc_psi
 import finnpy.sfc._dac as calc_dac
 
-def run_dac(data, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.3):
+def run_dac(data, bins, fmin, fmax, return_signed_conn = True, minimal_angle_thresh = 10, volume_conductance_ratio = 0.4):
     """
     Calculates the directional absolute coherence from complex coherency.
     

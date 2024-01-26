@@ -18,40 +18,47 @@ import matplotlib.pyplot as plt
 import finnpy.source_reconstruction.utils
 import finnpy.source_reconstruction.sphere_model
 
-def calc_skull_and_skin_models(subject_path, subject_id, preflood_height = 25, overwrite = False):
+def calc_skull_and_skin_models(anatomy_path, subject_name, preflood_height = 25, overwrite = False):
     """
     Employs freesufers watershed algorithm to calculate skull and skin models.
     
     Parameters
     ----------
-    subject_path : string
-                   Subjects freesurfer path.
-    subject_id : string
-                 Subject name.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subject_name : string
+                   Subject name.
     preflood_height : int
                       Freesurfer parameter. May need adjusting if segmentation doesn't work properly.
     overwrite : boolean
                 Flag to overwrite if files are already present. Defaults to False.
     """
     
-    if (overwrite == True or os.path.exists(subject_path + "bem/watershed/" + subject_id + "_inner_skull_surface") == False):
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    if (overwrite == True or os.path.exists(anatomy_path + subject_name + "/bem/watershed/" + subject_name + "_inner_skull_surface") == False):
         
-        cmd = ["mri_watershed", "-h", str(preflood_height), "-useSRAS", "-surf", subject_path + "bem/watershed/" + subject_id, subject_path + "mri/T1.mgz", subject_path + "bem/watershed/ws.mgz"]
-        finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(subject_id, cmd)
+        cmd = ["mri_watershed", "-h", str(preflood_height), "-useSRAS", "-surf",
+               anatomy_path + subject_name + "/bem/watershed/" + subject_name,
+               anatomy_path + subject_name + "/mri/T1.mgz",
+               anatomy_path + subject_name + "/bem/watershed/ws.mgz"]
+        finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(subject_name, cmd)
         
         #Remove files not needed for source reconstruction
-        os.remove(subject_path + "bem/watershed/" + subject_id + "_brain_surface")
-        os.remove(subject_path + "bem/watershed/ws.mgz")
+        os.remove(anatomy_path + subject_name + "/bem/watershed/" + subject_name + "_brain_surface")
+        os.remove(anatomy_path + subject_name + "/bem/watershed/ws.mgz")
 
-def read_skull_and_skin_models(subject_path, subj_name):
+def read_skull_and_skin_models(anatomy_path, subj_name):
     """
     Reads skull and skin models extracted
     via freesurfer's watershed algorithm.
     
     Parameters
     ----------
-    subject_path : string
-                   Subject's freesurfer path.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a
+                   sub-folder for each subject, to be pupulated with the corresponding structural data.
     subj_name : string
                 Subject name.
                
@@ -70,9 +77,13 @@ def read_skull_and_skin_models(subject_path, subj_name):
     out_skin_faces : numpy.ndarray, shape(out_skull_face_cnt, 3)
                      Faces of the skin model.
     """
-    (in_skull_vert, in_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_inner_skull_surface")
-    (out_skull_vert, out_skull_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skull_surface")
-    (out_skin_vect, out_skin_faces) = nibabel.freesurfer.read_geometry(subject_path + "bem/watershed/" + subj_name + "_outer_skin_surface")
+    
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    (in_skull_vert, in_skull_faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/bem/watershed/" + subj_name + "_inner_skull_surface")
+    (out_skull_vert, out_skull_faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/bem/watershed/" + subj_name + "_outer_skull_surface")
+    (out_skin_vect, out_skin_faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/bem/watershed/" + subj_name + "_outer_skin_surface")
     
     return (in_skull_vert, in_skull_faces,
             out_skull_vert, out_skull_faces,
@@ -81,7 +92,7 @@ def read_skull_and_skin_models(subject_path, subj_name):
 def plot_skull_and_skin_models(in_skull_vert, in_skull_faces, 
                                out_skull_vert, out_skull_faces,
                                out_skin_vect, out_skin_faces, 
-                               subject_path):
+                               anatomy_path, subj_name):
     """
     Plot skull and skin models for visual confirmation of proper alignment.
                
@@ -99,11 +110,17 @@ def plot_skull_and_skin_models(in_skull_vert, in_skull_faces,
                     Vertices of the skin model.
     out_skin_faces : numpy.ndarray, shape(out_skull_face_cnt, 3)
                      Faces of the skin model.
-    subject_path : string
-                   Subject's freesurfer path.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a
+                   sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subj_name : string
+                Subject name.
     """
     
-    (t1_data_trans, ras_to_mri) = _load_and_orient_t1(subject_path)
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    (t1_data_trans, ras_to_mri) = _load_and_orient_t1(anatomy_path + subj_name + "/")
     mri_to_ras = np.linalg.inv(ras_to_mri)
     
     in_skull_vert_trans = np.dot(in_skull_vert, mri_to_ras[:3, :3].transpose()); in_skull_vert_trans += mri_to_ras[:3, 3]
@@ -139,6 +156,10 @@ def _load_and_orient_t1(subject_path):
     ras_to_mri : numpy.ndarray, shape(a, b, c)
                  RAS (right, anterior, superior) to MRI transformation.
     """
+    
+    if (subject_path[-1] != "/"):
+        subject_path += "/"
+    
     t1_img = nibabel.load(subject_path + "mri/T1.mgz")
     
     src_orientation = nibabel.orientations.aff2axcodes(t1_img.affine)

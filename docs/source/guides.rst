@@ -22,7 +22,7 @@ Feature generation
 Source reconstruction
 ---------------------
 
-:ref:`source_reconstruction_compute_label`
+:ref:`_source_reconstruction_main_label`
 
 :ref:`source_reconstruction_visualize_label`
 

@@ -25,6 +25,7 @@ import warnings
 import shutil
 
 import finnpy.file_io.data_manager as dm
+import finnpy.source_reconstruction.mri_anatomy
 
 def _load_meg_ref_pts(rec_meta_info):
     """
@@ -62,17 +63,16 @@ def _load_meg_ref_pts(rec_meta_info):
     
     return ref_pts
 
-def _load_hd_surf(subj_name, subj_path):
+def _load_hd_surf(anatomy_path, subj_name):
     """
     Load freesurfer extracted hd surface model vertices. If this information does not yet exists, it is created using freesurfer.
     
-    
     Parameters
     ----------
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     subj_name : string
                 Subject name.
-    subj_path : string
-                Path to the subject's head model data. In case this doesn't exists, it is created.
     
     Returns
     -------
@@ -80,46 +80,22 @@ def _load_hd_surf(subj_name, subj_path):
                    High resulution surface model generated via freesurfer.
     """
     
-    if (os.path.exists(subj_path + "surf/lh.seghead") == False):
-        _calc_head_model(subj_name, subj_path)
+    if (os.path.exists(anatomy_path + subj_name + "/surf/lh.seghead") == False):
+        finnpy.source_reconstruction.mri_anatomy._calc_head_model(anatomy_path, subj_name)
     
-    (hd_surf_vert, _) = nibabel.freesurfer.read_geometry(subj_path + "surf/lh.seghead")
+    (hd_surf_vert, _) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/lh.seghead")
     hd_surf_vert /= 1000 # scale from m to mm
     
     return hd_surf_vert
 
-def _calc_head_model(subj_name, subj_path):
-    """
-    Calculate a head model to read hd surface vertices using freesurfer. Removes files not needed by this reconstruction. 
-    
-    Parameters
-    ----------
-    subj_name : string
-                Name of the subject.
-    subj_path : string
-                Path to the subject's freesurfer folder.
-    """
-    if (subj_path[-1] == "/"):
-        subj_name = subj_path.split("/")[-2]
-    else:
-        subj_name = subj_path.split("/")[-1]
-    
-    cmd = [__file__[:__file__.rindex("/")] + "/fs_get_model.sh", subj_name]
-    
-    finnpy_utils.run_subprocess_in_custom_working_directory(subj_name, cmd)
-    
-    os.remove(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/mri/" + "seghead.mgz")
-    shutil.rmtree(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/scripts")
-    os.remove(os.environ["SUBJECTS_DIR"] + "/" + subj_name + "/surf/" + "lh.seghead.inflated")
-
-def _load_mri_ref_pts(subj_path, subj_name):
+def _load_mri_ref_pts(anatomy_path, subj_name):
     """
     Load MEG reference points.
     
     Parameters
     ----------
-    subj_path : string
-                Path to subject files.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     subj_name : string
                 Subject name.
     
@@ -128,7 +104,7 @@ def _load_mri_ref_pts(subj_path, subj_name):
     meg_pts : dict, ('nasion', 'lpa', 'rpa', 'hsp', 'coord_frame')
               MRI reference points for coregistration.
     """
-    (pre_mri_ref_pts, _) = mne.io.read_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif")
+    (pre_mri_ref_pts, _) = mne.io.read_fiducials(anatomy_path + subj_name + "/bem/" + subj_name + "-fiducials.fif")
     mri_ref_pts = finnpy_utils.format_fiducials(pre_mri_ref_pts)
     
     return mri_ref_pts
@@ -443,7 +419,7 @@ def _get_ref_ptn_cnt(meg_pts):
             hsp_cnt = len(meg_pts["hsp"])
     return (ptn_cnt, hsp_cnt)
     
-def calc_coreg(subj_name, subj_path, rec_meta_info, registration_scale_type = "restricted",
+def calc_coreg(subj_name, anatomy_path, rec_meta_info, registration_scale_type = "restricted",
                max_number_of_iterations = 500):    
     """
     Coregisters MRI data (src) to MEG data (tgt).
@@ -452,8 +428,8 @@ def calc_coreg(subj_name, subj_path, rec_meta_info, registration_scale_type = "r
     ----------
     subj_name : string
                 Name of the subject.
-    subj_path : string
-                Path to the subject's freesurfer folder.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     rec_meta_info : mne.io.read_info
                     MEG scan meta info, obtailable via mne.io.read_info
     registration_scale_type : string
@@ -472,10 +448,13 @@ def calc_coreg(subj_name, subj_path, rec_meta_info, registration_scale_type = "r
               coregistered MEG/MRI points
     """
     
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
     ## Find initial solution
     meg_pts = _load_meg_ref_pts(rec_meta_info)
-    mri_pts = _load_mri_ref_pts(subj_path, subj_name)
-    hd_surf_vert = _load_hd_surf(subj_name, subj_path)
+    mri_pts = _load_mri_ref_pts(anatomy_path, subj_name)
+    hd_surf_vert = _load_hd_surf(anatomy_path, subj_name)
     
     mri_pts_initial = np.asarray([mri_pts["LPA"], mri_pts["NASION"], mri_pts["RPA"]])
     meg_pts_initial = np.asarray([meg_pts["lpa"], meg_pts["nasion"], meg_pts["rpa"]])
@@ -507,7 +486,7 @@ def calc_coreg(subj_name, subj_path, rec_meta_info, registration_scale_type = "r
     
     return (coreg_rotors, meg_pts)
 
-def plot_coregistration(coreg, rec_meta_info, meg_pts, subj_path):
+def plot_coregistration(coreg, rec_meta_info, meg_pts, anatomy_path, subj_name):
     """
     Plots the result of the coregistration from MRI to MEG using mayavi.
     
@@ -519,11 +498,16 @@ def plot_coregistration(coreg, rec_meta_info, meg_pts, subj_path):
                     MEG scan meta information, obtainable through mne.io.read_info.
     meg_pts : numpy.ndarray, shape(n, 4)
               MEG pts used in the coregistration.
-    subj_path : string
-                Path to the subject's freesurfer files.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subj_name : string
+                Subject name.
     """
     
-    (vert, faces) = nibabel.freesurfer.read_geometry(subj_path + "/surf/lh.seghead")
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    (vert, faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/lh.seghead")
     vert/= 1000
     
     _ = mayavi.mlab.figure(size = (800, 800))

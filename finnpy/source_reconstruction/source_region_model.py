@@ -86,8 +86,8 @@ def _get_mri_to_model_trans(mri_neigh_faces):
     
     return mri_to_model_trans
 
-def apply_source_region_model(src_data, lh_white_valid_vert, rh_white_valid_vert,
-                              octa_model_vert, octa_model_faces, fs_avg_path):
+def avg_source_regions(src_data, lh_white_valid_vert, rh_white_valid_vert,
+                       octa_model_vert, octa_model_faces, fs_path):
     """
     Averages source space regions to areas defined by the Desikan-Killiany atlas.
     
@@ -103,8 +103,8 @@ def apply_source_region_model(src_data, lh_white_valid_vert, rh_white_valid_vert
                       Octahedron model vertices.
     octa_model_faces : numpy.ndarray, shape(octa_face_cnt, 3)
                        Octahedron model faces.
-    fs_avg_path : numpy.ndarray, shape(source_ch_cnt,)
-                  Path to fs average's freesurfer  files.
+    fs_path : string
+              Path to the freesurfer folder. Should contain the 'bin' folder, your license.txt, and sources.sh.
                
     Returns
     -------
@@ -116,6 +116,9 @@ def apply_source_region_model(src_data, lh_white_valid_vert, rh_white_valid_vert
     morphed_region_names : list, len(source_ch_cnt,)
                            Region names.
     """
+    
+    fs_avg_path  = (fs_path + "/") if (fs_path[-1] != "/") else fs_path
+    fs_avg_path += "subjects/fsaverage/"
     
     morphed_epoch_data = list()
     morphed_epoch_channels = list()

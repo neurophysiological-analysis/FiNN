@@ -31,9 +31,9 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     fiducials_path : string
                      Path to the fiducials file. If none is present, default fiducials are morphed from fs-average, 
                      defaults to None. 
-    Var_name : boolean
-               Flag whether to overwrite the files of the respective subject folder already exists, 
-               defaults to False.
+    overwrite : boolean
+                Flag whether to overwrite the files of the respective subject folder already exists, 
+                defaults to False.
     """
     if (subj_name[-1] == "/"):
         patient_id = subj_name[:-1]
@@ -48,7 +48,9 @@ def extract_anatomy_from_mri_using_fs(subj_name, t1_scan_file, fiducials_file = 
     
     cmd = [__file__[:__file__.rindex("/")] + "/fs_extract_anatomy.sh", subj_name, t1_scan_file]
     
-    finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
+    #===========================================================================
+    # finnpy.source_reconstruction.utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
+    #===========================================================================
     
     os.mkdir(new_base_dir)
     
@@ -141,24 +143,32 @@ def _create_fiducials(in_path, out_path, subj_name):
     
     mne.io.write_fiducials(out_path + "bem/" + subj_name + "-fiducials.fif", formatted_mri_ref_pts, coord_system, overwrite = False)
 
-def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
+def copy_fs_avg_anatomy(fs_path, anatomy_path, subj_name, overwrite = False):
     """
     In case no mri scans are available for this subject, fs-average is used as a reference template.
     
     Parameters
     ----------
     fs_path : string
-              Path to the freesurfer files (containing fs average).
-    subj_path : string
-                Folder name of the subject.
+              Path to the freesurfer folder. Should contain the 'bin' folder, your license.txt, and sources.sh.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     subj_name : string
                 Name of the subject.
+    overwrite : boolean
+                Flag whether to overwrite the files of the respective subject folder already exists, 
+                defaults to False.
                
     """
-    old_base_dir = fs_path + "fsaverage" + "/"
-    new_base_dir = fs_path + subj_name + "/"
     
-    if (os.path.exists(new_base_dir)):
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    old_base_dir  = (fs_path + "/") if (fs_path[-1] != "/") else fs_path
+    old_base_dir += "subjects/fsaverage/"
+    new_base_dir = anatomy_path + subj_name + "/"
+    
+    if (os.path.exists(old_base_dir) and overwrite == False):
         return
     os.mkdir(new_base_dir)
      
@@ -184,14 +194,14 @@ def copy_fs_avg_anatomy(fs_path, subj_path, subj_name):
     shutil.copyfile(old_base_dir + "surf/" + "rh.sphere.reg", new_base_dir + "surf/" + "rh.sphere.reg")
     shutil.copyfile(old_base_dir + "surf/" + "rh.white", new_base_dir + "surf/" + "rh.white")
     
-def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
+def scale_anatomy(anatomy_path, subj_name, scale, overwrite = False):
     """
     Scales anatomy for a perfect fit between fiducials and anatomy. If files are already scaled, an .is_scaled file created. This flag can be ignore via setting overwrite to True. 
     
     Parameters
     ----------
-    subj_path : string
-                Path to the freesurfer created subject specific files.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     subj_name : string
                 Name of the subject.
     scale : float
@@ -202,20 +212,26 @@ def scale_anatomy(subj_path, subj_name, scale, overwrite = False):
                
     """
     
-    if (os.path.exists(subj_path + ".is_scaled") == True and overwrite == False):
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    if (os.path.exists(anatomy_path + subj_name + "/.is_scaled") == True and overwrite == False):
         return
     
-    if (os.path.exists(subj_path + "bem/" + subj_name + "-fiducials.fif")):
-        _load_scale_save_fiducials(subj_path + "bem/" + subj_name + "-fiducials.fif", scale)
+    if (os.path.exists(anatomy_path + subj_name + "/bem/" + subj_name + "-fiducials.fif")):
+        _load_scale_save_fiducials(anatomy_path + subj_name + "/bem/" + subj_name + "-fiducials.fif", scale)
     
-    _load_scale_save_surfaces(subj_path + "surf/" + "lh.white", scale)
-    _load_scale_save_surfaces(subj_path + "surf/" + "rh.white", scale)
-    _load_scale_save_surfaces(subj_path + "surf/" + "lh.seghead", scale)
+    _load_scale_save_surfaces(anatomy_path + subj_name + "/surf/" + "lh.white", scale)
+    _load_scale_save_surfaces(anatomy_path + subj_name + "/surf/" + "rh.white", scale)
     
-    _load_scale_save_mri(subj_path + "mri/" + "orig.mgz", scale)
-    _load_scale_save_mri(subj_path + "mri/" + "T1.mgz", scale)
+    if (os.path.exists(anatomy_path + subj_name + "/surf/lh.seghead") == False):
+        _calc_head_model(anatomy_path, subj_name)
+    _load_scale_save_surfaces(anatomy_path + subj_name + "/surf/" + "lh.seghead", scale)
     
-    file = open(subj_path + ".is_scaled", "wb")
+    _load_scale_save_mri(anatomy_path + subj_name + "/mri/" + "orig.mgz", scale)
+    _load_scale_save_mri(anatomy_path + subj_name + "/mri/" + "T1.mgz", scale)
+    
+    file = open(anatomy_path + subj_name + "/.is_scaled", "wb")
     file.close()
 
 def _load_scale_save_fiducials(path, scale):
@@ -316,6 +332,29 @@ def visualize_anatomy_from_mri_using_fs(subj_path):
     finnpy_utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
 
 
+
+def _calc_head_model(anatomy_path, subj_name):
+    """
+    Calculate a head model to read hd surface vertices using freesurfer. Removes files not needed by this reconstruction. 
+    
+    Parameters
+    ----------
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subj_name : string
+                Name of the subject.
+    """
+    
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    cmd = [__file__[:__file__.rindex("/")] + "/fs_get_model.sh", subj_name]
+    
+    finnpy_utils.run_subprocess_in_custom_working_directory(subj_name, cmd)
+    
+    os.remove(anatomy_path + subj_name + "/mri/" + "seghead.mgz")
+    shutil.rmtree(anatomy_path + subj_name + "/scripts")
+    os.remove(anatomy_path + subj_name + "/surf/" + "lh.seghead.inflated")
 
 
 

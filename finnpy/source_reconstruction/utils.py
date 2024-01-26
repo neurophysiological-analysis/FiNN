@@ -16,14 +16,16 @@ import warnings
 
 import mne.io
 
-def read_cortical_models(subject_path):
+def read_cortical_models(anatomy_path, subj_name):
     """
     Reads cortical freesurfer data.
     
     Parameters
     ----------
-    subject_path : string
-                   Subject's freesurfer path.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subj_name : string
+                Name of the subject.
                
     Returns
     -------
@@ -40,11 +42,15 @@ def read_cortical_models(subject_path):
     rh_sphere_vert : numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)
                      Spherical freesurfer head model vertices (right hemisphere).
     """
-    (lh_white_vert, lh_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.white")
-    (rh_white_vert, rh_white_faces) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.white")
     
-    (lh_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/lh.sphere")
-    (rh_sphere_vert, _) = nibabel.freesurfer.read_geometry(subject_path + "surf/rh.sphere")
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    (lh_white_vert, lh_white_faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/lh.white")
+    (rh_white_vert, rh_white_faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/rh.white")
+    
+    (lh_sphere_vert, _) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/lh.sphere")
+    (rh_sphere_vert, _) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/rh.sphere")
         
     #Normalize geometric
     lh_sphere_vert = norm_vert(lh_sphere_vert)
@@ -107,21 +113,25 @@ def run_subprocess_in_custom_working_directory(subject_id, cmd):
     
     shutil.rmtree(path_to_tmp_cwd) # And removed later on
 
-def init_fs_paths(subjects_path, fs_path = "/usr/local/freesurfer/7.2.0/"):
+def init_fs_paths(anatomy_path, fs_path = "/usr/local/freesurfer/7.2.0/"):
     """
     Runs some freesurfer initialization steps.
     
     Parameters
     ----------
-    subjects_path : string
-                    Path to the subject folder.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     fs_path : string
-              Path to the freesurfer folder.
+              Path to the freesurfer folder. Should contain the 'bin' folder, your license.txt, and sources.sh.
     """
+    
+    if (fs_path[-1] != "/"):
+        fs_path += "/"
+    
     os.environ["FREESURFER_HOME"]   = fs_path
     os.environ["FSFAST_HOME"]       = fs_path + "fsfast/"
     os.environ["FSF_OUTPUT_FORMAT"] = "nii.gz"
-    os.environ["SUBJECTS_DIR"]      = subjects_path[:-1] if (subjects_path[-1] == "/") else subjects_path
+    os.environ["SUBJECTS_DIR"]      = anatomy_path[:-1] if (anatomy_path[-1] == "/") else anatomy_path
     os.environ["MNI_DIR"]           = fs_path + "mni/"
     
     os.environ["PATH"] = os.environ["PATH"]+":"+os.environ['FREESURFER_HOME']+"bin/"
@@ -399,14 +409,16 @@ def get_eigenbasis(vortex_normals, valid_vert, cluster_grp, cluster_indices,
      
     return evec
     
-def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
+def calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite):
     """
     Find the subject space points corresponding to fs avg space points.
     
     Parameters
     ----------
-    subj_path : string
-                Path to subject freesurfer files.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subj_name : string
+                Name of the subject.
     fs_avg_path : string
                   Path for fs average freesurfer files.
     hemisphere : string
@@ -425,7 +437,11 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
     mri_map : numpy.ndarray, shape(fs_avg_vtx_cnt, mri_vtx_cnt)
               Translation from subject mri to fs-average sphere model.
     """
-    (sub_vert, sub_faces) = nibabel.freesurfer.read_geometry(subj_path + "surf/" + hemisphere + ".sphere.reg")
+    
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+    
+    (sub_vert, sub_faces) = nibabel.freesurfer.read_geometry(anatomy_path + subj_name + "/surf/" + hemisphere + ".sphere.reg")
     (avg_vert, _) = nibabel.freesurfer.read_geometry(fs_avg_path + "surf/" + hemisphere + ".sphere.reg")
     
     sub_vert /= np.expand_dims(np.linalg.norm(sub_vert, axis = 1), axis = 1)
@@ -440,8 +456,8 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
         
     avg_neigh_faces = [neigh_faces[vertex_idx] for vertex_idx in neigh_indices] 
     
-    if ((os.path.exists(subj_path + "proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy") == False or
-         os.path.exists(subj_path + "proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy") == False) or overwrite):
+    if ((os.path.exists(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy") == False or
+         os.path.exists(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy") == False) or overwrite):
         #Prepare faces for the following loop
         sub_face_params = list()
         for sub_face in sub_faces:
@@ -523,14 +539,14 @@ def calc_mri_maps(subj_path, fs_avg_path, hemisphere, overwrite):
              
             weights[bad_weights_idx][0] = alpha; weights[bad_weights_idx][1] = beta; weights[bad_weights_idx][2] = gamma
         
-        if (os.path.exists(subj_path + "proj/") == False):
-            os.mkdir(subj_path + "proj/")
+        if (os.path.exists(anatomy_path + subj_name + "/proj/") == False):
+            os.mkdir(anatomy_path + subj_name + "/proj/")
         
-        np.save(subj_path + "proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy", weights)
-        np.save(subj_path + "proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy", match_idx)
+        np.save(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy", weights)
+        np.save(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy", match_idx)
     else:
-        weights = np.load(subj_path + "proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy")
-        match_idx = np.load(subj_path + "proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy")
+        weights = np.load(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy")
+        match_idx = np.load(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy")
      
     face_idx = sub_faces[match_idx, :]
     row_ind = np.repeat(np.arange(len(avg_vert)), 3)
@@ -602,7 +618,7 @@ def calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     return proj
 
 def get_mri_subj_to_fs_avg_trans_mat(lh_valid_vert, rh_valid_vert,
-                                     model_vert, subj_path, fs_avg_path, overwrite):
+                                     model_vert, anatomy_path, subj_name, fs_path, overwrite):
     """
     Create a subject to fs average transformation matrix.
     
@@ -614,10 +630,12 @@ def get_mri_subj_to_fs_avg_trans_mat(lh_valid_vert, rh_valid_vert,
                           Valid rh vertices (subject space).
     model_vert : numpy.ndarray, shape(model_vtx_cnt, 3)
                  Model vertices.
-    subj_path : string
-                Path to subject's freesurfer files.
-    fs_avg_path : string
-                  Path to fs average's freesurfer files.
+    anatomy_path : string
+                   Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
+    subj_name : string
+                Name of the subject.
+    fs_path : string
+              Path to the freesurfer folder. Should contain the 'bin' folder, your license.txt, and sources.sh.
     overwrite : boolean
                 Flag whether to overwrite MRI maps.
                
@@ -631,9 +649,15 @@ def get_mri_subj_to_fs_avg_trans_mat(lh_valid_vert, rh_valid_vert,
                         Valid/supporting vertices for right hemisphere.
     """
     
+    if (anatomy_path[-1] != "/"):
+        anatomy_path += "/"
+        
+    if (fs_path[-1] != "/"):
+        fs_path += "/"
+    
     #Find a transformation for all points
-    (lh_sub_vert, lh_sub_faces, avg_lh_vert, lh_mri_map) = calc_mri_maps(subj_path, fs_avg_path, "lh", overwrite)
-    (rh_sub_vert, rh_sub_faces, avg_rh_vert, rh_mri_map) = calc_mri_maps(subj_path, fs_avg_path, "rh", overwrite)
+    (lh_sub_vert, lh_sub_faces, avg_lh_vert, lh_mri_map) = calc_mri_maps(anatomy_path, subj_name, fs_path + "subjects/fsaverage/", "lh", overwrite)
+    (rh_sub_vert, rh_sub_faces, avg_rh_vert, rh_mri_map) = calc_mri_maps(anatomy_path, subj_name, fs_path + "subjects/fsaverage/", "rh", overwrite)
     
     #Calculate a projection from valid/supporting points to all points (subject space only)
     lh_proj = calc_small_to_default_vertices_proj(lh_valid_vert, lh_sub_vert, lh_sub_faces)
@@ -693,4 +717,8 @@ def calc_whitener(eigen_val, eigen_vec):
     whitener = np.expand_dims(eigen_val_white, axis = 1) * eigen_vec
     
     return whitener
+
+
+
+
 
