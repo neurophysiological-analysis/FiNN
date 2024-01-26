@@ -31,15 +31,18 @@ Initially, free surfer paths need to be configured for subsequent FreeSurfer cal
 Important: The T1 scan to be used for the extract must be placed outside the anatomy folder, otherwise FreeSurfer will think the patient already exists.
 
 As such, FiNN adheres to the following, FreeSurfer aligned, organizational structure:
-└── anatomy_path
-    ├── subject_a (must be created via FreeSurfer, *do not create this folder manually*)
-    │   ├── bem (automatically generated at later steps)
-    │   │   └── watershed (automatically generated at later steps)
-    │   ├── mri (automatically generated at later steps)
-    │   │   └── transforms (automatically generated at later steps)
-    │   ├── proj (automatically generated at later steps)
-    │   └── surf (automatically generated at later steps)
-    └── subject_b
+
+::
+    project_data
+    └── anatomy_path
+        ├── subject_a (must be created via FreeSurfer, *do not create this folder manually*)
+        │   ├── bem (automatically generated at later steps)
+        │   │   └── watershed (automatically generated at later steps)
+        │   ├── mri (automatically generated at later steps)
+        │   │   └── transforms (automatically generated at later steps)
+        │   ├── proj (automatically generated at later steps)
+        │   └── surf (automatically generated at later steps)
+        └── subject_b
 
 As such, the above command may look as follows on a Windows machine.
 

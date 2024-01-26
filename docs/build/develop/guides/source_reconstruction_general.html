@@ -411,7 +411,9 @@ document.write(`
 <p><em>anatomy_path</em> contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists.
 <em>fs_path</em> points towards the FreeSurfer installation. The FreeSurfer folder should contain the ‘bin’ folder, license.txt, and sources.sh (among other files/directories).</p>
 <p>Important: The T1 scan to be used for the extract must be placed outside the anatomy folder, otherwise FreeSurfer will think the patient already exists.</p>
-<p>As such, FiNN adheres to the following, FreeSurfer aligned, organizational structure:
+<p>As such, FiNN adheres to the following, FreeSurfer aligned, organizational structure:</p>
+<dl>
+<dt>::</dt><dd><p>project_data
 └── anatomy_path</p>
 <blockquote>
 <div><p>├── subject_a (must be created via FreeSurfer, <em>do not create this folder manually</em>)
@@ -423,6 +425,8 @@ document.write(`
 │   └── surf (automatically generated at later steps)
 └── subject_b</p>
 </div></blockquote>
+</dd>
+</dl>
 <p>As such, the above command may look as follows on a Windows machine.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span> <span class="o">=</span> <span class="s2">&quot;C:/.../anatomry/&quot;</span><span class="p">,</span>
                                                  <span class="n">fs_path</span> <span class="o">=</span> <span class="s2">&quot;C:/.../FreeSurfer/version/&quot;</span><span class="p">)</span>
