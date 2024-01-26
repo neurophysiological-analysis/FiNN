@@ -407,29 +407,79 @@ It is highly recommended to move the downloaded FreeSurfer directory to a perman
 <section id="windows-subsystem-for-linux-wsl-installation">
 <h3>Windows Subsystem for Linux (WSL) Installation<a class="headerlink" href="#windows-subsystem-for-linux-wsl-installation" title="Link to this heading">#</a></h3>
 <p>To run freesurfer on Windows you will need Windows Subsystem for Linux (WSL). If WSL is not already installed on your PC, in Windows Powershell or Windows command prompt enter the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>wsl –install
+</pre></div>
+</div>
 <p>If WSL is already installed, please ensure an up to date version is used. The following command indicates which distros are installed and the asterisk in the output represents the active distribution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>wsl --list –verbose
+</pre></div>
+</div>
 <p>The following lines of code demonstrate how to install Ubuntu-22.04 as a distribution and set it as the default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="o">--</span><span class="n">install</span> <span class="o">-</span><span class="n">d</span> <span class="n">Ubuntu</span><span class="o">-</span><span class="mf">22.04</span>
+<span class="n">wsl</span> <span class="o">--</span><span class="n">setdefault</span> <span class="n">Ubuntu</span><span class="o">-</span><span class="mf">22.04</span>
+</pre></div>
+</div>
 </section>
 <section id="freesurfer-installation">
 <h3>Freesurfer Installation<a class="headerlink" href="#freesurfer-installation" title="Link to this heading">#</a></h3>
 <p>This installation guide is inspired by the original from FreeSurfer, available at <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu">https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu</a>.</p>
 <p>Via the following commands, FreeSurfer may be installed into the WSL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd
+wget https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/7.4.1/freesurfer_ubuntu22-7.4.1_amd64.deb
+
+ls freesurfer_ubuntu22-7.4.1_amd64.deb
+sudo apt-get update -y
+sudo apt-get -y install ./freesurfer_ubuntu22-7.4.1_amd64.deb
+export FREESURFER_HOME=/usr/local/freesurfer/7.4.1
+echo &quot;export FREESURFER_HOME=/usr/local/freesurfer/7.4.1&quot; &gt;&gt; $HOME/.bashrc
+</pre></div>
+</div>
 <p>Executing the ls command will display all items within the FreeSurfer directory, and as such should list files such as sources.sh, SetUpFreeSurfer.sh, and the bin folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ls $FREESURFER_HOME
+</pre></div>
+</div>
 <p>Afterwards, a free Freesurfer license needs to be optained via the following link, <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/registration.html">https://surfer.nmr.mgh.harvard.edu/registration.html</a>. The received license.txt needs to be moved into the FreeSurfer directory (within the WSL) and shortcuts created.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mv /mnt/c/Users/username/Downloads/licence.txt $HOME
+echo &quot;export FS_LICENSE=$HOME/license.txt&quot; &gt;&gt; $HOME/.bashrc
+echo &quot;export XDG_RUNTIME_DIR=$HOME/.xdg&quot; &gt;&gt; $HOME/.bashrc
+echo &quot;export DISPLAY=:0&quot; &gt;&gt; $HOME/.bashrc
+</pre></div>
+</div>
 <p>As such, when executing the following code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export FREESURFER_HOME=/usr/local/freesurfer/7.4.1
+source $FREESURFER_HOME/SetUpFreeSurfer.sh
+</pre></div>
+</div>
 <p>the corresponding output should be.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--------</span> <span class="n">freesurfer</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">ubuntu22_x86_64</span><span class="o">-</span><span class="mf">7.4.1</span><span class="o">-</span><span class="mi">20230614</span><span class="o">-</span><span class="mi">7</span><span class="n">eb8460</span> <span class="o">--------</span>
+<span class="n">Setting</span> <span class="n">up</span> <span class="n">environment</span> <span class="k">for</span> <span class="n">FreeSurfer</span><span class="o">/</span><span class="n">FS</span><span class="o">-</span><span class="n">FAST</span> <span class="p">(</span><span class="n">andFSL</span><span class="p">)</span>
+<span class="n">FREESURFER_HOME</span>         <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">freesurfer</span><span class="o">/</span><span class="mf">7.4.1</span>
+<span class="n">FSFAST_HOME</span>             <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">freesurfer</span><span class="o">/</span><span class="mf">7.4.1</span><span class="o">/</span><span class="n">fsfast</span>
+<span class="n">FSF_OUTPUT_FORMAT</span>       <span class="n">nii</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">SUBJECTS_DIR</span>            <span class="n">YOUR_SUBJECTS_DIRECTORY</span>
+<span class="n">MNI_DIR</span>                 <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">freesurfer</span><span class="o">/</span><span class="mf">7.4.1</span><span class="o">/</span><span class="n">mni</span>
+</pre></div>
+</div>
 <p>Results may slightly vary for different linux distributions (first line) or different FreeSurfer versions (7.4.1 used in this example).</p>
 </section>
 <section id="x-server-installation">
 <h3>X-server Installation<a class="headerlink" href="#x-server-installation" title="Link to this heading">#</a></h3>
 <p>To run image viewing software such as freesurfer on WSL (for reference, see <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming">https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming</a>), an X-server needs to be set up. The previous link describes how to set up the Xming X-server. Once Xming is installed, correct installation may be verified via the following WSL terminal command.</p>
-<div class="highlight-freeview notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">freeview</span>
 </pre></div>
 </div>
 <p>If the command fails, potential troubleshooting is described below.</p>
 <p>If the following error occurs</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QXcbConnection</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="n">display</span> <span class="p">:</span><span class="mi">0</span>
+<span class="n">Could</span> <span class="ow">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="nb">any</span> <span class="n">X</span> <span class="n">display</span><span class="o">.</span>
+</pre></div>
+</div>
 <p>Resolution details are provided in <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu">https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu</a>.</p>
 <p>The error</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qt</span><span class="o">.</span><span class="n">qpa</span><span class="o">.</span><span class="n">plugin</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">load</span> <span class="n">the</span> <span class="n">Qt</span> <span class="n">platform</span> <span class="n">plugin</span> <span class="s2">&quot;xcb&quot;</span> <span class="ow">in</span> <span class="s2">&quot;&quot;</span> <span class="n">even</span> <span class="n">though</span> <span class="n">it</span> <span class="n">was</span> <span class="n">found</span><span class="o">.</span>
+<span class="n">This</span> <span class="n">application</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">start</span> <span class="n">because</span> <span class="n">no</span> <span class="n">Qt</span> <span class="n">platform</span> <span class="n">plugin</span> <span class="n">could</span> <span class="n">be</span> <span class="n">initialized</span><span class="o">.</span> <span class="n">Reinstalling</span> <span class="n">the</span> <span class="n">application</span> <span class="n">may</span> <span class="n">fix</span> <span class="n">this</span> <span class="n">problem</span><span class="o">.</span>
+</pre></div>
+</div>
 <p>may be resolved by installing VcxSrv instead of Xmin, see <a class="reference external" href="https://sourceforge.net/projects/vcxsrv">https://sourceforge.net/projects/vcxsrv</a>.
 Xmin should be configured as follows:</p>
 <ul class="simple">
