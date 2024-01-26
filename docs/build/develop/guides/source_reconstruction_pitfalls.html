@@ -410,14 +410,20 @@ document.write(`
 <section id="improper-skull-model">
 <h2>Improper skull model<a class="headerlink" href="#improper-skull-model" title="Link to this heading">#</a></h2>
 <p>The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
- <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
- <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">bem_model</span><span class="o">.</span><span class="n">read_skull_and_skin_models</span><span class="p">(</span><span class="n">fs_subj_path</span><span class="p">,</span> <span class="n">subj_name</span> <span class="o">+</span> <span class="n">rec_folder</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">finnpy.source_reconstruction.bem_model</span> <span class="k">as</span> <span class="nn">finnpy_sr_bem</span>
 
-<span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">bem_model</span><span class="o">.</span><span class="n">plot_skull_and_skin_models</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
-                                                                  <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
-                                                                  <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">,</span>
-                                                                  <span class="n">fs_subj_path</span><span class="p">)</span>
+<span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span>
+ <span class="n">ws_in_skull_faces</span><span class="p">,</span>
+ <span class="n">ws_out_skull_vert</span><span class="p">,</span>
+ <span class="n">ws_out_skull_faces</span><span class="p">,</span>
+ <span class="n">ws_out_skin_vect</span><span class="p">,</span>
+ <span class="n">ws_out_skin_faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">read_skull_and_skin_models</span><span class="o">.</span><span class="p">(</span><span class="n">fs_subj_path</span><span class="p">,</span>
+                                                                <span class="n">subj_name</span> <span class="o">+</span> <span class="n">rec_folder</span><span class="p">)</span>
+
+<span class="n">finnpy_sr_bem</span><span class="o">.</span><span class="n">plot_skull_and_skin_models</span><span class="p">(</span><span class="n">ws_in_skull_vert</span><span class="p">,</span> <span class="n">ws_in_skull_faces</span><span class="p">,</span>
+                                         <span class="n">ws_out_skull_vert</span><span class="p">,</span> <span class="n">ws_out_skull_faces</span><span class="p">,</span>
+                                         <span class="n">ws_out_skin_vect</span><span class="p">,</span> <span class="n">ws_out_skin_faces</span><span class="p">,</span>
+                                         <span class="n">fs_subj_path</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Producing the following output:</p>

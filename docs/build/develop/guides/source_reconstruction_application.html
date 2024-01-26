@@ -394,32 +394,46 @@ document.write(`
 <span id="source-reconstruction-application-label"></span><h1>Model computation<a class="headerlink" href="#model-computation" title="Link to this heading">#</a></h1>
 <p>This part of the guide explains how the inverse model and the fsaverage source space morphing is applied. For previous steps, see <a class="reference internal" href="source_reconstruction_general.html#source-reconstruction-general-label"><span class="std std-ref">MEG recording agnostic model computation</span></a>, <a class="reference internal" href="source_reconstruction_specific.html#source-reconstruction-specific-label"><span class="std std-ref">MEG recording specific model computation</span></a>.</p>
 <p>Herein, the individual commands of this section will be explained in a step-by-step fashion.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src_data</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">inverse_model</span><span class="o">.</span><span class="n">apply_inverse_model</span><span class="p">(</span><span class="n">sen_data</span><span class="p">,</span> <span class="n">inv_trans</span><span class="p">,</span> <span class="n">noise_norm</span><span class="p">)</span>
-<span class="n">fs_avg_src_data</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">apply_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_data</span><span class="p">)</span>
-<span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">,</span> <span class="n">morphed_epoch_channels</span><span class="p">,</span> <span class="n">morphed_region_names</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">source_region_model</span><span class="o">.</span><span class="n">avg_source_regions</span><span class="p">(</span><span class="n">fs_avg_src_data</span><span class="p">,</span>
-                                                                                                                                     <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span>
-                                                                                                                                     <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">,</span>
-                                                                                                                                     <span class="n">octa_model_vert</span><span class="p">,</span>
-                                                                                                                                     <span class="n">octa_model_faces</span><span class="p">,</span>
-                                                                                                                                     <span class="n">fs_path</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">finnpy.source_reconstruction.inverse_model</span> <span class="k">as</span> <span class="nn">finnpy_sr_inv</span>
+<span class="kn">import</span> <span class="nn">finnpy.source_reconstruction.utils</span> <span class="k">as</span> <span class="nn">finnpy_sr_utils</span>
+<span class="kn">import</span> <span class="nn">finnpy.source_reconstruction.source_region_model</span> <span class="k">as</span> <span class="nn">finnpy_sr_srm</span>
+
+<span class="n">src_data</span> <span class="o">=</span> <span class="n">finnpy_sr_inv</span><span class="o">.</span><span class="n">apply_inverse_model</span><span class="p">(</span><span class="n">sen_data</span><span class="p">,</span>
+                                             <span class="n">inv_trans</span><span class="p">,</span>
+                                             <span class="n">noise_norm</span><span class="p">)</span>
+<span class="n">fs_avg_src_data</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">apply_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span>
+                                                                     <span class="n">src_data</span><span class="p">)</span>
+<span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">,</span>
+ <span class="n">morphed_epoch_channels</span><span class="p">,</span>
+ <span class="n">morphed_region_names</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_srm</span><span class="o">.</span><span class="n">avg_source_regions</span><span class="p">(</span><span class="n">fs_avg_src_data</span><span class="p">,</span>
+                                                          <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span>
+                                                          <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">,</span>
+                                                          <span class="n">octa_model_vert</span><span class="p">,</span>
+                                                          <span class="n">octa_model_faces</span><span class="p">,</span>
+                                                          <span class="n">fs_path</span><span class="p">)</span>
 <span class="n">morphed_epoch_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The first step applies the inverse model to sensor space data, transforming the data into source space.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src_data</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">inverse_model</span><span class="o">.</span><span class="n">apply_inverse_model</span><span class="p">(</span><span class="n">sen_data</span><span class="p">,</span> <span class="n">inv_trans</span><span class="p">,</span> <span class="n">noise_norm</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">src_data</span> <span class="o">=</span> <span class="n">finnpy_sr_inv</span><span class="o">.</span><span class="n">apply_inverse_model</span><span class="p">(</span><span class="n">sen_data</span><span class="p">,</span>
+                                             <span class="n">inv_trans</span><span class="p">,</span>
+                                             <span class="n">noise_norm</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Having transformed the data from sensor to source space, the data has been shifted into a subject specific variant of source space. This naturally limits comparbility between individual subjects. To establish comparability, the data is subsequently transformed from subject specific source space into fsaverage source space.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs_avg_src_data</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">apply_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span> <span class="n">src_data</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs_avg_src_data</span> <span class="o">=</span> <span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">apply_mri_subj_to_fs_avg_trans_mat</span><span class="p">(</span><span class="n">fs_avg_trans_mat</span><span class="p">,</span>
+                                                                     <span class="n">src_data</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Finally, as the source reconstruction results in a unsustainably high number of channels, individual channels are clustered according to the Desikan-Killiany atlas.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">,</span> <span class="n">morphed_epoch_channels</span><span class="p">,</span> <span class="n">morphed_region_names</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">source_reconstruction</span><span class="o">.</span><span class="n">source_region_model</span><span class="o">.</span><span class="n">avg_source_regions</span><span class="p">(</span><span class="n">fs_avg_src_data</span><span class="p">,</span>
-                                                                                                                                     <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span>
-                                                                                                                                     <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">,</span>
-                                                                                                                                     <span class="n">octa_model_vert</span><span class="p">,</span>
-                                                                                                                                     <span class="n">octa_model_faces</span><span class="p">,</span>
-                                                                                                                                     <span class="n">fs_path</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">,</span>
+ <span class="n">morphed_epoch_channels</span><span class="p">,</span>
+ <span class="n">morphed_region_names</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy_sr_srm</span><span class="o">.</span><span class="n">avg_source_regions</span><span class="p">(</span><span class="n">fs_avg_src_data</span><span class="p">,</span>
+                                                          <span class="n">src_fs_avg_valid_lh_vert</span><span class="p">,</span>
+                                                          <span class="n">src_fs_avg_valid_rh_vert</span><span class="p">,</span>
+                                                          <span class="n">octa_model_vert</span><span class="p">,</span>
+                                                          <span class="n">octa_model_faces</span><span class="p">,</span>
+                                                          <span class="n">fs_path</span><span class="p">)</span>
 <span class="n">morphed_epoch_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">morphed_epoch_data</span><span class="p">)</span>
 </pre></div>
 </div>
