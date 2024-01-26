@@ -33,6 +33,7 @@ Important: The T1 scan to be used for the extract must be placed outside the ana
 As such, FiNN adheres to the following, FreeSurfer aligned, organizational structure:
 
 ::
+
     project_data
     └── anatomy_path
         ├── subject_a (must be created via FreeSurfer, *do not create this folder manually*)
