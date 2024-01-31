@@ -331,8 +331,6 @@ def visualize_anatomy_from_mri_using_fs(subj_path):
     
     finnpy_utils.run_subprocess_in_custom_working_directory(patient_id, cmd)
 
-
-
 def _calc_head_model(anatomy_path, subj_name):
     """
     Calculate a head model to read hd surface vertices using freesurfer. Removes files not needed by this reconstruction. 
