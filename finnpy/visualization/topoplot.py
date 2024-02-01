@@ -68,10 +68,11 @@ class Topoplot():
         return ch_pos
 
     def run(self, values, ch_name_list, 
-            omit_channels = None, substitute_channels = None, 
+            omit_channels = [], substitute_channels = [], 
             v_min = None, v_max = None, v_border_values = [], v_border_labels = [""],
             file_path = None,
-            screen_channels = False, annotate_ch_names = False):
+            screen_channels = False, annotate_ch_names = False, 
+            ax = None):
         """
         Plots a 2D topomap
         
@@ -86,6 +87,7 @@ class Topoplot():
         :param file_path: Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
         :param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
         :param annotate_ch_names: If true, channels get annotate with their individual names.
+        :param ax: Provide an axis object to embed the topoplot into.
         
         :return: The figure and the axes object to easen the inclusion of a plot into a larger picture.
         """
@@ -107,7 +109,10 @@ class Topoplot():
         coords = np.asarray(coords, dtype = np.float32)
         coords = coords.transpose()
         
-        (fig, ax) = plt.subplots(1, 1)
+        created_ax = False
+        if (ax is None):
+            (fig, ax) = plt.subplots(1, 1)
+            created_ax = True
         
         if (type(values) != np.ndarray):
             values = np.asarray(values)
@@ -128,14 +133,17 @@ class Topoplot():
             self._add_ch_names(coords, ch_name_list, ax)
             
         self._refine_image(ax)
-        self._add_color_bar(v_min, v_max, v_border_values, v_border_labels)
+        self._add_color_bar(v_min, v_max, v_border_values, v_border_labels, ax)
         
-        if ((file_path is None) == False):
+        if ((file_path is None) == False and create_ax == True):
             fig.savefig(file_path)
         
-        return (fig, ax)
+        if (created_ax):
+            return (fig, ax)
+        else:
+            return ax
     
-    def _add_color_bar(self, v_min, v_max, v_border_values, v_border_labels):
+    def _add_color_bar(self, v_min, v_max, v_border_values, v_border_labels, ax):
         """
         Adds a color bar to the topoplot.
         
@@ -145,10 +153,11 @@ class Topoplot():
         one element larger than the number of elements in v_border_values.
         :param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly 
         one element larger than the number of elements in v_border_values. 
+        :param ax: Reference to the ax object. 
         """
         sm      = plt.cm.ScalarMappable(cmap = plt.get_cmap("jet"), norm = matplotlib.colors.Normalize(vmin=v_min, vmax=v_max))
         sm.set_array([])
-        cbar    = plt.colorbar(sm)
+        cbar    = plt.colorbar(sm, ax = ax)
     
         assert((len(v_border_values) + 1) == len(v_border_labels))
     
@@ -202,9 +211,9 @@ class Topoplot():
         :return: The corrected values
         """    
         
-        if ((substitute_channels is None or substitute_channels == False) == False):
+        if (len(substitute_channels) > 0):
             values = self._substitute_channels(values, ch_name_list, substitute_channels)
-        if ((omit_channels is None or omit_channels == False) == False):
+        if (len(omit_channels) > 0):
             values = self._omit_channels(values, ch_name_list, omit_channels)
             
         return values
