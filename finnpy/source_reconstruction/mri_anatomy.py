@@ -168,7 +168,7 @@ def copy_fs_avg_anatomy(fs_path, anatomy_path, subj_name, overwrite = False):
     old_base_dir += "subjects/fsaverage/"
     new_base_dir = anatomy_path + subj_name + "/"
     
-    if (os.path.exists(old_base_dir) and overwrite == False):
+    if (os.path.exists(new_base_dir) and overwrite == False):
         return
     os.mkdir(new_base_dir)
      

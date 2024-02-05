@@ -278,10 +278,7 @@ def calc_model(fs_path, anatomy_path, subj_name, t1_path, sensor_cov_path, cov_p
     
     finnpy.source_reconstruction.utils.init_fs_paths(anatomy_path, fs_path)
     
-    if (t1_path is None):
-        finnpy.source_reconstruction.mri_anatomy.copy_fs_avg_anatomy(fs_path, anatomy_path, subj_name, overwrite = overwrite_fs_extract)
-    else:
-        finnpy.source_reconstruction.mri_anatomy.extract_anatomy_from_mri_using_fs(subj_name, t1_path, overwrite = overwrite_fs_extract)
+    finnpy.source_reconstruction.mri_anatomy.extract_anatomy_from_mri_using_fs(subj_name, t1_path, overwrite = overwrite_fs_extract)
     (sensor_cov_eigen_val, sensor_cov_eigen_vec, sensor_cov_names) = finnpy.source_reconstruction.sensor_covariance.get_sensor_covariance(file_path = sensor_cov_path, cov_path = cov_path, overwrite = overwrite_sensor_cov)
 
     rec_meta_info = mne.io.read_info(data_path)
