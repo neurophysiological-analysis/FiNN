@@ -11,3 +11,4 @@ dist/
 *.pkl
 *#
 docs/_build/develop/.doctrees/*
+docs/_build/stable/.doctrees/*
