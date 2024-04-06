@@ -12,6 +12,8 @@ dist/
 *#
 *.doctree
 MANIFEST.in
+docs/build/.doctrees/*
+docs/_build/develop/.doctrees/*
 
 finnpy/data/src_rec/*
 

@@ -1,0 +1,32 @@
+.rst-versions.rst-badge {
+    display: block;
+    bottom: 50px;
+    /* Workaround for mkdocs which set a specific height for this element */
+    height: auto;
+}
+
+.rst-versions.shift-up {
+    height: auto;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.rst-other-versions {
+    text-align: left;
+}
+
+.rst-other-versions a {
+    border: 0;
+}
+
+.rst-other-versions dl {
+    margin: 0;
+}
+
+.rtd-current-item {
+    font-weight: bold;
+}
+
+.rst-content .line-block {
+    margin-bottom: 24px
+}
