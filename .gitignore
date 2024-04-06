@@ -10,3 +10,4 @@ dist/
 *.svg
 *.pkl
 *#
+docs/_build/develop/.doctrees/*
