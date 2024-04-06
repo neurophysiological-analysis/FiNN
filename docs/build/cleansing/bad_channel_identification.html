@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Bad channel identification &#8212; FiNN  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cleansing/bad_channel_identification';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Channel restoration" href="channel_restoration.html" />
+    <link rel="prev" title="Cleansing" href="../cleansing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNN  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install_guide.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../guides.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../api_reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install_guide.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../guides.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../api_reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../file_io.html">File IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../src_rec.html">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+        <div class="sidebar-primary-item"><div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    Version: latest
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    
+    
+    <dl>
+      <dt>Versions</dt>
+      
+        <dd><a href="https://neurophysiological-analysis.github.io/FiNN/build/develop/index.html/1.4.0/index.html">1.4.0</a></dd>
+      
+    </dl>
+    
+    <br>
+    </dl>
+  </div>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api_reference.html" class="nav-link">FiNNPy API</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../cleansing.html" class="nav-link">Cleansing</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Bad channel...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="bad-channel-identification">
+<h1>Bad channel identification<a class="headerlink" href="#bad-channel-identification" title="Link to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="cleansing.bad_channel_identification.run">
+<span class="sig-prename descclassname"><span class="pre">cleansing.bad_channel_identification.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_areas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[105,</span> <span class="pre">120],</span> <span class="pre">[135,</span> <span class="pre">145],</span> <span class="pre">[155,</span> <span class="pre">195]]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">broadness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visual_inspection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cleansing.bad_channel_identification.run" title="Link to this definition">#</a></dt>
+<dd><p>Identifies which channels have substantially more or less power in the frequency ranges defined by ref_areas. Channels whose power is more different than <em>broadness</em> (default: 3) standard deviations will be primed as faulty channels. In case visual inspection is <em>active</em> (default: True), the automatic results can be further refined via manual selection.</p>
+<p>Attention: Function is parallelized. Sensitive parts are placed within a locked area to avoid unexpected behaviour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Input data in the format channel x samples.</p></li>
+<li><p><strong>ch_names</strong> – Names of the channels. Used for visualization purposes only. Order has to match the channel order of data.</p></li>
+<li><p><strong>fs</strong> – List of sampling frequencies for each channel.</p></li>
+<li><p><strong>ref_areas</strong> – Spectral reference areas used for power estimation. Only power within these ranges is defined. It is recommended to choose ranges, which are not part of any evaluation to decrease the chances of pre-processing induced biases.</p></li>
+<li><p><strong>broadness</strong> – Number of standard deviations threshold by which channels are automatically categorized as faulty. In case visual inspection is enabled (recommended) this only results in priming the channels.</p></li>
+<li><p><strong>visual_inspection</strong> – Toggles visual inspection on and off.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(valid_list, invalid_list, score). List of valid channels, invalid channels and their respective z-scores.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>The following code example shows how to apply bad channel identification &amp; subsequent restoration.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;Qt5agg&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">finn.cleansing.bad_channel_identification</span> <span class="k">as</span> <span class="nn">bci</span>
+<span class="kn">import</span> <span class="nn">finn.cleansing.channel_restoration</span> <span class="k">as</span> <span class="nn">cr</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1">#Configure sample data</span>
+    <span class="n">channel_count</span> <span class="o">=</span> <span class="mi">64</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channel_count</span><span class="p">)]</span>
+    <span class="n">data_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+    <span class="n">frequency_sampling</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">ch_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;O1&#39;</span><span class="p">,</span> <span class="s1">&#39;Oz&#39;</span><span class="p">,</span> <span class="s1">&#39;O2&#39;</span><span class="p">,</span> <span class="s1">&#39;PO9&#39;</span><span class="p">,</span> <span class="s1">&#39;PO7&#39;</span><span class="p">,</span> <span class="s1">&#39;PO3&#39;</span><span class="p">,</span> <span class="s1">&#39;POz&#39;</span><span class="p">,</span> <span class="s1">&#39;PO4&#39;</span><span class="p">,</span> <span class="s1">&#39;PO8&#39;</span><span class="p">,</span> <span class="s1">&#39;PO10&#39;</span><span class="p">,</span> <span class="s1">&#39;P9&#39;</span><span class="p">,</span> <span class="s1">&#39;P7&#39;</span><span class="p">,</span> <span class="s1">&#39;P5&#39;</span><span class="p">,</span> <span class="s1">&#39;P3&#39;</span><span class="p">,</span> <span class="s1">&#39;P1&#39;</span><span class="p">,</span> <span class="s1">&#39;Pz&#39;</span><span class="p">,</span> <span class="s1">&#39;P2&#39;</span><span class="p">,</span> <span class="s1">&#39;P4&#39;</span><span class="p">,</span> <span class="s1">&#39;P6&#39;</span><span class="p">,</span> <span class="s1">&#39;P8&#39;</span><span class="p">,</span> <span class="s1">&#39;P10&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;TP9&#39;</span><span class="p">,</span> <span class="s1">&#39;TP7&#39;</span><span class="p">,</span> <span class="s1">&#39;CP5&#39;</span><span class="p">,</span> <span class="s1">&#39;CP3&#39;</span><span class="p">,</span> <span class="s1">&#39;CP1&#39;</span><span class="p">,</span> <span class="s1">&#39;CPz&#39;</span><span class="p">,</span> <span class="s1">&#39;CP2&#39;</span><span class="p">,</span> <span class="s1">&#39;CP4&#39;</span><span class="p">,</span> <span class="s1">&#39;CP6&#39;</span><span class="p">,</span> <span class="s1">&#39;TP8&#39;</span><span class="p">,</span> <span class="s1">&#39;TP10&#39;</span><span class="p">,</span> <span class="s1">&#39;T9&#39;</span><span class="p">,</span> <span class="s1">&#39;T7&#39;</span><span class="p">,</span> <span class="s1">&#39;C5&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;Cz&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">,</span> <span class="s1">&#39;C6&#39;</span><span class="p">,</span> <span class="s1">&#39;T8&#39;</span><span class="p">,</span> <span class="s1">&#39;T10&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;FT9&#39;</span><span class="p">,</span> <span class="s1">&#39;FT7&#39;</span><span class="p">,</span> <span class="s1">&#39;FC5&#39;</span><span class="p">,</span> <span class="s1">&#39;FC3&#39;</span><span class="p">,</span> <span class="s1">&#39;FC1&#39;</span><span class="p">,</span> <span class="s1">&#39;FCz&#39;</span><span class="p">,</span> <span class="s1">&#39;FC2&#39;</span><span class="p">,</span> <span class="s1">&#39;FC4&#39;</span><span class="p">,</span> <span class="s1">&#39;FC6&#39;</span><span class="p">,</span> <span class="s1">&#39;FT8&#39;</span><span class="p">,</span> <span class="s1">&#39;FT10&#39;</span><span class="p">,</span> <span class="s1">&#39;F9&#39;</span><span class="p">,</span> <span class="s1">&#39;F7&#39;</span><span class="p">,</span> <span class="s1">&#39;F5&#39;</span><span class="p">,</span> <span class="s1">&#39;F3&#39;</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">,</span> <span class="s1">&#39;Fz&#39;</span><span class="p">,</span> <span class="s1">&#39;F2&#39;</span><span class="p">,</span> <span class="s1">&#39;F4&#39;</span><span class="p">,</span> <span class="s1">&#39;F6&#39;</span><span class="p">,</span> <span class="s1">&#39;F8&#39;</span><span class="p">,</span> <span class="s1">&#39;F10&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;AF9&#39;</span><span class="p">,</span> <span class="s1">&#39;AF7&#39;</span><span class="p">,</span> <span class="s1">&#39;AF3&#39;</span><span class="p">,</span> <span class="s1">&#39;AFz&#39;</span><span class="p">,</span> <span class="s1">&#39;AF4&#39;</span><span class="p">,</span> <span class="s1">&#39;AF8&#39;</span><span class="p">,</span> <span class="s1">&#39;AF10&#39;</span><span class="p">,</span> <span class="s1">&#39;Fp1&#39;</span><span class="p">,</span> <span class="s1">&#39;Fpz&#39;</span><span class="p">,</span> <span class="s1">&#39;Fp2&#39;</span><span class="p">]</span>
+
+    <span class="c1">#Configure noise data</span>
+    <span class="n">frequency_noise</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">shared_noise_strength</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">random_noise_strength</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1">#Configure bad channel</span>
+    <span class="n">bad_channel_idx</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">bad_channel_signal_power</span> <span class="o">=</span> <span class="mf">1.1</span>
+
+    <span class="c1">#Generate some sample data</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channel_count</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">channel_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channel_count</span><span class="p">):</span>
+        <span class="n">genuine_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span><span class="p">[</span><span class="n">channel_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">data_range</span> <span class="o">/</span> <span class="n">frequency_sampling</span><span class="p">)</span>
+        <span class="n">shared_noise_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency_noise</span> <span class="o">*</span> <span class="n">data_range</span> <span class="o">/</span> <span class="n">frequency_sampling</span><span class="p">)</span> <span class="o">*</span> <span class="n">shared_noise_strength</span>
+        <span class="n">random_noise_signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_range</span><span class="p">))</span> <span class="o">*</span> <span class="n">random_noise_strength</span>
+
+        <span class="n">raw_data</span><span class="p">[</span><span class="n">channel_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">genuine_signal</span> <span class="o">+</span> <span class="n">shared_noise_signal</span> <span class="o">+</span> <span class="n">random_noise_signal</span>
+
+    <span class="n">raw_data</span><span class="p">[</span><span class="n">bad_channel_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data_range</span><span class="p">))</span> <span class="o">*</span> <span class="n">bad_channel_signal_power</span>
+    <span class="c1">#raw_data = np.asarray(raw_data)</span>
+
+    <span class="c1">#Faulty channel gets identified</span>
+    <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">invalid_list</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">bci</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">ch_names</span><span class="p">,</span> <span class="p">[</span><span class="n">frequency_sampling</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channel_count</span><span class="p">)],</span> <span class="p">[[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">]],</span> <span class="n">broadness</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">visual_inspection</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="c1">#Faulty channel gets substituted via neighbors</span>
+    <span class="n">rest_data</span> <span class="o">=</span> <span class="n">cr</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">ch_names</span><span class="p">,</span> <span class="n">invalid_list</span><span class="p">)</span>
+
+    <span class="c1">#visualization</span>
+    <span class="n">channels_to_plot</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">axes</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">channels_to_plot</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">channel_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">channels_to_plot</span><span class="p">):</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">channel_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">raw_data</span><span class="p">[</span><span class="n">channel_idx</span><span class="p">][:</span><span class="mi">200</span><span class="p">])</span>
+        <span class="n">axes</span><span class="p">[</span><span class="n">channel_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">rest_data</span><span class="p">[</span><span class="n">channel_idx</span><span class="p">][:</span><span class="mi">200</span><span class="p">])</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;before correction&quot;</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;after correction&quot;</span><span class="p">)</span>
+
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Channel #0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Channel #1</span><span class="se">\n</span><span class="s2">(faulty channel)&quot;</span><span class="p">);</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Channel #2</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Applying bad channel identification automatically selected channels whose broadband power is more than two standard deviations different from other channels. Yet, manual optimization of the selection is possible (and recommended). Manual adjustments can be performed in the screen below.</p>
+<img alt="../_images/bad_channel_identification.png" src="../_images/bad_channel_identification.png" />
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../cleansing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Cleansing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="channel_restoration.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Channel restoration</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cleansing.bad_channel_identification.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/cleansing/bad_channel_identification.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022, Maximilian Scherer.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+###### Requirements without Version Specifiers ######
+PyQt6
+pyexcel_ods
+
+###### Requirements with Version Specifiers ######
+numpy >= 1.21.5
+scipy >= 1.8.0
+lmfit >= 1.0.3
+matplotlib >= 3.5.1
+mne >= 1.0.2
+rpy2 >= 3.5.1
+scikit-image >= 0.19.2
