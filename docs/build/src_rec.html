@@ -1,0 +1,641 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Source reconstruction &#8212; FiNN  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'src_rec';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Source space region clustering" href="src_rec/avg_src_reg.html" />
+    <link rel="prev" title="Complex coherency" href="sfc/cc.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNN  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install_guide.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="guides.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="api_reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install_guide.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="guides.html">
+                        Guides
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="api_reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item"><h3><a href="index.html">FiNNPY</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#statistics">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="api_reference.html">API reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cfc.html">Cross frequency connectivity (cfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cleansing.html">Cleansing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_io.html">File IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sfc.html">Same frequency coupling (sfc)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="statistical.html">Statistical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+        <div class="sidebar-primary-item"><div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    Version: latest
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    
+    
+    <dl>
+      <dt>Versions</dt>
+      
+        <dd><a href="https://neurophysiological-analysis.github.io/FiNN/build/develop/index.html/1.4.0/index.html">1.4.0</a></dd>
+      
+    </dl>
+    
+    <br>
+    </dl>
+  </div>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="api_reference.html" class="nav-link">FiNNPy API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Source...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-src_rec">
+<span id="source-reconstruction"></span><h1>Source reconstruction<a class="headerlink" href="#module-src_rec" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/avg_src_reg.html">Source space region clustering</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/avg_src_reg.html#src_rec.avg_src_reg.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/avg_src_reg.html#src_rec.avg_src_reg._read_freesurfer_annotation"><code class="docutils literal notranslate"><span class="pre">_read_freesurfer_annotation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/avg_src_reg.html#src_rec.avg_src_reg._get_sphere_faces"><code class="docutils literal notranslate"><span class="pre">_get_sphere_faces()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/avg_src_reg.html#src_rec.avg_src_reg._get_mri_to_model_trans"><code class="docutils literal notranslate"><span class="pre">_get_mri_to_model_trans()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/bem_mdl.html">Boundary element model (BEM)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/bem_mdl.html#src_rec.bem_mdl.BEM_mdl"><code class="docutils literal notranslate"><span class="pre">BEM_mdl()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/bem_mdl.html#src_rec.bem_mdl.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/bem_mdl.html#src_rec.bem_mdl._find_non_diag_omega"><code class="docutils literal notranslate"><span class="pre">_find_non_diag_omega()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/bem_mdl.html#src_rec.bem_mdl._find_diag_omega"><code class="docutils literal notranslate"><span class="pre">_find_diag_omega()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/coreg.html">Coregistration, MEG to MRI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg.Coreg"><code class="docutils literal notranslate"><span class="pre">Coreg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg.plot_coregistration"><code class="docutils literal notranslate"><span class="pre">plot_coregistration()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg.load_meg_ref_pts"><code class="docutils literal notranslate"><span class="pre">load_meg_ref_pts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._calc_coreg"><code class="docutils literal notranslate"><span class="pre">_calc_coreg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._load_mri_ref_pts"><code class="docutils literal notranslate"><span class="pre">_load_mri_ref_pts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._format_fiducials"><code class="docutils literal notranslate"><span class="pre">_format_fiducials()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._load_hd_surf"><code class="docutils literal notranslate"><span class="pre">_load_hd_surf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._registrate_3d_points_restricted"><code class="docutils literal notranslate"><span class="pre">_registrate_3d_points_restricted()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._get_ref_ptn_cnt"><code class="docutils literal notranslate"><span class="pre">_get_ref_ptn_cnt()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._refine_registration"><code class="docutils literal notranslate"><span class="pre">_refine_registration()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._rm_bad_head_shape_pts"><code class="docutils literal notranslate"><span class="pre">_rm_bad_head_shape_pts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._registrate_3d_points_free"><code class="docutils literal notranslate"><span class="pre">_registrate_3d_points_free()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._translation"><code class="docutils literal notranslate"><span class="pre">_translation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._rotation"><code class="docutils literal notranslate"><span class="pre">_rotation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._scaling"><code class="docutils literal notranslate"><span class="pre">_scaling()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._get_transformation_matrix"><code class="docutils literal notranslate"><span class="pre">_get_transformation_matrix()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._get_rot_and_scale_mat"><code class="docutils literal notranslate"><span class="pre">_get_rot_and_scale_mat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._get_trans_and_rot_mat"><code class="docutils literal notranslate"><span class="pre">_get_trans_and_rot_mat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html#src_rec.coreg._get_rot_mat"><code class="docutils literal notranslate"><span class="pre">_get_rot_mat()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/cort_mdl.html">Cortical model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl.Cort_mdl"><code class="docutils literal notranslate"><span class="pre">Cort_mdl()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl._read"><code class="docutils literal notranslate"><span class="pre">_read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl._create_source_mesh_model"><code class="docutils literal notranslate"><span class="pre">_create_source_mesh_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl._match_source_mesh_model"><code class="docutils literal notranslate"><span class="pre">_match_source_mesh_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl._rm_out_of_in_skull_vert"><code class="docutils literal notranslate"><span class="pre">_rm_out_of_in_skull_vert()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html#src_rec.cort_mdl._update_invalid_vertices"><code class="docutils literal notranslate"><span class="pre">_update_invalid_vertices()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/freesurfer.html">Freesurfer methods</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html#src_rec.freesurfer.init_fs_paths"><code class="docutils literal notranslate"><span class="pre">init_fs_paths()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html#src_rec.freesurfer.extract_mri_anatomy"><code class="docutils literal notranslate"><span class="pre">extract_mri_anatomy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html#src_rec.freesurfer.copy_fsavg_anatomy"><code class="docutils literal notranslate"><span class="pre">copy_fsavg_anatomy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html#src_rec.freesurfer.extract_skull_skin"><code class="docutils literal notranslate"><span class="pre">extract_skull_skin()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html#src_rec.freesurfer._create_fiducials"><code class="docutils literal notranslate"><span class="pre">_create_fiducials()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html#src_rec.freesurfer._format_fiducials"><code class="docutils literal notranslate"><span class="pre">_format_fiducials()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/fwd_mdl.html">Forward model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl.compute"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl.restrict"><code class="docutils literal notranslate"><span class="pre">restrict()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._get_meg_coil_info"><code class="docutils literal notranslate"><span class="pre">_get_meg_coil_info()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._get_meg_coil_positions"><code class="docutils literal notranslate"><span class="pre">_get_meg_coil_positions()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._comp_src_sen_contrib"><code class="docutils literal notranslate"><span class="pre">_comp_src_sen_contrib()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._calc_magnetic_fields"><code class="docutils literal notranslate"><span class="pre">_calc_magnetic_fields()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._add_current_distribution"><code class="docutils literal notranslate"><span class="pre">_add_current_distribution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._calc_bem_fields"><code class="docutils literal notranslate"><span class="pre">_calc_bem_fields()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._calc_acc_hem_normals"><code class="docutils literal notranslate"><span class="pre">_calc_acc_hem_normals()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html#src_rec.fwd_mdl._find_vertex_clusters"><code class="docutils literal notranslate"><span class="pre">_find_vertex_clusters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/inv_mdl.html">Inverse model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl.Inv_mdl"><code class="docutils literal notranslate"><span class="pre">Inv_mdl()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl.inv_trans"><code class="docutils literal notranslate"><span class="pre">inv_trans</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl.noise_norm"><code class="docutils literal notranslate"><span class="pre">noise_norm</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl.compute"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl.apply"><code class="docutils literal notranslate"><span class="pre">apply()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl._calc_whitener"><code class="docutils literal notranslate"><span class="pre">_calc_whitener()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html#src_rec.inv_mdl._get_meg_channel_type_idx"><code class="docutils literal notranslate"><span class="pre">_get_meg_channel_type_idx()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/sen_cov.html">Sensor covariance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov.Sen_cov"><code class="docutils literal notranslate"><span class="pre">Sen_cov()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov.evals"><code class="docutils literal notranslate"><span class="pre">evals</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov.evecs"><code class="docutils literal notranslate"><span class="pre">evecs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov.ch_names"><code class="docutils literal notranslate"><span class="pre">ch_names</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov._get_bio_channel_type_idx"><code class="docutils literal notranslate"><span class="pre">_get_bio_channel_type_idx()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov._empirically_estimate_cov"><code class="docutils literal notranslate"><span class="pre">_empirically_estimate_cov()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html#src_rec.sen_cov._calc_sensor_noise_cov"><code class="docutils literal notranslate"><span class="pre">_calc_sensor_noise_cov()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/skull_skin_mdls.html">Skull and skin models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/skull_skin_mdls.html#src_rec.skull_skin_mdls.Skull_skin_mdls"><code class="docutils literal notranslate"><span class="pre">Skull_skin_mdls()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/skull_skin_mdls.html#src_rec.skull_skin_mdls.read"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/skull_skin_mdls.html#src_rec.skull_skin_mdls.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/skull_skin_mdls.html#src_rec.skull_skin_mdls._load_and_orient_t1"><code class="docutils literal notranslate"><span class="pre">_load_and_orient_t1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/skull_skin_mdls.html#src_rec.skull_skin_mdls._plot_subplots"><code class="docutils literal notranslate"><span class="pre">_plot_subplots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/sphere_mdl.html">Sphere models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sphere_mdl.html#src_rec.sphere_mdl.calculate_sphere_from_octahedron"><code class="docutils literal notranslate"><span class="pre">calculate_sphere_from_octahedron()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sphere_mdl.html#src_rec.sphere_mdl.calculate_sphere_from_icosahedron"><code class="docutils literal notranslate"><span class="pre">calculate_sphere_from_icosahedron()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sphere_mdl.html#src_rec.sphere_mdl.read_sphere_from_icosahedron_in_fs_order"><code class="docutils literal notranslate"><span class="pre">read_sphere_from_icosahedron_in_fs_order()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sphere_mdl.html#src_rec.sphere_mdl.prune_closeby_vert"><code class="docutils literal notranslate"><span class="pre">prune_closeby_vert()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/sphere_mdl.html#src_rec.sphere_mdl._tessellate_sphere"><code class="docutils literal notranslate"><span class="pre">_tessellate_sphere()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/subj_to_fsavg.html">Subject to fs-avg</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/subj_to_fsavg.html#src_rec.subj_to_fsavg.prepare"><code class="docutils literal notranslate"><span class="pre">prepare()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/subj_to_fsavg.html#src_rec.subj_to_fsavg.compute"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/subj_to_fsavg.html#src_rec.subj_to_fsavg.apply"><code class="docutils literal notranslate"><span class="pre">apply()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/subj_to_fsavg.html#src_rec.subj_to_fsavg._calc_small_to_default_vertices_proj"><code class="docutils literal notranslate"><span class="pre">_calc_small_to_default_vertices_proj()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/subj_to_fsavg.html#src_rec.subj_to_fsavg._calc_mri_maps"><code class="docutils literal notranslate"><span class="pre">_calc_mri_maps()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src_rec/utils.html">Utility functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.run_subprocess_in_custom_working_directory"><code class="docutils literal notranslate"><span class="pre">run_subprocess_in_custom_working_directory()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.fast_cross_product"><code class="docutils literal notranslate"><span class="pre">fast_cross_product()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.norm_vert"><code class="docutils literal notranslate"><span class="pre">norm_vert()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.magn_of_vec"><code class="docutils literal notranslate"><span class="pre">magn_of_vec()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.apply_inv_transformation"><code class="docutils literal notranslate"><span class="pre">apply_inv_transformation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.calc_quat_angle"><code class="docutils literal notranslate"><span class="pre">calc_quat_angle()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.orient_mat_to_block_format"><code class="docutils literal notranslate"><span class="pre">orient_mat_to_block_format()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.get_eigenbasis"><code class="docutils literal notranslate"><span class="pre">get_eigenbasis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.find_nearest_neighbor"><code class="docutils literal notranslate"><span class="pre">find_nearest_neighbor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html#src_rec.utils.find_valid_vertices"><code class="docutils literal notranslate"><span class="pre">find_valid_vertices()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="sfc/cc.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Complex coherency</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="src_rec/avg_src_reg.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Source space region clustering</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/src_rec.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022, Maximilian Scherer.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

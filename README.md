@@ -4,6 +4,13 @@ A Python Toolbox for the analysis of electrophysiological data
 
 The main directory *finn* contains the toolbox itself, while *finn_demo* contains a number of demo files describing end-point functionality of the toolbox. *finn_tests* contains automated tests to perform unit tests in order to evaluate the state of the toolbox.
 
+## Installation
+
+FiNN can be installed either
+1) manually by downloading a branch of choice
+2) via pip when calling `pip install finnpy`
+
+For more information please [click here](https://neurophysiological-analysis.github.io/FiNN/build/develop/install_guide.html).
 
 ## Branches
 

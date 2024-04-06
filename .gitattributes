@@ -1,1 +1,4 @@
 *.npy filter=lfs diff=lfs merge=lfs -text
+*.eeg filter=lfs diff=lfs merge=lfs -text
+*.vhdr filter=lfs diff=lfs merge=lfs -text
+*.vmrk filter=lfs diff=lfs merge=lfs -text

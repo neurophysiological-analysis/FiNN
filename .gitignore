@@ -10,3 +10,15 @@ dist/
 *.svg
 *.pkl
 *#
+*.doctree
+MANIFEST.in
+
+finnpy/data/src_rec/*
+
+/mnt/data/Professional/projects/finnpy/latest/finnpy/data/src_rec/anatomical/*
+
+finnpy/demo/functionality/src_rec/test.py
+finnpy/demo/functionality/src_rec/test2.py
+finnpy/demo/functionality/src_rec/test_backup.py
+finnpy/demo/functionality/src_rec/testb.py
+finnpy/demo/functionality/src_rec/test2.py
