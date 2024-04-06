@@ -10,7 +10,7 @@ FiNN can be installed either
 1) manually by downloading a branch of choice
 2) via pip when calling `pip install finnpy`
 
-For more information please [click here](https://neurophysiological-analysis.github.io/FiNN/build/develop/install_guide.html).
+For more information please [click here](https://neurophysiological-analysis.github.io/FiNN/build/install_guide.html).
 
 ## Branches
 
