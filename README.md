@@ -10,7 +10,7 @@ FiNN can be installed either
 1) manually by downloading a branch of choice
 2) via pip when calling `pip install finnpy`
 
-For more information please [click here](https://neurophysiological-analysis.github.io/FiNN/_build/install_guide.html).
+For more information please [click here](https://neurophysiological-analysis.github.io/FiNN/_build/develop/install_guide.html).
 
 ## Branches
 
@@ -20,7 +20,7 @@ FiNN offers two branches:
 
 ## Features
 
-Currently implemented features in this toolbox. Full documentation is accessible in doc/\_build/index.html. Documentation of the development branch is available at https://neurophysiological-analysis.github.io/FiNN/.
+Currently implemented features in this toolbox. Full documentation is accessible in doc/\_build/index.html. Documentation of the development branch is available [here](https://neurophysiological-analysis.github.io/FiNN/_build/index.html).
 
    - Artifact rejection
         - Identification of bad channels and (optional) restoration of those from neighboring channels
