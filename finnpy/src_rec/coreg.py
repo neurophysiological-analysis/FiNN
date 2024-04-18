@@ -68,7 +68,7 @@ class Coreg():
         self.meg_to_mri_rs = np.linalg.inv(self.mri_to_meg_rs)
         self.meg_to_mri_r = np.linalg.inv(self.mri_to_meg_r)
 
-def run(subj_name, anatomy_path, mode = "MEG", rec_meta_info = None):
+def run(subj_name, anatomy_path, rec_meta_info = None):
     """
     Executes the complete coregistration for a specific subject.
     
@@ -109,14 +109,11 @@ def run(subj_name, anatomy_path, mode = "MEG", rec_meta_info = None):
             Rotation only affine transformation matrix (MEG -> MRI)
     
     """
-    if (mode == "MEG"):
-        sen_ref_pts = load_meg_ref_pts(rec_meta_info)
-    elif(mode == "EEG"):
-        sen_ref_pts = read_EEG_pts("1005")
+    sen_ref_pts = load_meg_ref_pts(rec_meta_info)
         
-    (coreg_rotors, sen_ref_pts, bad_hsp_indices_outer) = _calc_coreg(subj_name, anatomy_path, sen_ref_pts, registration_scale_type = "free", mode = mode)
-    (coreg_rotors[:6], sen_ref_pts, bad_hsp_indices_inner) = _calc_coreg(subj_name, anatomy_path, sen_ref_pts, registration_scale_type = "restricted", scale = coreg_rotors[6:9], mode = mode)
-    
+    (coreg_rotors, sen_ref_pts, bad_hsp_indices_outer, hd_surf_vert) = _calc_coreg(subj_name, anatomy_path, sen_ref_pts, registration_scale_type = "free", mode = "MEG")
+    (coreg_rotors[:6], sen_ref_pts, bad_hsp_indices_inner, hd_surf_vert) = _calc_coreg(subj_name, anatomy_path, sen_ref_pts, registration_scale_type = "restricted", scale = coreg_rotors[6:9], mode = "MEG")
+        
     return (Coreg(coreg_rotors), [bad_hsp_indices_outer, bad_hsp_indices_inner])
 
 def read_EEG_pts(system = "1020"):
@@ -381,9 +378,9 @@ def _calc_coreg(subj_name, anatomy_path, meg_pts, registration_scale_type = "fre
                                                           registration_scale_type = registration_scale_type, 
                                                           mode = mode)
     if (registration_scale_type == "restricted"):
-        return (coreg_rotors[:6], meg_pts, bad_hsp_indices) # No point in returning invalid values
+        return (coreg_rotors[:6], meg_pts, bad_hsp_indices, hd_surf_vert) # No point in returning invalid values
     else:
-        return (coreg_rotors, meg_pts, bad_hsp_indices)
+        return (coreg_rotors, meg_pts, bad_hsp_indices, hd_surf_vert)
 
 def _load_mri_ref_pts(anatomy_path, subj_name):
     """
@@ -658,6 +655,17 @@ def _refine_registration(src_pts, tgt_pts,
         warnings.warn("Max number of iterations reached")
         
     return (last_rotors, last_mat, tgt_pts_full, src_pts_full)
+
+def _finalze_EEG_coreg(meg_pts, hd_surf_vert, last_mat):
+    surf_sen_pts = {"chs" : [None for _ in range(len(meg_pts["chs"]))]}
+    (surf_sen_pts["lpa"], tree) = finnpy.src_rec.utils.find_nearest_neighbor(hd_surf_vert, np.expand_dims(finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["lpa"])), last_mat), axis = 0), "kdtree")
+    surf_sen_pts["lpa"] = hd_surf_vert[surf_sen_pts["lpa"], :].squeeze(0)
+    surf_sen_pts["nasion"] = hd_surf_vert[finnpy.src_rec.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["nasion"])), last_mat), axis = 0), "kdtree")[0], :].squeeze(0)
+    surf_sen_pts["rpa"] = hd_surf_vert[finnpy.src_rec.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["rpa"])), last_mat), axis = 0), "kdtree")[0], :].squeeze(0)
+    surf_sen_pts["chs"] = hd_surf_vert[finnpy.src_rec.utils.find_nearest_neighbor(tree, finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(meg_pts["chs"])), last_mat), "kdtree")[0], :]
+    surf_sen_pts["labels"] = meg_pts["labels"]
+    
+    return surf_sen_pts
 
 def _rm_bad_head_shape_pts(meg_pts, mri_pts, trans_mat, distance_thresh = 5/1000):
     """
