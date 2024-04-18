@@ -14,6 +14,7 @@ import mne
 import warnings
 import copy
 import mayavi.mlab
+import pyexcel
 
 import finnpy.file_io.data_manager as dm
 import finnpy.src_rec.freesurfer
@@ -67,7 +68,7 @@ class Coreg():
         self.meg_to_mri_rs = np.linalg.inv(self.mri_to_meg_rs)
         self.meg_to_mri_r = np.linalg.inv(self.mri_to_meg_r)
 
-def run(subj_name, anatomy_path, rec_meta_info):
+def run(subj_name, anatomy_path, mode = "MEG", rec_meta_info = None):
     """
     Executes the complete coregistration for a specific subject.
     
@@ -77,6 +78,8 @@ def run(subj_name, anatomy_path, rec_meta_info):
                 Name of the subject.
     anatomy_path : string
                    Path to the anatomy folder. This folder should contain a sub-folder for each subject.
+    mode : string
+           Either "EEG" or "MEG".
     rec_meta_info : mne.io.read_info
                     MEG scan meta info, obtailable via mne.io.read_info
     Returns
@@ -106,13 +109,45 @@ def run(subj_name, anatomy_path, rec_meta_info):
             Rotation only affine transformation matrix (MEG -> MRI)
     
     """
-    meg_ref_pts = load_meg_ref_pts(rec_meta_info)
-    (coreg_rotors, meg_ref_pts, bad_hsp_indices_outer) = _calc_coreg(subj_name, anatomy_path, meg_ref_pts, registration_scale_type = "free")
-    (coreg_rotors[:6], meg_ref_pts, bad_hsp_indices_inner) = _calc_coreg(subj_name, anatomy_path, meg_ref_pts, registration_scale_type = "restricted", scale = coreg_rotors[6:9])
+    if (mode == "MEG"):
+        sen_ref_pts = load_meg_ref_pts(rec_meta_info)
+    elif(mode == "EEG"):
+        sen_ref_pts = read_EEG_pts("1005")
+        
+    (coreg_rotors, sen_ref_pts, bad_hsp_indices_outer) = _calc_coreg(subj_name, anatomy_path, sen_ref_pts, registration_scale_type = "free", mode = mode)
+    (coreg_rotors[:6], sen_ref_pts, bad_hsp_indices_inner) = _calc_coreg(subj_name, anatomy_path, sen_ref_pts, registration_scale_type = "restricted", scale = coreg_rotors[6:9], mode = mode)
     
     return (Coreg(coreg_rotors), [bad_hsp_indices_outer, bad_hsp_indices_inner])
 
-def plot_coregistration(coreg, meg_pts, bad_hsp_pts, anatomy_path, subj_name):
+def read_EEG_pts(system = "1020"):
+    """
+    system : string
+             "1020" or 1005".
+    """
+    if (system == "1020"):
+        pre_sen_ref_pts = pyexcel.get_sheet(file_name = __file__[:__file__.rindex("/")] + "/../res/1020_system.csv").to_array()
+    elif(system == "1005"):
+        pre_sen_ref_pts = pyexcel.get_sheet(file_name = __file__[:__file__.rindex("/")] + "/../res/1005_system.csv").to_array()
+    else:
+        raise NotImplementedError("Unknown setup.")
+    sen_ref_pts = {"chs" : [], "labels" : []}
+    for pre_sen_ref_pt in pre_sen_ref_pts:
+        if (pre_sen_ref_pt[0] == "NAS"):
+            label = "nasion"
+        elif (pre_sen_ref_pt[0] == "LPA"):
+            label = "lpa"
+        elif (pre_sen_ref_pt[0] == "RPA"):
+            label = "rpa"
+        else:
+            label = pre_sen_ref_pt[0]
+            sen_ref_pts["chs"].append(np.asarray(pre_sen_ref_pt[1:])/1000)
+            #sen_ref_pts["chs"].append(np.asarray(pre_sen_ref_pt[1:])/np.asarray([10, 10, 8]))
+            sen_ref_pts["labels"].append(pre_sen_ref_pt[0])
+        sen_ref_pts[label] = np.asarray(pre_sen_ref_pt[1:])/1000
+        #sen_ref_pts[label] = np.asarray(pre_sen_ref_pt[1:])/np.asarray([10, 10, 8])
+    return sen_ref_pts
+
+def plot_coregistration(coreg, meg_pts, bad_hsp_pts, anatomy_path, subj_name, mode = "MEG"):
     """
     Plots the result of the coregistration from MRI to MEG using mayavi.
     
@@ -126,6 +161,8 @@ def plot_coregistration(coreg, meg_pts, bad_hsp_pts, anatomy_path, subj_name):
                    Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
     subj_name : string
                 Subject name.
+    mode : string
+           "EEG" or "MEG".
     """
     
     for bad_hsp_pt in bad_hsp_pts:
@@ -142,28 +179,51 @@ def plot_coregistration(coreg, meg_pts, bad_hsp_pts, anatomy_path, subj_name):
     _ = mayavi.mlab.figure(size = (800, 800))
     mayavi.mlab.triangular_mesh(vert[:, 0], vert[:, 1], vert[:, 2], faces, color = (.4, .4, .4), opacity = 0.9)
     
+    mri_pts = _load_mri_ref_pts(anatomy_path, subj_name)
+    mayavi.mlab.points3d(mri_pts["LPA"][0], mri_pts["LPA"][1], mri_pts["LPA"][2], scale_factor = .015,  color = (0, .5, 1))
+    mayavi.mlab.points3d(mri_pts["NASION"][0], mri_pts["NASION"][1], mri_pts["NASION"][2], scale_factor = .015,  color = (0, .5, 1))
+    mayavi.mlab.points3d(mri_pts["RPA"][0], mri_pts["RPA"][1], mri_pts["RPA"][2], scale_factor = .015,  color = (0, .5, 1))
+    
     meg_nasion = np.expand_dims(np.asarray(meg_pts["nasion"]), axis = 0)
     meg_lpa = np.expand_dims(np.asarray(meg_pts["lpa"]), axis = 0)
     meg_rpa = np.expand_dims(np.asarray(meg_pts["rpa"]), axis = 0)
-    meg_hpi = np.asarray(meg_pts["hpi"])
-    meg_hsp = np.asarray(meg_pts["hsp"])
+    if (mode == "MEG"):
+        meg_hpi = np.asarray(meg_pts["hpi"])
+        meg_hsp = np.asarray(meg_pts["hsp"])
+    else:
+        eeg_chs = meg_pts["chs"]
+        eeg_labels = meg_pts["labels"]
     
-    def _meg_to_mri_trans(coreg, meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp):
+    def _meg_to_mri_trans(coreg, meg_nasion, meg_lpa, meg_rpa, meg_hpi = None, meg_hsp = None, eeg_chs = None):
         meg_nasion  = np.dot(meg_nasion, coreg.meg_to_mri_tr[:3, :3].T); meg_nasion  += coreg.meg_to_mri_tr[:3, 3];
         meg_lpa     = np.dot(meg_lpa,    coreg.meg_to_mri_tr[:3, :3].T); meg_lpa     += coreg.meg_to_mri_tr[:3, 3];
         meg_rpa     = np.dot(meg_rpa,    coreg.meg_to_mri_tr[:3, :3].T); meg_rpa     += coreg.meg_to_mri_tr[:3, 3];
-        meg_hpi     = np.dot(meg_hpi,    coreg.meg_to_mri_tr[:3, :3].T); meg_hpi     += coreg.meg_to_mri_tr[:3, 3];
-        meg_hsp     = np.dot(meg_hsp,    coreg.meg_to_mri_tr[:3, :3].T); meg_hsp     += coreg.meg_to_mri_tr[:3, 3];
+        if (mode == "MEG"):
+            meg_hpi     = np.dot(meg_hpi,    coreg.meg_to_mri_tr[:3, :3].T); meg_hpi     += coreg.meg_to_mri_tr[:3, 3];
+            meg_hsp     = np.dot(meg_hsp,    coreg.meg_to_mri_tr[:3, :3].T); meg_hsp     += coreg.meg_to_mri_tr[:3, 3];
+        else:
+            eeg_chs     = np.dot(eeg_chs,    coreg.meg_to_mri_tr[:3, :3].T); eeg_chs     += coreg.meg_to_mri_tr[:3, 3];
         
-        return (meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp)
+        if (mode == "MEG"):
+            return (meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp)
+        else:
+            return (meg_nasion, meg_lpa, meg_rpa, eeg_chs)
     
-    (meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp) = _meg_to_mri_trans(coreg, meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp)
+    if (mode == "MEG"):
+        (meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp) = _meg_to_mri_trans(coreg, meg_nasion, meg_lpa, meg_rpa, meg_hpi, meg_hsp, None)
+    else:
+        (meg_nasion, meg_lpa, meg_rpa, eeg_chs) = _meg_to_mri_trans(coreg, meg_nasion, meg_lpa, meg_rpa, None, None, eeg_chs)
     
     mayavi.mlab.points3d(meg_nasion[:, 0], meg_nasion[:, 1], meg_nasion[:, 2], scale_factor = .015, color = (1, 0, 0))
     mayavi.mlab.points3d(meg_lpa[:, 0], meg_lpa[:, 1], meg_lpa[:, 2], scale_factor = .015,  color = (1, 0.425, 0))
     mayavi.mlab.points3d(meg_rpa[:, 0], meg_rpa[:, 1], meg_rpa[:, 2], scale_factor = .015,  color = (1, 0.425, 0))
-    mayavi.mlab.points3d(meg_hpi[:, 0], meg_hpi[:, 1], meg_hpi[:, 2], scale_factor = .01,   color = (1, 0.8, 0))
-    mayavi.mlab.points3d(meg_hsp[:, 0], meg_hsp[:, 1], meg_hsp[:, 2], scale_factor = .0025, color = (1, 1, 0))
+    if (mode == "MEG"):
+        mayavi.mlab.points3d(meg_hpi[:, 0], meg_hpi[:, 1], meg_hpi[:, 2], scale_factor = .01,   color = (1, 0.8, 0))
+        mayavi.mlab.points3d(meg_hsp[:, 0], meg_hsp[:, 1], meg_hsp[:, 2], scale_factor = .0025, color = (1, 1, 0))
+    else:
+        mayavi.mlab.points3d(eeg_chs[:, 0], eeg_chs[:, 1], eeg_chs[:, 2], scale_factor = .0025, color = (1, 1, 0))
+        for ch_idx in range(eeg_chs.shape[0]):
+            mayavi.mlab.text3d(eeg_chs[ch_idx, 0], eeg_chs[ch_idx, 1], eeg_chs[ch_idx, 2], eeg_labels[ch_idx], scale = (.005, .005, .005))
     
     mayavi.mlab.show()
 
@@ -204,7 +264,7 @@ def load_meg_ref_pts(rec_meta_info):
     return ref_pts
 
 def _calc_coreg(subj_name, anatomy_path, meg_pts, registration_scale_type = "free", scale = None, use_nasion = True,
-               max_number_of_iterations = 500):    
+               max_number_of_iterations = 500, mode = "MEG"):
     """
     Coregisters MRI data (src) to MEG data (tgt).
     
@@ -227,6 +287,8 @@ def _calc_coreg(subj_name, anatomy_path, meg_pts, registration_scale_type = "fre
     max_number_of_iterations : int
                                Number of iterations per registration step (total 3),
                                defaults to 500 per registration step.
+    mode : string
+           "EEG" or "MEG".
     
     Returns
     -------
@@ -238,8 +300,9 @@ def _calc_coreg(subj_name, anatomy_path, meg_pts, registration_scale_type = "fre
         anatomy_path += "/"
     
     ## Find initial solution
-    if (len(meg_pts["hsp"]) == 0):
-        raise AssertionError("Cannot find hsp registration points for patient, likely missing. Proper coregistration impossible.")
+    if (mode == "MEG"):
+        if (len(meg_pts["hsp"]) == 0):
+            raise AssertionError("Cannot find hsp registration points for patient, likely missing. Proper coregistration impossible.")
     meg_pts = copy.deepcopy(meg_pts)
     
     mri_pts = _load_mri_ref_pts(anatomy_path, subj_name)
@@ -259,29 +322,64 @@ def _calc_coreg(subj_name, anatomy_path, meg_pts, registration_scale_type = "fre
     
     #Start with an rigid transformation estimate (less variables -> less complex)
     (coreg_rotors, coreg_mat) = _registrate_3d_points_restricted(mri_pts_initial, meg_pts_initial, scale = (registration_scale_type == "free"))
+    #===========================================================================
+    # if (registration_scale_type == "restricted"):
+    #     return (coreg_rotors[:6], meg_pts, None)
+    # else:
+    #     return (coreg_rotors, meg_pts, None)
+    #===========================================================================
     
     thresh = 1e-10
     
     # Refine initial solution, 1st run; Allow for non-rigid transformations in refinement
-    (ptn_cnt, hsp_cnt) = _get_ref_ptn_cnt(meg_pts)
-    refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 2
+    if (mode == "MEG"):
+        (ptn_cnt, hsp_cnt) = _get_ref_ptn_cnt(meg_pts)
+        refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 2
+    else:
+        refined_weights = np.ones((3 + len(meg_pts["chs"])))
+        refined_weights[len(meg_pts["chs"]) + 0] = 50
+        refined_weights[len(meg_pts["chs"]) + 1] = 200
+        refined_weights[len(meg_pts["chs"]) + 2] = 50
+        
+        #=======================================================================
+        # refined_weights[len(meg_pts["chs"]) + 0] = 10
+        # refined_weights[len(meg_pts["chs"]) + 1] = 20
+        # refined_weights[len(meg_pts["chs"]) + 2] = 10
+        #=======================================================================
     (coreg_rotors, coreg_mat, _, _) = _refine_registration(meg_pts, hd_surf_vert,
-                                                          coreg_rotors, coreg_mat, refined_weights,
-                                                          trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
-                                                          max_number_of_iterations = max_number_of_iterations,
-                                                          registration_scale_type = registration_scale_type)
+                                                           coreg_rotors, coreg_mat, refined_weights,
+                                                           trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
+                                                           max_number_of_iterations = max_number_of_iterations,
+                                                           registration_scale_type = registration_scale_type, 
+                                                           mode = mode)
             
     # Remove non-fitting pts
-    (meg_pts["hsp"], bad_hsp_indices) = _rm_bad_head_shape_pts(meg_pts["hsp"], hd_surf_vert, coreg_mat)
+    if (mode == "MEG"):
+        (meg_pts["hsp"], bad_hsp_indices) = _rm_bad_head_shape_pts(meg_pts["hsp"], hd_surf_vert, coreg_mat)
+    else:
+        bad_hsp_indices = None
     
     # Refine initial solution, 2nd run
-    (ptn_cnt, hsp_cnt) = _get_ref_ptn_cnt(meg_pts)
-    refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 10
+    if (mode == "MEG"):
+        (ptn_cnt, hsp_cnt) = _get_ref_ptn_cnt(meg_pts)
+        refined_weights = np.ones((ptn_cnt)); refined_weights[hsp_cnt + 1] = 10
+    else:
+        refined_weights = np.ones((3 + len(meg_pts["chs"])))
+        refined_weights[len(meg_pts["chs"]) + 0] = 50
+        refined_weights[len(meg_pts["chs"]) + 1] = 200
+        refined_weights[len(meg_pts["chs"]) + 2] = 50
+        
+        #=======================================================================
+        # refined_weights[len(meg_pts["chs"]) + 0] = 10
+        # refined_weights[len(meg_pts["chs"]) + 1] = 20
+        # refined_weights[len(meg_pts["chs"]) + 2] = 10
+        #=======================================================================
     (coreg_rotors, coreg_mat, _, _) = _refine_registration(meg_pts, hd_surf_vert,
                                                           coreg_rotors, coreg_mat, refined_weights,
                                                           trans_thresh = thresh, angle_thresh = thresh, scale_thresh = thresh,
                                                           max_number_of_iterations = max_number_of_iterations,
-                                                          registration_scale_type = registration_scale_type)
+                                                          registration_scale_type = registration_scale_type, 
+                                                          mode = mode)
     if (registration_scale_type == "restricted"):
         return (coreg_rotors[:6], meg_pts, bad_hsp_indices) # No point in returning invalid values
     else:
@@ -468,7 +566,8 @@ def _refine_registration(src_pts, tgt_pts,
                         trans_thresh = .002, angle_thresh = .002, scale_thresh = .002, 
                         #trans_thresh = .2, angle_thresh = .2, scale_thresh = .2, 
                         max_number_of_iterations = 500, 
-                        registration_scale_type = "free"):
+                        registration_scale_type = "free", 
+                        mode = "MEG"):
     """
     Refines an initial registration.
     
@@ -496,6 +595,8 @@ def _refine_registration(src_pts, tgt_pts,
                               If "free", scaling is estimated across 3 axis,
                               if "reduced", scaling is uniform,
                               defaults to "free".
+    mode : string
+           "EEG" or "MEG".
                
     Returns
     -------
@@ -510,18 +611,28 @@ def _refine_registration(src_pts, tgt_pts,
     """
     
     for iteration_idx in range(max_number_of_iterations):
-        src_pts_partial = list(); src_pts_partial.extend(src_pts["hsp"])
-        inv_pre_tgt_pts_partial = finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["hsp"])), last_mat)
-        (tgt_indices, tree) = finnpy.src_rec.utils.find_nearest_neighbor(tgt_pts, inv_pre_tgt_pts_partial, "kdtree")
-        tgt_pts_partial = list(); tgt_pts_partial.extend(tgt_pts[tgt_indices, :])
+        if (mode == "MEG"):
+            src_pts_partial = list(); src_pts_partial.extend(src_pts["hsp"])
+            inv_pre_tgt_pts_partial = finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["hsp"])), last_mat)
+            (tgt_indices, tree) = finnpy.src_rec.utils.find_nearest_neighbor(tgt_pts, inv_pre_tgt_pts_partial, "kdtree")
+            tgt_pts_partial = list(); tgt_pts_partial.extend(tgt_pts[tgt_indices, :])
+        else:
+            src_pts_partial = list(); src_pts_partial.extend(src_pts["chs"])
+            inv_pre_tgt_pts_partial = finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["chs"])), last_mat)
+            (tgt_indices, tree) = finnpy.src_rec.utils.find_nearest_neighbor(tgt_pts, inv_pre_tgt_pts_partial, "kdtree")
+            tgt_pts_partial = list(); tgt_pts_partial.extend(tgt_pts[tgt_indices, :])
         
-        src_pts_partial.append(src_pts["lpa"]); src_pts_partial.append(src_pts["nasion"]); src_pts_partial.append(src_pts["rpa"]);
+        src_pts_partial.append(src_pts["lpa"])
         tgt_pts_partial.extend(tgt_pts[finnpy.src_rec.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["lpa"])), last_mat), axis = 0), "kdtree")[0], :])
+        src_pts_partial.append(src_pts["nasion"])
         tgt_pts_partial.extend(tgt_pts[finnpy.src_rec.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["nasion"])), last_mat), axis = 0), "kdtree")[0], :])
+        src_pts_partial.append(src_pts["rpa"])
         tgt_pts_partial.extend(tgt_pts[finnpy.src_rec.utils.find_nearest_neighbor(tree, np.expand_dims(finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["rpa"])), last_mat), axis = 0), "kdtree")[0], :])
         
-        src_pts_partial.extend(src_pts["hpi"])
-        tgt_pts_partial.extend(tgt_pts[finnpy.src_rec.utils.find_nearest_neighbor(tree, finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["hpi"])), last_mat), "kdtree")[0], :])
+        if (mode == "MEG"):
+            src_pts_partial.extend(src_pts["hpi"])
+            tgt_pts_partial.extend(tgt_pts[finnpy.src_rec.utils.find_nearest_neighbor(tree, finnpy.src_rec.utils.apply_inv_transformation(np.copy(np.asarray(src_pts["hpi"])), last_mat), "kdtree")[0], :])
+
         src_pts_full = np.asarray(src_pts_partial, dtype = np.float64)
         tgt_pts_full = np.asarray(tgt_pts_partial, dtype = np.float64)
         
