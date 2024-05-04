@@ -13,8 +13,8 @@ setuptools.setup(
     url='https://github.com/neurophysiological-analysis/FiNN',
     download_url='https://github.com/neurophysiological-analysis/FiNN',
     license='GPLv3',
-    packages=['finnpy.basic','finnpy.cfc','finnpy.cleansing','finnpy.file_io','finnpy.filters',
-    'finnpy.misc', 'finnpy.sfc', 'finnpy.statistical', 'finnpy.visualization'],
+    packages=['finnpy.basic','finnpy.cfc','finnpy.cleansing','finnpy.demo','finnpy.file_io','finnpy.filters',
+    'finnpy.misc', 'finnpy.sfc','finnpy.src_rec', 'finnpy.statistical', 'finnpy.tests','finnpy.visualization'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
