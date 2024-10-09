@@ -17,7 +17,7 @@ class Inv_mdl():
     
     Attributes
     ----------
-    inv_trans : numpy.ndarray, shape(valid_vtx_cnt, meg_ch_cnt)
+    trans : numpy.ndarray, shape(valid_vtx_cnt, meg_ch_cnt)
                 Inverse model.
     noise_norm : numpy.ndarray, shape(valid_vtx_cnt,)
                  Noise normalization vector.
