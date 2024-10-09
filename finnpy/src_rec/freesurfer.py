@@ -90,7 +90,7 @@ def extract_mri_anatomy(anatomy_path, subj_name, t1_scan_file, fiducials_file = 
     shutil.copyfile(old_base_dir + "mri/" + "orig.mgz", new_base_dir + "mri/" + "orig.mgz")
     shutil.copyfile(old_base_dir + "mri/" + "T1.mgz", new_base_dir + "mri/" + "T1.mgz")
     shutil.copyfile(old_base_dir + "mri/transforms/" + "talairach.xfm", new_base_dir + "mri/transforms/" + "talairach.xfm")
-    
+     
     #Create and populate surface folder
     os.mkdir(new_base_dir + "surf")
     shutil.copyfile(old_base_dir + "surf/" + "lh.sphere", new_base_dir + "surf/" + "lh.sphere")
@@ -99,7 +99,7 @@ def extract_mri_anatomy(anatomy_path, subj_name, t1_scan_file, fiducials_file = 
     shutil.copyfile(old_base_dir + "surf/" + "rh.sphere", new_base_dir + "surf/" + "rh.sphere")
     shutil.copyfile(old_base_dir + "surf/" + "rh.sphere.reg", new_base_dir + "surf/" + "rh.sphere.reg")
     shutil.copyfile(old_base_dir + "surf/" + "rh.white", new_base_dir + "surf/" + "rh.white")
-    
+     
     shutil.rmtree(old_base_dir)
     shutil.move(new_base_dir, old_base_dir)
 
