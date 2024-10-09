@@ -16,6 +16,8 @@ import os
 import sklearn.covariance
 import sklearn.decomposition
 
+import ctypes
+
 def _get_bio_channel_type_idx(raw_file, mask = None):
     """
     Identifies bio channel types.
@@ -179,7 +181,8 @@ class Sen_cov():
         self.evecs = evecs
         self.ch_names = ch_names
 
-def run(file_path, cov_path, method = None, method_params = None, overwrite = False):
+def run(file_path, cov_path, method = None, float_sz = 64, method_params = None, 
+        finnpy_speedups_path = "../FinnPy_speedups/Release/FinnPy_speedups.so", overwrite = False):
     
     """
     #Determines eigenvectors/values from the sensor noise covariance
@@ -197,6 +200,8 @@ def run(file_path, cov_path, method = None, method_params = None, overwrite = Fa
                     Method specific parameters.
                     Only applies to sklearn.covariance.ShrunkCovariance and sklearn.decomposition.FactorAnalysis, 
                     defaults to "shrinkage" : 0.2 - epoch size in s.
+    finnpy_speedups_path: string
+                    Path to the finnpy speedups library
     overwrite : boolean
                 Flag to overwrite covariance calculation.
                
@@ -211,26 +216,60 @@ def run(file_path, cov_path, method = None, method_params = None, overwrite = Fa
     
         raw_file = mne.io.read_raw_fif(file_path, preload = True, verbose = "ERROR")
         (bio_sensor_noise_cov, ch_names) = _calc_sensor_noise_cov(raw_file, method, method_params)
-    
-        mat = mpmath.matrix(bio_sensor_noise_cov)
-        mat.ctx.dps = 40
-        (eigen_val, eigen_vec) = mpmath.eigsy(mat)
-     
-        eigen_val = np.asarray(eigen_val.tolist(), dtype = float)
-        eigen_vec = np.asarray(eigen_vec.tolist(), dtype = float)
+            
+        if (float_sz == 64):
+            mat = np.asarray(bio_sensor_noise_cov, dtype = float)
+            (evals, evecs) = np.linalg.eigh(mat)
+        else:
+            if (os.path.exists(finnpy_speedups_path)):
+                speedup_fncts = ctypes.CDLL(finnpy_speedups_path)
+                
+                precision_c = ctypes.c_uint(float_sz)
+                size = int(bio_sensor_noise_cov.shape[0])
+                size_c = ctypes.c_uint(size)
+                bio_sensor_noise_cov_c = (ctypes.c_double * int(size * size))(*bio_sensor_noise_cov.reshape(-1))
+                evecs_c = (ctypes.c_double * int(size * size))(*np.empty((size*size,)))
+                evals_c = (ctypes.c_double * size)(*np.empty((size,)))
+                
+                speedup_fncts.finnpy_eigen_decomp(bio_sensor_noise_cov_c, size_c, evals_c, evecs_c, precision_c)
+                
+                evals = np.asarray(evals_c)
+                evecs = np.asarray(evecs_c).reshape((size, size)).T
+            else:
+                if (float_sz == 32):
+                    deci_plcs = 7
+                elif (float_sz == 64):
+                    deci_plcs = 15
+                elif (float_sz == 80):
+                    deci_plcs = 19
+                elif (float_sz == 128):
+                    deci_plcs = 36
+                elif (float_sz == 256):
+                    deci_plcs = 71
+                else:
+                    raise AssertionError("Unknown float size")
+                
+                mat = mpmath.matrix(bio_sensor_noise_cov)
+                #mat.ctx.dps = 40 #64 bit float is 15
+                mat.ctx.dps = deci_plcs
+                (evals, evecs) = mpmath.eigsy(mat)
+                evals = evals.squeeze(1)
+             
+                evals = np.asarray(evals.tolist(), dtype = float)
+                evecs = np.asarray(evecs.tolist(), dtype = float)
      
         if (os.path.exists(cov_path) == False):
             os.makedirs(cov_path, exist_ok = True)
      
-        np.save(cov_path + "eval.npy", eigen_val)
-        np.save(cov_path + "evec.npy", eigen_vec)
+        np.save(cov_path + "eval.npy", evals)
+        np.save(cov_path + "evec.npy", evecs)
         pickle.dump(ch_names, open(cov_path + "ch_names.pkl", "wb"))
     else:
-        eigen_val = np.load(cov_path + "eval.npy")
-        eigen_vec = np.load(cov_path + "evec.npy")
+        evals = np.load(cov_path + "eval.npy")
+        evecs = np.load(cov_path + "evec.npy")
         ch_names = pickle.load(open(cov_path + "ch_names.pkl", "rb"))
         
-    return Sen_cov(eigen_val.squeeze(1), eigen_vec.T, ch_names)
+    return Sen_cov(evals, evecs.T, ch_names)
     
 def load(cov_path):
     
@@ -247,11 +286,11 @@ def load(cov_path):
               Container class.
     """
     
-    eigen_val = np.load(cov_path + "eval.npy")
-    eigen_vec = np.load(cov_path + "evec.npy")
+    evals = np.load(cov_path + "eval.npy")
+    evecs = np.load(cov_path + "evec.npy")
     ch_names = pickle.load(open(cov_path + "ch_names.pkl", "rb"))
     
-    return Sen_cov(eigen_val.squeeze(1), eigen_vec.T, ch_names)
+    return Sen_cov(evals.squeeze(1), evecs.T, ch_names)
     
     
     
