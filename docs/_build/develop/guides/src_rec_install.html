@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FreeSurfer installation guide &#8212; FiNN  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/_rst_properties.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/badge_only.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/_rtd_versions.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/src_rec_install';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Model computation &amp; application" href="src_rec_main.html" />
+    <link rel="prev" title="MEG recording agnostic model computation" href="src_rec_subject.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNN  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install_guide.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../guides.html">
+    Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install_guide.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../guides.html">
+    Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guides.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../file_io.html">File IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../src_rec.html">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+        <div class="sidebar-primary-item"><div class="injected">
+  <div class="rst-versions " data-toggle="rst-versions" role="note"
+    aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;&nbsp;Other versions&nbsp;&nbsp;</span>
+      v: develop
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>Branches</dt>
+        <dd class="rtd-current-item">
+          <a href="../../develop/index.html">develop</a>
+        </dd>
+        <dd class="">
+          <a href="../../stable/index.html">stable</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="../
+              ../develop/index.html/../search.html" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs">
+            </form>
+          </div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../guides.html" class="nav-link">Guides</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">FreeSurfer...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="freesurfer-installation-guide">
+<span id="src-rec-install-label"></span><h1>FreeSurfer installation guide<a class="headerlink" href="#freesurfer-installation-guide" title="Link to this heading">#</a></h1>
+<p>This guide explains how to install FreeSurfer. In general, it is recommended to save FreeSurfer in a folder (or subfolder) indicating the version of FreeSurfer and, if possible, to stay with the same version throughout a project. Although randomized steps are only pseud-randomized via seeding random numbers with <em>1234</em>, alterations to the feature extraction algorithms may produce varying results. As such, preproducibility is limited if different FreeSurfer versions are mixed in the context of a single project.</p>
+<section id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Link to this heading">#</a></h2>
+<p>FreeSurfer may be directly downloaded from the FreeSurfer website (<a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/DownloadAndInstall">https://surfer.nmr.mgh.harvard.edu/fswiki/DownloadAndInstall</a>).
+In addition, the following libraries are required: bc, libjpeg6-turbo, libxp, tcsh, libpng12 (version 7.4.1 - 2024/01/26).
+It is highly recommended to move the downloaded FreeSurfer directory to a permanent location, such as /usr/local/FreeSurfer.</p>
+</section>
+<section id="windows-by-prerana-keerthi">
+<h2>Windows (by Prerana Keerthi)<a class="headerlink" href="#windows-by-prerana-keerthi" title="Link to this heading">#</a></h2>
+<p>As FreeSurfer does not support Windows directly, the application may be used through the WIndow Subsystem for Linux as follows:</p>
+<ol class="arabic simple">
+<li><p>Windows Subsystem for Linux (WSL) Installation: <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">https://learn.microsoft.com/en-us/windows/wsl/install</a></p></li>
+<li><p>Freesurfer on WSL Installation: <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu">https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu</a></p></li>
+<li><p>Freesurfer on Xming Installation: <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming">https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming</a></p></li>
+</ol>
+<section id="windows-subsystem-for-linux-wsl-installation">
+<h3>Windows Subsystem for Linux (WSL) Installation<a class="headerlink" href="#windows-subsystem-for-linux-wsl-installation" title="Link to this heading">#</a></h3>
+<p>To run freesurfer on Windows you will need Windows Subsystem for Linux (WSL). If WSL is not already installed on your PC, in Windows Powershell or Windows command prompt enter the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>wsl –install
+</pre></div>
+</div>
+<p>If WSL is already installed, please ensure an up to date version is used. The following command indicates which distros are installed and the asterisk in the output represents the active distribution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>wsl --list –verbose
+</pre></div>
+</div>
+<p>The following lines of code demonstrate how to install Ubuntu-22.04 as a distribution and set it as the default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wsl</span> <span class="o">--</span><span class="n">install</span> <span class="o">-</span><span class="n">d</span> <span class="n">Ubuntu</span><span class="o">-</span><span class="mf">22.04</span>
+<span class="n">wsl</span> <span class="o">--</span><span class="n">setdefault</span> <span class="n">Ubuntu</span><span class="o">-</span><span class="mf">22.04</span>
+</pre></div>
+</div>
+</section>
+<section id="freesurfer-installation">
+<h3>Freesurfer Installation<a class="headerlink" href="#freesurfer-installation" title="Link to this heading">#</a></h3>
+<p>This installation guide is inspired by the original from FreeSurfer, available at <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu">https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu</a>.</p>
+<p>Via the following commands, FreeSurfer may be installed into the WSL.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cd
+wget https://surfer.nmr.mgh.harvard.edu/pub/dist/freesurfer/7.4.1/freesurfer_ubuntu22-7.4.1_amd64.deb
+
+ls freesurfer_ubuntu22-7.4.1_amd64.deb
+sudo apt-get update -y
+sudo apt-get -y install ./freesurfer_ubuntu22-7.4.1_amd64.deb
+export FREESURFER_HOME=/usr/local/freesurfer/7.4.1
+echo &quot;export FREESURFER_HOME=/usr/local/freesurfer/7.4.1&quot; &gt;&gt; $HOME/.bashrc
+</pre></div>
+</div>
+<p>Executing the ls command will display all items within the FreeSurfer directory, and as such should list files such as sources.sh, SetUpFreeSurfer.sh, and the bin folder.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ls $FREESURFER_HOME
+</pre></div>
+</div>
+<p>Afterwards, a free Freesurfer license needs to be optained via the following link, <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/registration.html">https://surfer.nmr.mgh.harvard.edu/registration.html</a>. The received license.txt needs to be moved into the FreeSurfer directory (within the WSL) and shortcuts created.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mv /mnt/c/Users/username/Downloads/licence.txt $HOME
+echo &quot;export FS_LICENSE=$HOME/license.txt&quot; &gt;&gt; $HOME/.bashrc
+echo &quot;export XDG_RUNTIME_DIR=$HOME/.xdg&quot; &gt;&gt; $HOME/.bashrc
+echo &quot;export DISPLAY=:0&quot; &gt;&gt; $HOME/.bashrc
+</pre></div>
+</div>
+<p>As such, when executing the following code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export FREESURFER_HOME=/usr/local/freesurfer/7.4.1
+source $FREESURFER_HOME/SetUpFreeSurfer.sh
+</pre></div>
+</div>
+<p>the corresponding output should be.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--------</span> <span class="n">freesurfer</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">ubuntu22_x86_64</span><span class="o">-</span><span class="mf">7.4.1</span><span class="o">-</span><span class="mi">20230614</span><span class="o">-</span><span class="mi">7</span><span class="n">eb8460</span> <span class="o">--------</span>
+<span class="n">Setting</span> <span class="n">up</span> <span class="n">environment</span> <span class="k">for</span> <span class="n">FreeSurfer</span><span class="o">/</span><span class="n">FS</span><span class="o">-</span><span class="n">FAST</span> <span class="p">(</span><span class="n">andFSL</span><span class="p">)</span>
+<span class="n">FREESURFER_HOME</span>         <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">freesurfer</span><span class="o">/</span><span class="mf">7.4.1</span>
+<span class="n">FSFAST_HOME</span>             <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">freesurfer</span><span class="o">/</span><span class="mf">7.4.1</span><span class="o">/</span><span class="n">fsfast</span>
+<span class="n">FSF_OUTPUT_FORMAT</span>       <span class="n">nii</span><span class="o">.</span><span class="n">gz</span>
+<span class="n">SUBJECTS_DIR</span>            <span class="n">YOUR_SUBJECTS_DIRECTORY</span>
+<span class="n">MNI_DIR</span>                 <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">freesurfer</span><span class="o">/</span><span class="mf">7.4.1</span><span class="o">/</span><span class="n">mni</span>
+</pre></div>
+</div>
+<p>Results may slightly vary for different linux distributions (first line) or different FreeSurfer versions (7.4.1 used in this example).</p>
+</section>
+<section id="x-server-installation">
+<h3>X-server Installation<a class="headerlink" href="#x-server-installation" title="Link to this heading">#</a></h3>
+<p>To run image viewing software such as freesurfer on WSL (for reference, see <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming">https://surfer.nmr.mgh.harvard.edu/fswiki/FSL_wsl_xming</a>), an X-server needs to be set up. The previous link describes how to set up the Xming X-server. Once Xming is installed, correct installation may be verified via the following WSL terminal command.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">freeview</span>
+</pre></div>
+</div>
+<p>If the command fails, potential troubleshooting is described below.</p>
+<p>If the following error occurs</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QXcbConnection</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="n">display</span> <span class="p">:</span><span class="mi">0</span>
+<span class="n">Could</span> <span class="ow">not</span> <span class="n">connect</span> <span class="n">to</span> <span class="nb">any</span> <span class="n">X</span> <span class="n">display</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Resolution details are provided in <a class="reference external" href="https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu">https://surfer.nmr.mgh.harvard.edu/fswiki/FS7_wsl_ubuntu</a>.</p>
+<p>The error</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">qt</span><span class="o">.</span><span class="n">qpa</span><span class="o">.</span><span class="n">plugin</span><span class="p">:</span> <span class="n">Could</span> <span class="ow">not</span> <span class="n">load</span> <span class="n">the</span> <span class="n">Qt</span> <span class="n">platform</span> <span class="n">plugin</span> <span class="s2">&quot;xcb&quot;</span> <span class="ow">in</span> <span class="s2">&quot;&quot;</span> <span class="n">even</span> <span class="n">though</span> <span class="n">it</span> <span class="n">was</span> <span class="n">found</span><span class="o">.</span>
+<span class="n">This</span> <span class="n">application</span> <span class="n">failed</span> <span class="n">to</span> <span class="n">start</span> <span class="n">because</span> <span class="n">no</span> <span class="n">Qt</span> <span class="n">platform</span> <span class="n">plugin</span> <span class="n">could</span> <span class="n">be</span> <span class="n">initialized</span><span class="o">.</span> <span class="n">Reinstalling</span> <span class="n">the</span> <span class="n">application</span> <span class="n">may</span> <span class="n">fix</span> <span class="n">this</span> <span class="n">problem</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>may be resolved by installing VcxSrv instead of Xmin, see <a class="reference external" href="https://sourceforge.net/projects/vcxsrv">https://sourceforge.net/projects/vcxsrv</a>.
+Xmin should be configured as follows:</p>
+<ul class="simple">
+<li><p>Display settings: Multiple Windows</p></li>
+<li><p>How to start clients: Start no client</p></li>
+<li><p>Extra settings, Clipboard: Checked</p></li>
+<li><p>Extra settings, Primary Selection: Checked</p></li>
+<li><p>Extra settings, Native opengl: Checked</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="src_rec_subject.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">MEG recording agnostic model computation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="src_rec_main.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Model computation &amp; application</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linux">Linux</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-by-prerana-keerthi">Windows (by Prerana Keerthi)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windows-subsystem-for-linux-wsl-installation">Windows Subsystem for Linux (WSL) Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#freesurfer-installation">Freesurfer Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#x-server-installation">X-server Installation</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/guides/src_rec_install.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022, Maximilian Scherer.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item"><div class="injected">
+  <div class="rst-versions " data-toggle="rst-versions" role="note"
+    aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;&nbsp;Other versions&nbsp;&nbsp;</span>
+      v: develop
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>Branches</dt>
+        <dd class="rtd-current-item">
+          <a href="../../develop/index.html">develop</a>
+        </dd>
+        <dd class="">
+          <a href="../../stable/index.html">stable</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="../
+              ../develop/index.html/../search.html" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs">
+            </form>
+          </div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
