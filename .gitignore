@@ -1,4 +1,5 @@
 .project
+.cproject
 .pydevproject
 __pycache__/
 *.pyc
@@ -24,3 +25,8 @@ finnpy/demo/functionality/src_rec/test2.py
 finnpy/demo/functionality/src_rec/test_backup.py
 finnpy/demo/functionality/src_rec/testb.py
 finnpy/demo/functionality/src_rec/test2.py
+
+finnpy_speedups/.settings/*
+finnpy_speedups/Debug/*
+finnpy_speedups/Release/*
+finnpy_speedups/include/npy.hpp
