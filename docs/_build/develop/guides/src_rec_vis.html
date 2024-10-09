@@ -1,0 +1,851 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Visualization &#8212; FiNN  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/_rst_properties.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/badge_only.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/_rtd_versions.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/src_rec_vis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FiNNPy API" href="../api_reference.html" />
+    <link rel="prev" title="Likely pitfalls" href="src_rec_pitfalls.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNN  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install_guide.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../guides.html">
+    Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install_guide.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../guides.html">
+    Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guides.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../file_io.html">File IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../src_rec.html">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+        <div class="sidebar-primary-item"><div class="injected">
+  <div class="rst-versions " data-toggle="rst-versions" role="note"
+    aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;&nbsp;Other versions&nbsp;&nbsp;</span>
+      v: develop
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>Branches</dt>
+        <dd class="rtd-current-item">
+          <a href="../../develop/index.html">develop</a>
+        </dd>
+        <dd class="">
+          <a href="../../stable/index.html">stable</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="../
+              ../develop/index.html/../search.html" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs">
+            </form>
+          </div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../guides.html" class="nav-link">Guides</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Visualization</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="visualization">
+<span id="src-rec-vis-label"></span><h1>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h1>
+<p>This guide explains how to visualize source reconstructed results using Blender.</p>
+<a class="reference internal image-reference" href="../_images/blender_demo3.png"><img alt="Blender demo result" class="align-center" src="../_images/blender_demo3.png" style="width: 400px;" />
+</a>
+<section id="background-blender">
+<h2>Background: Blender<a class="headerlink" href="#background-blender" title="Link to this heading">#</a></h2>
+<p>Blender is an open source and free available software suite for 3D visualization &amp; animation. It is available at <a class="reference external" href="https://www.blender.org/">https://www.blender.org/</a>.</p>
+<a class="reference internal image-reference" href="../_images/blender_demo.png"><img alt="Blender demo" class="align-center" src="../_images/blender_demo.png" style="width: 600px;" />
+</a>
+</section>
+<section id="visualization-guide">
+<h2>Visualization guide<a class="headerlink" href="#visualization-guide" title="Link to this heading">#</a></h2>
+<p>Results source-reconstructed via FinnPy may be either (almost) directly visualized in blender or after subsequent postprocessing (e.g. power estimation, connectivity estimation). The following code will be employed to visualize results in blender. It provides a number of pre-configured perspectives, but images may be rendered from any freely chosen perspective.</p>
+<section id="important">
+<h3>Important<a class="headerlink" href="#important" title="Link to this heading">#</a></h3>
+<p>Unlike other functionality of this framework, this code has to be executed from within blender, as explained below. A blender template file (blender_template) is provided within the github repository.</p>
+</section>
+<section id="executing-python-code-in-blender">
+<h3>Executing Python code in Blender<a class="headerlink" href="#executing-python-code-in-blender" title="Link to this heading">#</a></h3>
+<p>To execute Python code from within blender, a text window needs to be opened within blender (either in the main or a <em>swiped in</em> window). Code within this window is executed by pressing the rightwards pointing triangle.</p>
+<a class="reference internal image-reference" href="../_images/blender_demo2.png"><img alt="Blender demo" class="align-center" src="../_images/blender_demo2.png" style="width: 500px;" />
+</a>
+</section>
+<section id="code-explanation">
+<h3>Code explanation<a class="headerlink" href="#code-explanation" title="Link to this heading">#</a></h3>
+<p>The code will have to be subtly adapted to use, as usual.</p>
+<p>Initially, supportive functions are defined. The call to <em>reset_hemispheres</em> resets all nodes to an equal color, defined by the RGBA tuple (1, .738, .665, 1).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="c1"># See detailed section below.</span>
+
+<span class="k">def</span> <span class="nf">reset_hemispheres</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">region_name</span> <span class="ow">in</span> <span class="n">REF_REGIONS</span><span class="p">:</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">region_name</span><span class="p">]</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Principled BSDF&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mf">.738</span><span class="p">,</span> <span class="mf">.665</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>In this example, effect sizes of significant results are visualized. To this end, <em>update_hemisphere</em> is provided with a path to an array/list with significance values, effect size values, and region names. The region names correspond to those earlier established in the source reconstruction. Subsequently, regions are colored where a stronger cyan coloring indicates a stronger effect and vice versa.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">update_hemispheres</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">sign_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;_sign.npy&quot;</span><span class="p">)</span>
+    <span class="n">eff_sz_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;_eff_sz.npy&quot;</span><span class="p">)</span>
+    <span class="n">region_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;ref_regions.npy&quot;</span><span class="p">)</span>
+
+    <span class="n">eff_sz_data</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">eff_sz_data</span><span class="p">)</span>
+    <span class="n">eff_sz_data</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">eff_sz_data</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">region_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">region_names</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sign_data</span><span class="p">[</span><span class="n">region_idx</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span> <span class="o">*</span> <span class="n">eff_sz_data</span><span class="p">[</span><span class="n">region_idx</span><span class="p">],</span> <span class="mi">222</span><span class="o">/</span><span class="mi">255</span> <span class="o">*</span> <span class="n">eff_sz_data</span><span class="p">[</span><span class="n">region_idx</span><span class="p">],</span> <span class="mi">255</span><span class="o">/</span><span class="mi">255</span> <span class="o">*</span> <span class="n">eff_sz_data</span><span class="p">[</span><span class="n">region_idx</span><span class="p">],</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">region_name</span> <span class="o">=</span> <span class="n">region_names</span><span class="p">[</span><span class="n">region_idx</span><span class="p">]</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">region_name</span><span class="p">]</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Principled BSDF&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">draw_scene</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">reset_hemispheres</span><span class="p">()</span>
+    <span class="n">update_hemispheres</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, the resulting image is rendered and the image saved into a predefined location.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">save_scene</span><span class="p">(</span><span class="n">hypothesis</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">OUTPATH</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">write_still</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For conviencence, these methods may be formatted and called as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DIRECTIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">,</span> <span class="s2">&quot;right_medial&quot;</span><span class="p">,</span> <span class="s2">&quot;left_lateral&quot;</span><span class="p">,</span> <span class="s2">&quot;right_lateral&quot;</span><span class="p">,</span> <span class="s2">&quot;ventral&quot;</span><span class="p">,</span> <span class="s2">&quot;dorsal&quot;</span><span class="p">,</span> <span class="s2">&quot;frontal&quot;</span><span class="p">,</span> <span class="s2">&quot;occipital&quot;</span><span class="p">]</span>
+
+<span class="n">INPATH</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="n">OUTPATH</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+<span class="n">config_scene</span><span class="p">(</span><span class="s2">&quot;left_medial&quot;</span><span class="p">)</span>
+<span class="n">draw_scene</span><span class="p">(</span><span class="n">INPATH</span><span class="p">)</span>
+<span class="c1">#save_scene(OUTPATH)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;terminated successfully&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<details class="summary-details">
+<summary>Details</summary><p>Functionality employed to change perspective.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">REF_REGIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bankssts-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;caudalanteriorcingulate-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;caudalmiddlefrontal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;cuneus-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;entorhinal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;frontalpole-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;fusiform-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;inferiorparietal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;inferiortemporal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;insula-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;isthmuscingulate-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;lateraloccipital-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;lateralorbitofrontal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;lingual-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;medialorbitofrontal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;middletemporal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;paracentral-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;parahippocampal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;parsopercularis-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;parsorbitalis-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;parstriangularis-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;pericalcarine-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;postcentral-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;posteriorcingulate-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;precentral-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;precuneus-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;rostralanteriorcingulate-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;rostralmiddlefrontal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;superiorfrontal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;superiorparietal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;superiortemporal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;supramarginal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;temporalpole-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;transversetemporal-lh&quot;</span><span class="p">,</span> <span class="s2">&quot;bankssts-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;caudalanteriorcingulate-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;caudalmiddlefrontal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;cuneus-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;entorhinal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;frontalpole-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;fusiform-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;inferiorparietal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;inferiortemporal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;insula-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;isthmuscingulate-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;lateraloccipital-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;lateralorbitofrontal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;lingual-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;medialorbitofrontal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;middletemporal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;paracentral-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;parahippocampal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;parsopercularis-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;parsorbitalis-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;parstriangularis-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;pericalcarine-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;postcentral-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;posteriorcingulate-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;precentral-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;precuneus-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;rostralanteriorcingulate-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;rostralmiddlefrontal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;superiorfrontal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;superiorparietal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;superiortemporal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;supramarginal-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;temporalpole-rh&quot;</span><span class="p">,</span> <span class="s2">&quot;transversetemporal-rh&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_left_medial</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">90</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">270</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="o">-</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;left_medial_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_right_medial</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">90</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">270</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="o">-</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;right_medial_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_left_lateral</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">90</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">270</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="o">-</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;left_lateral_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_right_lateral</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">90</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">270</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="o">-</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mf">0.075</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;right_lateral_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_ventral</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;ventral_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_dorsal</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;dorsal_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_frontal</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;frontal_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">set_camera_occipital</span><span class="p">():</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_medial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right_lateral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;ventral&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;dorsal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;occipital&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;left hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">collections</span><span class="p">[</span><span class="s2">&quot;right hemisphere&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">hide_render</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rotation_euler</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">0</span><span class="o">/</span><span class="p">(</span><span class="mi">360</span><span class="p">)</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-lh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+    <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;subcortical-rh&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.058445</span><span class="p">,</span> <span class="mf">0.001176</span><span class="p">])</span>
+
+    <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="p">[</span><span class="s2">&quot;occipital_cam&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">config_scene</span><span class="p">(</span><span class="n">direction</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;left_medial&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_left_medial</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;right_medial&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_right_medial</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;left_lateral&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_left_lateral</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;right_lateral&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_right_lateral</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;ventral&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_ventral</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;dorsal&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_dorsal</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;frontal&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_frontal</span><span class="p">()</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;occipital&quot;</span><span class="p">):</span>
+        <span class="n">set_camera_occipital</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>print(“terminated successfully”)</p>
+</details></section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="src_rec_pitfalls.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Likely pitfalls</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api_reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FiNNPy API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background-blender">Background: Blender</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-guide">Visualization guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important">Important</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-python-code-in-blender">Executing Python code in Blender</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-explanation">Code explanation</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/guides/src_rec_vis.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022, Maximilian Scherer.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item"><div class="injected">
+  <div class="rst-versions " data-toggle="rst-versions" role="note"
+    aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;&nbsp;Other versions&nbsp;&nbsp;</span>
+      v: develop
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>Branches</dt>
+        <dd class="rtd-current-item">
+          <a href="../../develop/index.html">develop</a>
+        </dd>
+        <dd class="">
+          <a href="../../stable/index.html">stable</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="../
+              ../develop/index.html/../search.html" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs">
+            </form>
+          </div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
