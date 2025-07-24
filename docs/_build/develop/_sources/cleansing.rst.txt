@@ -1,4 +1,6 @@
 
+.. _cleansing_package:
+
 Cleansing
 =========
 

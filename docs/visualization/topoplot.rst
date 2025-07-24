@@ -1,4 +1,6 @@
 
+.. _topoplot_module:
+
 Topoplot
 ========
 

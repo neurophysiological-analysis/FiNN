@@ -1,16 +1,23 @@
 
 .. _src_rec_main_label:
 
-Model computation & application
+Model Computation & Application
 ===============================
 
 This guide explains how to apply source reconstruction for M/EEG using FiNNPy.
 
-.. image:: img/MEG_source_reconstruction_simplified.png
-   :alt: Graphic presentation of the relationship between skull & cortical model
+.. image:: img/MEG_source_reconstruction_simplified_light.png
+   :alt: MEG Source Reconstruction (light)
+   :class: only-light
    :align: center
+   :width: 400
 
-
+.. image:: img/MEG_source_reconstruction_simplified_dark.png
+   :alt: MEG Source Reconstruction (dark)
+   :class: only-dark
+   :align: center
+   :width: 400
+ 
 Anatomical model processing
 ---------------------------
 
@@ -30,9 +37,10 @@ Application
 -----------
 
 An application example of source reconstruction for M/EEG is provided below. Generally, source reconstruction may be divided into five steps, 
-1. Device specific steps
-2. Subject specific steps
-3. Recording specific steps
+
+1. Extraction of anatomical information
+2. Computation of sensor noise and M/EEG-MRT coregistration matrices
+3. Model computation
 4. Model application
 5. Group space (fs-average) and atlas transformation
 
@@ -56,4 +64,4 @@ Potential pitfalls in source reconstruction are discussed in :ref:`src_rec_pitfa
 Speed-ups
 ---------
 
-Provided code to build binaries to speed up processing are discussed in :ref:`_src_rec_ext_speedup_label`.
+Provided code to build binaries to speed up processing are discussed in :ref:`src_rec_ext_speedup_label`.

@@ -8,17 +8,19 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import finnpy.sfc.td as td
-import finnpy.sfc.fd as fd
-import finnpy.sfc.cd as cohd
-
-import finnpy.sfc._misc as misc
-import finnpy.data.paths as paths
+import finnpy.feat.sfc as sfc  # @UnresolvedImport
+import finnpy.demo.functionality.sfc.gen_demo_data as gen_demo_data  # @UnresolvedImport
 
 def main():
-    data = np.load(paths.fct_sfc_data)
-    frequency_sampling = 5500
-    frequency_peak = 30
+    minimum_frequency = 13
+    maximum_frequency = 27
+    
+    frequency_sampling = 3000
+    time_s = 120
+    offset_s = 1
+    signal_length_samples = int(frequency_sampling * (time_s + offset_s * 2)) 
+    data = gen_demo_data.gen_wn_signal(minimum_frequency, maximum_frequency, frequency_sampling, signal_length_samples)
+    frequency_peak = (maximum_frequency + minimum_frequency)/2
     
     noise_weight = 0.2
     
@@ -26,7 +28,7 @@ def main():
     phase_max = 270
     phase_step = 4
     
-    frequency_target = 30
+    frequency_target = 20
     nperseg = frequency_sampling
     nfft = frequency_sampling
     
@@ -71,7 +73,7 @@ def main():
     
     
 def calc_from_time_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
-    return td.run_wpli(signal_1, signal_2, frequency_sampling, nperseg, nfft)[1][frequency_target]
+    return sfc.wpli_td(signal_1, signal_2, frequency_sampling, nperseg, nfft)[1][frequency_target]
 
 def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
     
@@ -82,16 +84,16 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, nperseg, 
         loc_signal_1 = signal_1[block_start:(block_start + nperseg)]
         loc_signal_2 = signal_2[block_start:(block_start + nperseg)]
         
-        seg_signal_X = misc._segment_data(loc_signal_1, nperseg, pad_type = "zero")
-        seg_signal_Y = misc._segment_data(loc_signal_2, nperseg, pad_type = "zero")
+        seg_signal_X = sfc._segment_data(loc_signal_1, nperseg, pad_type = "zero")  # pylint: disable=protected-access
+        seg_signal_Y = sfc._segment_data(loc_signal_2, nperseg, pad_type = "zero")  # pylint: disable=protected-access
     
-        (bins, fd_signal_X) = misc._calc_FFT(seg_signal_X, frequency_sampling, nfft, window = "hann")
-        (_, fd_signal_Y) = misc._calc_FFT(seg_signal_Y, frequency_sampling, nfft, window = "hanning")
+        (bins, fd_signal_X) = sfc._calc_FFT(seg_signal_X, frequency_sampling, nfft, window = "hann")  # pylint: disable=protected-access
+        (_, fd_signal_Y) = sfc._calc_FFT(seg_signal_Y, frequency_sampling, nfft, window = "hanning")  # pylint: disable=protected-access
         
         fd_signals_X.append(fd_signal_X[0, :])
         fd_signals_Y.append(fd_signal_Y[0, :])
     
-    return fd.run_wpli(fd_signals_X, fd_signals_Y)[np.argmin(np.abs(bins - frequency_target))]
+    return sfc.wpli_fd(fd_signals_X, fd_signals_Y)[np.argmin(np.abs(bins - frequency_target))]
         
 def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, nperseg, nfft, frequency_target):
     s_xy = list()
@@ -99,17 +101,17 @@ def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, nperseg, 
         loc_data1 = signal_1[block_start:(block_start + nperseg)]
         loc_data2 = signal_2[block_start:(block_start + nperseg)]
         
-        seg_data_X = misc._segment_data(loc_data1, nperseg, pad_type = "zero")
-        seg_data_Y = misc._segment_data(loc_data2, nperseg, pad_type = "zero")
+        seg_data_X = sfc._segment_data(loc_data1, nperseg, pad_type = "zero")  # pylint: disable=protected-access
+        seg_data_Y = sfc._segment_data(loc_data2, nperseg, pad_type = "zero")  # pylint: disable=protected-access
     
-        (_, f_data_X) = misc._calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hann")
-        (_,    f_data_Y) = misc._calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hann")
+        (_, f_data_X) = sfc._calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hann")  # pylint: disable=protected-access
+        (_,    f_data_Y) = sfc._calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hann")  # pylint: disable=protected-access
     
         s_xy.append((np.conjugate(f_data_X[0, :]) * f_data_Y[0, :] * 2))
 
     s_xy = np.asarray(s_xy)
     
-    return cohd.run_wpli(s_xy)[frequency_target]
+    return sfc.wpli_cc(s_xy)[frequency_target]
     
 main()
 

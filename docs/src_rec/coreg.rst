@@ -1,4 +1,6 @@
 
+.. _src_rec_coreg_module:
+
 Coregistration, MEG to MRI
 ===========================
 

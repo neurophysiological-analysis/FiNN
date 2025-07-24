@@ -1,7 +1,7 @@
 
 .. _src_rec_pitfalls_label:
 
-Likely pitfalls
+Likely Pitfalls
 ===============
 
 This guide explains how to deal with likely pitfalls in source reconstruction for MEG using FiNNPy.
@@ -13,10 +13,10 @@ Correctness of the coregistration between the MEG and MRI should be manually ver
 
 .. code-block::
 
-  rec_meta_info = mne.io.read_info(data_path)
-  meg_ref_pts = finnpy.src_rec.coreg.load_meg_ref_pts(rec_meta_info)
-  (coreg, bad_hsp_pts) = finnpy.src_rec.coreg.run(subj_name, anatomy_path, rec_meta_info)
-  finnpy.src_rec.coreg.plot_coregistration(coreg, meg_ref_pts, bad_hsp_pts, anatomy_path, subj_name)
+   rec_meta_info = mne.io.read_info(data_path)
+   meg_ref_pts = finnpy.src_rec.coreg.load_meg_ref_pts(rec_meta_info)
+   (coreg, bad_hsp_pts) = finnpy.src_rec.coreg.run(subj_name, anatomy_path, rec_meta_info)
+   finnpy.src_rec.coreg.plot_coregistration(coreg, meg_ref_pts, bad_hsp_pts, anatomy_path, subj_name)
        
 Producing the following output:
 
@@ -32,8 +32,8 @@ Correctness of the anatomy extraction should be manually verified. This may be d
 
 .. code-block::
 
-  skull_skin_mdl = finnpy.src_rec.skull_skin_mdls.read(anatomy_path, subj_name, "MEG")
-  finnpy.src_rec.skull_skin_mdls.plot(skull_skin_mdl, anatomy_path, subj_name)
+   skull_skin_mdl = finnpy.src_rec.skull_skin_mdls.read(anatomy_path, subj_name, "MEG")
+   finnpy.src_rec.skull_skin_mdls.plot(skull_skin_mdl, anatomy_path, subj_name)
        
 Producing the following output:
 
@@ -51,12 +51,12 @@ projection of this effect onto source space. As such, if e.g. a motor channel wa
 
 .. code-block::
 
-  sen_data[ch_names.index("C4"), :] += 10000
-  color_data = np.mean(np.abs(src_data), axis = 1)
-  (coreg, _) = finnpy.src_rec.coreg.run(SUBJ_NAME, ANATOMY_PATH, "EEG", rec_info = "1020")
-  [...] # Here comes the full reconstruction pipeline.
-  src_data = finnpy.src_rec.inv_mdl.apply(sen_data, inv_mdl)
-  psr.plot_subj_space(cort_mdl, color_data, "EEG", ["1020", ch_names], coreg, ch_names)
+   sen_data[ch_names.index("C4"), :] += 10000
+   color_data = np.mean(np.abs(src_data), axis = 1)
+   (coreg, _) = finnpy.src_rec.coreg.run(SUBJ_NAME, ANATOMY_PATH, "EEG", rec_info = "1020")
+   [...] # Here comes the full reconstruction pipeline.
+   src_data = finnpy.src_rec.inv_mdl.apply(sen_data, inv_mdl)
+   psr.plot_subj_space(cort_mdl, color_data, "EEG", ["1020", ch_names], coreg, ch_names)
 
 Alternatively, multiple files for a sensor noise covariance may be acquired and the resulting projections compared.
 

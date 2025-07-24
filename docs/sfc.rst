@@ -1,6 +1,8 @@
 
-Same frequency coupling (sfc)
-=============================
+.. _sfc_package:
+
+Same-Frequency Coupling
+=======================
 
 .. automodule:: sfc
    :members:

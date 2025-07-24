@@ -1,6 +1,8 @@
 
-Cross frequency connectivity (cfc)
-==================================
+.. _cfc_package:
+
+Cross-frequency coupling
+========================
 
 .. automodule:: cfc
    :members:

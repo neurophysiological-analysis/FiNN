@@ -16,38 +16,42 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b7737de8" />
     <link rel="stylesheet" type="text/css" href="../_static/_rst_properties.css" />
     <link rel="stylesheet" type="text/css" href="../_static/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b7737de8" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/_rtd_versions.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'src_rec/fwd_mdl';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Inverse model" href="inv_mdl.html" />
-    <link rel="prev" title="Freesurfer methods" href="freesurfer.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,19 +67,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -83,7 +76,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -91,8 +83,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -149,7 +141,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api_reference.html">
     API reference
   </a>
@@ -166,29 +158,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
     </div>
     
@@ -197,15 +181,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -224,7 +204,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -253,7 +234,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api_reference.html">
     API reference
   </a>
@@ -271,15 +252,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
       </div>
     
@@ -294,7 +271,6 @@ document.write(`
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -304,32 +280,28 @@ document.write(`
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
         <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#enabling-statistics-optional">3. Enabling statistics (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#external-libraries-optional">4. External libraries (optional)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#visualization">Visualization</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../file_io.html">File IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../src_rec.html">Source reconstruction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#feature-signal-processing">Feature/Signal processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#the-source-reconstruction">The Source Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#feature-analysis">Feature analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#presentation">Presentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#quality-of-life">Quality of life</a></li>
 </ul>
 </li>
 </ul>
@@ -371,9 +343,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -391,8 +368,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -401,13 +376,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../api_reference.html" class="nav-link">FiNNPy API</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="../src_rec.html" class="nav-link">Source reconstruction</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page">Forward model</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Forward model</span></li>
   </ul>
 </nav>
 </div>
@@ -425,73 +394,171 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="forward-model">
-<h1>Forward model<a class="headerlink" href="#forward-model" title="Link to this heading">#</a></h1>
+<span id="src-rec-fwd-module"></span><h1>Forward model<a class="headerlink" href="#forward-model" title="Link to this heading">#</a></h1>
 <p>This module may be employed to calculate the forward model for the source reconstruction.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl.compute">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cort_mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bem_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mag_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl.compute" title="Link to this definition">#</a></dt>
-<dd><p>Calculates the forward model according to Mosher et al, 1999.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bem_mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cort_mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_mag_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductivity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl.compute" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the forward model according to Mosher et al, 1999.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cort_mdl</strong> (<em>finnpy.src_rec.cort_mdl.Cort_mdl</em>) – <p>Container populated with the following items:</p>
-<dl class="simple">
-<dt>lh_vert<span class="classifier">numpy.ndarray, shape(lh_vtx_cnt, 3)</span></dt><dd><p>White matter surface model vertices (left hemisphere).</p>
-</dd>
-<dt>lh_faces<span class="classifier">numpy.ndarray, shape(lh_face_cnt, 3)</span></dt><dd><p>White matter surface model faces (left hemisphere).</p>
-</dd>
-<dt>rh_vert<span class="classifier">numpy.ndarray, shape(rh_vtx_cnt, 3)</span></dt><dd><p>White matter surface model vertices (right hemisphere).</p>
-</dd>
-<dt>rh_faces<span class="classifier">numpy.ndarray, shape(rh_face_cnt, 3)</span></dt><dd><p>White matter surface model faces (right hemisphere).</p>
-</dd>
-<dt>lh_sphere_vert<span class="classifier">numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)</span></dt><dd><p>Spherical freesurfer head model vertices (left hemisphere).</p>
-</dd>
-<dt>rh_sphere_vert<span class="classifier">numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)</span></dt><dd><p>Spherical freesurfer head model vertices (right hemisphere).</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>coreg</strong> (<em>finnpy.src_rec.coreg.Coreg</em>) – <p>Container class, populed with the following items:</p>
-<p>rotors : numpy.ndarray, shape(9,)
-Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
-<p>mri_to_meg_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MRI -&gt; MEG)</p>
-<p>meg_to_mri_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MEG -&gt; MRI)</p>
-</p></li>
-<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
 <li><p><strong>bem_mdl</strong> (<em>finnpy.src_rec.bem_mdl.BEM_mdl</em>) – <p>Container class, populed with the following items:</p>
-<dl class="simple">
+<ul>
+<li><dl class="simple">
 <dt>vert<span class="classifier">numpy.ndarray, shape(scaled_vtx_cnt, 3)</span></dt><dd><p>Remaining Vertices of a skin/skull model vertices.</p>
 </dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>faces<span class="classifier">numpy.ndarray, shape(scaled_face_cnt, 3)</span></dt><dd><p>Remaining Vertices of a skin/skull model faces.</p>
 </dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>faces_normal<span class="classifier">numpy.ndarray, shape(scaled_face_cnt, 3)</span></dt><dd><p>Normals of the individual remaining inner skull faces.</p>
 </dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>faces_area<span class="classifier">numpy.ndarray, shape(scaled_face_cnt)</span></dt><dd><p>Surface area of the remaining faces.</p>
 </dd>
+</dl>
+</li>
+<li><dl class="simple">
 <dt>bem_solution<span class="classifier">numpy.ndarray, shape(scaled_vtx_cnt, scaled_vtx_cnt)</span></dt><dd><p>BEM solution (preliminary step for the calculation of the forward model).</p>
 </dd>
 </dl>
+</li>
+</ul>
 </p></li>
+<li><p><strong>cort_mdl</strong> (<em>finnpy.src_rec.cort_mdl.Cort_mdl</em>) – <p>Container populated with the following items:</p>
+<ul>
+<li><dl class="simple">
+<dt>lh_vert<span class="classifier">numpy.ndarray, shape(lh_vtx_cnt, 3)</span></dt><dd><p>White matter surface model vertices (left hemisphere).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>lh_faces<span class="classifier">numpy.ndarray, shape(lh_face_cnt, 3)</span></dt><dd><p>White matter surface model faces (left hemisphere).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>rh_vert<span class="classifier">numpy.ndarray, shape(rh_vtx_cnt, 3)</span></dt><dd><p>White matter surface model vertices (right hemisphere).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>rh_faces<span class="classifier">numpy.ndarray, shape(rh_face_cnt, 3)</span></dt><dd><p>White matter surface model faces (right hemisphere).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>lh_sphere_vert<span class="classifier">numpy.ndarray, shape(lh_sphere_vtx_cnt, 3)</span></dt><dd><p>Spherical freesurfer head model vertices (left hemisphere).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>rh_sphere_vert<span class="classifier">numpy.ndarray, shape(rh_sphere_vtx_cnt, 3)</span></dt><dd><p>Spherical freesurfer head model vertices (right hemisphere).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>coreg</strong> (<em>finnpy.src_rec.coreg.Coreg</em>) – <p>Container class, populed with the following items:</p>
+<ul>
+<li><dl class="simple">
+<dt>Used in EEG:</dt><dd><ul>
+<li><dl class="simple">
+<dt>closest_pts_nas<span class="classifier">numpy.ndarray, shape(3, )</span></dt><dd><p>Closest points to the nas on the MRI.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>closest_pts_lpa<span class="classifier">numpy.ndarray, shape(3, )</span></dt><dd><p>Closest points to the lpa on the MRI.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>closest_pts_rpa<span class="classifier">numpy.ndarray, shape(3, )</span></dt><dd><p>Closest points to the rpa on the MRI.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>closest_pts_eeg<span class="classifier">numpy.ndarray, shape(eeg_ch_cnt, )</span></dt><dd><p>Closest points to the eeg positions on the MRI.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Used in MEG:</dt><dd><ul>
+<li><dl class="simple">
+<dt>rotors<span class="classifier">numpy.ndarray, shape(9,)</span></dt><dd><p>Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mri_to_meeg_trs<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Full affine transformation matrix (MRI -&gt; MEEG)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mri_to_meeg_tr<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Rigid affine transformation matrix (MRI -&gt; MEEG)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mri_to_meeg_rs<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEEG)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>mri_to_meeg_r<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Rotation only affine transformation matrix (MRI -&gt; MEEG)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>meeg_to_mri_trs<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Full affine transformation matrix (MEEG -&gt; MRI)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>meeg_to_mri_tr<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Rigid affine transformation matrix (MEEG -&gt; MRI)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>meeg_to_mri_rs<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Rotation &amp; scaling only affine transformation matrix (MEEG -&gt; MRI)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>meeg_to_mri_r<span class="classifier">numpy.ndarray, shape(4, 4)</span></dt><dd><p>Rotation only affine transformation matrix (MEEG -&gt; MRI)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>signal_type</strong> (<em>string</em>) – Either ‘EEG’ or ‘MEG’.</p></li>
+<li><p><strong>rec_info</strong> (<em>string if signal_type == &quot;MEG&quot; else tuple</em><em>(</em><em>string</em><em>, </em><em>list</em><em>(</em><em>string</em><em>)</em><em>)</em>) – If MEG, path to the fif.file
+If EEG, tuple of EEG setup name (either 1010 or 1020) and a list of valid eeg channel names.</p></li>
+<li><p><strong>_mag_factor</strong> (<em>float</em>) – MEG scaling factor.</p></li>
+<li><p><strong>conductivity</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>, </em><em>) or </em><em>shape</em><em>(</em><em>1</em><em>, </em><em>) or </em><em>None</em>) – Conductivity values for the individual surfaces. If None, defaults to (.3) for MEG and (.3, .006, .3) for EEG.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>fwd_sol</strong> – Forward model, projecting from sen into src space.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Var_type, shape(meg_ch_cnt, valid_vtx_cnt * 3)</p>
+<dd class="field-odd"><p>Var_type, shape(meeg_ch_cnt, valid_vtx_cnt * 3)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -499,9 +566,9 @@ Rotation only affine transformation matrix (MEG -&gt; MRI)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl.restrict">
 <span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">restrict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cort_mdl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl.restrict" title="Link to this definition">#</a></dt>
-<dd><p>Transforms a fwd model into surface orientation (orthogonal to the respective surface cluster;
-allowing for cortically constrained inverse modeling)
-and shrinks it by making closeby channels project to the same destination.
+<dd><p>Transform a fwd model into surface orientation and shrinks it.</p>
+<p>From orthogonal to the respective surface cluster, allowing for cortically constrained inverse modeling.
+Shrinking is achieved by making closeby channels project to the same destination.
 This is different from a ‘default’ 3D transformation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -559,123 +626,15 @@ Rotation only affine transformation matrix (MEG -&gt; MRI)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="src_rec.fwd_mdl._get_meg_coil_info">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_get_meg_coil_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._get_meg_coil_info" title="Link to this definition">#</a></dt>
-<dd><p>Accumulates spatial information on MEG sensor position.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
-<li><p><strong>coreg</strong> (<em>finnpy.src_rec.coreg.Coreg</em>) – <p>Container class, populed with the following items:</p>
-<p>rotors : numpy.ndarray, shape(9,)
-Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
-<p>mri_to_meg_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MRI -&gt; MEG)</p>
-<p>meg_to_mri_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MEG -&gt; MRI)</p>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>rmags</strong> (<em>numpy.ndarray, shape(meg_ch_integration_pt_cnt, 3)</em>) – 3D positions of MEG coil integration points (MEG space).</p></li>
-<li><p><strong>cosmags</strong> (<em>numpy.ndarray, shape(meg_ch_integration_pt_cnt, 3)</em>) – Direction of the MEG coil integration points (MEG space).</p></li>
-<li><p><strong>rmags_mri</strong> (<em>numpy.ndarray, shape(meg_ch_integration_pt_cnt, 3)</em>) – 3D positions of MEG coil integration points (MRI space).</p></li>
-<li><p><strong>cosmags_mri</strong> (<em>numpy.ndarray, shape(meg_ch_integration_pt_cnt, 3)</em>) – Direction of the MEG coil integration points (MRI space).</p></li>
-<li><p><strong>ws</strong> (<em>Var_type, shape(meg_ch_integration_pt_cnt,)</em>) – Weights for MEG coil integration points.</p></li>
-<li><p><strong>meg_ch_indices</strong> (<em>Var_type, shape(meg_ch_integration_pt_cnt,)</em>) – Indices of MEG channels.</p></li>
-<li><p><strong>meg_ch_cnt</strong> (<em>integer</em>) – Number of MEG channels.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src_rec.fwd_mdl._get_meg_coil_positions">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_get_meg_coil_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_to_mri_trans</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._get_meg_coil_positions" title="Link to this definition">#</a></dt>
-<dd><p>Gets MEG coil spatial information,
-such as coils’ individual integration points (rmag),
-their directions (cosmag), and weights for these integration points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
-<li><p><strong>meg_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformation from MEG to MRI space.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>meg_chs</strong> – MEG channel specific information.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict, (‘coil_type’, ‘rmag’, ‘cosmag’, ‘w’, ‘ch_trans’, ‘rmag_mri’, ‘cosmag_mri’)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src_rec.fwd_mdl._comp_src_sen_contrib">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_comp_src_sen_contrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bem_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_cnt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conductivity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.3,)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._comp_src_sen_contrib" title="Link to this definition">#</a></dt>
-<dd><p>Calculates the contribution of each current source (BEM normals) towards to each MEG sensor.
-Based on Mosher, 1999, formula #3 µ/(4*pi)(normals x tau)/norm³ …
-extended with additional weights for MEG coil direction, MEG coil weight
-Integration simplified as multiplication with surface area, see “Multiple Interface Brain and Head Models for EEG: A Surface Charge Approach”, Solis and Papandreou-Suppappola</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bem_mdl</strong> (<em>finnpy.src_rec.bem_mdl.BEM_mdl</em>) – <p>Container class, populed with the following items:</p>
-<dl class="simple">
-<dt>vert<span class="classifier">numpy.ndarray, shape(scaled_vtx_cnt, 3)</span></dt><dd><p>Remaining Vertices of a skin/skull model vertices.</p>
-</dd>
-<dt>faces<span class="classifier">numpy.ndarray, shape(scaled_face_cnt, 3)</span></dt><dd><p>Remaining Vertices of a skin/skull model faces.</p>
-</dd>
-<dt>faces_normal<span class="classifier">numpy.ndarray, shape(scaled_face_cnt, 3)</span></dt><dd><p>Normals of the individual remaining inner skull faces.</p>
-</dd>
-<dt>faces_area<span class="classifier">numpy.ndarray, shape(scaled_face_cnt)</span></dt><dd><p>Surface area of the remaining faces.</p>
-</dd>
-<dt>bem_solution<span class="classifier">numpy.ndarray, shape(scaled_vtx_cnt, scaled_vtx_cnt)</span></dt><dd><p>BEM solution (preliminary step for the calculation of the forward model).</p>
-</dd>
-</dl>
-</p></li>
-<li><p><strong>rmags_mri</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MRI space).</p></li>
-<li><p><strong>cosmags_mri</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MRI space).</p></li>
-<li><p><strong>ws</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>,</em><em>)</em>) – Weights for MEG coil integration points.</p></li>
-<li><p><strong>meg_ch_indices</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>,</em><em>)</em>) – Indices of MEG channels.</p></li>
-<li><p><strong>meg_ch_cnt</strong> (<em>integer</em>) – Number of MEG channels.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>src_sen_contrib</strong> (<em>numpy.ndarray,</em>)</p></li>
-<li><p><em>Contribution of each current source towards each sensor.</em></p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl._calc_magnetic_fields">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_calc_magnetic_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vertices_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduced_in_skull_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_to_mri_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_fwd_solution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._calc_magnetic_fields" title="Link to this definition">#</a></dt>
-<dd><p>Computes infinite medium potentials.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_calc_magnetic_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vertices_mri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_bem_verts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_to_mri_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_fwd_solution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._calc_magnetic_fields" title="Link to this definition">#</a></dt>
+<dd><p>Compute infinite medium potentials.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>white_vertices_mri</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>valid_white_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – White matter vertices.</p></li>
-<li><p><strong>reduced_in_skull_vert</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>reduced_in_skull_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Inner skull model vertices.</p></li>
-<li><p><strong>meg_to_mri_trans</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformatio matrix from the coregistration.</p></li>
+<li><p><strong>all_bem_verts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>bem_vtx_cnt</em><em>, </em><em>3</em><em>)</em>) – Inner skull model vertices.</p></li>
+<li><p><strong>meg_to_mri_r</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Transformatio matrix from the coregistration, rotation only.</p></li>
 <li><p><strong>pre_fwd_solution</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_cnt</em><em>, </em><em>reduced_in_skull_vtx_cnt</em><em>)</em>) – Fwd solution precursor.</p></li>
 </ul>
 </dd>
@@ -690,16 +649,16 @@ Integration simplified as multiplication with surface area, see “Multiple Inte
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl._add_current_distribution">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_add_current_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_cnt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._add_current_distribution" title="Link to this definition">#</a></dt>
-<dd><p>Adds current distribution to the MEG forward solution.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_add_current_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fwd_sol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_cnt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sen_locs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sen_dirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_ch_indices</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._add_current_distribution" title="Link to this definition">#</a></dt>
+<dd><p>Add current distribution to the MEG forward solution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fwd_sol</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>number_of_valid_vertices * 3</em><em>, </em><em>meg_ch_cnt</em><em>)</em>) – Previously calcualted (preliminary) forward solution.</p></li>
 <li><p><strong>white_vertices</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>number_of_valid_vertices</em><em>, </em><em>3</em><em>)</em>) – Valid white matter vertices.</p></li>
-<li><p><strong>meg_ch_infos</strong> (<em>list</em><em> of </em><em>dictionaries</em><em>, </em><em>(</em><em>'coil_type'</em><em>, </em><em>'rmag'</em><em>, </em><em>'cosmag'</em><em>, </em><em>'w'</em><em>, </em><em>'ch_trans'</em><em>, </em><em>'rmag_mri'</em><em>, </em><em>'cosmag_mri'</em><em>)</em>) – MEG recording meta into.</p></li>
-<li><p><strong>rmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MEG space).</p></li>
-<li><p><strong>cosmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space).</p></li>
+<li><p><strong>meg_ch_cnt</strong> (<em>int</em>) – Number of MEG channels.</p></li>
+<li><p><strong>sen_locs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MEG space).</p></li>
+<li><p><strong>sen_dirs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space).</p></li>
 <li><p><strong>ws</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>,</em><em>)</em>) – Weights for MEG coil integration points.</p></li>
 <li><p><strong>meg_ch_indices</strong> (<em>Var_type</em><em>, </em><em>shape</em><em>(</em><em>meg_ch_integration_pt_cnt</em><em>,</em><em>)</em>) – Indices of MEG channels.</p></li>
 </ul>
@@ -715,14 +674,14 @@ Integration simplified as multiplication with surface area, see “Multiple Inte
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl._calc_bem_fields">
-<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_calc_bem_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cosmags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._calc_bem_fields" title="Link to this definition">#</a></dt>
-<dd><p>Calculates the magnetic field at a vortex from all MEG sensors.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_calc_bem_fields</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vortex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sen_locs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sen_dirs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._calc_bem_fields" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the magnetic field at a vortex from all MEG sensors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vortex</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>,</em><em>)</em>) – Position of the vortex</p></li>
-<li><p><strong>rmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_chs_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MEG space)</p></li>
-<li><p><strong>cosmags</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_chs_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space)</p></li>
+<li><p><strong>sen_locs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_chs_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – 3D positions of MEG coil integration points (MEG space)</p></li>
+<li><p><strong>sen_dirs</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>meg_chs_integration_pt_cnt</em><em>, </em><em>3</em><em>)</em>) – Direction of the MEG coil integration points (MEG space)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -737,8 +696,8 @@ Integration simplified as multiplication with surface area, see “Multiple Inte
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl._calc_acc_hem_normals">
 <span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_calc_acc_hem_normals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._calc_acc_hem_normals" title="Link to this definition">#</a></dt>
-<dd><p>Generatoes vertex normals from accumulated face normals.
-See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">https://en.wikipedia.org/wiki/Vertex_normal</a>.</p>
+<dd><p>Generate vertex normals from accumulated face normals.</p>
+<p>See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_normal">https://en.wikipedia.org/wiki/Vertex_normal</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -758,7 +717,7 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.fwd_mdl._find_vertex_clusters">
 <span class="sig-prename descclassname"><span class="pre">src_rec.fwd_mdl.</span></span><span class="sig-name descname"><span class="pre">_find_vertex_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">white_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">white_faces</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.fwd_mdl._find_vertex_clusters" title="Link to this definition">#</a></dt>
-<dd><p>Identifies which input vertices (white_vert) are presented by which valid vortex.</p>
+<dd><p>Identify which input vertices (white_vert) are presented by which valid vortex.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -768,11 +727,23 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>cluster_grp</strong> (<em>list, len(n,)</em>) – Transformed surface model.</p></li>
-<li><p><strong>cluster_indices</strong> (<em>list, len(n,)</em>) – Transformed surface model.</p></li>
+<dd class="field-even"><p><p><strong>result</strong> –</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>cluster_grp<span class="classifier">list, len(n,)</span></dt><dd><p>Transformed surface model.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>cluster_indices<span class="classifier">list, len(n,)</span></dt><dd><p>Transformed surface model.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of (list, list)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -789,24 +760,6 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="freesurfer.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Freesurfer methods</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="inv_mdl.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Inverse model</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -814,7 +767,8 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -827,9 +781,6 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl.compute"><code class="docutils literal notranslate"><span class="pre">compute()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl.restrict"><code class="docutils literal notranslate"><span class="pre">restrict()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl._get_meg_coil_info"><code class="docutils literal notranslate"><span class="pre">_get_meg_coil_info()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl._get_meg_coil_positions"><code class="docutils literal notranslate"><span class="pre">_get_meg_coil_positions()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl._comp_src_sen_contrib"><code class="docutils literal notranslate"><span class="pre">_comp_src_sen_contrib()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl._calc_magnetic_fields"><code class="docutils literal notranslate"><span class="pre">_calc_magnetic_fields()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl._add_current_distribution"><code class="docutils literal notranslate"><span class="pre">_add_current_distribution()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.fwd_mdl._calc_bem_fields"><code class="docutils literal notranslate"><span class="pre">_calc_bem_fields()</span></code></a></li>
@@ -839,13 +790,13 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/src_rec/fwd_mdl.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src_rec/fwd_mdl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -860,8 +811,8 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -881,7 +832,7 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
@@ -927,7 +878,8 @@ See <a class="reference external" href="https://en.wikipedia.org/wiki/Vertex_nor
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

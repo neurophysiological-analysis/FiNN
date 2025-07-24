@@ -1,4 +1,6 @@
 
+.. _dac_module:
+
 Directional absolute coherence
 ==============================
 

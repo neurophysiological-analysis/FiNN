@@ -19,7 +19,7 @@ author = 'Maximilian Scherer'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx_toolbox.collapse']
+extensions = ['sphinx.ext.todo', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx_toolbox.collapse', 'sphinx.ext.mathjax']
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -43,28 +43,5 @@ html_sidebars = {
         ],
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def setup(app):
+    app.add_css_file('custom.css')

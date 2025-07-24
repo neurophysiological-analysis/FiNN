@@ -1,7 +1,7 @@
 
 .. _src_rec_apply_label:
 
-Model application
+Model Application
 =================
 
 This part of the guide explains how the inverse model and the fsaverage source space morphing is applied. For previous steps, see :ref:`src_rec_anatomy_label`, :ref:`src_rec_sensors_label`, :ref:`src_rec_downstream_label`. 
@@ -12,18 +12,18 @@ The first step is to employ the previously created inverse model (see :ref:`src_
     
 .. code-block::
 
-  src_data = finnpy.src_rec.inv_mdl.apply(sen_data, inv_mdl)
+   src_data = finnpy.src_rec.inv_mdl.apply(sen_data, inv_mdl)
 
 Afterwards, data are moved from subject specific into fs-average space.
 
 .. code-block::
   
-  fsavg_src_data = finnpy.src_rec.subj_to_vsavg.apply(subj_to_fsavg_mdl, src_data)
+   fsavg_src_data = finnpy.src_rec.subj_to_vsavg.apply(subj_to_fsavg_mdl, src_data)
 
 Finally, the in fs-average space defined Desikan-Killiany is employed to consolidate individual source space channels into cortical regions. 
 
 .. code-block::
   
-  (clust_src_data, chs, ch_names) = finnpy.src_rec.avg_src_reg.run(fsavg_src_data, subj_to_fsavg_mdl, fs_path)
+   (clust_src_data, chs, ch_names) = finnpy.src_rec.avg_src_reg.run(fsavg_src_data, subj_to_fsavg_mdl, fs_path)
 
 This concludes the source construction pipeline. Potential pitfalls during source reconstruction are discussed in :ref:`src_rec_pitfalls_label`. 

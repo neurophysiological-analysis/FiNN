@@ -19,7 +19,6 @@ import finnpy.src_rec.inv_mdl  # @UnresolvedImport
 import finnpy.src_rec.subj_to_fsavg  # @UnresolvedImport
 import finnpy.visualization.plot_src_rec as psr  # @UnresolvedImport
 
-COV_PATH = "./cov/"
 ANATOMY_PATH = "./anatomy/"
 SUBJ_NAME = "demo_pat"
 FS_PATH = "<path_to_freesurfer>"
@@ -44,9 +43,9 @@ def main():
     sensor_data = sensor_data[:, :int(fs * 10)]
     
     if (os.path.exists("meg_sen_cov") is False):
-        sen_cov = finnpy.src_rec.sen_cov.run(sensor_data.T, fs, COV_PATH, "MEG", np.ones(sensor_data.shape[0]), ch_names, ch_types, 
+        sen_cov = finnpy.src_rec.sen_cov.run(sensor_data.T, fs, "MEG", np.ones(sensor_data.shape[0]), ch_names, ch_types, 
                                              fast_eigendecomp_path = FAST_EIGEN_DECOMP_PATH,
-                                             float_sz = 256, overwrite = True)
+                                             float_sz = 256)
         dm.save(sen_cov, "meg_sen_cov")
     else:
         sen_cov = dm.load("meg_sen_cov")
@@ -104,16 +103,19 @@ def main():
         subj_to_fsavg_mdl = dm.load("meg_subj_to_fsavg_mdl")
     
     (sensor_data, fs, ch_names) = get_data()  # noqa: F821 @UndefinedVariable
+    
+    # Preprocess sensor data
+    
     if (IS_DEMO):
-        sensor_data[ch_names.index("MEG0133"), :] += 10000    
+        sensor_data[ch_names.index("MEG0133"), :] += 10000
+        
     src_data = finnpy.src_rec.inv_mdl.apply(sensor_data, inv_mdl)
+    src_fsavg_data = finnpy.src_rec.subj_to_fsavg.apply(subj_to_fsavg_mdl, src_data)
+    (src_avg_data, morphed_channels, region_names) = finnpy.src_rec.avg_src_reg.run(src_fsavg_data, subj_to_fsavg_mdl, FS_PATH)
     
     print("Plot 1")
     color_data = np.mean(np.abs(src_data), axis = 1)
     psr.plot_subj_space(cort_mdl, color_data, "MEG", FIF_FILE, coreg, ch_names)
-        
-    src_fsavg_data = finnpy.src_rec.subj_to_fsavg.apply(subj_to_fsavg_mdl, src_data)
-    (src_avg_data, morphed_channels, region_names) = finnpy.src_rec.avg_src_reg.run(src_fsavg_data, subj_to_fsavg_mdl, FS_PATH)
     
     print("Plot 2")
     color_data = np.mean(np.abs(src_fsavg_data), axis = 1)

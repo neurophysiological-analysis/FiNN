@@ -1,4 +1,6 @@
 
+.. _src_rec_sencov_module:
+
 Sensor covariance
 =================
 

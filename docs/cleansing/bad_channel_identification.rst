@@ -1,5 +1,7 @@
 
-Bad channel identification
+.. _bad_ch_module:
+
+Bad Channel Identification
 ==========================
 
 
@@ -75,7 +77,7 @@ The following code example shows how to apply bad channel identification & subse
 
    main()
 
-Applying bad channel identification automatically selected channels whose broadband power is more than two standard deviations different from other channels. Yet, manual optimization of the selection is possible (and recommended). Manual adjustments can be performed in the screen below. 
+Applying bad channel identification automatically selects channels whose broadband power is more than two standard deviations different from other channels. Yet, manual optimization of the selection is possible (and recommended). Manual adjustments can be performed in the screen below. 
     
 .. image:: img/bad_channel_identification.png
 

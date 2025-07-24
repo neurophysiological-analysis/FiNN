@@ -1,4 +1,6 @@
 
+.. _src_rec_spheremdl_module:
+
 Sphere models
 =============
 

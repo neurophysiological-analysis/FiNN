@@ -1,6 +1,8 @@
 
+.. _mi_module:
+
 Modulation Index
-=======================
+================
 
 
 .. currentmodule:: cfc.pac

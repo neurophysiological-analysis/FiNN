@@ -1,4 +1,6 @@
 
+.. _vis_package:
+
 Visualization
 =============
 

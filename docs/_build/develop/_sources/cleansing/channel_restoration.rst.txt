@@ -1,4 +1,6 @@
 
+.. _ch_rest_module:
+
 Channel restoration
 ==========================
 
@@ -75,7 +77,7 @@ The following code example shows how to apply bad channel identification & subse
 
    main()
 
-Having identified bad channels, those got restored by averaging activity from their neighbors.
+After identifying bad channels, they were restored by averaging activity from their neighbors.
     
 .. image:: img/channel_restoration.png
 

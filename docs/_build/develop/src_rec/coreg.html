@@ -16,38 +16,42 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b7737de8" />
     <link rel="stylesheet" type="text/css" href="../_static/_rst_properties.css" />
     <link rel="stylesheet" type="text/css" href="../_static/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b7737de8" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/_rtd_versions.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'src_rec/coreg';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Cortical model" href="cort_mdl.html" />
-    <link rel="prev" title="Boundary element model (BEM)" href="bem_mdl.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,19 +67,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -83,7 +76,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -91,8 +83,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -149,7 +141,7 @@
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api_reference.html">
     API reference
   </a>
@@ -166,29 +158,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
     </div>
     
@@ -197,15 +181,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -224,7 +204,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -253,7 +234,7 @@ document.write(`
 </li>
 
 
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../api_reference.html">
     API reference
   </a>
@@ -271,15 +252,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
       </div>
     
@@ -294,7 +271,6 @@ document.write(`
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -304,32 +280,28 @@ document.write(`
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
         <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#enabling-statistics-optional">3. Enabling statistics (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#external-libraries-optional">4. External libraries (optional)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../guides.html#general">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#visualization">Visualization</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api_reference.html">API reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../basic.html">Basic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cfc.html">Cross frequency connectivity (cfc)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cleansing.html">Cleansing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../file_io.html">File IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../filters.html">Filters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../misc.html">Misc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../sfc.html">Same frequency coupling (sfc)</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../src_rec.html">Source reconstruction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../statistical.html">Statistical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../visualization.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#feature-signal-processing">Feature/Signal processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#the-source-reconstruction">The Source Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#feature-analysis">Feature analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#presentation">Presentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#quality-of-life">Quality of life</a></li>
 </ul>
 </li>
 </ul>
@@ -371,9 +343,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -391,8 +368,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -401,13 +376,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    
-    <li class="breadcrumb-item"><a href="../api_reference.html" class="nav-link">FiNNPy API</a></li>
-    
-    
-    <li class="breadcrumb-item"><a href="../src_rec.html" class="nav-link">Source reconstruction</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page">Coregistrati...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Coregistration, MEG to MRI</span></li>
   </ul>
 </nav>
 </div>
@@ -425,132 +394,250 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="coregistration-meg-to-mri">
-<h1>Coregistration, MEG to MRI<a class="headerlink" href="#coregistration-meg-to-mri" title="Link to this heading">#</a></h1>
+<span id="src-rec-coreg-module"></span><h1>Coregistration, MEG to MRI<a class="headerlink" href="#coregistration-meg-to-mri" title="Link to this heading">#</a></h1>
 <p>This module may be employed to coregister MEG to MRI images.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg.Coreg">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">Coreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.Coreg" title="Link to this definition">#</a></dt>
-<dd><p>Container class, populed with the following items:</p>
-<p>rotors : numpy.ndarray, shape(9,)
-Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
-<p>mri_to_meg_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MRI -&gt; MEG)</p>
-<p>meg_to_mri_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MEG -&gt; MRI)</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">Coreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_pts_nas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_pts_lpa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_pts_rpa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">closest_pts_eeg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.Coreg" title="Link to this definition">#</a></dt>
+<dd><p>Container class containing the following parameters.</p>
+<p>For EEG, a EEG cap is projected onto the skull, for MEG registration
+points are matched with MRI surface.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.rotors">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">rotors</span></span><a class="headerlink" href="#src_rec.coreg.rotors" title="Link to this definition">#</a></dt>
+<dd><p>Sequence of rotors defining rotation (3), translation (3) and scaling (3). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(9,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.mri_to_meeg_trs">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">mri_to_meeg_trs</span></span><a class="headerlink" href="#src_rec.coreg.mri_to_meeg_trs" title="Link to this definition">#</a></dt>
+<dd><p>Full affine transformation matrix (MRI -&gt; MEEG). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.mri_to_meeg_tr">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">mri_to_meeg_tr</span></span><a class="headerlink" href="#src_rec.coreg.mri_to_meeg_tr" title="Link to this definition">#</a></dt>
+<dd><p>Rigid affine transformation matrix (MRI -&gt; MEEG). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.mri_to_meeg_rs">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">mri_to_meeg_rs</span></span><a class="headerlink" href="#src_rec.coreg.mri_to_meeg_rs" title="Link to this definition">#</a></dt>
+<dd><p>Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEEG). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.mri_to_meeg_r">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">mri_to_meeg_r</span></span><a class="headerlink" href="#src_rec.coreg.mri_to_meeg_r" title="Link to this definition">#</a></dt>
+<dd><p>Rotation only affine transformation matrix (MRI -&gt; MEEG). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.meeg_to_mri_trs">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">meeg_to_mri_trs</span></span><a class="headerlink" href="#src_rec.coreg.meeg_to_mri_trs" title="Link to this definition">#</a></dt>
+<dd><p>Full affine transformation matrix (MEEG -&gt; MRI). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.meeg_to_mri_tr">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">meeg_to_mri_tr</span></span><a class="headerlink" href="#src_rec.coreg.meeg_to_mri_tr" title="Link to this definition">#</a></dt>
+<dd><p>Rigid affine transformation matrix (MEEG -&gt; MRI). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.meeg_to_mri_rs">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">meeg_to_mri_rs</span></span><a class="headerlink" href="#src_rec.coreg.meeg_to_mri_rs" title="Link to this definition">#</a></dt>
+<dd><p>Rotation &amp; scaling only affine transformation matrix (MEEG -&gt; MRI). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.meeg_to_mri_r">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">meeg_to_mri_r</span></span><a class="headerlink" href="#src_rec.coreg.meeg_to_mri_r" title="Link to this definition">#</a></dt>
+<dd><p>Rotation only affine transformation matrix (MEEG -&gt; MRI). MEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.closest_pts_nas">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">closest_pts_nas</span></span><a class="headerlink" href="#src_rec.coreg.closest_pts_nas" title="Link to this definition">#</a></dt>
+<dd><p>Closest points to the nas on the MRI. EEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(3, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.closest_pts_lpa">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">closest_pts_lpa</span></span><a class="headerlink" href="#src_rec.coreg.closest_pts_lpa" title="Link to this definition">#</a></dt>
+<dd><p>Closest points to the lpa on the MRI. EEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(3, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.closest_pts_rpa">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">closest_pts_rpa</span></span><a class="headerlink" href="#src_rec.coreg.closest_pts_rpa" title="Link to this definition">#</a></dt>
+<dd><p>Closest points to the rpa on the MRI. EEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(3, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src_rec.coreg.closest_pts_eeg">
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">closest_pts_eeg</span></span><a class="headerlink" href="#src_rec.coreg.closest_pts_eeg" title="Link to this definition">#</a></dt>
+<dd><p>Closest points to the eeg positions on the MRI. EEG only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, shape(eeg_ch_cnt, )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal_type</strong> (<em>string</em>) – Either “EEG” or “MEG.</p></li>
+<li><p><strong>rotors</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p></li>
+<li><p><strong>closest_pts_nas</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>, </em><em>)</em>) – Closest points to the nas on the MRI.</p></li>
+<li><p><strong>closest_pts_lpa</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>, </em><em>)</em>) – Closest points to the lpa on the MRI.</p></li>
+<li><p><strong>closest_pts_rpa</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>, </em><em>)</em>) – Closest points to the rpa on the MRI.</p></li>
+<li><p><strong>closest_pts_eeg</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>eeg_ch_cnt</em><em>, </em><em>)</em>) – Closest points to the eeg positions on the MRI.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg.run">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.run" title="Link to this definition">#</a></dt>
-<dd><p>Executes the complete coregistration for a specific subject.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_nasion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rec_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.run" title="Link to this definition">#</a></dt>
+<dd><p>Execute the complete coregistration for a specific subject.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
 <li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject.</p></li>
-<li><p><strong>mode</strong> (<em>string</em>) – Either “EEG” or “MEG”.</p></li>
-<li><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p></li>
+<li><p><strong>signal_type</strong> (<em>string</em>) – Either “EEG” or “MEG”.</p></li>
+<li><p><strong>use_nasion</strong> (<em>bool</em>) – Whether to use the nasion for registration, may be deacivated if the nasion is cut in the MRI.</p></li>
+<li><p><strong>rec_info</strong> (<em>string</em>) – If signal_type is “EEG”, rec_info is the EEG setup (1020 or 1005).
+If signal_type is “MEG”, rec_info is the path to the FIF.file.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p><strong>coreg</strong> – Container class, populed with the following items:</p>
-<p>rotors : numpy.ndarray, shape(9,)
-Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
-<p>mri_to_meg_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEG)
-mri_to_meg_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MRI -&gt; MEG)</p>
-<p>meg_to_mri_trs : numpy.ndarray, shape(4, 4)
-Full affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_tr : numpy.ndarray, shape(4, 4)
-Rigid affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_rs : numpy.ndarray, shape(4, 4)
-Rotation &amp; scaling only affine transformation matrix (MEG -&gt; MRI)
-meg_to_mri_r : numpy.ndarray, shape(4, 4)
-Rotation only affine transformation matrix (MEG -&gt; MRI)</p>
+<dd class="field-even"><p><p><strong>result</strong> –</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>coreg<span class="classifier">finnpy.src_rec.coreg.Coreg</span></dt><dd><p>Container class, populed with the following items:</p>
+<ul>
+<li><p>rotors : np.ndarray, shape(9,)
+Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p></li>
+<li><p>mri_to_meeg_trs : np.ndarray, shape(4, 4)
+Full affine transformation matrix (MRI -&gt; MEG)</p></li>
+<li><p>mri_to_meeg_tr : np.ndarray, shape(4, 4)
+Rigid affine transformation matrix (MRI -&gt; MEG)</p></li>
+<li><p>mri_to_meeg_rs : np.ndarray, shape(4, 4)
+Rotation &amp; scaling only affine transformation matrix (MRI -&gt; MEG)</p></li>
+<li><p>mri_to_meeg_r : np.ndarray, shape(4, 4)
+Rotation only affine transformation matrix (MRI -&gt; MEG)</p></li>
+<li><p>meeg_to_mri_trs : np.ndarray, shape(4, 4)
+Full affine transformation matrix (MEG -&gt; MRI)</p></li>
+<li><p>meeg_to_mri_tr : np.ndarray, shape(4, 4)
+Rigid affine transformation matrix (MEG -&gt; MRI)</p></li>
+<li><p>meeg_to_mri_rs : np.ndarray, shape(4, 4)
+Rotation &amp; scaling only affine transformation matrix (MEG -&gt; MRI)</p></li>
+<li><p>meeg_to_mri_r : np.ndarray, shape(4, 4)
+Rotation only affine transformation matrix (MEG -&gt; MRI)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>bad_hsp_pts<span class="classifier">(list, list)</span></dt><dd><p>Bad hsp points from the 1st and 2nd run of the coregistration.</p>
+</dd>
+</dl>
+</li>
+</ul>
 </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>finnpy.src_rec.coreg.Coreg</p>
+<dd class="field-odd"><p>tuple of (finnpy.src_rec.coreg.Coreg, tuple of (list, list))</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – Raised if the signal type is not either ‘EEG’ or ‘MEG’.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg.plot_coregistration">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">plot_coregistration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_hsp_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MEG'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.plot_coregistration" title="Link to this definition">#</a></dt>
-<dd><p>Plots the result of the coregistration from MRI to MEG using mayavi.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">plot_coregistration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coreg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_nasion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bad_hsp_pts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_data_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eeg_setup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'1020'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.plot_coregistration" title="Link to this definition">#</a></dt>
+<dd><p>Plot the result of the coregistration from MRI to MEG using pyvista.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>coreg</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MEG to MRI coregistration matrix.</p></li>
-<li><p><strong>meg_pts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>4</em><em>)</em>) – MEG pts used in the coregistration.</p></li>
+<li><p><strong>coreg</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MEG to MRI coregistration matrix.</p></li>
+<li><p><strong>signal_type</strong> (<em>string</em>) – “EEG” or “MEG”.</p></li>
 <li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
 <li><p><strong>subj_name</strong> (<em>string</em>) – Subject name.</p></li>
-<li><p><strong>mode</strong> (<em>string</em>) – “EEG” or “MEG”.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src_rec.coreg.load_meg_ref_pts">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">load_meg_ref_pts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec_meta_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg.load_meg_ref_pts" title="Link to this definition">#</a></dt>
-<dd><p>Load MEG reference points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rec_meta_info</strong> (<em>mne.io.read_info</em>) – MEG scan meta info, obtailable via mne.io.read_info</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>meg_pts</strong> – MEG reference points for coregistration.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict, (‘nasion’, ‘lpa’, ‘rpa’, ‘hsp’, ‘coord_frame’)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src_rec.coreg._calc_coreg">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_calc_coreg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subj_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anatomy_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meg_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'free'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_nasion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MEG'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._calc_coreg" title="Link to this definition">#</a></dt>
-<dd><p>Coregisters MRI data (src) to MEG data (tgt).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>subj_name</strong> (<em>string</em>) – Name of the subject.</p></li>
-<li><p><strong>anatomy_path</strong> (<em>string</em>) – Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.</p></li>
-<li><p><strong>meg_pts</strong> (<em>dict</em>) – Dictionary with the following keys populated: nasion, lpa, rpa, hpi, hsp.</p></li>
-<li><p><strong>registration_scale_type</strong> (<em>string</em>) – Can be either “free” or “restricted”.
-If free, the initial registration may be scaled with
-a uniform factor, no scaling with restricted.</p></li>
-<li><p><strong>scale</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>3</em><em>)</em>) – Scale anatomy for registration.</p></li>
 <li><p><strong>use_nasion</strong> (<em>boolean</em>) – Flag whether to use the nasion registration point. Not recommended for defaced patients.</p></li>
-<li><p><strong>max_number_of_iterations</strong> (<em>int</em>) – Number of iterations per registration step (total 3),
-defaults to 500 per registration step.</p></li>
-<li><p><strong>mode</strong> (<em>string</em>) – “EEG” or “MEG”.</p></li>
+<li><p><strong>bad_hsp_pts</strong> (<em>(</em><em>list</em><em>, </em><em>list</em><em>)</em>) – Bad hsp points from the 1st and 2nd run of the coregistration.</p></li>
+<li><p><strong>meg_data_path</strong> (<em>string</em>) – Path to the MEG file used in the coregistration.</p></li>
+<li><p><strong>eeg_setup</strong> (<em>string</em>) – Setup of the EEG contacts. Defaults to 1020 system. Can be either 1020 or 1005.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>coreg_rotors</strong> – Coregistration rotors</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape (9,)</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – Raised if the signal type is not either ‘EEG’ or ‘MEG’.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -578,7 +665,7 @@ defaults to 500 per registration step.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._format_fiducials">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_format_fiducials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pre_mri_ref_pts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._format_fiducials" title="Link to this definition">#</a></dt>
-<dd><p>Transforms an mne-fiducials object into an dictionary containing the fiducials.</p>
+<dd><p>Transform an mne-fiducials object into an dictionary containing the fiducials.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>pre_mri_ref_pts</strong> (<em>list</em><em> of </em><em>dict</em><em>(</em><em>)</em><em>, </em><em>obtained via mne.io.read_fiducials</em>) – MNE-formatted list of MRI fiducials.</p>
@@ -607,31 +694,43 @@ defaults to 500 per registration step.</p></li>
 <dd class="field-even"><p><strong>hd_surf_vert</strong> – High resulution surface model generated via freesurfer.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape (n, 3)</p>
+<dd class="field-odd"><p>np.ndarray, shape (n, 3)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._registrate_3d_points_restricted">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_registrate_3d_points_restricted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">10.0,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._registrate_3d_points_restricted" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_registrate_3d_points_restricted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._registrate_3d_points_restricted" title="Link to this definition">#</a></dt>
 <dd><p>Registrates src points to tgt points via Horns method. The resulting 4x4 transformation matrix may contain translation, rotation, and scaling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Source points for the coregistration.</p></li>
-<li><p><strong>tgt_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Target points for the coregistration.</p></li>
-<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>)</em>) – Weights of the individual pts.</p></li>
+<li><p><strong>src_pts</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Source points for the coregistration.</p></li>
+<li><p><strong>tgt_pts</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – Target points for the coregistration.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>)</em>) – Weights of the individual pts.</p></li>
 <li><p><strong>scale</strong> (<em>boolean</em><em>,</em>) – Flag whether to apply uniform scaling,
 defaults to False</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>est_rotors</strong> (<em>np.ndarray, shape(9,)</em>) – Rotors of the estimated transformation.</p></li>
-<li><p><strong>est_mat</strong> (<em>np.ndarray, shape(4, 4)</em>) – Rotation matrix of the estimated transformation.</p></li>
+<dd class="field-even"><p><p><strong>result</strong> –</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>est_rotors<span class="classifier">np.ndarray, shape(9,)</span></dt><dd><p>Rotors of the estimated transformation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>est_mat<span class="classifier">np.ndarray, shape(4, 4)</span></dt><dd><p>Rotation matrix of the estimated transformation.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of (np.ndarray, np.ndarray)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -645,45 +744,82 @@ defaults to False</p></li>
 <dd class="field-odd"><p><strong>meg_pts</strong> (<em>dict</em><em>, </em><em>(</em><em>'lpa'</em><em>, </em><em>rpa'</em><em>, </em><em>'nasion'</em><em>, </em><em>'hpi'</em><em>, </em><em>'hsp'</em><em>, </em><em>'coord_frame'</em><em>)</em>) – Reference MEG points for the coregistration.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>ptn_cnt</strong> (<em>int</em>) – Number of points without hsp-points.</p></li>
-<li><p><strong>hsp_cnt</strong> (<em>int</em>) – Number of hsp-points.</p></li>
+<dd class="field-even"><p><p><strong>result</strong> –</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>ptn_cnt<span class="classifier">int</span></dt><dd><p>Number of points without hsp-points.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>hsp_cnt<span class="classifier">int</span></dt><dd><p>Number of hsp-points.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of (int, int)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._refine_registration">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_refine_registration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_rotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'free'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MEG'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._refine_registration" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_refine_registration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meeg_nasion_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meeg_lpa_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meeg_rpa_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_rotors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last_mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">registration_scale_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'free'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coreg_thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._refine_registration" title="Link to this definition">#</a></dt>
 <dd><p>Refines an initial registration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Source points for the coregistration.</p></li>
-<li><p><strong>tgt_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Target points for the coregistration.</p></li>
+<li><p><strong>src_pts</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Source points for the coregistration.</p></li>
+<li><p><strong>tgt_pts</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n1</em><em>, </em><em>3</em><em>)</em>) – Target points for the coregistration.</p></li>
+<li><p><strong>meeg_nasion_key</strong> (<em>string</em><em>,</em>) – Name of the nasion channel in meeg data.</p></li>
+<li><p><strong>meeg_lpa_key</strong> (<em>string</em><em>,</em>) – Name of the lpa channel in meeg data.</p></li>
+<li><p><strong>meeg_rpa_key</strong> (<em>string</em><em>,</em>) – Name of the rpa channel in meeg data.</p></li>
 <li><p><strong>last_rotors</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Original rotor estimates.</p></li>
 <li><p><strong>last_mat</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – Original rotation matrix estimate.</p></li>
-<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>,</em><em>)</em>) – Weights for the coregistration.</p></li>
-<li><p><strong>trans_thresh</strong> (<em>float</em>) – Translation error threshold.</p></li>
-<li><p><strong>angle_thresh</strong> (<em>float</em>) – Rotation error threshold.</p></li>
-<li><p><strong>scale_thresh</strong> (<em>float</em>) – Scaling error threshold.</p></li>
-<li><p><strong>max_number_of_iterations</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>,</em><em>)</em>) – Weights for the coregistration.</p></li>
+<li><p><strong>signal_type</strong> (<em>string</em>) – “EEG” or “MEG”.</p></li>
 <li><p><strong>registration_scale_type</strong> (<em>string</em>) – If “free”, scaling is estimated across 3 axis,
 if “reduced”, scaling is uniform,
 defaults to “free”.</p></li>
-<li><p><strong>mode</strong> (<em>string</em>) – “EEG” or “MEG”.</p></li>
+<li><p><strong>coreg_thresh</strong> (<em>float</em>) – Coregionstration error threshold.</p></li>
+<li><p><strong>max_number_of_iterations</strong> (<em>int</em>) – Number of iterations.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>last_rotors</strong> (<em>np.ndarray, shape(9,)</em>) – Updated rotor estimates.</p></li>
-<li><p><strong>last_mat</strong> (<em>np.ndarray, shape(4, 4)</em>) – Updated rotation matrix estimate.</p></li>
-<li><p><strong>tgt_pts_full</strong> (<em>np.ndarray, shape(m2, 3)</em>) – Target points used for the coregistration.</p></li>
-<li><p><strong>src_pts_full</strong> (<em>np.ndarray, shape(n2, 3)</em>) – Source points used for the coregistration.</p></li>
+<dd class="field-even"><p><p><strong>result</strong> –</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>last_rotors<span class="classifier">np.ndarray, shape(9,)</span></dt><dd><p>Updated rotor estimates.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>last_mat<span class="classifier">np.ndarray, shape(4, 4)</span></dt><dd><p>Updated rotation matrix estimate.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>tgt_pts_full<span class="classifier">np.ndarray, shape(m2, 3)</span></dt><dd><p>Target points used for the coregistration.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>src_pts_full<span class="classifier">np.ndarray, shape(n2, 3)</span></dt><dd><p>Source points used for the coregistration.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of (np.ndarray, np.ndarray, np.ndarray, np.ndarray)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If signal type is invalid, must be either ‘EEG’ or ‘MEG’.
+    If the registration type is invalid, has to be eitehr ‘free’ or ‘restricted’.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -695,41 +831,66 @@ defaults to “free”.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>meg_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>(</em><em>m</em><em>, </em><em>3</em><em>)</em>) – MEG reference points.</p></li>
-<li><p><strong>mri_pts</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em>, </em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – MRI reference points.</p></li>
+<li><p><strong>meg_pts</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>(</em><em>m</em><em>, </em><em>3</em><em>)</em>) – MEG reference points.</p></li>
+<li><p><strong>mri_pts</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em>, </em><em>(</em><em>n</em><em>, </em><em>3</em><em>)</em>) – MRI reference points.</p></li>
 <li><p><strong>trans_mat</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>4</em><em>, </em><em>4</em><em>)</em>) – MEG to MRI transformation matrix.</p></li>
-<li><p><strong>distance_threshold</strong> (<em>float</em>) – Maximum distance. Defaults to 5 mm.</p></li>
+<li><p><strong>distance_thresh</strong> (<em>float</em>) – Maximum distance. Defaults to 5 mm.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>meg_pts</strong> – Pruned list of MEG pts.</p>
+<dd class="field-even"><p><p><strong>result</strong> – If there are over the threshold distances, return surviving meg pts &amp; invalid indices.
+Otherwise, return only surviving meg pts.
+- meg_pts : np.ndarray, shape(m - x, 3)</p>
+<blockquote>
+<div><p>Pruned list of MEG pts.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>surv_idx<span class="classifier">np.ndarray, shape(x, )</span></dt><dd><p>Indices of invalid points.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.ndarray, shape(m - x, 3)</p>
+<dd class="field-odd"><p>tuple of (np.ndarray, np.ndarray) or np.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._registrate_3d_points_free">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_registrate_3d_points_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1.0,</span> <span class="pre">10.0,</span> <span class="pre">1.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._registrate_3d_points_free" title="Link to this definition">#</a></dt>
-<dd><p>Registrates src points to tgt points via least squares minimizing. The resulting 4x4 transformation matrix may contain translation, rotation, and scaling.</p>
+<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_registrate_3d_points_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgt_pts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_guess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._registrate_3d_points_free" title="Link to this definition">#</a></dt>
+<dd><p>Registrate src points to tgt points via least squares minimizing. The resulting 4x4 transformation matrix may contain translation, rotation, and scaling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>src_pts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>4</em><em>)</em>) – Source points for the registration.</p></li>
-<li><p><strong>tgt_pts</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>4</em><em>)</em>) – Target points for the registration.</p></li>
-<li><p><strong>weights</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>1</em><em>)</em>) – (Source) weights for the registration.</p></li>
-<li><p><strong>initial_guess</strong> (<em>numpy.ndarray</em><em> or </em><em>list</em><em> or </em><em>tuple</em><em> or </em><em>None</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Initial transformation guess,
+<li><p><strong>src_pts</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>4</em><em>)</em>) – Source points for the registration.</p></li>
+<li><p><strong>tgt_pts</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>n</em><em>, </em><em>4</em><em>)</em>) – Target points for the registration.</p></li>
+<li><p><strong>weights</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>m</em><em>, </em><em>1</em><em>)</em>) – (Source) weights for the registration.</p></li>
+<li><p><strong>initial_guess</strong> (<em>np.ndarray</em><em> or </em><em>list</em><em> or </em><em>tuple</em><em> or </em><em>None</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Initial transformation guess,
 defaults to None for no translation/rotation/scaling.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>est_rotors</strong> (<em>numpy.ndarray, shape(9,)</em>) – Updated rotor estimate.</p></li>
-<li><p><strong>est_mat</strong> (<em>numpy.ndarray, shape(4, 4)</em>) – Updated transformation matrix.</p></li>
+<dd class="field-even"><p><p><strong>result</strong> –</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>est_rotors<span class="classifier">np.ndarray, shape(9,)</span></dt><dd><p>Updated rotor estimate.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>est_mat<span class="classifier">np.ndarray, shape(4, 4)</span></dt><dd><p>Updated transformation matrix.</p>
+</dd>
+</dl>
+</li>
 </ul>
 </p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of (np.ndarray, np.ndarray)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -737,7 +898,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._translation">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._translation" title="Link to this definition">#</a></dt>
-<dd><p>Calculates a translation matrix from x, y, and z.</p>
+<dd><p>Calculate a translation matrix from x, y, and z.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -750,7 +911,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -758,7 +919,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._rotation">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._rotation" title="Link to this definition">#</a></dt>
-<dd><p>Calculates a rotation matrix from x, y, and z.</p>
+<dd><p>Calculate a rotation matrix from x, y, and z.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -771,7 +932,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -779,7 +940,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._scaling">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_scaling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._scaling" title="Link to this definition">#</a></dt>
-<dd><p>Calculates a scaling matrix from x, y, and z.</p>
+<dd><p>Calculate a scaling matrix from x, y, and z.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -792,24 +953,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="src_rec.coreg._get_transformation_matrix">
-<span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_get_transformation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._get_transformation_matrix" title="Link to this definition">#</a></dt>
-<dd><p>Produces a full transformation matrix from rotors.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rotors</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -817,16 +961,16 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._get_rot_and_scale_mat">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_get_rot_and_scale_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._get_rot_and_scale_mat" title="Link to this definition">#</a></dt>
-<dd><p>Produces a rotation and scaling matrix from rotors.</p>
+<dd><p>Produce a rotation and scaling matrix from rotors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rotors</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
+<dd class="field-odd"><p><strong>rotors</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -834,16 +978,16 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._get_trans_and_rot_mat">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_get_trans_and_rot_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._get_trans_and_rot_mat" title="Link to this definition">#</a></dt>
-<dd><p>Produces a rigid transformation matrix from rotors.</p>
+<dd><p>Produce a rigid transformation matrix from rotors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rotors</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
+<dd class="field-odd"><p><strong>rotors</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -851,16 +995,16 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="src_rec.coreg._get_rot_mat">
 <span class="sig-prename descclassname"><span class="pre">src_rec.coreg.</span></span><span class="sig-name descname"><span class="pre">_get_rot_mat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotors</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src_rec.coreg._get_rot_mat" title="Link to this definition">#</a></dt>
-<dd><p>Produces a rotatio matrix from rotors.</p>
+<dd><p>Produce a rotatio matrix from rotors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rotors</strong> (<em>numpy.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
+<dd class="field-odd"><p><strong>rotors</strong> (<em>np.ndarray</em><em>, </em><em>shape</em><em>(</em><em>9</em><em>,</em><em>)</em>) – Sequence of rotors defining rotation (3), translation (3) and scaling (3).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>trans</strong> – Transformation matrix.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>numpy.ndarray, shape(4, 4)</p>
+<dd class="field-odd"><p>np.ndarray, shape(4, 4)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -877,24 +1021,6 @@ defaults to None for no translation/rotation/scaling.</p></li>
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="bem_mdl.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Boundary element model (BEM)</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="cort_mdl.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Cortical model</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -902,7 +1028,8 @@ defaults to None for no translation/rotation/scaling.</p></li>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -913,11 +1040,24 @@ defaults to None for no translation/rotation/scaling.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.Coreg"><code class="docutils literal notranslate"><span class="pre">Coreg()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.Coreg"><code class="docutils literal notranslate"><span class="pre">Coreg()</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.rotors"><code class="docutils literal notranslate"><span class="pre">rotors</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.mri_to_meeg_trs"><code class="docutils literal notranslate"><span class="pre">mri_to_meeg_trs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.mri_to_meeg_tr"><code class="docutils literal notranslate"><span class="pre">mri_to_meeg_tr</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.mri_to_meeg_rs"><code class="docutils literal notranslate"><span class="pre">mri_to_meeg_rs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.mri_to_meeg_r"><code class="docutils literal notranslate"><span class="pre">mri_to_meeg_r</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.meeg_to_mri_trs"><code class="docutils literal notranslate"><span class="pre">meeg_to_mri_trs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.meeg_to_mri_tr"><code class="docutils literal notranslate"><span class="pre">meeg_to_mri_tr</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.meeg_to_mri_rs"><code class="docutils literal notranslate"><span class="pre">meeg_to_mri_rs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.meeg_to_mri_r"><code class="docutils literal notranslate"><span class="pre">meeg_to_mri_r</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.closest_pts_nas"><code class="docutils literal notranslate"><span class="pre">closest_pts_nas</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.closest_pts_lpa"><code class="docutils literal notranslate"><span class="pre">closest_pts_lpa</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.closest_pts_rpa"><code class="docutils literal notranslate"><span class="pre">closest_pts_rpa</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.closest_pts_eeg"><code class="docutils literal notranslate"><span class="pre">closest_pts_eeg</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.plot_coregistration"><code class="docutils literal notranslate"><span class="pre">plot_coregistration()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg.load_meg_ref_pts"><code class="docutils literal notranslate"><span class="pre">load_meg_ref_pts()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._calc_coreg"><code class="docutils literal notranslate"><span class="pre">_calc_coreg()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._load_mri_ref_pts"><code class="docutils literal notranslate"><span class="pre">_load_mri_ref_pts()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._format_fiducials"><code class="docutils literal notranslate"><span class="pre">_format_fiducials()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._load_hd_surf"><code class="docutils literal notranslate"><span class="pre">_load_hd_surf()</span></code></a></li>
@@ -929,7 +1069,6 @@ defaults to None for no translation/rotation/scaling.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._translation"><code class="docutils literal notranslate"><span class="pre">_translation()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._rotation"><code class="docutils literal notranslate"><span class="pre">_rotation()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._scaling"><code class="docutils literal notranslate"><span class="pre">_scaling()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._get_transformation_matrix"><code class="docutils literal notranslate"><span class="pre">_get_transformation_matrix()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._get_rot_and_scale_mat"><code class="docutils literal notranslate"><span class="pre">_get_rot_and_scale_mat()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._get_trans_and_rot_mat"><code class="docutils literal notranslate"><span class="pre">_get_trans_and_rot_mat()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#src_rec.coreg._get_rot_mat"><code class="docutils literal notranslate"><span class="pre">_get_rot_mat()</span></code></a></li>
@@ -937,13 +1076,13 @@ defaults to None for no translation/rotation/scaling.</p></li>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../_sources/src_rec/coreg.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/src_rec/coreg.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -958,8 +1097,8 @@ defaults to None for no translation/rotation/scaling.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -979,7 +1118,7 @@ defaults to None for no translation/rotation/scaling.</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
@@ -1025,7 +1164,8 @@ defaults to None for no translation/rotation/scaling.</p></li>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

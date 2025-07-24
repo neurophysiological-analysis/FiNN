@@ -8,17 +8,19 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import finnpy.sfc.td as td
-import finnpy.sfc.fd as fd
-import finnpy.sfc.cd as cohd
-
-import finnpy.sfc._misc as misc
-import finnpy.data.paths as paths
+import finnpy.feat.sfc as sfc  # @UnresolvedImport
+import finnpy.demo.functionality.sfc.gen_demo_data as gen_demo_data  # @UnresolvedImport
 
 def main():
-    data = np.load(paths.fct_sfc_data)
-    frequency_sampling = 5500
-    frequency_peak = 30
+    minimum_frequency = 13
+    maximum_frequency = 27
+    
+    frequency_sampling = 3000
+    time_s = 120
+    offset_s = 1
+    signal_length_samples = int(frequency_sampling * (time_s + offset_s * 2)) 
+    data = gen_demo_data.gen_wn_signal(minimum_frequency, maximum_frequency, frequency_sampling, signal_length_samples)
+    frequency_peak = (maximum_frequency + minimum_frequency)/2
     
     noise_weight = 0.2
     
@@ -26,8 +28,8 @@ def main():
     phase_max = 270
     phase_step = 4
         
-    fmin = 28
-    fmax = 33
+    fmin = 18
+    fmax = 23
     
     #Generate data
     offset = int(np.ceil(frequency_sampling/frequency_peak))
@@ -73,7 +75,7 @@ def calc_from_time_domain(signal_1, signal_2, frequency_sampling, f_min, f_max):
     nperseg_inner = frequency_sampling
     nfft = frequency_sampling
     
-    return td.run_psi(signal_1, signal_2, nperseg_outer, frequency_sampling, nperseg_inner, nfft, "hanning", "zero", f_min, f_max, f_step_sz = 1) 
+    return sfc.psi_td(signal_1, signal_2, nperseg_outer, frequency_sampling, nperseg_inner, nfft, "hanning", "zero", f_min, f_max, f_step_sz = 1) 
 
 def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, f_min, f_max):
     nperseg_outer = int(frequency_sampling * 3)
@@ -85,16 +87,16 @@ def calc_from_frequency_domain(signal_1, signal_2, frequency_sampling, f_min, f_
     
     for idx_start in np.arange(0, len(signal_1), nperseg_outer):
         
-        seg_data_X = misc._segment_data(signal_1[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")
-        seg_data_Y = misc._segment_data(signal_2[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")
+        seg_data_X = sfc._segment_data(signal_1[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")  # pylint: disable=protected-access
+        seg_data_Y = sfc._segment_data(signal_2[idx_start:int(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero")  # pylint: disable=protected-access
     
-        (bins, fd_signal_1) = misc._calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hanning")
-        (_,    fd_signal_2) = misc._calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hanning")
+        (bins, fd_signal_1) = sfc._calc_FFT(seg_data_X, frequency_sampling, nfft, window = "hanning")  # pylint: disable=protected-access
+        (_,    fd_signal_2) = sfc._calc_FFT(seg_data_Y, frequency_sampling, nfft, window = "hanning")  # pylint: disable=protected-access
         
         fd_signals_1.append(fd_signal_1)
         fd_signals_2.append(fd_signal_2)
     
-    return fd.run_psi(fd_signals_1, fd_signals_2, bins, f_min, f_max, 1)
+    return sfc.psi_fd(fd_signals_1, fd_signals_2, bins, f_min, f_max, 1)
         
 def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, f_min, f_max):
     
@@ -106,10 +108,10 @@ def calc_from_coherency_domain(signal_1, signal_2, frequency_sampling, f_min, f_
     
     for idx_start in np.arange(0, len(signal_1), nperseg_outer):
         
-        (bins, cc) = td.run_cc(signal_1[idx_start:(idx_start + nperseg_outer)], signal_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero", 
+        (bins, cc) = sfc.cc_td(signal_1[idx_start:(idx_start + nperseg_outer)], signal_2[idx_start:(idx_start + nperseg_outer)], nperseg_inner, pad_type = "zero", 
                                fs = frequency_sampling, nfft = nfft, window = "hanning")
         data_coh.append(cc)
     
-    return cohd.run_psi(data_coh, bins, f_min, f_max)
+    return sfc.psi_cc(data_coh, bins, f_min, f_max)
     
 main()

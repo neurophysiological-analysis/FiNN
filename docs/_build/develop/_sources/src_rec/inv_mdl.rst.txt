@@ -1,4 +1,6 @@
 
+.. _src_rec_inv_module:
+
 Inverse model
 =============
 

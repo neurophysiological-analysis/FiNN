@@ -1,4 +1,6 @@
 
+.. _fileio_package:
+
 File IO
 =======
 

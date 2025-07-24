@@ -1,4 +1,6 @@
 
+.. _src_rec_utils_module:
+
 Utility functions
 =================
 

@@ -8,8 +8,11 @@ Welcome to FiNNPy
 
 FiNNPy is a toolbox for the analysis of electrophysiological to *Fi*\nd *N*\europhysiological *N*\etworks using *Py*\thon. To this end, FiNNPy provides a number of methods which support the analysis of electrophysiological data. This support is expanded to a broad scope from basic digital signal processing, to file IO, statistical analysis, visualization & most importantly, a number of different metrics to evaluate same frequency connectivity and cross frequency connectivity. 
 
-FiNNPy was designed with primarily EEG, EMG & MEG data in mind, but can easily
-utilized for the analysis of related electrophysiological data. 
+FiNNPy was designed with primarily EEG, EMG & MEG data in mind, but can easily utilized for the analysis of related electrophysiological data. 
+
+| For help in setting up FiNNpy, see :ref:`install_label`.
+| For assistance with individual topics, see :ref:`guides_label`.
+| Code documentation is provided in the :ref:`api_label`.
 
 Demo applications of the included modules are available in the finnpy_demo folder.
 

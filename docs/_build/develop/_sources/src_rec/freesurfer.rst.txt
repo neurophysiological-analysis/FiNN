@@ -1,4 +1,6 @@
 
+.. _src_rec_fs_module:
+
 Freesurfer methods
 ==================
 

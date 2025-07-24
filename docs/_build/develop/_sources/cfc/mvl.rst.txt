@@ -1,6 +1,8 @@
 
+.. _mvl_module:
+
 Mean Vector Length
-=======================
+==================
 
 
 .. currentmodule:: cfc.pac

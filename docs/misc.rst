@@ -1,4 +1,6 @@
 
+.. _misc_package:
+
 Misc
 ====
 

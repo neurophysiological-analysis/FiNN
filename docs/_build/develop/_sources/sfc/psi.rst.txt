@@ -1,4 +1,6 @@
 
+.. _psi_module:
+
 Phase slope index
 =================
 

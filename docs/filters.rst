@@ -1,4 +1,6 @@
 
+.. _filters_package:
+
 Filters
 =======
 

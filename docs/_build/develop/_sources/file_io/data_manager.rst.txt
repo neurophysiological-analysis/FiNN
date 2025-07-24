@@ -1,4 +1,6 @@
 
+.. _datamanager_module:
+
 Data manager
 ============
 

@@ -6,7 +6,7 @@ Created on Jan 5, 2021
 
 import numpy as np
 
-import finnpy.cfc.pac as pac
+import finnpy.feat.cfc as cfc  # @UnresolvedImport
 
 def generate_high_frequency_signal(n, frequency_sampling, frequency_within_bursts, random_noise_strength, 
                                    offset, burst_count, burst_length):
@@ -38,10 +38,10 @@ def main():
                                                         random_noise_strength, high_freq_frame_offset, burst_count, burst_length) for high_freq_frame_offset in high_freq_frame_offsets]
     low_freq_signals = [np.sin(2 * np.pi * frequency_between_bursts * data_range / frequency_sampling) for frequency_between_bursts in frequencies_between_bursts]
     
-    scores = np.zeros((len(high_freq_signals), len(low_freq_signals)));
+    scores = np.zeros((len(high_freq_signals), len(low_freq_signals)))
     for (high_freq_idx, high_freq_signal) in enumerate(high_freq_signals):
         for (low_freq_idx, low_freq_signal) in enumerate(low_freq_signals):
-            scores[high_freq_idx, low_freq_idx] = pac.run_mi(low_freq_signal, high_freq_signal,
+            scores[high_freq_idx, low_freq_idx] = cfc.mi(low_freq_signal, high_freq_signal,
                                                              phase_window_half_size = 20, phase_step_width = 5)
             
     print("target frequency: ", tgt_frequency_between_bursts)

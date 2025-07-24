@@ -1,4 +1,6 @@
 
+.. _brainvision_module:
+
 Load brainvision data
 =====================
 

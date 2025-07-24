@@ -19,7 +19,6 @@ import finnpy.src_rec.inv_mdl  # @UnresolvedImport
 import finnpy.src_rec.subj_to_fsavg  # @UnresolvedImport
 import finnpy.visualization.plot_src_rec as psr  # @UnresolvedImport
 
-COV_PATH = "./cov/"
 ANATOMY_PATH = "./anatomy/"
 SUBJ_NAME = "demo_pat"
 FS_PATH = "<path_to_freesurfer>"
@@ -34,17 +33,39 @@ OVERWRITE_WS_EXTRACT = False
 
 VISUALIZE_COREG = True
 
+def get_demo_noise_data(ch_cnt = 64, duration_s = 100, fs = 100):
+    ch_names = ["eeg"] * ch_cnt
+    unique_data = np.random.normal(size = (ch_cnt, int(duration_s * fs)))
+    
+    shared_data = np.repeat(np.random.normal(size = (1, int(duration_s * fs))), ch_cnt, axis = 0)
+    
+    data = unique_data * 0.8 + shared_data * 0.2
+    
+    return (data, fs, ch_names)
+    
+
+def get_demo_data(ch_cnt = 64, duration_s = 100, fs = 100):
+    ch_names = ["eeg"] * ch_cnt
+    unique_data = np.random.normal(size = (ch_cnt, int(duration_s * fs)))
+    
+    shared_data = np.repeat(np.random.normal(size = (1, int(duration_s * fs))), ch_cnt, axis = 0)
+    
+    data = unique_data * 0.9 + shared_data * 0.1
+    
+    return (data, fs, ch_names)
+
+
 def main():
     """Demo pipeline for EEG source reconstruction."""
     # This line is only required if multiple source reconstructions are computed in parallel (recommended)
     threadpoolctl.threadpool_limits(1, user_api='blas')
     
-    (sensor_cov_data, fs, ch_names) = get_data()  # noqa: F821 @UndefinedVariable
+    (sensor_cov_data, fs, ch_names) = get_demo_noise_data()
     
     if (os.path.exists("eeg_sen_cov") is False):
-        sen_cov = finnpy.src_rec.sen_cov.run(sensor_cov_data.T, fs, COV_PATH, "EEG", np.ones(sensor_cov_data.shape[0]), ch_names, ["eeg"] * sensor_cov_data.shape[0],
+        sen_cov = finnpy.src_rec.sen_cov.run(sensor_cov_data.T, fs, "EEG", np.ones(sensor_cov_data.shape[0]), ch_names, ["eeg"] * sensor_cov_data.shape[0],
                                              fast_eigendecomp_path = FAST_EIGEN_DECOMP_PATH,
-                                             float_sz = 256, overwrite = True)
+                                             float_sz = 256)
         dm.save(sen_cov, "eeg_sen_cov")
     else:
         sen_cov = dm.load("eeg_sen_cov")
@@ -98,8 +119,10 @@ def main():
     else:
         subj_to_fsavg_mdl = dm.load("eeg_subj_to_fsavg_mdl")
     
-    (sensor_data, fs, ch_names) = get_data()  # noqa: F821 @UndefinedVariable
+    (sensor_data, fs, ch_names) = get_demo_data()
+    
     # Preprocess sensor data
+    
     if (IS_DEMO):
         sensor_data[ch_names.index("C4"), :] += 10000
             

@@ -181,7 +181,7 @@ def run(subj_name, anatomy_path, signal_type, use_nasion = True, rec_info = None
         Raised if the signal type is not either 'EEG' or 'MEG'.
     """
     if (signal_type == "MEG"):
-        sen_ref_pts = _read_meg_pts(mne.io.read_info(rec_info))
+        sen_ref_pts = _read_meg_pts(mne.io.read_info(rec_info, verbose = "ERROR"))
     elif (signal_type == "EEG"):
         sen_ref_pts = finnpy.src_rec.utils.read_eeg_pts(rec_info)
     else:
@@ -251,7 +251,7 @@ def plot_coregistration(coreg, signal_type, anatomy_path, subj_name, use_nasion 
         Raised if the signal type is not either 'EEG' or 'MEG'.
     """
     if (signal_type == "MEG"):
-        meeg_pts = _read_meg_pts(mne.io.read_info(meg_data_path))
+        meeg_pts = _read_meg_pts(mne.io.read_info(meg_data_path, verbose = "ERROR"))
     elif (signal_type == "EEG"):
         meeg_pts = finnpy.src_rec.utils.read_eeg_pts(eeg_setup)
         meeg_pts = {"Nz": coreg.closest_pts_nas, "lpa": coreg.closest_pts_lpa, "rpa": coreg.closest_pts_rpa, "chs": coreg.closest_pts_eeg, "labels": meeg_pts["labels"]}
@@ -349,7 +349,7 @@ def _read_meg_pts(rec_meta_info):
         elif (ref_pt["kind"] == mne.io.constants.FIFF.FIFFV_POINT_EXTRA):
             ref_pts["hsp"].append(ref_pt["r"])
         else:
-            raise AssertionError("unknown point type")
+            continue
         ref_pts["coord_frame"].append(ref_pt["coord_frame"].real)
     if (np.sum(np.asarray(ref_pts["coord_frame"]) == ref_pts["coord_frame"][0]) != len(ref_pts["coord_frame"])):
         raise AssertionError("Coordinate frame is not universal")
@@ -557,7 +557,7 @@ def _load_mri_ref_pts(anatomy_path, subj_name):
     meg_pts : dict, ('nasion', 'lpa', 'rpa', 'hsp', 'coord_frame')
               MRI reference points for coregistration.
     """
-    (pre_mri_ref_pts, _) = mne.io.read_fiducials(anatomy_path + subj_name + "/bem/" + subj_name + "-fiducials.fif")
+    (pre_mri_ref_pts, _) = mne.io.read_fiducials(anatomy_path + subj_name + "/bem/" + subj_name + "-fiducials.fif", verbose = "ERROR")
     mri_ref_pts = _format_fiducials(pre_mri_ref_pts)
     
     return mri_ref_pts

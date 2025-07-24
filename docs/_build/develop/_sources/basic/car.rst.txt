@@ -1,4 +1,6 @@
 
+.. _car_module:
+
 Common Average Re-Referencing
 =============================
 

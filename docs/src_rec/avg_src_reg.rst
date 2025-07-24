@@ -1,4 +1,6 @@
 
+.. _src_rec_clust_module:
+
 Source space region clustering
 ==============================
 

@@ -1,4 +1,6 @@
 
+.. _downsample_module:
+
 Downsampling
 ============
 

@@ -289,8 +289,10 @@ def get_skull_skin(anatomy_path, subject_name, preflood_height = 25, overwrite =
         ex_c.run(subject_name, cmd)
         
         # Remove files not needed for source reconstruction
-        os.remove(anatomy_path + subject_name + "/bem/watershed/" + subject_name + "_brain_surface")
-        os.remove(anatomy_path + subject_name + "/bem/watershed/ws.mgz")
+        if (os.path.exists(anatomy_path + subject_name + "/bem/watershed/" + subject_name + "_brain_surface")):
+            os.remove(anatomy_path + subject_name + "/bem/watershed/" + subject_name + "_brain_surface")
+        if (os.path.exists(anatomy_path + subject_name + "/bem/watershed/ws.mgz")):
+            os.remove(anatomy_path + subject_name + "/bem/watershed/ws.mgz")
 
 def get_head_model(anatomy_path, subj_name):
     """

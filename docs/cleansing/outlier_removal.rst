@@ -1,4 +1,6 @@
 
+.. _orem_module:
+
 Outlier removal
 ===============
 

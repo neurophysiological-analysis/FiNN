@@ -1,4 +1,6 @@
 
+.. _butter_module:
+
 Butterwort filter
 =================
 

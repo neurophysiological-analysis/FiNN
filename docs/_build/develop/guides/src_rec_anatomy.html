@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Anatomy Extraction &#8212; FiNN  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b7737de8" />
+    <link rel="stylesheet" type="text/css" href="../_static/_rst_properties.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b7737de8" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/_rtd_versions.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'guides/src_rec_anatomy';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">FiNN  documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install_guide.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guides.html">
+    Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../install_guide.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guides.html">
+    Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api_reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+        <div class="sidebar-primary-item"><h3><a href="../index.html">FiNNPY</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install_guide.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#automatic-install">1. Automatic install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#manual-build">2. Manual build</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#enabling-statistics-optional">3. Enabling statistics (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../install_guide.html#external-libraries-optional">4. External libraries (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#data-preparation">Data preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#feature-generation">Feature generation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#source-reconstruction">Source reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#statistics">Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../guides.html#visualization">Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#feature-signal-processing">Feature/Signal processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#the-source-reconstruction">The Source Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#feature-analysis">Feature analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#presentation">Presentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference.html#quality-of-life">Quality of life</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+        <div class="sidebar-primary-item"><div class="injected">
+  <div class="rst-versions " data-toggle="rst-versions" role="note"
+    aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;&nbsp;Other versions&nbsp;&nbsp;</span>
+      v: develop
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>Branches</dt>
+        <dd class="rtd-current-item">
+          <a href="../../develop/index.html">develop</a>
+        </dd>
+        <dd class="">
+          <a href="../../stable/index.html">stable</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="../
+              ../develop/index.html/../search.html" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs">
+            </form>
+          </div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Anatomy Extraction</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="anatomy-extraction">
+<span id="src-rec-anatomy-label"></span><h1>Anatomy Extraction<a class="headerlink" href="#anatomy-extraction" title="Link to this heading">#</a></h1>
+<p>This part of the guide explains how to extract anatomy information from a patient’s T1 using via FiNNpy’s FreeSurfer wrappings.</p>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Link to this heading">#</a></h2>
+<p>When called via FiNNpy, FreeSurfer commands will be executed in dedicated processes with dedicated temporary working spaces. As such, anatomy from multiple subjects may be extracted concurrently. If it is unknown how many processes may be executed concurrently without overburdening the PC, it is recommended to consecutively start processes as memory consumption is mostly stable throughout the extraction process. Time-wise, the extraction will last between 2 and 4 hours. FreeSurfer employs the below detailed folder structure. Thereof, only the project_data (name customizable) and anatomy path (name customizable) are to be created by the user. Subject folders and their contents are created by FreeSurfer. Folders marked as ‘automatically generated’ must not be created by the user as FreeSurfer will not operate correctly in case these are present.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>project_data (user created)
+└── anatomy_path (user created)
+    ├── subject_a (automatically generated)
+    │   ├── bem (automatically generated)
+    │   │   └── watershed (automatically generated)
+    │   ├── mri (automatically generated)
+    │   │   └── transforms (automatically generated)
+    │   ├── proj (automatically generated)
+    │   └── surf (automatically generated)
+    └── subject_b (automatically generated)
+</pre></div>
+</div>
+</section>
+<section id="initialization">
+<h2>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">#</a></h2>
+<p>Initially, FreeSurfer paths need to be configured for subsequent FreeSurfer calls.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">fs_path</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>fs_path</em> points towards the FreeSurfer installation. The FreeSurfer folder should contain the ‘bin’ folder, license.txt, and sources.sh (among other files/directories).</div>
+<div class="line"><em>anatomy_path</em> contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists.</div>
+<div class="line"><em>fastsurfer_path</em> FreeSurfer may also be called via FastSurfer. In this case, the FastSurfer path must also be indicated.</div>
+<div class="line"><em>fastsurfer_python_path</em> Option to provide a python path to FastSurfer if the system-wide Python installation is not to be used (default in Linux).</div>
+<div class="line"><em>freesurfer_license_path</em> Path to the FreeSurfer license file. This can be freely obtained (as of 2025/06/04) on the <a class="reference external" href="https://freesurfer.net/">FreeSurfer website</a>.</div>
+</div>
+<p>The above command may look as follows on a Windows machine.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy_sr_utils</span><span class="o">.</span><span class="n">init_fs_paths</span><span class="p">(</span><span class="n">anatomy_path</span> <span class="o">=</span> <span class="s2">&quot;C:/.../anatomy/&quot;</span><span class="p">,</span>
+                              <span class="n">fs_path</span> <span class="o">=</span> <span class="s2">&quot;C:/.../FreeSurfer/version/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Be aware that the <em>anatomy_path</em> variable in this initialization step must point towards the directory of <em>all</em> subjects, not a specific one.</p>
+</section>
+<section id="surface-extraction">
+<h2>Surface extraction<a class="headerlink" href="#surface-extraction" title="Link to this heading">#</a></h2>
+<p>FiNNpy may either employ FreeSurfer to extract anatomical information from subject specific MRI scans or to copy data from fs-average, an averaged MRI scan provided by FreeSurfer.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">t1_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">t1_path</span><span class="p">)):</span>
+   <span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">extract_mri</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">t1_scan_file</span><span class="p">,</span> <span class="n">fiducials_file</span><span class="p">,</span> <span class="n">fiducials_path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+   <span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">copy_fsavg</span><span class="p">(</span><span class="n">freesurfer_path</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>anatomy_path</em> contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists.</div>
+<div class="line"><em>subj_name</em> Name of the subject.</div>
+<div class="line"><em>t1_scan_file</em> Path to the subject’s T1 scan file. It is important to note that the patient’s T1 scan file must <em>not</em> be placed within the subject’s folder inside the anatomy folder. The subject folder must be created by FreeSurfer and the T1 file placed elsewhere. It will be copied by FreeSurfer during the extraction and may be deleted thereafter.</div>
+<div class="line"><em>fiducials_file</em> Name of the fiducials file. If none is present, default fiducials are morphed from fs-average, defaults to None.</div>
+<div class="line"><em>fiducials_path</em> Path to the fiducials file. If none is present, default fiducials are morphed from fs-average, defaults to None.</div>
+<div class="line"><em>mode</em> Mode is either “FreeSurfer” (default) or “FastSurfer”.</div>
+<div class="line"><em>overwrite</em> Flag whether to overwrite the files of a subject in case the respective subject’s folder already exists. Defaults to False.</div>
+</div>
+<div class="line-block">
+<div class="line"><em>freesurfer_path</em> points towards the FreeSurfer installation. The FreeSurfer folder should contain the ‘bin’ folder, license.txt, and sources.sh (among other files/directories).</div>
+</div>
+<p>Let’s take a closer look at this code example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">t1_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">t1_path</span><span class="p">)):</span>
+</pre></div>
+</div>
+<p>Initially, it is checked whether the <em>t1_path</em> variable is not None and whether the indicated directory does actually exist. If this is the case, the following line is executed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">extract_mri</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">t1_scan_file</span><span class="p">,</span> <span class="n">fiducials_file</span><span class="p">,</span> <span class="n">fiducials_path</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>fiducials_file</em> and <em>fiducials_path</em> may be employed to include subject specific fiducials, otherwise these will be compute from <em>fsaverage</em>. Finally, the <em>overwrite</em> flag may be used to allow overwriting a subject’s folder. As such, herein anatomy is extracted from a T1 scan. Be aware, this process may likely take several hours to run (reference: Linux on a 5950X - 1.5 h - 4 h). Therefore, it is highly recommended to execute this command for several subjects in parallel.</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">copy_fsavg</span><span class="p">(</span><span class="n">fs_path</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, this line of code copies reference anatomy from <em>fsaverage</em> into the folder indicated by <em>subj_name</em>. <em>fsaverage</em> is provided by FreeSurfer and found in <em>FreeSurfer/version/subjects/</em> or <em>FreeSurfer/subjects/</em></p>
+<p>Either of the above steps will create the following folders, <em>bem</em>, <em>bem/watershed</em>, <em>mri</em>, <em>mri/transforms</em>, <em>surf</em>, and partially populate these.</p>
+</section>
+<section id="get-skull-and-skin-models">
+<h2>Get skull and skin models<a class="headerlink" href="#get-skull-and-skin-models" title="Link to this heading">#</a></h2>
+<p>The next step is to extract skull and skin models using FiNNpy’s wrapping of the FreeSurfer watershed algorithm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">get_skull_skin</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subject_name</span><span class="p">,</span> <span class="n">preflood_height</span> <span class="o">=</span> <span class="mi">25</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>preflood_height</em> The preflood parameter controls how <em>strict</em> or <em>liberal</em> the extraction of these models is performed.</div>
+</div>
+<p>It is important that the correct extraction is manually verified, as these are highly dependent on adjusting the preflood height. Results may be visualized as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">finnpy.src_rec.skull_skin_mdls</span>
+
+<span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span> <span class="o">=</span> <span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">read_skin_skull</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="s2">&quot;MEG&quot;</span><span class="p">)</span>
+<span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">plot_skin_skull</span><span class="p">(</span><span class="n">vert</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">,</span> <span class="n">block</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><em>vert</em> and <em>faces</em> are lists of vertices/faces of the skin, outer skull, and inner skull models.</div>
+<div class="line"><em>block</em> indicates whether the program is to stop and display an interactive matplotlib image for visualization.</div>
+</div>
+</section>
+<section id="get-head-surface-model">
+<h2>Get head surface model<a class="headerlink" href="#get-head-surface-model" title="Link to this heading">#</a></h2>
+<p>The next step is to compute the seghead models, these are required for M/EEG co-registration:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">extract_anatomy</span><span class="o">.</span><span class="n">get_head_model</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="enabling-group-analyses">
+<h2>Enabling group analyses<a class="headerlink" href="#enabling-group-analyses" title="Link to this heading">#</a></h2>
+<p>If features are to be evaluated on the group level (or for distinct regions of an atlas), a transformation to fs-average (standard-template) needs to be computed for every subject, making all data resides within the same space. To enable these, the following FreeSurfer call is needed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">finnpy</span><span class="o">.</span><span class="n">src_rec</span><span class="o">.</span><span class="n">subj_to_fsavg</span><span class="o">.</span><span class="n">prepare</span><span class="p">(</span><span class="n">anatomy_path</span><span class="p">,</span> <span class="n">subj_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>Importantly, if maintainable (memory-wise), subjects should be processed in parallel to minimize computation time. As such, the entire herein discussed part of the reconstruction pipeline may be easily parallelized on the outside, for example using finnpys timed pool for multithreading (finnpy.misc.timed_pool).</p>
+<p>This concludes MRI extraction segment of the source reconstruction pipeline. The next step (MEG recording specific) is explained in <a class="reference internal" href="src_rec_sensors.html#src-rec-sensors-label"><span class="std std-ref">Sensor Position Dependent Factors</span></a>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialization">Initialization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#surface-extraction">Surface extraction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-skull-and-skin-models">Get skull and skin models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#get-head-surface-model">Get head surface model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enabling-group-analyses">Enabling group analyses</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/guides/src_rec_anatomy.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2022, Maximilian Scherer.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item"><div class="injected">
+  <div class="rst-versions " data-toggle="rst-versions" role="note"
+    aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book">&nbsp;&nbsp;Other versions&nbsp;&nbsp;</span>
+      v: develop
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl>
+        <dt>Branches</dt>
+        <dd class="rtd-current-item">
+          <a href="../../develop/index.html">develop</a>
+        </dd>
+        <dd class="">
+          <a href="../../stable/index.html">stable</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Search</dt>
+        <dd>
+          <div style="padding: 6px;">
+            <form id="flyout-search-form" class="wy-form" target="_blank" action="../
+              ../develop/index.html/../search.html" method="get">
+              <input type="text" name="q" aria-label="Search docs" placeholder="Search docs">
+            </form>
+          </div>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

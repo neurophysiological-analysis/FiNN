@@ -8,7 +8,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-import finnpy.cfc.pac as pac
+import finnpy.feat.cfc as cfc  # @UnresolvedImport
 
 def generate_high_frequency_signal(n, frequency_sampling, frequency_within_bursts, random_noise_strength, 
                                    offset, burst_count, burst_length):
@@ -67,7 +67,7 @@ def main():
     scores = list(); best_fits = list(); amplitude_signals = list()
     for high_freq_signal in high_freq_signals:
         for low_freq_signal in low_freq_signals:
-            tmp = pac.run_dmi(low_freq_signal, high_freq_signal, phase_window_half_size = 20, phase_step_width = 5)
+            tmp = cfc.dmi(low_freq_signal, high_freq_signal, phase_window_half_size = 20, phase_step_width = 5)
             scores.append(tmp[0]); best_fits.append(tmp[1]); amplitude_signals.append(tmp[2])
     
     #visualization

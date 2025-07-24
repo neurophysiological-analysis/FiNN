@@ -1,4 +1,6 @@
 
+.. _fir_module:
+
 FIR filter
 ==========
 

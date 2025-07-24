@@ -1,4 +1,6 @@
 
+.. _src_rec_bem_module:
+
 Boundary element model (BEM)
 ============================
 

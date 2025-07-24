@@ -1,4 +1,6 @@
 
+.. _cc_module:
+
 Complex coherency
 =================
 

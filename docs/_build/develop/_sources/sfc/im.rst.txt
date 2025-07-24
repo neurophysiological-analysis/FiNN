@@ -1,4 +1,6 @@
 
+.. _icoh_module:
+
 Imaginary coherence
 ===================
 

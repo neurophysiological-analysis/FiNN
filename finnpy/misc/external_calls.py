@@ -28,7 +28,9 @@ def run(subject_id, cmd):
     path_to_tmp_cwd = "finnpy_" + subject_id + "_freesurfer_tmp_dir/"  # A temporary working directory is needed as freesurfer saves intermediate results in files.
         
     if (os.path.exists(path_to_tmp_cwd + ".lock")):  # Checks if the current directory is already worked in, if yes, raise error.
-        raise AssertionError("Subject is already being worked on as %s already exists" % (path_to_tmp_cwd + ".lock",))
+        raise AssertionError("Subject is already being worked on as %s already exists.\n" % (path_to_tmp_cwd + ".lock",)
+                             + "This lock is in place to prevent errornous executions on the same data.\n"
+                             + "If this does not apply, please remove %s prior proceeding." % (os.path.abspath(path_to_tmp_cwd),))
     
     os.makedirs(path_to_tmp_cwd, exist_ok = True)
     file = open(path_to_tmp_cwd + ".lock", "wb")

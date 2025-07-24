@@ -93,7 +93,7 @@ def compute(sen_cov, fwd_sol, signal_type, rec_meta_info = None, method = "dSPM"
     # Extract relevant indices from the sensor covariance matrix's eigenvectors/values.
     # And construct whitener
     if (signal_type == "MEG"):
-        data_meg_ch_names = _get_meg_channel_type_idx(mne.io.read_info(rec_meta_info))
+        data_meg_ch_names = _get_meg_channel_type_idx(mne.io.read_info(rec_meta_info, verbose = "ERROR"))
         ref_ids = np.empty(((len(data_meg_ch_names))), dtype = int)
         for (ch_idx, data_meg_ch_name) in enumerate(data_meg_ch_names):
             ref_ids[ch_idx] = sen_cov.ch_names.index(data_meg_ch_name)

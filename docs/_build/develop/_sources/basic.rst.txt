@@ -1,6 +1,8 @@
 
+.. _basic_package:
+
 Basic
-=============
+=====
 
 .. automodule:: basic
    :members:

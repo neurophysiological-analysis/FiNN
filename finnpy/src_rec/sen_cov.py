@@ -7,13 +7,12 @@ Created on Oct 17, 2022.
 import numpy as np
 import pickle
 import warnings
-import os
 import sklearn.covariance
 import sklearn.decomposition
 
 import finnpy.src_rec.utils  # @UnresolvedImport
 
-def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types = None):
+def _empirically_estimate_cov(cov_data, epoch_splits, signal_type, valid_ch_indices, ch_types = None):
     """
     Calculate the sensor noise covariance.
     
@@ -22,6 +21,8 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
     cov_data : numpy.ndarray, shape(samples, ch_cnt)
                An (empty room) file to use for sensor noise covariance calculations.
                Important: Evaluate a number of different files to identify a good example.
+    epoch_splits : list
+                   Epoching-indices for covariance calculation.
     signal_type : string
                   Can be either "EEG" or "MEG", determines how the data is loaded.
     valid_ch_indices : numpy.ndarray, shape(ch_cnt,)
@@ -40,7 +41,7 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
         Signal type is invalid, has to be either 'EEG' or 'MEG'.
     """
     
-    def _calc_cov_meg(cov_data, mag_ch_indices, grad_ch_indices, valid_ch_indices, reject_thresholds = None):
+    def _calc_cov_meg(cov_data, epoch_splits, mag_ch_indices, grad_ch_indices, valid_ch_indices, reject_thresholds = None):
         """
         Calculate the covariance for meg data.
         
@@ -71,20 +72,17 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
         if (reject_thresholds is None):
             reject_thresholds = {"mag": 4e-12, "grad": 4e-10}
         
-        cov_data = cov_data.swapaxes(1, 2)
+        cov_data = cov_data.swapaxes(0, 1)
         mu = 0; samp_cnt = 0; cov = 0
-        for segment_idx in range(cov_data.shape[0]):
-            loc_cov_data = cov_data[segment_idx, :, :]
+        for epoch_idx in range(len(epoch_splits) - 2):
+            loc_cov_data = cov_data[:, epoch_splits[epoch_idx]:epoch_splits[epoch_idx + 1]]
             
             mag_delta = np.max(loc_cov_data[mag_ch_indices, :], axis = 1) - np.min(loc_cov_data[mag_ch_indices, :], axis = 1)
             grad_delta = np.max(loc_cov_data[grad_ch_indices, :], axis = 1) - np.min(loc_cov_data[grad_ch_indices, :], axis = 1)
             # If epoch is bad, skip
             
-            try:
-                if ((mag_delta > reject_thresholds["mag"]).any() or (grad_delta > reject_thresholds["grad"]).any()):
-                    continue
-            except:
-                print("A")
+            if ((mag_delta > reject_thresholds["mag"]).any() or (grad_delta > reject_thresholds["grad"]).any()):
+                continue
             loc_cov_data = loc_cov_data[np.asarray(valid_ch_indices, dtype = bool), :]
             
             mu += np.sum(loc_cov_data, axis = 1)
@@ -92,7 +90,7 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
             samp_cnt += loc_cov_data.shape[1]
         return (mu, cov, samp_cnt)
     
-    def _calc_cov_eeg(cov_data, reject_threshold_factor = 1):
+    def _calc_cov_eeg(cov_data, epoch_splits, reject_threshold_factor = 2):
         """
         Calculate the covariance for eeg data.
         
@@ -101,6 +99,8 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
         cov_data : numpy.ndarray, shape(samples, ch_cnt)
                    An (empty room) file to use for sensor noise covariance calculations.
                    Important: Evaluate a number of different files to identify a good example.
+        epoch_splits : list
+                       Epoching-indices for covariance calculation.
         reject_threshold_factor : factor 
                                   Number of standard deviations after which a sample is rejected.  
         
@@ -114,20 +114,23 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
             - samp_cnt : int
                          Number of samples.
         """
-        cov_data = cov_data.swapaxes(1, 2)
+        cov_data = cov_data.swapaxes(0, 1)
         mu = 0; samp_cnt = 0; cov = 0
         deltas = np.empty((cov_data.shape[0], cov_data.shape[1]))
-        for segment_idx in range(cov_data.shape[0]):
-            loc_cov_data = cov_data[segment_idx, :, :]
+        for epoch_idx in range(len(epoch_splits) - 2):
+            loc_cov_data = cov_data[:, epoch_splits[epoch_idx]:epoch_splits[epoch_idx + 1]]
             deltas[segment_idx] = np.max(loc_cov_data, axis = 1) - np.min(loc_cov_data, axis = 1)
-        reject_threshold = np.sqrt(np.var(deltas)) * reject_threshold_factor
+        # Per segment delta percentile (70%) of per channel signal variability * 2 (default; expands to 5)
+        # Assumes that values up to 140 % of the average are fair game as artifacts are usually several orders of 
+        # magnitude stronger
+        reject_threshold = np.percentile(deltas, 70, axis = 0) * reject_threshold_factor
         
+        bads = 0
         for segment_idx in range(cov_data.shape[0]):
-            loc_cov_data = cov_data[segment_idx, :, :]
-            
-            delta = np.max(loc_cov_data, axis = 1) - np.min(loc_cov_data, axis = 1)
+            delta = deltas[segment_idx, :]
             # If epoch is bad, skip
             if ((delta > reject_threshold).any()):
+                bads += 1
                 continue
             loc_cov_data = loc_cov_data[np.asarray(valid_ch_indices, dtype = bool), :]
             
@@ -140,18 +143,18 @@ def _empirically_estimate_cov(cov_data, signal_type, valid_ch_indices, ch_types 
         mag_ch_indices = np.argwhere(np.asarray(ch_types) == "mag").squeeze(1)
         grad_ch_indices = np.argwhere(np.asarray(ch_types) == "grad").squeeze(1)
         
-        (mu, cov, samp_cnt) = _calc_cov_meg(cov_data, mag_ch_indices, grad_ch_indices, valid_ch_indices)
+        (mu, cov, samp_cnt) = _calc_cov_meg(cov_data, epoch_splits, mag_ch_indices, grad_ch_indices, valid_ch_indices)
         if (samp_cnt < 5):
             warnings.warn("Bad epoch threshold increased (x10) for covariance calculation")
-            (mu, cov, samp_cnt) = _calc_cov_meg(cov_data, mag_ch_indices, grad_ch_indices, valid_ch_indices, reject_thresholds = {"mag": 4e-11, "grad": 4e-9})
+            (mu, cov, samp_cnt) = _calc_cov_meg(cov_data, epoch_splits, mag_ch_indices, grad_ch_indices, valid_ch_indices, reject_thresholds = {"mag": 4e-11, "grad": 4e-9})
     elif (signal_type == "EEG"):
         eeg_ch_indices = np.argwhere(np.asarray(ch_types) == "eeg").squeeze(1)
         cov_data = cov_data[:, :, eeg_ch_indices]
         
-        (mu, cov, samp_cnt) = _calc_cov_eeg(cov_data, reject_threshold_factor = 5)
+        (mu, cov, samp_cnt) = _calc_cov_eeg(cov_data, epoch_splits, reject_threshold_factor = 2)
         if (samp_cnt < 5):
-            warnings.warn("Bad epoch threshold increased (x10) for covariance calculation")
-            (mu, cov, samp_cnt) = _calc_cov_eeg(cov_data, reject_threshold_factor = 10)
+            warnings.warn("Bad epoch threshold increased (x5) for covariance calculation")
+            (mu, cov, samp_cnt) = _calc_cov_eeg(cov_data, epoch_splits, reject_threshold_factor = 5)
     else:
         raise AssertionError('Signal type %s not supported, must be "EEG" or "MEG"' % (signal_type,))
         
@@ -199,8 +202,7 @@ def _calc_sensor_noise_cov(sensor_data, fs, signal_type,
     """
     if (method is None or method == "empirically"):
         epoch_splits = np.arange(0, sensor_data.shape[0], int(fs * epoch_sz_s))
-        emp_cov_data = np.asarray(np.split(sensor_data, epoch_splits, axis = 0)[1:-1])
-        cov = _empirically_estimate_cov(emp_cov_data, signal_type, valid_channels, ch_types)
+        cov = _empirically_estimate_cov(sensor_data, epoch_splits, signal_type, valid_channels, ch_types)
     elif (method == "shrinkage"):
         cov = sklearn.covariance.ShrunkCovariance(**method_params).fit(sensor_data.T[:, valid_channels]).covariance_
     elif (method == "factor_analysis"):
@@ -229,10 +231,10 @@ class Sen_cov():
         self.evecs = evecs
         self.ch_names = ch_names
 
-def run(sensor_data, fs, cov_path, signal_type,
+def run(sensor_data, fs, signal_type,
         valid_channels, ch_names, ch_types, 
         method = None, float_sz = 64, epoch_sz_s = 0.2, method_params = None, 
-        fast_eigendecomp_path = "../FinnPy_speedups/Release/FinnPy_speedups.so", overwrite = False):
+        fast_eigendecomp_path = "../FinnPy_speedups/Release/FinnPy_speedups.so"):
     """
     Compute the sensor noise covariance from given data. Of note, must not contain data of interest.
     
@@ -243,9 +245,6 @@ def run(sensor_data, fs, cov_path, signal_type,
                   Important: Evaluate a number of different files to identify a good example.
     fs : float
          Sampling frequency
-    cov_path : string
-               Path to a the covariance file. If none exists, the covariance will be saved in this location.
-               If set to none (not advised) the covariance's information will not be saved.
     signal_type : string
                   Can be either "EEG" or "MEG", determines how the data is loaded.
     valid_channels : numpy.ndarray, shape(ch_cnt,)
@@ -269,8 +268,6 @@ def run(sensor_data, fs, cov_path, signal_type,
                     defaults to "shrinkage" : 0.2 - epoch size in s.
     fast_eigendecomp_path: string
                            Path to the finnpy speedups library
-    overwrite : boolean
-                Flag to overwrite covariance calculation.
                
     Returns
     -------
@@ -285,30 +282,14 @@ def run(sensor_data, fs, cov_path, signal_type,
     if (sensor_data.shape[0] < sensor_data.shape[1]):
         raise AssertionError("Error: More channels than datapoints. It is likely, the matrix is of shape (ch_cnt, samples) rather than (samples, ch_cnt).")
     
-    if (cov_path is None or 
-        (os.path.exists(cov_path + "eval.npy") is False or  # noqa: W504
-         os.path.exists(cov_path + "evec.npy") is False) or overwrite):
-        
-        # Calculates the covariance
-        sensor_cov = _calc_sensor_noise_cov(sensor_data, fs, signal_type,
-                                            valid_channels, ch_types,
-                                            method, epoch_sz_s, method_params)
-        
-        # Extracts the eigenvectors/-values
-        (evals, evecs) = finnpy.src_rec.utils.calc_eigendecomposition(sensor_cov, float_sz, fast_eigendecomp_path)
-        
-        if (cov_path is not None):
-            if (os.path.exists(cov_path) is False):
-                os.makedirs(cov_path, exist_ok = True)
-         
-            np.save(cov_path + "eval.npy", evals)
-            np.save(cov_path + "evec.npy", evecs)
-            pickle.dump(ch_names, open(cov_path + "ch_names.pkl", "wb"))
-    else:
-        evals = np.load(cov_path + "eval.npy")
-        evecs = np.load(cov_path + "evec.npy")
-        ch_names = pickle.load(open(cov_path + "ch_names.pkl", "rb"))
-        
+    # Calculates the covariance
+    sensor_cov = _calc_sensor_noise_cov(sensor_data, fs, signal_type,
+                                        valid_channels, ch_types,
+                                        method, epoch_sz_s, method_params)
+    
+    # Extracts the eigenvectors/-values
+    (evals, evecs) = finnpy.src_rec.utils.calc_eigendecomposition(sensor_cov, float_sz, fast_eigendecomp_path)
+    
     return Sen_cov(evals, evecs.T, ch_names)
     
 def load(cov_path):

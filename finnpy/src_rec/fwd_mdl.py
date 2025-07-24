@@ -320,7 +320,7 @@ def _get_meg_coil_integration_pts(rec_info, meg_to_mri_trans):
     AssertionError
         Cannot determin MEG coil type.
     """
-    rec_info = mne.io.read_info(rec_info)
+    rec_info = mne.io.read_info(rec_info, verbose = "ERROR")
     
     dev_to_meg_trans = rec_info['dev_head_t']["trans"]
     coil_types = mne.forward._read_coil_defs(verbose="Error")  # Reads meg coil types from mne library pylint: disable=protected-access
@@ -388,7 +388,7 @@ def get_meg_coil_pos(rec_info, meg_to_mri_trans):
     AssertionError
         Cannot determin MEG coil type.
     """
-    rec_info = mne.io.read_info(rec_info)
+    rec_info = mne.io.read_info(rec_info, verbose = "ERROR")
     
     dev_to_meg_trans = rec_info['dev_head_t']["trans"]
     coil_types = mne.forward._read_coil_defs(verbose="Error")  # Reads meg coil types from mne library pylint: disable=protected-access
@@ -406,17 +406,17 @@ def get_meg_coil_pos(rec_info, meg_to_mri_trans):
             channel["pos"] = ch_trans[0:3]
             channel["pos_rot_scale"] = ch_trans
              
-            curr_coil_type = None
+            curr_coil_pos = None
             for coil_type in coil_types:
                 if ((int(coil_type["coil_type"]) == channel["coil_type"]) and (coil_type["accuracy"] == 2)):
-                    curr_coil_type = coil_type
-            if (curr_coil_type is None):
+                    curr_coil_pos = coil_type["rmag"]
+            if (curr_coil_pos is None):
                 raise AssertionError("Unable to identify meg coil type")
-            channel["coil_type_info"] = curr_coil_type
+            channel["coil_pos"] = curr_coil_pos
              
             loc_trans = np.dot(dev_to_meg_trans, channel["pos_rot_scale"])
             
-            pos_meg.append(np.dot(np.mean(channel["coil_type_info"]["sen_loc"], axis = 0), loc_trans[:3, :3].T) + loc_trans[:3, 3])
+            pos_meg.append(np.dot(np.mean(channel["coil_pos"], axis = 0), loc_trans[:3, :3].T) + loc_trans[:3, 3])
             pos_mri.append(np.dot(pos_meg[-1], meg_to_mri_trans[:3, :3].T) + meg_to_mri_trans[:3, 3])
     
     pos_meg = np.asarray(pos_meg)

@@ -8,6 +8,7 @@ import numpy as np
 import sklearn
 import pyvista
 import finnpy.src_rec.fwd_mdl  # @UnresolvedImport
+import copy
 
 def plot_reg_avg(subj_to_fsavg_mdl, morphed_channels, color_data,
                  signal_type = None, rec_meta_info = None, coreg = None, ch_names = None):
@@ -100,7 +101,8 @@ def plot_fsavg_space(subj_to_fsavg_mdl, color_data,
     plot_subj_space(subj_to_fsavg_mdl, color_data, signal_type, rec_meta_info, coreg, ch_names)
 
 def plot_subj_space(cort_mdl, color_data,
-                    signal_type = None, rec_meta_info = None, coreg = None, ch_names = None):
+                    signal_type = None, rec_meta_info = None, coreg = None, ch_names = None,
+                    title = None):
     """
     Use finnpy's cortical model to produce a high resolution 3D plot.
     
@@ -138,7 +140,12 @@ def plot_subj_space(cort_mdl, color_data,
             Coregistration between MEEG and MRI.
     ch_names : list
                Channel names.
+    title : str
+            Title string.
     """
+    
+    cort_mdl = copy.deepcopy(cort_mdl)
+    
     lh_colors = np.empty((cort_mdl.lh_vert.shape[0]))
     lh_vert = cort_mdl.lh_vert
     lh_valid_vert = cort_mdl.lh_vert[np.where(cort_mdl.lh_valid_vert)[0]]
@@ -173,6 +180,44 @@ def plot_subj_space(cort_mdl, color_data,
         (pos_mri, _) = finnpy.src_rec.fwd_mdl.get_eeg_sen_info(rec_meta_info, coreg)
         
     pl.add_points(pos_mri, render_points_as_spheres = False, point_size = 16)  # pylint: disable=possibly-used-before-assignment
-    pl.add_point_labels(pos_mri, ch_names, shape_opacity = 0, font_size = 12)
+    pl.add_point_labels(pos_mri, ch_names, shape_opacity = 0, font_size = 12)#, text_color = "white")
+    
+    #pl.set_background("black")
+    
+    if (title is not None):
+        pl.add_title(title)
+        
+    #===========================================================================
+    # def compute_azimuth_elevation(camera):
+    #     # Vector from focal point to camera position
+    #     vec = np.array(camera.position) - np.array(camera.focal_point)
+    #     x, y, z = vec
+    # 
+    #     # Azimuth: angle in XY-plane from X-axis (atan2(y, x))
+    #     azimuth = np.degrees(np.arctan2(y, x))
+    # 
+    #     # Elevation: angle from XY-plane upwards (atan2(z, hyp))
+    #     hyp = np.sqrt(x**2 + y**2)
+    #     elevation = np.degrees(np.arctan2(z, hyp))
+    # 
+    #     return azimuth, elevation
+    # 
+    # def print_camera_angles(a, b):
+    #     cam = pl.camera
+    #     az, el = compute_azimuth_elevation(cam)
+    #     print(f"Azimuth: {az:.2f}°, Elevation: {el:.2f}°")
+    #     print(f"Position: {cam.position}")
+    #     print("---")
+    # interactor = pl.iren
+    # interactor.add_observer('TimerEvent', print_camera_angles)
+    # timer_id = interactor.create_timer(500, True)
+    #===========================================================================
+    
+    #===========================================================================
+    # cam = pl.camera
+    # cam.Azimuth(145)
+    # cam.Elevation(6)
+    # cam.SetPosition((-0.6108798273874511, 0.41434351774217093, 0.09811421902995418))
+    #===========================================================================
     
     pl.show()

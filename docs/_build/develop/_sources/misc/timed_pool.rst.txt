@@ -1,4 +1,6 @@
 
+.. _tp_module:
+
 Timed Pool
 ============
 

@@ -1,5 +1,7 @@
 
-Source reconstruction
+.. _srcrec_package:
+
+Source Reconstruction
 =====================
 
 .. automodule:: src_rec

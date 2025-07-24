@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>FiNNPy API &#8212; FiNN  documentation</title>
+    <title>API &#8212; FiNN  documentation</title>
   
   
   
@@ -16,38 +16,43 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=b7737de8" />
     <link rel="stylesheet" type="text/css" href="_static/_rst_properties.css" />
     <link rel="stylesheet" type="text/css" href="_static/badge_only.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=b7737de8" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/_rtd_versions.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Basic" href="basic.html" />
-    <link rel="prev" title="Visualization" href="guides/src_rec_vis.html" />
+    <link rel="prev" title="Likely Pitfalls" href="guides/src_rec_pitfalls.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,19 +68,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -83,7 +77,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -91,8 +84,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -166,29 +159,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
     </div>
     
@@ -197,15 +182,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -224,7 +205,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -271,15 +253,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
       </div>
     
@@ -294,7 +272,6 @@ document.write(`
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -308,28 +285,24 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="install_guide.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="install_guide.html#automatic-install">1. Automatic install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="install_guide.html#manual-build">2. Manual build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install_guide.html#installing-r-enabling-statistics">3. Installing R &amp; enabling statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_guide.html#enabling-statistics-optional">3. Enabling statistics (optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install_guide.html#external-libraries-optional">4. External libraries (optional)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="guides.html">Guides</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="guides.html#general">General</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides.html#data-preparation">Data preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides.html#feature-generation">Feature generation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides.html#source-reconstruction">Source reconstruction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="guides.html#statistics">Statistics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="guides.html#visualization">Visualization</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="basic.html">Basic</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc.html">Cross frequency connectivity (cfc)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cleansing.html">Cleansing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file_io.html">File IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="filters.html">Filters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="misc.html">Misc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc.html">Same frequency coupling (sfc)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec.html">Source reconstruction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="statistical.html">Statistical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-signal-processing">Feature/Signal processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-source-reconstruction">The Source Reconstruction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#feature-analysis">Feature analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#presentation">Presentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quality-of-life">Quality of life</a></li>
 </ul>
 </li>
 </ul>
@@ -371,9 +344,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -391,8 +369,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -401,7 +377,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">FiNNPy API</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">API</span></li>
   </ul>
 </nav>
 </div>
@@ -418,77 +394,144 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="finnpy-api">
-<h1>FiNNPy API<a class="headerlink" href="#finnpy-api" title="Link to this heading">#</a></h1>
+  <section id="api">
+<span id="api-label"></span><h1>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h1>
 <p>This section documents the functions offered by FiNNPy.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="basic.html">Basic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="basic/car.html">Common Average Re-Referencing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="basic/downsample.html">Downsampling</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cfc.html">Cross frequency connectivity (cfc)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cfc/dmi.html">Direct Modulation Index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc/mi.html">Modulation Index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc/mvl.html">Mean Vector Length</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cfc/plv.html">Phase Lock Value</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cleansing.html">Cleansing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cleansing/bad_channel_identification.html">Bad channel identification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cleansing/channel_restoration.html">Channel restoration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cleansing/outlier_removal.html">Outlier removal</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="file_io.html">File IO</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="file_io/data_manager.html">Data manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file_io/load_brainvision_data.html">Load brainvision data</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="filters/butter.html">Butterwort filter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="filters/fir.html">FIR filter</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="misc.html">Misc</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="misc/timed_pool.html">Timed Pool</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="sfc.html">Same frequency coupling (sfc)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="sfc/dac.html">Directional absolute coherence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/psi.html">Phase slope index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/wpli.html">Weighted phase lag index</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/im.html">Imaginary coherence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/msc.html">Magnitude squared coherence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sfc/cc.html">Complex coherency</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="src_rec.html">Source reconstruction</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/avg_src_reg.html">Source space region clustering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/bem_mdl.html">Boundary element model (BEM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/coreg.html">Coregistration, MEG to MRI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/cort_mdl.html">Cortical model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/freesurfer.html">Freesurfer methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/fwd_mdl.html">Forward model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/inv_mdl.html">Inverse model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/sen_cov.html">Sensor covariance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/skull_skin_mdls.html">Skull and skin models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/sphere_mdl.html">Sphere models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/subj_to_fsavg.html">Subject to fs-avg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="src_rec/utils.html">Utility functions</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="statistical.html">Statistical</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="statistical/glmm.html">Generalized linear mixed model</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="visualization.html">Visualization</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="visualization/topoplot.html">Topoplot</a></li>
-</ul>
-</li>
-</ul>
+<section id="feature-signal-processing">
+<h2>Feature/Signal processing<a class="headerlink" href="#feature-signal-processing" title="Link to this heading">#</a></h2>
+<p>FiNNpy offers a wide range of tools for general signal processing.</p>
+<section id="the-basic-package">
+<h3>The Basic package<a class="headerlink" href="#the-basic-package" title="Link to this heading">#</a></h3>
+<p>This <a class="reference internal" href="basic.html#basic-package"><span class="std std-ref">package</span></a> implements basic signal processing functionality.</p>
+<div class="line-block">
+<div class="line">Common average Re-reference data via the <a class="reference internal" href="basic/car.html#car-module"><span class="std std-ref">Common Average Re-Referencing</span></a> module.</div>
+<div class="line">Modify data’s sampling frequency via the <a class="reference internal" href="basic/downsample.html#downsample-module"><span class="std std-ref">Downsampling</span></a> module.</div>
 </div>
+</section>
+<section id="the-cleansing-package">
+<h3>The Cleansing package<a class="headerlink" href="#the-cleansing-package" title="Link to this heading">#</a></h3>
+<p>This <a class="reference internal" href="cleansing.html#cleansing-package"><span class="std std-ref">package</span></a> implements several tools to identify and remove bad samples.</p>
+<div class="line-block">
+<div class="line">Identify bad (e.g. oversaturated) channels graphically via the <a class="reference internal" href="cleansing/bad_channel_identification.html#bad-ch-module"><span class="std std-ref">Bad Channel Identification</span></a> module.</div>
+<div class="line">Recover lost channels by averaging neighboring channels in the <a class="reference internal" href="cleansing/channel_restoration.html#ch-rest-module"><span class="std std-ref">Channel restoration</span></a> module.</div>
+<div class="line">Automatically filter outlier and harmonize samples via the <a class="reference internal" href="cleansing/outlier_removal.html#orem-module"><span class="std std-ref">Outlier removal</span></a> module.</div>
+</div>
+</section>
+<section id="the-features-package">
+<h3>The Features package<a class="headerlink" href="#the-features-package" title="Link to this heading">#</a></h3>
+<p>FiNNpy offers methods for spectral power analysis,</p>
+<div class="line-block">
+<div class="line">Measure spectral power via Welch’s method in the <a class="reference internal" href="feat/pwr.html#spectral-power"><span class="std std-ref">Spectral power</span></a> module.</div>
+</div>
+<p>cross frequency connectivity (cfc) via multiple metrics,</p>
+<div class="line-block">
+<div class="line">Measure cfc as <a class="reference internal" href="feat/dmi.html#dmi-module"><span class="std std-ref">Direct Modulation Index</span></a> (DMI).</div>
+<div class="line">Measure cfc as <a class="reference internal" href="feat/mi.html#mi-module"><span class="std std-ref">Modulation Index</span></a> (MI).</div>
+<div class="line">Measure cfc as <a class="reference internal" href="feat/mvl.html#mvl-module"><span class="std std-ref">Mean Vector Length</span></a> (MVL).</div>
+<div class="line">Measure cfc as <a class="reference internal" href="feat/plv.html#plv-module"><span class="std std-ref">Phase Lock Value</span></a> (PLV).</div>
+</div>
+<p>and same frequency connectivity (sfc),</p>
+<div class="line-block">
+<div class="line">Measure sfc as <a class="reference internal" href="feat/dac.html#dac-module"><span class="std std-ref">Directional absolute coherence</span></a> (DAC).</div>
+<div class="line">Measure sfc as <a class="reference internal" href="feat/psi.html#psi-module"><span class="std std-ref">Phase slope index</span></a> (PSI).</div>
+<div class="line">Measure sfc as <a class="reference internal" href="feat/wpli.html#wpli-module"><span class="std std-ref">Weighted phase lag index</span></a> (wPLI).</div>
+<div class="line">Measure sfc as <a class="reference internal" href="feat/im.html#icoh-module"><span class="std std-ref">Imaginary coherence</span></a> (IC).</div>
+<div class="line">Measure sfc as <a class="reference internal" href="feat/msc.html#msc-module"><span class="std std-ref">Magnitude squared coherence</span></a> (MSC).</div>
+<div class="line">Measure sfc as <a class="reference internal" href="feat/cc.html#cc-module"><span class="std std-ref">Complex coherency</span></a> module measures coupling as the complex coherency, a precursor to several sfc metrics.</div>
+</div>
+</section>
+<section id="the-filters-package">
+<h3>The Filters package<a class="headerlink" href="#the-filters-package" title="Link to this heading">#</a></h3>
+<p>This <a class="reference internal" href="filters.html#filters-package"><span class="std std-ref">package</span></a> implements several frequency domain filters.</p>
+<div class="line-block">
+<div class="line">Employ a highly configure FIR filter via the <a class="reference internal" href="filters/fir.html#fir-module"><span class="std std-ref">FIR filter</span></a> module.</div>
+<div class="line">Employ a configurable Butterworth filter via the <a class="reference internal" href="filters/butter.html#butter-module"><span class="std std-ref">Butterwort filter</span></a> module.</div>
+</div>
+</section>
+</section>
+<section id="the-source-reconstruction">
+<h2>The Source Reconstruction<a class="headerlink" href="#the-source-reconstruction" title="Link to this heading">#</a></h2>
+<p>Data may be projected from sensor to source space via FiNNpy’s <a class="reference internal" href="src_rec.html#srcrec-package"><span class="std std-ref">Source Reconstruction package</span></a>.</p>
+<section id="initial-steps">
+<h3>Initial steps<a class="headerlink" href="#initial-steps" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">Compute a sensor covariance matrix via the <a class="reference internal" href="src_rec/sen_cov.html#src-rec-sencov-module"><span class="std std-ref">Sensor covariance</span></a> module.</div>
+<div class="line">Coregister M/EEG and anatomical spaces in the <a class="reference internal" href="src_rec/coreg.html#src-rec-coreg-module"><span class="std std-ref">Coregistration, MEG to MRI</span></a> module.</div>
+<div class="line">Call FreeSurfer from within Python in the <a class="reference internal" href="src_rec/freesurfer.html#src-rec-fs-module"><span class="std std-ref">Freesurfer methods</span></a> module.</div>
+</div>
+</section>
+<section id="pipeline-proper">
+<h3>Pipeline proper<a class="headerlink" href="#pipeline-proper" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">Compute a BEM model in the <a class="reference internal" href="src_rec/bem_mdl.html#src-rec-bem-module"><span class="std std-ref">Boundary element model (BEM)</span></a> module.</div>
+<div class="line">Load highly accurate cortical data via the <a class="reference internal" href="src_rec/cort_mdl.html#src-rec-cort-module"><span class="std std-ref">Cortical model</span></a> module.</div>
+<div class="line">Calculate a forward (source -&gt; sensor space) model in the <a class="reference internal" href="src_rec/fwd_mdl.html#src-rec-fwd-module"><span class="std std-ref">Forward model</span></a> module.</div>
+<div class="line">Inverse the forward model (sensor -&gt; source space) via the <a class="reference internal" href="src_rec/inv_mdl.html#src-rec-inv-module"><span class="std std-ref">Inverse model</span></a> module.</div>
+</div>
+</section>
+<section id="optional-steps">
+<h3>Optional steps<a class="headerlink" href="#optional-steps" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">To process source reconstructed data on a group level, the data needs to be projected from individual subject into a group space (fs-average space). This can be done via the <a class="reference internal" href="src_rec/subj_to_fsavg.html#src-rec-fsavgproj-module"><span class="std std-ref">Subject to fs-avg</span></a> module.</div>
+<div class="line">Localize cortical regions as per the Desikan-Killiany Atlas in the <a class="reference internal" href="src_rec/avg_src_reg.html#src-rec-clust-module"><span class="std std-ref">Source space region clustering</span></a> module.</div>
+</div>
+</section>
+<section id="supplementary">
+<h3>Supplementary<a class="headerlink" href="#supplementary" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">Compute spheres for the source reconstruction via the <a class="reference internal" href="src_rec/sphere_mdl.html#src-rec-spheremdl-module"><span class="std std-ref">Sphere models</span></a> module.</div>
+<div class="line">Several supplementary tools used internally in the source reconstruction are bundled in the <a class="reference internal" href="src_rec/utils.html#src-rec-utils-module"><span class="std std-ref">Utility functions</span></a> module.</div>
+</div>
+</section>
+</section>
+<section id="feature-analysis">
+<h2>Feature analysis<a class="headerlink" href="#feature-analysis" title="Link to this heading">#</a></h2>
+<p>FiNNpy offers advanced feature analysis tools.</p>
+<section id="the-statistics-package">
+<h3>The Statistics package<a class="headerlink" href="#the-statistics-package" title="Link to this heading">#</a></h3>
+<p>This <a class="reference internal" href="statistics.html#stat-package"><span class="std std-ref">package</span></a> implements methods for the statistical analysis of data.</p>
+<div class="line-block">
+<div class="line">Linear mixed models may be configured and deployed via the <a class="reference internal" href="statistics/glmm.html#glmm-module"><span class="std std-ref">Generalized linear mixed model</span></a> module.</div>
+</div>
+</section>
+</section>
+<section id="presentation">
+<h2>Presentation<a class="headerlink" href="#presentation" title="Link to this heading">#</a></h2>
+<p>FiNNpy offers In-Python and Blender based visualization tools in the <a class="reference internal" href="visualization.html#vis-package"><span class="std std-ref">visualization</span></a> package.</p>
+<section id="topoplots">
+<h3>Topoplots<a class="headerlink" href="#topoplots" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">Plot 2D topoplots (sensor space) via the <a class="reference internal" href="visualization/topoplot.html#topoplot-module"><span class="std std-ref">Topoplot</span></a> module.</div>
+<div class="line">Plot 3D topoplots (source space) via the <a class="reference internal" href="visualization/plt_src_rec.html#plt-src-rec-module"><span class="std std-ref">Plot Source Reconstructions</span></a> module.</div>
+</div>
+</section>
+<section id="other">
+<h3>Other<a class="headerlink" href="#other" title="Link to this heading">#</a></h3>
+<div class="line-block">
+<div class="line">Plot volumetric data/pointcloids using the <a class="reference internal" href="visualization/volumetric.html#volumetric-module"><span class="std std-ref">Volumetric Plotting</span></a> module.</div>
+<div class="line">Convert nifti files to *.obj files for use in visualizations in the <a class="reference internal" href="visualization/atlas_to_nifti.html#atlas-module"><span class="std std-ref">Atlas Conversion</span></a> module.</div>
+</div>
+</section>
+</section>
+<section id="quality-of-life">
+<h2>Quality of life<a class="headerlink" href="#quality-of-life" title="Link to this heading">#</a></h2>
+<p>FiNNpy offers a wide range of quality-of-life tools.</p>
+<section id="the-file-io-package">
+<h3>The File IO package<a class="headerlink" href="#the-file-io-package" title="Link to this heading">#</a></h3>
+<p>This <a class="reference internal" href="file_io.html#fileio-package"><span class="std std-ref">package</span></a> enables reading/saving variables from/to the harddrive.</p>
+<div class="line-block">
+<div class="line">Load/Save any data structure using the <a class="reference internal" href="file_io/data_manager.html#datamanager-module"><span class="std std-ref">Data manager</span></a> module. Even large data sets may be safely stored/loaded as these can be split into multiple auto-assembling subsets.</div>
+<div class="line">Load BrainVision data using the <a class="reference internal" href="file_io/load_brainvision_data.html#brainvision-module"><span class="std std-ref">Load brainvision data</span></a> module.</div>
+</div>
+</section>
+<section id="the-misc-package">
+<h3>The Misc package<a class="headerlink" href="#the-misc-package" title="Link to this heading">#</a></h3>
+<p>This <a class="reference internal" href="misc.html#misc-package"><span class="std std-ref">package</span></a> provides a wide range of tools.</p>
+<div class="line-block">
+<div class="line">Employ a highly configurable multiprocessing loop to perform multiple computations in parallel via the <a class="reference internal" href="misc/timed_pool.html#tp-module"><span class="std std-ref">Timed Pool</span></a> module. The loop is designed to minimize the memory footprint, enabling a maximum of concurrent evaluations.</div>
+</div>
+</section>
+</section>
 </section>
 
 
@@ -502,22 +545,13 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="guides/src_rec_vis.html"
+       href="guides/src_rec_pitfalls.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Visualization</p>
+        <p class="prev-next-title">Likely Pitfalls</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="basic.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Basic</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -526,17 +560,57 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="_sources/api_reference.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
   </div>
-</div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-signal-processing">Feature/Signal processing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-basic-package">The Basic package</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-cleansing-package">The Cleansing package</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-features-package">The Features package</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-filters-package">The Filters package</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-source-reconstruction">The Source Reconstruction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-steps">Initial steps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-proper">Pipeline proper</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-steps">Optional steps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supplementary">Supplementary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-analysis">Feature analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-statistics-package">The Statistics package</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#presentation">Presentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topoplots">Topoplots</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other">Other</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quality-of-life">Quality of life</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-file-io-package">The File IO package</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-misc-package">The Misc package</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api_reference.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -551,8 +625,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -572,7 +646,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
@@ -618,7 +692,8 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

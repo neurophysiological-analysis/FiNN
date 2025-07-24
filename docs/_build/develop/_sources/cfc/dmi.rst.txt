@@ -1,4 +1,6 @@
 
+.. _dmi_module:
+
 Direct Modulation Index
 =======================
 

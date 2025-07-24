@@ -1,4 +1,6 @@
 
+.. _src_rec_fsavgproj_module:
+
 Subject to fs-avg
 =================
 
