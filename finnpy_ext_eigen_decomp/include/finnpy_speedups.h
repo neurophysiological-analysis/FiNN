@@ -13,7 +13,7 @@
 #include <string>
 #include <eigen3/unsupported/Eigen/MPRealSupport>
 
-#include "npy.hpp"
+#include "../include/npy.hpp"
 
 extern "C" {
 	void finnpy_eigen_decomp(double*, unsigned int,

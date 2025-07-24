@@ -1,21 +1,21 @@
-'''
-Created on Oct 12, 2022
+"""
+Created on Oct 12, 2022.
 
 @author: voodoocode
-'''
+"""
 
 import numpy as np
 import scipy.linalg
 
-import finnpy.src_rec.utils
+import finnpy.src_rec.utils  # @UnresolvedImport
 
-import mne
+import mne.io
 
 class Inv_mdl():
     """
-    Container class, populed with the following items:
+    Container class, populated with the following items.
     
-    Attributes
+    Parameters
     ----------
     trans : numpy.ndarray, shape(valid_vtx_cnt, meg_ch_cnt)
                 Inverse model.
@@ -29,7 +29,7 @@ class Inv_mdl():
 
 def _get_meg_channel_type_idx(rec_meta_info):
     """
-    Returns the channel names of the MEG channels.
+    Return the channel names of the MEG channels.
     
     Parameters
     ----------
@@ -46,23 +46,23 @@ def _get_meg_channel_type_idx(rec_meta_info):
     channel_types = np.asarray(rec_meta_info["chs"])
     for ch_idx in range(len(channel_types)):
         if (rec_meta_info["chs"][ch_idx]["coil_type"] in [mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T1,
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T2,
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T3,
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T4,
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_W]):
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T2,
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T3,
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_T4,
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_MAG_W]):
             ch_names.append(rec_meta_info.ch_names[ch_idx])
-        if (rec_meta_info["chs"][ch_idx]["coil_type"] in [mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T1, 
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T2, 
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T3, 
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T4, 
-                                                     mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_W]):
+        if (rec_meta_info["chs"][ch_idx]["coil_type"] in [mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T1,
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T2,
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T3,
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_T4, 
+                                                          mne.io.constants.FIFF.FIFFV_COIL_VV_PLANAR_W]):
             ch_names.append(rec_meta_info.ch_names[ch_idx])
     
     return ch_names
 
-def compute(sen_cov, fwd_sol, rec_meta_info, method = "dSPM"):
+def compute(sen_cov, fwd_sol, signal_type, rec_meta_info = None, method = "dSPM"):
     """
-    Converts a forward model into an inverse model.
+    Convert a forward model into an inverse model.
         
     Parameters
     ----------
@@ -70,6 +70,8 @@ def compute(sen_cov, fwd_sol, rec_meta_info, method = "dSPM"):
               Container class.
     fwd_sol : numpy.ndarray, shape(meg_ch_cnt, valid_vtx_cnt)
               Forward model.
+    signal_type : string
+                  Either 'EEG' or 'MEG'.
     rec_meta_info : mne.io.read_info
                     MEG scan meta information, obtainable through mne.io.read_info.
     method : string
@@ -80,41 +82,58 @@ def compute(sen_cov, fwd_sol, rec_meta_info, method = "dSPM"):
     -------
     inv_mdl : finnpy.src_rec.inv_mdl.Inv_mdl
               Container class.
+              
+    Raises
+    ------
+    AssertionError
+        Signal type must be either 'EEG' or 'MEG'.
+        Covariance matrix is not fully invertible (contains 0s).
+        Noise normalization method is not support, currently only dSPM is implemented.
     """
-     
-     
-    data_meg_ch_names = _get_meg_channel_type_idx(rec_meta_info)
-     
-    #Extract relevant indices from the sensor covariance matrix's eigenvectors/values.
-    #And construct whitener
-    valid_meg_ch_idx = np.empty(((len(data_meg_ch_names))), dtype = int)
-    for (ch_idx, data_meg_ch_name) in enumerate(data_meg_ch_names):
-        valid_meg_ch_idx[ch_idx] = sen_cov.ch_names.index(data_meg_ch_name)
-    sensor_cov_eigen_val = sen_cov.evals[valid_meg_ch_idx]
-    sensor_cov_eigen_vec = sen_cov.evecs[valid_meg_ch_idx, :]; sensor_cov_eigen_vec = sensor_cov_eigen_vec[:, valid_meg_ch_idx]
+    # Extract relevant indices from the sensor covariance matrix's eigenvectors/values.
+    # And construct whitener
+    if (signal_type == "MEG"):
+        data_meg_ch_names = _get_meg_channel_type_idx(mne.io.read_info(rec_meta_info))
+        ref_ids = np.empty(((len(data_meg_ch_names))), dtype = int)
+        for (ch_idx, data_meg_ch_name) in enumerate(data_meg_ch_names):
+            ref_ids[ch_idx] = sen_cov.ch_names.index(data_meg_ch_name)
+    elif (signal_type == "EEG"):
+        eeg_setup = rec_meta_info[0]
+        ch_names = [ch_name.lower() for ch_name in rec_meta_info[1]]
+        sen_ref_pts = finnpy.src_rec.utils.read_eeg_pts(eeg_setup)
+        ref_ch_names = [ref_ch_name.lower() for ref_ch_name in sen_ref_pts["labels"]]
+        ref_ids = list()
+        for (ch_idx, ch_name) in enumerate(ch_names):
+            if (ch_name in ref_ch_names):
+                ref_ids.append(ch_idx)
+        ref_ids = np.asarray(ref_ids, dtype = int)
+    else:
+        raise AssertionError("Signal type must be either 'MEG' or 'EEG' but was %s" & (signal_type,))
+    sensor_cov_eigen_val = sen_cov.evals[ref_ids]
+    if (0 in sensor_cov_eigen_val):
+        raise AssertionError("0 in sensor covariance eigenvalue list.")
+    sensor_cov_eigen_vec = sen_cov.evecs[ref_ids, :]; sensor_cov_eigen_vec = sensor_cov_eigen_vec[:, ref_ids]
     whitener = _calc_whitener(sensor_cov_eigen_val, sensor_cov_eigen_vec)
     
-    #Whiten fwd solution for numerical stability and scale
+    # Whiten fwd solution for numerical stability and scale
     white_fwd = np.dot(whitener, fwd_sol)
     scale = np.sqrt(np.sum(sensor_cov_eigen_val > 0) / np.linalg.norm(white_fwd, ord="fro") ** 2)
     white_fwd *= scale
     
-    #Calculate source_cov
+    # Calculate source_cov
     source_cov = (np.ones((fwd_sol.shape[1],)) * scale) ** 2
     
-    #Employ Tikhonov regularized SVD decomposition, see for reference https://en.wikipedia.org/wiki/Ridge_regression#Relation_to_singular-value_decomposition_and_Wiener_filter,
-    #To calculated (whitened) pseudo inverse.
+    # Employ Tikhonov regularized SVD decomposition, see for reference https://en.wikipedia.org/wiki/Ridge_regression#Relation_to_singular-value_decomposition_and_Wiener_filter,
+    # To calculated (whitened) pseudo inverse.
     (U, sigmas, V) = scipy.linalg.svd(white_fwd, full_matrices = False)
-    if (0 in sensor_cov_eigen_val):
-        raise AssertionError("0 in sensor covariance eigenvalue list.")
-    lambda2 = 1/9
-    sigma = sigmas/(sigmas ** 2 + lambda2)
+    lambda2 = 1 / 9
+    sigma = sigmas / (sigmas ** 2 + lambda2)
     inv_trans = np.dot(V.T, (np.dot(U.T, whitener) * np.expand_dims(sigma, axis = 1)))
     
-    #Weigh whitened pseudo inverse according to sensor covariance.
+    # Weigh whitened pseudo inverse according to sensor covariance.
     inv_trans *= np.expand_dims(np.sqrt(source_cov), axis = 1)
      
-    #Compute noise normalization vector
+    # Compute noise normalization vector
     if (method == "dSPM"):
         noise_norm = np.zeros((V.shape[1],))
         for idx in range(V.shape[1]):
@@ -128,7 +147,7 @@ def compute(sen_cov, fwd_sol, rec_meta_info, method = "dSPM"):
 
 def apply(sensor_data, inv_mdl):
     """
-    Applies an inverse model and noise normalization vector to sensor space data.
+    Apply an inverse model and noise normalization vector to sensor space data.
     
     Parameters
     ----------
@@ -144,12 +163,12 @@ def apply(sensor_data, inv_mdl):
     """
     source_data = np.dot(inv_mdl.trans, sensor_data)
     source_data *= np.expand_dims(inv_mdl.noise_norm, axis = 1)
-    
+        
     return source_data
 
 def _calc_whitener(eigen_val, eigen_vec):
     """
-    alculate PCA based whitener from provided eigenvalues and eigenvectors.
+    Calculate PCA based whitener from provided eigenvalues and eigenvectors.
     
     Parameters
     ----------
@@ -164,12 +183,8 @@ def _calc_whitener(eigen_val, eigen_vec):
                Whitener.
     """
     eigen_val_white = np.copy(eigen_val)
-    eigen_val_white[eigen_val_white < 0] = 0 #Cannot be negative in a cov-matrix; may happen due to numerical innaccuracy
-    eigen_val_white[eigen_val_white > 0] = 1/np.sqrt(eigen_val_white[eigen_val_white > 0])
+    eigen_val_white[eigen_val_white < 0] = 0  # Cannot be negative in a cov-matrix; may happen due to numerical innaccuracy
+    eigen_val_white[eigen_val_white > 0] = 1 / np.sqrt(eigen_val_white[eigen_val_white > 0])
     whitener = np.expand_dims(eigen_val_white, axis = 1) * eigen_vec
     
     return whitener
-
-
-
-

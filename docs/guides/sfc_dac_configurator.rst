@@ -1,5 +1,5 @@
 
-.. _dac_configurator_label:
+.. _sfc_dac_configurator_label:
 
 DAC configurator
 ================

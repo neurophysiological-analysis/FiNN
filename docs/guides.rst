@@ -4,11 +4,6 @@ Guides
 
 Although FinnPy provides numerous tools for the analysis of electropohysiological data, the quality of the results derived using these tools equally depends on correct application and configuration of the former. This section contains guides tackling specific topics from the field of electropohysiological data analysis, providing guide to users of this and other frameworks.
 
-General
--------
-
-<To be added>
-
 Data preparation
 ----------------
 
@@ -17,20 +12,28 @@ Data preparation
 Feature generation
 ------------------
 
-:ref:`dac_configurator_label`
+:ref:`sfc_dac_configurator_label`
 
 Source reconstruction
 ---------------------
 
 :ref:`src_rec_main_label`
 
-:ref:`src_rec_vis_label`
-
 Statistics
 ----------
 
-<To be added>
+:ref:`stats_lmm_label`
 
+:ref:`stats_general`
+
+Visualization
+-------------
+
+:ref:`vis_topoplots_label`
+
+:ref:`vis_src_rec_blender_label`
+
+:ref:`vis_volumetric_label`
 
 .. toctree::
    :hidden:

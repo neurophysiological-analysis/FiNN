@@ -8,7 +8,8 @@ This guide explains how to deal with likely pitfalls in source reconstruction fo
 
 MEG and MRI coregistration
 --------------------------
-The coregistration between MEG and MRI space has been left unchecked. This step must be manually verified. This may be done as follows:
+
+Correctness of the coregistration between the MEG and MRI should be manually verified. This may be done as follows:
 
 .. code-block::
 
@@ -24,16 +25,10 @@ Producing the following output:
    :width: 400
    :align: center
 
-
-Sensor noise covariance
------------------------
-The sensor noise covariance is faulty. This may be investigated by adding a power spike to a sensor-space channel and investigate where it is projected.
-
-Alternatively, multiple files for a sensor noise covariance may be acquired and their similarity compared.
-
 Improper skull model
 --------------------
-The skull model was improperly extracted. This step must be manually verified.  This may be done as follows:
+
+Correctness of the anatomy extraction should be manually verified. This may be done as follows:
 
 .. code-block::
 
@@ -47,5 +42,22 @@ Producing the following output:
    :width: 500
    :align: center
 
+Sensor noise covariance
+-----------------------
+
+A faulty sensor covariance matrix may also adversely affect the reconstruction effort. Unlike with the coregistration, this is most easily spotted toward
+the end of the reconstruction effort. Namely, by adding an artificially introduced power spike to well-chosen single sensor-space channel and observing the
+projection of this effect onto source space. As such, if e.g. a motor channel was chosen, the projected effect should appear above the motor cortex. 
+
+.. code-block::
+
+  sen_data[ch_names.index("C4"), :] += 10000
+  color_data = np.mean(np.abs(src_data), axis = 1)
+  (coreg, _) = finnpy.src_rec.coreg.run(SUBJ_NAME, ANATOMY_PATH, "EEG", rec_info = "1020")
+  [...] # Here comes the full reconstruction pipeline.
+  src_data = finnpy.src_rec.inv_mdl.apply(sen_data, inv_mdl)
+  psr.plot_subj_space(cort_mdl, color_data, "EEG", ["1020", ch_names], coreg, ch_names)
+
+Alternatively, multiple files for a sensor noise covariance may be acquired and the resulting projections compared.
 
 

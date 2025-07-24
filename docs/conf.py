@@ -32,8 +32,9 @@ exclude_patterns = []
 html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 
-#Ignore import mayavi as sphinx doesn't like it
-autodoc_mock_imports = ["mayavi"]
+html_css_files = [
+    'custom.css',
+]
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {

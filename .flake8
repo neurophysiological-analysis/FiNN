@@ -1,0 +1,5 @@
+[flake8]
+docstring-convention = numpy
+ignore = E501, W293, E302, E251, W291, E702, DOC106, DOC107, DOC105, DOC203, DOC110
+[tool.pydoclint]
+arg-type-hints-in-signature = False

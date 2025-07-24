@@ -1,0 +1,69 @@
+
+.. _src_rec_ext_speedup_label:
+
+Speeding up source reconstruction
+=================================
+
+Computing eigenvectors, particularly if a precision more than 64 bit is needed, can be time consuming. Hence, FiNNpy provides code to compile an executable to speed up this process. The relevant code can be found in the following folder: *finnpy_ext_eigen_decomp*. The required shared libraries (for use in Python) can be build via make. For a more detailed guide, see :ref:`ext_build_lib`.
+
+Requirements
+------------
+
+This library requires the presence of the following libraries:
+
+- gmp (https://gmplib.org/)
+- mpfr (https://www.mpfr.org/)
+- mpreal (https://github.com/advanpix/mpreal)
+
+Windows
+^^^^^^^
+
+gmp & mpfr can be installed via Msys2
+
+.. code-block::
+
+  pacman -S gmp
+  pacman -S mpfr
+  pacman -S eigen3
+
+
+MacOs
+^^^^^
+
+gmp & mpfr can be installed via homebrew
+
+.. code-block::
+
+  brew install gmp
+  brew install mpfr
+  brew install eigen3
+
+Linux
+^^^^^
+
+gmp & mpfr can be installed via a packet manager, e.g. apt,
+
+.. code-block::
+
+  apt install gmp
+  apt install mpfr
+  apt install eigen3
+
+or pacman,
+
+.. code-block::
+
+  pacman -S gmp
+  pacman -S mpfr
+  pacman -S eigen3
+
+
+All
+^^^
+
+mpreal is a header only library and needs to be copied into either the same directory as the makefile or the cpp file. 
+
+Building the library
+--------------------
+
+The make command for *finnpy_ext_export_openvdb* may be called, building the library for use in Python. 

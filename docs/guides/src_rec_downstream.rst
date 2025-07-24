@@ -1,0 +1,65 @@
+
+.. _src_rec_downstream_label:
+
+Downstream processing
+=====================
+
+Having extracted the required anatomical components, and computed the sensor covariance and M/EEG to anatomy co-registration, the inverse model may be calculated as follows. Of note, as the inverse transformation and the following intermediate byproducts depend on the sensor-position, these have to be recomputed in case the sensor covariance or M/EEG co-registration was recomputed (cf. section :ref:`_src_rec_sensors_label`).
+
+The following code segment computes the inverse model, employing the previously calculated intermediate results.
+    
+.. code-block::
+  
+  import finnpy.src_rec.bem_mdl
+  import finnpy.src_rec.cort_mdl
+  import finnpy.src_rec.fwd_mdl
+  import finnpy.src_rec.inv_mdl
+  import finnpy.src_rec.subj_to_fsavg
+  
+  bem_mdl = finnpy.src_rec.bem_mdl.run(fs_path, anatomy_path, subj_name, signal_type, coreg, conductivity = None, tgt_icosahedron_level = 4):
+  cort_mdl = finnpy.src_rec.cort_mdl.get(anatomy_path, subj_name, signal_type, coreg, bem_mdl)
+
+  fwd_mdl = finnpy.src_rec.fwd_mdl.compute(bem_mdl, cort_mdl, coreg, signal_type, rec_info, _mag_factor=1e-7, conductivity = None):
+  fwd_mdl = finnpy.src_rec.fwd_mdl.restrict(cort_mdl, fwd_sol, coreg)
+  inv_mdl = finnpy.src_rec.inv_mdl.compute(sen_cov, fwd_sol, signal_type, rec_info, method = "dSPM")
+  
+  subj_to_fsavg_mdl = compute(cort_mdl, anatomy_path, subj_name, fs_path, overwrite)
+       
+*fs_path* points towards the FreeSurfer installation. The FreeSurfer folder should contain the 'bin' folder, license.txt, and sources.sh (among other files/directories).
+*anatomy_path* contains sub-folders with anatomy folders for all subjects. FreeSurfer will fail if a subjects folder already exists.
+*subj_name* is the name of the subject.
+*signal_type* is be either 'EEG' or 'MEG'.
+*coreg* is the output of the co-registration run from :ref:`src_rec_sensors_label`.
+*conductivity* describes the conductivity of the individual layers. Defaults to 0.3 for MEG and (0.3, 0.006, 0.3) for EEG.
+*tgt_icosahedron_level* determines the level of downscaling. Defaults to 4.
+*rec_info* if the *signal_type* is 'MEG' the path to the \*.fif file is required. In case the *signal_type* is 'EEG' a tuple of EEG setup ('1005' or '1020') and channel names is required.
+*_mag_factor* is a statical scaling factor for MEG analysis.
+*method* is the method used to compute the sensor noise normalization. Currently only supports 'dSPM'.
+
+Let's take a closer look at this code example.
+
+.. code-block::
+
+  bem_mdl = finnpy.src_rec.bem_mdl.run(fs_path, anatomy_path, subj_name, signal_type, coreg, conductivity = None, tgt_icosahedron_level = 4):
+
+Calculates position and current sharing of the individual virtual cortical dipoles. 
+
+.. code-block::
+
+  cort_mdl = finnpy.src_rec.cort_mdl.get(anatomy_path, subj_name, signal_type, coreg, bem_mdl)
+
+Loads cortical data and removes any data points that are outside the inner skull BEM model component.
+
+.. code-block::
+
+  fwd_mdl = finnpy.src_rec.fwd_mdl.compute(bem_mdl, cort_mdl, coreg, signal_type, rec_info, _mag_factor=1e-7, conductivity = None):
+  fwd_mdl = finnpy.src_rec.fwd_mdl.restrict(cort_mdl, fwd_sol, coreg)
+  inv_mdl = finnpy.src_rec.inv_mdl.compute(sen_cov, fwd_sol, signal_type, rec_info, method = "dSPM")
+
+Computation of the forward model proper, restriction to surface orthogonal dipoles only, and subsequent inversion. 
+
+
+Next steps
+----------
+
+This concludes the computation of the inverse matrix. It's application is demonstrated in section :ref:`src_rec_downstream_label`.

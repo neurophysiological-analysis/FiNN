@@ -11,6 +11,10 @@ dist/
 *.svg
 *.pkl
 *#
+*.d
+*.so
+*.mk
+*.o
 *.doctree
 MANIFEST.in
 docs/build/.doctrees/*

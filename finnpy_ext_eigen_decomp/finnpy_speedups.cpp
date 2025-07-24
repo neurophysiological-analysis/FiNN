@@ -28,7 +28,6 @@ extern "C" {
 		MatrixXmp loc_data = MatrixXmp::Random(size, size);
 		for (unsigned int i = 0; i < size; ++i) {
 			for (unsigned int j = 0; j < size; ++j) {
-				//loc_data(i, j) = d.data[int(j + d.shape[1] * i)];
 				loc_data(i, j) = data[int(j + size * i)];
 			}
 		}

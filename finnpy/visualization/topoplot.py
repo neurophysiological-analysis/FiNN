@@ -1,63 +1,89 @@
-'''
-Created on Jun 12, 2018
+"""
+Created on Jun 12, 2018.
 
 Creates a topoplot from provided data, indicating either size of change or size of change and significance.
 
 :author: voodoocode
-'''
+"""
 
 import numpy as np
 import scipy.interpolate
 import skimage.filters
 
-import matplotlib
-#matplotlib.use("Qt5Agg")
+import matplotlib  # @UnusedImport
 import matplotlib.markers
-import matplotlib.pyplot as plt
+matplotlib.use("QtAgg")  # noqa: E402
+import matplotlib.pyplot as plt  # noqa: E402
 
-import pathlib
-import pyexcel_ods
+import pathlib  # noqa: E402
+import pyexcel_ods  # noqa: E402
 
 class Topoplot():
     """
-    topoplot generation class. Initialition costs a couple of seconds due to mask generation.
+    Topoplot generation class.
+    
+    Initialization costs a couple of seconds due to mask generation.
     Performance advice: if possible, only generate a single topoplot object.
     
-    :param mode: Mode is either "EEG" or "MEG"
+    Constructor. Currently supports: The extended 10-20 system for 64 channels - ext_10_20_64_ch
+    
+    Attributes
+    ----------
+    topoplot_mask_data : np.ndarray
+                         Whether to mask channels.
+    default_v_diff : float
+                     default value for v_diff.
+    win_sz : float
+             Default window size.
+    get_coords : callable
+                 Function to reat the coordinates.
+    signal_type : str
+                  Signal type is either "EEG" or "MEG"
+    
+    Parameters
+    ----------
+    signal_type : str
+                  Signal type is either "EEG" or "MEG"
+                  
+    Raises
+    ------
+    NotImplementedError
+        If signal_type is neither 'EEG' nor 'MEG'.
     """
     
-    #Mask for the topoplot color value data
-    topoplot_mask_data = None
-    default_v_diff = 50
-    win_sz = 1.3
-    get_coords = None
-    mode = None
+    # Mask for the topoplot color value data
+    topoplot_mask_data: np.ndarray = None
+    default_v_diff: float = 50
+    win_sz: float = 1.3
+    get_coords: callable = None
+    signal_type: str = None
 
-    def __init__(self, mode):
-        """
-        Constructor. Currently supports: The extended 10-20 system for 64 channels - ext_10_20_64_ch
-        
-        :param mode: Mode is either "EEG" or "MEG"
-        """
-        
-        if (mode not in ["EEG", "MEG"]):
+    def __init__(self, signal_type):
+        if (signal_type not in ["EEG", "MEG"]):
             raise NotImplementedError("This setup has not yet been implemented")
         else:
-            self.mode = mode
+            self.signal_type = signal_type
             self.get_coords = self._read_map
         
         self._generate_topoplot_mask()
 
-    def _read_map(self, mode):
+    def _read_map(self, signal_type):
         """
-        Reads the coordinate map.
+        Read the coordinate map.
         
-        :param mode: Identifies which coordinate map to read.
+        Parameters
+        ----------
+        signal_type : str
+                      Signal type is either "EEG" or "MEG"   
+                      
+        Returns
+        -------
+        dict
+            Position of the individual channels.
         """
         map_path = str(pathlib.Path(__file__).parent.absolute()) + "/coord_map.ods"
-        #map_file = pyexcel_ods.read_data("methods/visualization_map.ods")[mode]
-        map_file = pyexcel_ods.read_data(map_path)[mode]
-        while (len(map_file[-1]) == 0): #Remove trailing empty rows
+        map_file = pyexcel_ods.read_data(map_path)[signal_type]
+        while (len(map_file[-1]) == 0):  # Remove trailing empty rows
             map_file = map_file[:-1]
         map_file = np.asarray(map_file)
         
@@ -68,32 +94,68 @@ class Topoplot():
         return ch_pos
 
     def run(self, values, ch_name_list, 
-            omit_channels = [], substitute_channels = [], 
-            v_min = None, v_max = None, v_border_values = [], v_border_labels = [""],
+            omit_channels = None, substitute_channels = None, 
+            v_min = None, v_max = None, v_border_values = None, v_border_labels = None,
             file_path = None,
             screen_channels = False, annotate_ch_names = False, 
             ax = None):
         """
-        Plots a 2D topomap
+        Plot a 2D topomap.
         
-        :param values: May either be a N x 3 or N x 1 matrix. Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
-        :param ch_names: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        :param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
-        :param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
-        :param v_min: Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.
-        :param v_max: Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.
-        :param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.
-        :param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly one element larger than the number of elements in v_border_values.
-        :param file_path: Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
-        :param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
-        :param annotate_ch_names: If true, channels get annotate with their individual names.
-        :param ax: Provide an axis object to embed the topoplot into.
+        Parameters
+        ----------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 May either be a N x 3 or N x 1 matrix.
+                 Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison
+                 correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
+        ch_name_list : list
+                       Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        omit_channels : list
+                        A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
+        substitute_channels : dict
+                              A list of dictionaries. Each dictionary contains a 'tgt' section with a single string
+                              defining the channel to be substituted and a second 'src' section which contains a list of strings,
+                              defining channel names which are used to substitute the 'tgt' channel.
+        v_min : float
+                Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.
+        v_max : float
+                Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.
+        v_border_values : list
+                          Where to put new ticks onto the color bar. v_min and v_max are always added as values.
+                          The number of labels defined in v_border_labels must be exactly one element larger than
+                          the number of elements in v_border_values.
+        v_border_labels : list
+                          Labels for the ticks on the color bar. The number of labels defined in v_border_labels
+                          must be exactly one element larger than the number of elements in v_border_values.
+        file_path : str
+                    Path (including file name and file ending) were the file is stored. In case of None, the file is not saved.
+        screen_channels : boolean
+                          If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
+        annotate_ch_names : boolean
+                            If true, channels get annotate with their individual names.
+        ax : matplotlib.axes.Axes
+             Provide an axis object to embed the topoplot into.
         
-        :return: The figure and the axes object to easen the inclusion of a plot into a larger picture.
+        
+        Returns
+        -------
+        matplotlib.pyplot.figure or tuple of (matplotlib.axes.Axes, matplotlib.pyplot.figure)
+            - axes : matplotlib.axes.Axes
+                     The axes object to easen the inclusion of a plot into a larger picture.
+            - fig : matplotlib.axes.Axes
+                    The figure object.
         """
+        if (omit_channels is None):
+            omit_channels = []
+        if (substitute_channels is None):
+            substitute_channels = []
+        if (v_border_values is None):
+            v_border_values = []
+        if (v_border_labels is None):
+            v_border_labels = [""]
         
         coords = list()
-        coord_ref_list = self.get_coords(self.mode)
+        coord_ref_list = self.get_coords(self.signal_type)
         filt_values = list()
         filt_ch_names = list()
         for (ch_name_idx, ch_name) in enumerate(ch_name_list):
@@ -114,7 +176,7 @@ class Topoplot():
             (fig, ax) = plt.subplots(1, 1)
             created_ax = True
         
-        if (type(values) != np.ndarray):
+        if (type(values) is not np.ndarray):
             values = np.asarray(values)
         if (len(values.shape) == 1):
             values = np.expand_dims(values, axis = 1)
@@ -135,8 +197,8 @@ class Topoplot():
         self._refine_image(ax)
         self._add_color_bar(v_min, v_max, v_border_values, v_border_labels, ax)
         
-        if ((file_path is None) == False and create_ax == True):
-            fig.savefig(file_path)
+        if ((file_path is None) is False and created_ax is True):
+            fig.savefig(file_path)  # pylint: disable=possibly-used-before-assignment
         
         if (created_ax):
             return (fig, ax)
@@ -145,21 +207,28 @@ class Topoplot():
     
     def _add_color_bar(self, v_min, v_max, v_border_values, v_border_labels, ax):
         """
-        Adds a color bar to the topoplot.
+        Add a color bar to the topoplot.
         
-        :param v_min: The minimal value on the color bar.
-        :param v_max: The maximimal value on the color bar.
-        :param v_border_values: Where to put new ticks onto the color bar. v_min and v_max are always added as values. The number of labels defined in v_border_labels must be exactly 
-        one element larger than the number of elements in v_border_values.
-        :param v_border_labels: Labels for the ticks on the color bar. The number of labels defined in v_border_labels must be exactly 
-        one element larger than the number of elements in v_border_values. 
-        :param ax: Reference to the ax object. 
+        Parameters
+        ----------
+        v_min : float
+                Minimal value on the color bar. If None, v_min is chosen as the minimum value within the data.
+        v_max : float
+                Maximuim value on the color bar. If None, v_max is chosen as the maximum value within the data.
+        v_border_values : list
+                          Where to put new ticks onto the color bar. v_min and v_max are always added as values.
+                          The number of labels defined in v_border_labels must be exactly one element larger than
+                          the number of elements in v_border_values.
+        v_border_labels : list
+                          Labels for the ticks on the color bar. The number of labels defined in v_border_labels
+        ax : matplotlib.axes.Axes
+               The axes object to easen the inclusion of a plot into a larger picture.
         """
-        sm      = plt.cm.ScalarMappable(cmap = plt.get_cmap("jet"), norm = matplotlib.colors.Normalize(vmin=v_min, vmax=v_max))
+        sm      = plt.cm.ScalarMappable(cmap = plt.get_cmap("jet"), norm = matplotlib.colors.Normalize(vmin=v_min, vmax=v_max))  # noqa: E221
         sm.set_array([])
-        cbar    = plt.colorbar(sm, ax = ax)
+        cbar    = plt.colorbar(sm, ax = ax)  # noqa: E221
     
-        assert((len(v_border_values) + 1) == len(v_border_labels))
+        assert ((len(v_border_values) + 1) == len(v_border_labels))
     
         y_tick_list = [v_min] + v_border_values + [v_max]
         for y_ticksBorders in y_tick_list:
@@ -168,7 +237,7 @@ class Topoplot():
         y_tick_labels = list()
         for y_tick_idx in np.arange(0, len(y_tick_list) - 1):
             if (v_border_labels[y_tick_idx] is not None and len(v_border_labels[y_tick_idx]) > 0):
-                y_ticks.append((y_tick_list[y_tick_idx] + y_tick_list[y_tick_idx + 1])/2)
+                y_ticks.append((y_tick_list[y_tick_idx] + y_tick_list[y_tick_idx + 1]) / 2)
                 y_tick_labels.append(v_border_labels[y_tick_idx])
     
         cbar.ax.get_yaxis().set_ticks(y_ticks)
@@ -176,15 +245,18 @@ class Topoplot():
     
     def _refine_image(self, ax):
         """
-        Adds additional elements to the topoplot to make it visually more appealing.
+        Add additional elements to the topoplot to make it visually more appealing.
         
-        :param ax: The axes object of the topoplot
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+               The axes object to easen the inclusion of a plot into a larger picture.
         """
-        #Add border of face
+        # Add border of face
         circ = plt.Circle((0, 0), 1, color = "black", zorder = 11, linewidth = 1, fill = False)
         ax.add_artist(circ)
         
-        line = plt.Line2D([-0.309, 0, 0.309], [0.9511, 1.2 , 0.9511], color = "black", zorder = 11, linewidth = 1)
+        line = plt.Line2D([-0.309, 0, 0.309], [0.9511, 1.2, 0.9511], color = "black", zorder = 11, linewidth = 1)
         ax.add_artist(line)
         
         ax.get_xaxis().set_ticks([])
@@ -200,17 +272,28 @@ class Topoplot():
     
     def _mask_data(self, values, ch_name_list, substitute_channels, omit_channels):
         """
-        Substitutes and omits channels which are marked respectively.
+        Substitute and omits channels which are marked respectively.
         
-        :param values: The original values to be plotted
-        :param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        :param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
-        :param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
-        a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
+        Parameters
+        ----------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 May either be a N x 3 or N x 1 matrix.
+                 Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison
+                 correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
+        ch_name_list : list
+                       Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        substitute_channels : dict
+                              A list of dictionaries. Each dictionary contains a 'tgt' section with a single string
+                              defining the channel to be substituted and a second 'src' section which contains a list of strings,
+                              defining channel names which are used to substitute the 'tgt' channel.
+        omit_channels : list
+                        A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
         
-        :return: The corrected values
-        """    
-        
+        Returns
+        -------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 The corrected values
+        """
         if (len(substitute_channels) > 0):
             values = self._substitute_channels(values, ch_name_list, substitute_channels)
         if (len(omit_channels) > 0):
@@ -220,14 +303,24 @@ class Topoplot():
     
     def _substitute_channels(self, values, ch_name_list, substitute_channels):
         """
-        Substitutes channels by overwriting each 'tgt' channel with the average of the respective 'src' channels
+        Substitute channels by overwriting each 'tgt' channel with the average of the respective 'src' channels.
         
-        :param values: The original values to be plotted
-        :param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        :param substitute_channels: A list of dictionaries. Each dictionary contains a 'tgt' section with a single string defining the channel to be substituted and 
-        a second 'src' section which contains a list of strings, defining channel names which are used to substitute the 'tgt' channel.
+        Parameters
+        ----------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 May either be a N x 3 or N x 1 matrix.
+                 Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison
+                 correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
+        ch_name_list : list
+                       Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        substitute_channels : dict
+                              A list of dictionaries. Each dictionary contains a 'tgt' section with a single string
+                              defining the channel to be substituted and a second 'src' section which contains a list of strings,
         
-        :return: The corrected values
+        Returns
+        -------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 The corrected values
         """
         mod_ch_name_list = [ch_name for ch_name in ch_name_list]
         
@@ -249,15 +342,24 @@ class Topoplot():
     
     def _omit_channels(self, values, ch_name_list, omit_channels):
         """
-        Omits channels by setting them to zero.
+        Omit channels by setting them to zero.
         
-        :param values: The original values to be plotted
-        :param ch_name_list: Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
-        :param omit_channels: A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
+        Parameters
+        ----------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 May either be a N x 3 or N x 1 matrix.
+                 Dimensions #2 (boolean only) may be used to indicate significance before multiple comparison
+                 correction and dimensions #3 (boolean only) may be used to indicate significance after multiple comparison correction.
+        ch_name_list : list
+                       Names of the individual channels. Used for the spatial positioning of channels and the annotation of channels.
+        omit_channels : list
+                        A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
         
-        :return: The corrected values    
+        Returns
+        -------
+        values : np.ndarray, shape(ch_cnt, 1 or 3)
+                 The corrected values
         """
-        
         mod_ch_name_list = [ch_name for ch_name in ch_name_list]
         
         for ch_name in omit_channels:
@@ -271,31 +373,43 @@ class Topoplot():
         return values
     
     def _generate_topoplot_mask(self):
-        """
-        Generates a mask to hide areas of the topoplot to make it circular
-        """
+        """Generate a mask to hide areas of the topoplot to make it circular."""
         self.topoplot_mask_data = np.ones((1000, 1000))
         for x in range(self.topoplot_mask_data.shape[0]):
-            xPos = -self.win_sz + self.win_sz*2/1000 * x
+            xPos = -self.win_sz + self.win_sz * 2 / 1000 * x
             for y in range(self.topoplot_mask_data.shape[1]):
-                yPos = -self.win_sz + self.win_sz*2/1000 * y
+                yPos = -self.win_sz + self.win_sz * 2 / 1000 * y
                 
                 if ((np.power(xPos - 0, 2) + np.power(yPos - 0, 2)) >= (self.win_sz - 0.1)):
                     self.topoplot_mask_data[x, y] = np.nan
     
     def _interpolate_data(self, coords, values, screen_channels = False):
         """
-        Interpolates the individual data points and hides anything 'outside' the head
+        Interpolate the individual data points and hides anything 'outside' the head.
         
-        :param coords: Coordinates of the individual points
-        :param values: Color values of the individual points
-        :param screen_channels: If true, channels are not drawn as a smoothed 2D plane, but a voroni diagram easening the identification of individual unexpected results.
+        Parameters
+        ----------
+        coords : np.ndarray, shape(ch_cnt, 3)
+                 Coordinates of the individual points
+        values : np.ndarray, shape(ch_cnt, 1)
+                 Color values of the individual points
+        screen_channels : boolean
+                          If true, channels are not drawn as a smoothed 2D plane,
+                          but a voroni diagram easening the identification of individual unexpected results.
         
-        :return mesh grid values, x coordinates and y coordinates
+        Returns
+        -------
+        tuple of (np.ndarray, np.ndarray, np.ndarray)
+            - mesh grid values : np.ndarray
+                                 Color values.
+            - x coordinates : np.ndarray
+                              X-coordinates.
+            - y coordinates : np.ndarray
+                              Y-coordinates.
         """
         x = np.linspace(-self.win_sz, self.win_sz, 1000)
         y = np.linspace(-self.win_sz, self.win_sz, 1000)
-        X, Y = np.meshgrid(x,y)
+        X, Y = np.meshgrid(x, y)
         
         if (screen_channels):
             data = scipy.interpolate.griddata((coords[0], coords[1]), values, (X, Y), method = "nearest")
@@ -308,17 +422,32 @@ class Topoplot():
     
     def _normalize_data(self, data, X, Y, v_min, v_max):
         """
-        Normalizes the topoplot data
+        Normalize the topoplot data.
         
-        :param data: Color values
-        :param X: x coordinates
-        :param Y: y coordinates
-        :param v_min: Minimal color value. If None, v_min is chosen as the minimum value within the data.
-        :param v_max: Maximimal color value. If None, v_max is chosen as the maximum value within the data.
+        Parameters
+        ----------
+        data : np.ndarray
+               Color values.
+        X : np.ndarray
+            X-coordinates.
+        Y : np.ndarray
+            Y-coordinates.
+        v_min : float
+                Minimal color value. If None, v_min is chosen as the minimum value within the data.
+        v_max : float
+                Maximimal color value. If None, v_max is chosen as the maximum value within the data.
         
-        :return: normalized data, v_min, v_max and v_diff
+        Returns
+        -------
+        - normalized data : np.ndarray
+                            Color-range normalized data.
+        - v_min : float
+                  Minimum color value
+        - v_max : float
+                  Maximum color value
+         - v_diff : float
+                    Color value range.
         """
-        
         if (type(data) is not np.ndarray):
             norm_data = data((X, Y))
         else:
@@ -329,7 +458,7 @@ class Topoplot():
             mask = data((X, Y))
         else:
             mask = data
-        mask[np.isnan(mask) == False] = 1
+        mask[np.isnan(mask) is False] = 1
         norm_data = norm_data * mask
         
         if (v_min is None and v_max is None):
@@ -355,31 +484,48 @@ class Topoplot():
         """
         Draws the contour of the topoplot.
         
-        :param ax: Axes object of the topoplot
-        :param X: x coordinates
-        :param Y: y coordinates
-        :param norm_data: normalized color values.
-        :param v_min: Minimal color value. If None, v_min is chosen as the minimum value within the data.
-        :param v_max: Maximimal color value. If None, v_max is chosen as the maximum value within the data.
-        :param v_diff: Step size between individual color steps
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes
+               The axes object to easen the inclusion of a plot into a larger picture.
+        X : np.ndarray
+            X-coordinates.
+        Y : np.ndarray
+            Y-coordinates.
+        norm_data : np.ndarray
+                    Color-range normalized data.
+        v_min : float
+                Minimal color value. If None, v_min is chosen as the minimum value within the data.
+        v_max : float
+                Maximimal color value. If None, v_max is chosen as the maximum value within the data.
+        v_diff : float
+                 Step size between individual color steps
         """
-        
         levels = np.arange(v_min, v_max, v_diff)
         
         ax.contourf(X, Y, norm_data, cmap = plt.get_cmap("jet"), levels = levels, antialiased = False, zorder = 1)
     
     def _annotate_ch_sig(self, coords, ch_name_list, ax, signValues, omit_channels = None, substitute_channels = None):
         """
-        Adds channel positions and respective significance (if supplied)
+        Add channel positions and respective significance (if supplied).
         
-        :param coords: Coordinates of the individual points.
-        :param ch_name_list: Names of the individual channels.
-        :param ax: axes object to draw onto.
-        :param signValues: significance values.
-        :param omit_channels: Channels omitted from visualization
-        :param substitute_channels: Channels substituted in the visualization
+        Parameters
+        ----------
+        coords : np.ndarray, shape(ch_cnt, 3)
+                 Coordinates of the individual points
+        ch_name_list : list
+                       Names of the individual channels.
+        ax : matplotlib.axes.Axes
+               The axes object to easen the inclusion of a plot into a larger picture.
+        signValues : list
+                     significance values.
+        omit_channels : list
+                        A list which channels are to be omitted. Channels are identified via names matching the ones specified in ch_names.
+        substitute_channels : dict
+                              A list of dictionaries. Each dictionary contains a 'tgt' section with a single string
+                              defining the channel to be substituted and a second 'src' section which contains a list of strings,
+                              defining channel names which are used to substitute the 'tgt' channel.
         """
-        
         if (type(signValues) is not np.ndarray):
             signValues = np.asarray(signValues)
         
@@ -388,8 +534,8 @@ class Topoplot():
         for chIdx in range(0, len(ch_name_list)):
             
             # In case a channel is either substituted or not omitted, the corresponding significance is also not displayed
-            if ((ch_name_list[chIdx] in [subName["tgt"] for subName in substitute_channels]) 
-                or (ch_name_list[chIdx] in omit_channels)):
+            if ((ch_name_list[chIdx] in [subName["tgt"] for subName in substitute_channels])
+                or (ch_name_list[chIdx] in omit_channels)):  # noqa: E129, W503
                 continue
             
             if (len(signValues.shape) == 2 and len(signValues[0, :]) == 3):
@@ -413,107 +559,17 @@ class Topoplot():
     
     def _add_ch_names(self, coords, ch_name_list, ax):
         """
-        Annotates the individual channels with their names
+        Annotate the individual channels with their names.
         
-        :param coords: Coordinates of the individual channels.
-        :param ch_name_list: Names of the individual channels.
-        :param ax: axis object to be annotated
+        Parameters
+        ----------
+        coords : np.ndarray, shape(ch_cnt, 3)
+                 Coordinates of the individual points
+        ch_name_list : list
+                       Names of the individual channels.
+        ax : matplotlib.axes.Axes
+               The axes object to easen the inclusion of a plot into a larger picture.
         """
-        
         for chIdx in range(0, len(ch_name_list)):
             text = ch_name_list[chIdx]
             ax.annotate(text, [coords[0, chIdx], coords[1, chIdx]], zorder = 3)
-            
-    def _get_eeg_ch_coords(self):
-        """
-        
-        To be removed into a separate csv file at a later point.
-        
-        """
-        coords = {
-            "Cz" : [0, 0],
-            "C1" : [-0.201729106628242, 0],
-            "C3" : [-0.400576368876081, 0],
-            "C5" : [-0.602305475504323, 0],
-            "T7" : [-0.801152737752161, 0],
-            "T9" : [-1, 0],
-            "C2" : [0.201729106628242, 0],
-            "C4" : [0.400576368876081, 0],
-            "C6" : [0.602305475504323, 0],
-            "T8" : [0.801152737752161, 0],
-            "T10" : [1, 0],
-            "CPz" : [0, -0.25089605734767],
-            "CP1" : [-0.195965417867435, -0.247311827956989],
-            "CP3" : [-0.386167146974063, -0.254480286738351],
-            "CP5" : [-0.585014409221902, -0.279569892473118],
-            "TP7" : [-0.763688760806916, -0.308243727598566],
-            "TP9" : [-0.953890489913545, -0.3584229390681],
-            "CP2" : [0.195965417867435, -0.247311827956989],
-            "CP4" : [0.386167146974063, -0.254480286738351],
-            "CP6" : [0.585014409221902, -0.279569892473118],
-            "TP8" : [0.763688760806916, -0.308243727598566],
-            "TP10" : [0.953890489913545, -0.3584229390681],
-            "Pz" : [0, -0.501792114695341],
-            "P1" : [-0.164265129682997, -0.505376344086022],
-            "P3" : [-0.328530259365994, -0.508960573476702],
-            "P5" : [-0.492795389048991, -0.53405017921147],
-            "P7" : [-0.648414985590778, -0.587813620071685],
-            "P9" : [-0.812680115273775, -0.734767025089606],
-            "P2" : [0.164265129682997, -0.505376344086022],
-            "P4" : [0.328530259365994, -0.508960573476702],
-            "P6" : [0.492795389048991, -0.53405017921147],
-            "P8" : [0.648414985590778, -0.587813620071685],
-            "P10" : [0.812680115273775, -0.734767025089606],
-            "POz" : [0, -0.74910394265233],
-            "PO3" : [-0.273775216138329, -0.727598566308244],
-            "PO7" : [-0.472622478386167, -0.810035842293907],
-            "PO9" : [-0.636887608069164, -0.949820788530466],
-            "PO4" : [0.273775216138328, -0.727598566308244],
-            "PO8" : [0.472622478386167, -0.810035842293907],
-            "PO10" : [0.636887608069164, -0.949820788530466],
-            "Oz" : [0, -1],
-            "O1" : [-0.247838616714697, -0.949820788530466],
-            "O2" : [0.247838616714697, -0.949820788530466],
-            "Iz" : [0, -1.25089605734767],
-            "FCz" : [0, 0.25089605734767],
-            "FC1" : [-0.195965417867435, 0.247311827956989],
-            "FC3" : [-0.386167146974063, 0.254480286738351],
-            "FC5" : [-0.585014409221902, 0.279569892473118],
-            "FT7" : [-0.763688760806916, 0.308243727598566],
-            "FT9" : [-0.953890489913545, 0.3584229390681],
-            "FC2" : [0.195965417867435, 0.247311827956989],
-            "FC4" : [0.386167146974063, 0.254480286738351],
-            "FC6" : [0.585014409221902, 0.279569892473118],
-            "FT8" : [0.763688760806916, 0.308243727598566],
-            "FT10" : [0.953890489913545, 0.3584229390681],
-            "Fz" : [0, 0.501792114695341],
-            "F1" : [-0.164265129682997, 0.505376344086022],
-            "F3" : [-0.328530259365994, 0.508960573476702],
-            "F5" : [-0.492795389048991, 0.53405017921147],
-            "F7" : [-0.648414985590778, 0.587813620071685],
-            "F9" : [-0.812680115273775, 0.734767025089606],
-            "F2" : [0.164265129682997, 0.505376344086022],
-            "F4" : [0.328530259365994, 0.508960573476702],
-            "F6" : [0.492795389048991, 0.53405017921147],
-            "F8" : [0.648414985590778, 0.587813620071685],
-            "F10" : [0.812680115273775, 0.734767025089606],
-            "AFz" : [0, 0.74910394265233],
-            "AF3" : [-0.273775216138329, 0.727598566308244],
-            "AF7" : [-0.472622478386167, 0.810035842293907],
-            "AF9" : [-0.636887608069164, 0.949820788530466],
-            "AF4" : [0.273775216138328, 0.727598566308244],
-            "AF8" : [0.472622478386167, 0.810035842293907],
-            "AF10" : [0.636887608069164, 0.949820788530466],
-            "Fpz" : [0, 1],
-            "Fp1" : [-0.247838616714697, 0.949820788530466],
-            "Fp2" : [0.247838616714697, 0.949820788530466],
-            "Nz" : [0, 1.25089605734767],
-        }
-        return coords
-    
-    
-    
-    
-    
-    
-    

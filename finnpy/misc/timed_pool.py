@@ -1,10 +1,10 @@
-'''
-Created on Jan 30, 2019
+"""
+Created on Jan 30, 2019.
 
 Provides a memory and cpu sensitive version of the multiprocessing tool. 
 
 :author: voodoocode
-'''
+"""
 
 import multiprocessing
 import time
@@ -14,10 +14,16 @@ def _manage_sub_process(func, args, child_pipe, return_data_lock):
     """
     Commands a sub-process to execute *func* with the arguments provided in *args*.
     
-    :param func: Function to be executed.
-    :param args: Arguments for the aformentioned function.
-    :param child_pipe: Pipe used to return the result.
-    :param return_data_lock: Lock to have only one sub-process return data at a time (prevents excessive memory usage in case of large returns for each sub-process.
+    Parameters
+    ----------
+    func : callable
+           Function to be executed.
+    args: Any
+          Arguments for the aformentioned function.
+    child_pipe : multiprocessing.Pipe
+                 Pipe used to return the result.
+    return_data_lock : multiprocessing.Lock 
+                       Lock to have only one sub-process return data at a time (prevents excessive memory usage in case of large returns for each sub-process.
     
     """
     result = func(*args)
@@ -29,20 +35,23 @@ def _manage_sub_process(func, args, child_pipe, return_data_lock):
      
     child_pipe.close()
     
-def _launch_child_process(sub_processes, func, args, max_time, curr_job_idx, return_data_lock):
+def _launch_child_process(sub_processes, func, args, curr_job_idx, return_data_lock):
     """
+    Start a child-process to execute work.
     
-    Starts a child-process to execute work.
-    
-    :param sub_processes: List of all child-processes.
-    :param func: Function to be executed.
-    :param args: Arguments for the aformentioned function.
-    :param max_time: Maximum time after which the sub-process is terminated. 
-    :param curr_job_idx: Number of this sub-processe's job.
-    :param return_data_lock: Lock to have only one sub-process return data at a time (prevents excessive memory usage in case of large returns for each sub-process.
-    
-    """
-    
+    Parameters
+    ----------
+    sub_processes : list, len(sub_proc_cnt)
+                    List of all child-processes.
+    func : callable
+           Function to be executed.
+    args : Any
+           Arguments for the aformentioned function.
+    curr_job_idx : int
+                   Id of this sub-processe's job.
+    return_data_lock : multiprocessing.Lock
+                       Lock to have only one sub-process return data at a time (prevents excessive memory usage in case of large returns for each sub-process.
+    """    
     (parent_pipe, child_pipe) = multiprocessing.Pipe(True)
     sub_process = multiprocessing.Process(target = _manage_sub_process, args = (func, args[curr_job_idx], child_pipe, return_data_lock))
     sub_processes.append((sub_process, parent_pipe, curr_job_idx, time.time()))
@@ -51,24 +60,32 @@ def _launch_child_process(sub_processes, func, args, max_time, curr_job_idx, ret
     
 def _get_child_proc_data(sub_processes, max_time, res_data, args, delete_data):
     """
+    Get result data from sub-processes or terminates them if they have exceeded their life-time.
     
-    Gets result data from sub-processes or terminates them if they have exceeded their life-time.
+    Parameters
+    ----------
+    sub_processes : list, len(sub_proc_cnt)
+                    List of all child-processes.
+    max_time : int
+               Maximum time after which the sub-process is terminated. 
+    res_data : Any
+               Result data to be computed from the provided function (and input data).
+    args : Any
+           Arguments for the aformentioned function.
+    delete_data : boolean
+                  Flag on whether input data is deleted after successful computation of it's results.
     
-    :param sub_processes: List of all child-processes.
-    :param max_time: Maximum time after which the sub-process is terminated. 
-    :param res_data: Result data to be computed from the provided function (and input data).
-    :param args: Arguments for the aformentioned function.
-    :param delete_data: Flag on whether input data is deleted after successful computation of it's results.
-    
-    :return: Computed results from the sub-processes.
-    
+    Returns
+    -------
+    Any
+        Computed results from the sub-processes.
     """
     for parent_idx in np.arange(len(sub_processes) - 1, -1, -1):
         
         elapsed_time = time.time() - sub_processes[parent_idx][3]
-        if (sub_processes[parent_idx][1].poll() == True):
+        if (sub_processes[parent_idx][1].poll() is True):
             
-            if (delete_data == True):
+            if (delete_data is True):
                 job_idx = sub_processes[parent_idx][2]
                 args[job_idx] = None
  
@@ -98,23 +115,32 @@ def _get_child_proc_data(sub_processes, max_time, res_data, args, delete_data):
 
 def run(max_child_proc_cnt = 4, func = None, args = None, max_time = None, delete_data = True):
     """
-    Creates a subprocess loop to work the issue task defined by func and it's arguments. This subprocess loop is different in two key elements from the
-    default python processpool.
+    Create a subprocess loop to work the issue task defined by func and it's arguments.
     
-    #. Only a single subprocess can return data at a time. This drastically decreases the odds of a memory utilization spikes which otherwise would cause a crash. This is linked to how pickle handles data transfer via pipes.
-    #. A maximum time can be set after which a subprocess is terminated and restarted.
+    This subprocess loop is different in two key elements from the default python processpool. 
+    Only a single subprocess can return data at a time. This drastically decreases the odds of a memory utilization spikes,
+    which otherwise would cause a crash. This is linked to how pickle handles data transfer via pipes.
+    A maximum time can be set after which a subprocess is terminated and restarted.
     
-    :param max_child_proc_cnt: Maximum number of child processes.
-    :param func: The function to be processed.
-    :param args: List of arguments. Every element in the list is handled by a separate process.
-    :param max_time: Maximum time to wait for a processe prior to cancellation.
-    :param delete_data: Flag on whether input data is deleted after successful computation of it's results.
+    Parameters
+    ----------
+    max_child_proc_cnt : int
+                         Maximum number of child processes.
+    func : callalble
+           The function to be processed.
+    args : Any
+           List of arguments. Every element in the list is handled by a separate process.
+    max_time : float
+               Maximum time to wait for a processe prior to cancellation.
+    delete_data : boolean
+                  Flag on whether input data is deleted after successful computation of it's results.
     
-    :return The processed information from func and args as a list. The order is identical to the order in which the argument blocks were given.
-    
+    Returns
+    -------
+    Any
+        The processed information from func and args as a list. The order is identical to the order in which the argument blocks were given.
     """
-    
-    if (type(args) != np.ndarray):
+    if (type(args) is not np.ndarray):
         args = np.asarray(args, dtype = object)
     
     job_cnt = len(args)
@@ -125,19 +151,15 @@ def run(max_child_proc_cnt = 4, func = None, args = None, max_time = None, delet
     
     return_data_lock = multiprocessing.Lock()
     
-    while(len(sub_processes) != 0 or curr_job_idx < job_cnt):
+    while (len(sub_processes) != 0 or curr_job_idx < job_cnt):
         if (len(sub_processes) < max_child_proc_cnt and curr_job_idx < job_cnt):
-            _launch_child_process(sub_processes, func, args, max_time, curr_job_idx, return_data_lock)
+            _launch_child_process(sub_processes, func, args, curr_job_idx, return_data_lock)
             curr_job_idx += 1
 
         failed_idx = _get_child_proc_data(sub_processes, max_time, res_data, args, delete_data)
         if (failed_idx is not None):
-            _launch_child_process(sub_processes, func, args, max_time, failed_idx, return_data_lock)
+            _launch_child_process(sub_processes, func, args, failed_idx, return_data_lock)
                 
         time.sleep(0.01)
         
     return res_data
-
-
-
-

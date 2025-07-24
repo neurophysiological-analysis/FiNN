@@ -1,0 +1,84 @@
+
+.. _stats_general_label:
+
+General
+=======
+
+This guide explains general concepts on statistics.
+
+Repeated measurements
+---------------------
+
+This guide describes how to handle repeated measurements.
+
+Issue
+^^^^^
+
+Repeated measurements arise when a specific context is measured repeatedly (i.e. a patient) and compared to another context (i.e. another patient). 
+
+Problem
+^^^^^^^
+
+The problem this creates is that compound symmetry across data points is lost. This concepts describes the fact that all data points in a statistical evaluation are *similarly* related to one another. However, multiple data points from one context are closer related than from another context (assuming no different). For example, data from one patient are more likely to share characteristics with one another than with data from another patient. 
+
+Solution
+^^^^^^^^
+
+This problem may be addressed by adding independent variables into the applied statistical model to restore compound symmetry. In the above example, this would necessitate including the factor *patient*. Thereby, potential imbalance from measuring the same patient repeatedly is handled properly.
+
+How to handle multiple comparisons
+----------------------------------
+
+This guide describes how to handle multiple comparisons.
+
+Issue
+^^^^^
+
+Multiple statistical analyses are performed across the same set of datapoints.
+
+Problem
+^^^^^^^
+
+While each individual test may have an error of e.g. 1-5%, the probability of no error across *all* tests decreases rapidly with increasing test count.
+
+Solution
+^^^^^^^^
+
+This issue may be engaged by employing respective corrective measures. Among them are the *Bonferroni-Holm* method and the *Benjamini–Hochberg* procedure.
+It should be noted that the *Bonferroni-Holm* method is more stricit, hence the number of false positives is lower but the number of false negatives higher.
+
+Bonferroni-Holm method
+~~~~~~~~~~~~~~~~~~~~~~
+
+This approach caps the error rate for each test at a predetermined percentage (i.e. 5%). Hence, any *corrected* test has a e.g. <5% likelihood of being incorrect. This approach is executed by evaluating the following formula,
+
+.. math::
+
+  P_k \le \frac{\alpha}{m + 1 - k}
+
+:math:`P_k` are the p-values, order from low to high (k = 1 is the lowest).
+:math:`\alpha` is the significance threshold.
+:math:`k` is a counter variable.
+:math:`m` is the hypothesis count.
+
+Each Hypothesis meeting the above criterion is considered significant.
+
+Benjamini–Hochberg procedure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Instead of capping the error rate for each test, this approach limits the global error. Hence, e.g. *only* 5% of all results are incorrect. This approach is executed by evaluating the following formula,
+
+.. math::
+  
+  P_k \le \frac{k \alpha}{m}
+
+:math:`P_k` are the p-values, order from low to high (k = 1 is the lowest).
+:math:`\alpha` is the significance threshold.
+:math:`k` is a counter variable.
+:math:`m` is the hypothesis count.
+
+Of note, unlike the Bonferroni-Holm method, the largest :math:`k` meeting the above criterion (:math:`k_x`) is identified and all hypotheses (:math:`H_k`) with :math:`k < k_x` are considered significant.
+
+
+
+

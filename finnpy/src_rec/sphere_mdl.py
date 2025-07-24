@@ -1,17 +1,16 @@
-'''
-Created on Oct 13, 2022
+"""
+Created on Oct 13, 2022.
 
 @author: voodoocode
-'''
+"""
 
-import os
 import numpy as np
 import scipy.spatial
 
-import finnpy.src_rec.utils
+import finnpy.src_rec.utils  # @UnresolvedImport
 
 def _tessellate_sphere(vert, faces, level):
-    """    
+    """
     Inflates the sphere.
     
     Parameters
@@ -25,20 +24,20 @@ def _tessellate_sphere(vert, faces, level):
                
     Returns
     -------
-    vert : numpy.ndarray, shape(inflated_vtx_cnt, 3)
-           Inflated vertices of the sphere.
-    faces : numpy.ndarray, shape(inflated_face_cnt, 3)
-            Inflated faces of the sphere.
+    result : tuple of (np.ndarray, np.ndarray)
+             - vert : numpy.ndarray, shape(inflated_vtx_cnt, 3)
+                      Inflated vertices of the sphere.
+             - faces : numpy.ndarray, shape(inflated_face_cnt, 3)
+                       Inflated faces of the sphere.
     """
-
     new_vert = [None, None, None]
     new_vert_len = [None, None, None]
     new_faces = [None, None, None, None]
     for _ in range(0, level - 1):
         
-        new_vert[0] = vert[faces[:, 0]] + vert[faces[:, 1]]; new_vert[0] = finnpy.src_rec.utils.norm_vert(new_vert[0])
-        new_vert[1] = vert[faces[:, 1]] + vert[faces[:, 2]]; new_vert[1] = finnpy.src_rec.utils.norm_vert(new_vert[1])
-        new_vert[2] = vert[faces[:, 0]] + vert[faces[:, 2]]; new_vert[2] = finnpy.src_rec.utils.norm_vert(new_vert[2])
+        new_vert[0] = vert[faces[:, 0]] + vert[faces[:, 1]]; new_vert[0] = finnpy.src_rec.utils.fast_3D_normalize_vec_multi(new_vert[0])
+        new_vert[1] = vert[faces[:, 1]] + vert[faces[:, 2]]; new_vert[1] = finnpy.src_rec.utils.fast_3D_normalize_vec_multi(new_vert[1])
+        new_vert[2] = vert[faces[:, 0]] + vert[faces[:, 2]]; new_vert[2] = finnpy.src_rec.utils.fast_3D_normalize_vec_multi(new_vert[2])
         
         new_vert_cnt = np.cumsum([len(vert), len(new_vert[0]), len(new_vert[1]), len(new_vert[2])])
         new_vert_len[0] = np.arange(new_vert_cnt[0], new_vert_cnt[1])
@@ -58,22 +57,23 @@ def _tessellate_sphere(vert, faces, level):
     return (vert, faces)
 
 def calculate_sphere_from_octahedron(level):
-    """    
-    Inflates the sphere.
+    """
+    Inflate the sphere.
     
     Parameters
     ----------
     level : int
             Target level of the sphere model.
-               
+    
     Returns
     -------
-    vert : numpy.ndarray, shape(inflated_vtx_cnt, 3)
-           Vertices of the sphere.
-    faces : numpy.ndarray, shape(inflated_face_cnt, 3)
-            Faces of the sphere.
+    result : tuple of (np.ndarray, np.ndarray)
+             - vert : numpy.ndarray, shape(inflated_vtx_cnt, 3)
+                      Vertices of the sphere.
+             - faces : numpy.ndarray, shape(inflated_face_cnt, 3)
+                       Faces of the sphere.
     """
-    vert = np.asarray([[1., 0., 0.],[0., 1., 0.], [0., 0., 1.], [-1., 0., 0.], [0., -1., 0.], [0., 0., -1.]], dtype = float)
+    vert = np.asarray([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.], [-1., 0., 0.], [0., -1., 0.], [0., 0., -1.]], dtype = float)
     faces = np.asarray([[0, 1, 2], [0, 1, 5], [0, 4, 2], [0, 4, 5], [3, 1, 2], [3, 1, 5], [3, 4, 2], [3, 4, 5]], dtype = int)
         
     (vert, faces) = _tessellate_sphere(vert, faces, level)
@@ -82,7 +82,7 @@ def calculate_sphere_from_octahedron(level):
 
 def read_sphere_from_icosahedron_in_fs_order(fs_path, level):
     """
-    Reads an icosahedron from freesurfer.
+    Read an icosahedron from freesurfer.
     
     Parameters
     ----------
@@ -93,13 +93,13 @@ def read_sphere_from_icosahedron_in_fs_order(fs_path, level):
                
     Returns
     -------
-    vert : numpy.ndarray, shape(model_vtx_cnt, 3)
-           Vertices of the icosahedron.
-    faces : numpy.ndarray, shape(model_face_cnt, 3)
-            Faces of the icosahedron.
+    result : tuple of (np.ndarray, np.ndarray)
+             - vert : numpy.ndarray, shape(model_vtx_cnt, 3)
+                      Vertices of the icosahedron.
+             - faces : numpy.ndarray, shape(model_face_cnt, 3)
+                       Faces of the icosahedron.
     """
-    
-    file = open(fs_path + "lib/bem/ic" + str(level) + ".tri", "r")
+    file = open(fs_path + "lib/bem/ic" + str(level) + ".tri", "r")  # pylint: disable=unspecified-encoding
     
     vert_cnt = int(file.readline().replace("\n", ""))
     vert = np.empty((vert_cnt, 3), dtype = float)
@@ -125,7 +125,7 @@ def read_sphere_from_icosahedron_in_fs_order(fs_path, level):
 
 def calculate_sphere_from_icosahedron(level):
     """
-    Calculates an icosahedron from a specific seed.
+    Calculate an icosahedron from a specific seed.
     
     Parameters
     ----------
@@ -134,19 +134,20 @@ def calculate_sphere_from_icosahedron(level):
                
     Returns
     -------
-    vert : numpy.ndarray, shape(model_vtx_cnt, 3)
-           Vertices of the icosahedron.
-    faces : numpy.ndarray, shape(model_face_cnt, 3)
-            Faces of the icosahedron.
+    result : tuple of (np.ndarray, np.ndarray)
+             - vert : numpy.ndarray, shape(model_vtx_cnt, 3)
+                      Vertices of the icosahedron.
+             - faces : numpy.ndarray, shape(model_face_cnt, 3)
+                       Faces of the icosahedron.
     """
-    vert = np.asarray([[.0000, .0000, 1.0000], [.8944, .0000, .4472], [.2764, .8507, .4472], [-.7236, .5257, .4472],
-                       [-.7236, -.5257, .4472], [.2764, -.8507, .4472], [.7236, -.5257, -.4472], [.7236, .5257, -.4472],
-                       [-.2764, .8507, -.4472], [-.8944, .0000, -.4472], [-.2764, -.8507, -.4472], [.0000, .0000, -1.0000]], dtype = float)
+    vert = np.asarray([[ .0000,  .0000, 1.0000], [ .8944,  .0000,  .4472], [ .2764,  .8507,  .4472], [-.7236, .5257,  .4472],  # noqa: E201, E241
+                       [-.7236, -.5257,  .4472], [ .2764, -.8507,  .4472], [ .7236, -.5257, -.4472], [ .7236, .5257, -.4472],  # noqa: E201, E241
+                       [-.2764,  .8507, -.4472], [-.8944,  .0000, -.4472], [-.2764, -.8507, -.4472], [ .0000, .0000, -1.0000]], dtype = float)  # noqa: E201, E241
     
-    faces = np.asarray([[ 0,  3,  4], [ 0,  4,  5], [ 0,  5,  1], [ 0,  1,  2], [ 0,  2,  3],
-                        [ 3,  2,  8], [ 3,  8,  9], [ 3,  9,  4], [ 4,  9, 10], [ 4, 10,  5],
-                        [ 5, 10,  6], [ 5,  6,  1], [ 1,  6,  7], [ 1,  7,  2], [ 2,  7,  8],
-                        [ 8, 11,  9], [ 9, 11, 10], [10, 11,  6], [ 6, 11,  7], [ 7, 11,  8]], dtype = int)
+    faces = np.asarray([[ 0,  3,  4], [ 0,  4,  5], [ 0,  5,  1], [ 0,  1,  2], [ 0,  2,  3],  # noqa: E201, E241
+                        [ 3,  2,  8], [ 3,  8,  9], [ 3,  9,  4], [ 4,  9, 10], [ 4, 10,  5],  # noqa: E201, E241
+                        [ 5, 10,  6], [ 5,  6,  1], [ 1,  6,  7], [ 1,  7,  2], [ 2,  7,  8],  # noqa: E201, E241
+                        [ 8, 11,  9], [ 9, 11, 10], [10, 11,  6], [ 6, 11,  7], [ 7, 11,  8]], dtype = int)  # noqa: E201, E241
         
     (vert, faces) = _tessellate_sphere(vert, faces, level = level + 1)
     (vert, faces) = prune_closeby_vert(vert, faces)
@@ -163,15 +164,16 @@ def prune_closeby_vert(vert, faces, threshold = 1e-6):
            Vertices of the icosahedron.
     faces : numpy.ndarray, shape(model_face_cnt, 3)
             Faces of the icosahedron.
-    level : float
-            Distance threshold.
+    threshold : float
+                Distance threshold.
                
     Returns
     -------
-    vert : numpy.ndarray, shape(pruned_vtx_cnt, 3)
-           Vertices of the icosahedron.
-    faces : numpy.ndarray, shape(pruned_face_cnt, 3)
-            Faces of the icosahedron.
+    result : tuple of (np.ndarray, np.ndarray)
+             - vert : numpy.ndarray, shape(pruned_vtx_cnt, 3)
+                      Vertices of the icosahedron.
+             - faces : numpy.ndarray, shape(pruned_face_cnt, 3)
+                       Faces of the icosahedron.
     """
     distances = scipy.spatial.distance_matrix(vert, vert, p = 2)
     distances = distances < threshold
@@ -198,15 +200,3 @@ def prune_closeby_vert(vert, faces, threshold = 1e-6):
     vert = vert[np.invert(bad_vertices), :]
     
     return (vert, faces)
-
-
-
-
-
-
-
-
-
-
-
-

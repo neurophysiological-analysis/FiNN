@@ -1,22 +1,27 @@
-'''
-Created on Jun 2, 2020
+"""
+Created on Jun 2, 2020.
 
 This module implements functions to restore channels as an approach to deal with missing and/or bad channels.
 
 :author: voodoocode
-'''
+"""
 
 import numpy as np
-import finnpy.cleansing.neighboring_channels as nc
+import finnpy.cleansing.neighboring_channels as nc  # @UnresolvedImport
 
 def _get_neighbor_channel_ids(ch_names):
     """
+    Determine the neighboring channels of a specific channel.
     
-    Determines the neighboring channels of a specific channel
+    Parameters
+    ----------
+    ch_names : list, len(ch_cnt)
+               Channel list whose neighbors are to be identified.
     
-    :param ch_names: Channel list whose neighbors are to be identified.
-    
-    :return: List of neighboring channels (between two and four per channel of interest).
+    Returns
+    -------
+    list, len(ch_cnt)
+        List of neighboring channels (between two and four per channel of interest).
     
     """
     neigh_list = nc.neighbor_channels
@@ -31,22 +36,32 @@ def _get_neighbor_channel_ids(ch_names):
 
 def run(data, ch_names, bad_ch_idx_list):
     """
-    Restores channel by averaging signals from their respective neighbors. In case neighboring channels are flagged as bad, channels get iteratively restored, from the channel with the most valid neighbors to the channel with the least. Restored channels are considered valid candidates for channel reconstruction.
+    Restore channels by averaging signals from their respective neighbors. In case neighboring channels are flagged as bad, channels get iteratively restored, from the channel with the most valid neighbors to the channel with the least. Restored channels are considered valid candidates for channel reconstruction.
     
-    :param data: Input data in the format channels x samples.
-    :param ch_names: Names of the channles from the input data. Order needs to be aligned with the channel order of ch_names.
-    :param bad_ch_idx_list: List of bad channels with are selected for substitution by their neighbors.
+    Parameters
+    ----------
+    data : np.ndarray, shape(ch_cnt, samples)
+           Input data in the format channels x samples.
+    ch_names : list, len(ch_cnt)
+               Names of the channles from the input data. Order needs to be aligned with the channel order of ch_names.
+    bad_ch_idx_list : list
+                      List of bad channels with are selected for substitution by their neighbors.
     
-    :return: Restored channels in the format channels x samples.
-    
+    Returns
+    -------
+    np.ndarray(ch_cnt, samples)
+        Restored channels in the format channels x samples.
+        
+    Raises
+    ------
+    AssertionError
+        In case too many channels are missing/bad.
     """
-    
-    
     sub_data = np.copy(data)
 
     neigh_list = _get_neighbor_channel_ids(ch_names)
 
-    while(len(bad_ch_idx_list) > 0):
+    while (len(bad_ch_idx_list) > 0):
         # Update neighbor count per bad channel
         # Has to be updated each iteration, as a channel is restored during each iteration
         available_neigh_cnt = np.zeros((len(bad_ch_idx_list)))
@@ -71,7 +86,7 @@ def run(data, ch_names, bad_ch_idx_list):
 
         # In case there are only faulty neighbors, raise an exception
         if (neighCnt == 0):
-            raise Exception("Error, cannot restore channels due to too many missing channels")
+            raise AssertionError("Error, cannot restore channels due to too many missing channels")
         else:
             loc_data /= neighCnt
             sub_data[bad_ch_idx_list[bad_Idx]] = loc_data
@@ -80,8 +95,3 @@ def run(data, ch_names, bad_ch_idx_list):
             del bad_ch_idx_list[bad_Idx]
 
     return sub_data
-
-
-
-
-

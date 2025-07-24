@@ -1,20 +1,20 @@
-'''
-Created on Feb 22, 2024
+"""
+Created on Feb 22, 2024.
 
 @author: voodoocode
-'''
+"""
 
 import numpy as np
 import scipy.sparse
 import nibabel.freesurfer
 import os
 
-import finnpy.src_rec.utils
+import finnpy.src_rec.utils  # @UnresolvedImport
 
 
 class Subj_to_fsavg_mdl():
     """
-    Container class, populated with the following items:
+    Container class, populated with the following items.
     
     trans : numpy.ndarray, shape(valid_subj_vtx_cnt, valid_subj_vtx_cnt)
             Transformation matrix
@@ -24,9 +24,18 @@ class Subj_to_fsavg_mdl():
                     Valid/supporting vertices for right hemisphere.
     """
     
-    def __init__(self, trans, lh_valid_vert, rh_valid_vert, octa_mdl_vert, octa_mdl_faces):
+    def __init__(self, trans,
+                 lh_vert, lh_faces, lh_valid_vert,
+                 rh_vert, rh_faces, rh_valid_vert,
+                 octa_mdl_vert, octa_mdl_faces):
         self.trans = trans
+        
+        self.lh_vert = lh_vert
+        self.lh_faces = lh_faces
         self.lh_valid_vert = lh_valid_vert
+
+        self.rh_vert = rh_vert
+        self.rh_faces = rh_faces
         self.rh_valid_vert = rh_valid_vert
         
         self.octa_mdl_vert = octa_mdl_vert
@@ -37,7 +46,7 @@ def prepare(fs_path, anatomy_path, subj_name):
     Compute precursors of the mri projections.
     
     Parameters
-    ----------    
+    ---------- 
     fs_path : string
               Path to the freesurfer folder. Should contain the 'bin' folder, your license.txt, and sources.sh.
     anatomy_path : string
@@ -45,35 +54,33 @@ def prepare(fs_path, anatomy_path, subj_name):
     subj_name : string
                 Name of the subject.
     """
-    
     _calc_mri_maps(anatomy_path, subj_name, fs_path + "subjects/fsaverage/", "lh", True)
     _calc_mri_maps(anatomy_path, subj_name, fs_path + "subjects/fsaverage/", "rh", True)
 
-def compute(cort_mdl, anatomy_path, subj_name, fs_path, overwrite):
+def compute(cort_mdl, anatomy_path, subj_name, fs_path, overwrite = False):
     """
     Create a subject to fs average transformation matrix.
     
     Parameters
     ----------
-    
     cort_mdl : finnpy.src_rec.cort_mdl.Cort_mdl
                Container populated with the following items:
                
-               lh_vert : numpy.ndarray, shape(lh_vtx_cnt, 3)
-                         White matter surface model vertices (left hemisphere).
-               lh_faces : numpy.ndarray, shape(lh_face_cnt, 3)
-                          White matter surface model faces (left hemisphere).
-               lh_valid_vert : numpy.ndarray, shape(lh_vtx_cnt,)
-                               Valid flags for white matter surface model vertices (left hemisphere).
-               rh_vert : numpy.ndarray, shape(rh_vtx_cnt, 3)
-                         White matter surface model vertices (right hemisphere).
-               rh_faces : numpy.ndarray, shape(rh_face_cnt, 3)
-                          White matter surface model faces (right hemisphere).
-               lh_valid_vert : numpy.ndarray, shape(rh_vtx_cnt,)
-                               Valid flags for white matter surface model vertices (right hemisphere).
-               octa_model_vert : numpy.ndarray, shape(octa_mdl_vtx_cnt, 3)
-                                 Octamodel vertices (left hemisphere).
-               octa_model_faces : numpy.ndarray, shape(octa_mdl_face_cnt, 3)
+               - lh_vert : numpy.ndarray, shape(lh_vtx_cnt, 3)
+                           White matter surface model vertices (left hemisphere).
+               - lh_faces : numpy.ndarray, shape(lh_face_cnt, 3)
+                            White matter surface model faces (left hemisphere).
+               - lh_valid_vert : numpy.ndarray, shape(lh_vtx_cnt,)
+                                 Valid flags for white matter surface model vertices (left hemisphere).
+               - rh_vert : numpy.ndarray, shape(rh_vtx_cnt, 3)
+                           White matter surface model vertices (right hemisphere).
+               - rh_faces : numpy.ndarray, shape(rh_face_cnt, 3)
+                            White matter surface model faces (right hemisphere).
+               - lh_valid_vert : numpy.ndarray, shape(rh_vtx_cnt,)
+                                 Valid flags for white matter surface model vertices (right hemisphere).
+               - octa_model_vert : numpy.ndarray, shape(octa_mdl_vtx_cnt, 3)
+                                   Octamodel vertices (left hemisphere).
+               - octa_model_faces : numpy.ndarray, shape(octa_mdl_face_cnt, 3)
                                   Octamodel faces (right hemisphere).
     anatomy_path : string
                    Path to the anatomy folder. This folder should contain a sub-folder for each subject, to be pupulated with the corresponding structural data.
@@ -82,7 +89,7 @@ def compute(cort_mdl, anatomy_path, subj_name, fs_path, overwrite):
     fs_path : string
               Path to the freesurfer folder. Should contain the 'bin' folder, your license.txt, and sources.sh.
     overwrite : boolean
-                Flag whether to overwrite MRI maps.
+                Flag whether to overwrite MRI maps. Defaults to False.
                
     Returns
     -------
@@ -96,43 +103,53 @@ def compute(cort_mdl, anatomy_path, subj_name, fs_path, overwrite):
                         rh_valid_vert : numpy.ndarray, shape(fs_avg_vtx_cnt,)
                                         Valid/supporting vertices for right hemisphere.
     """
-    
     if (anatomy_path[-1] != "/"):
         anatomy_path += "/"
         
     if (fs_path[-1] != "/"):
         fs_path += "/"
     
-    #Find a transformation for all points
+    # Find a transformation for all points
     (lh_sub_vert, lh_sub_faces, avg_lh_vert, lh_mri_map) = _calc_mri_maps(anatomy_path, subj_name, fs_path + "subjects/fsaverage/", "lh", overwrite)
     (rh_sub_vert, rh_sub_faces, avg_rh_vert, rh_mri_map) = _calc_mri_maps(anatomy_path, subj_name, fs_path + "subjects/fsaverage/", "rh", overwrite)
     
-    #Calculate a projection from valid/supporting points to all points (subject space only)
+    # Calculate a projection from valid/supporting points to all points (subject space only)
     lh_proj = _calc_small_to_default_vertices_proj(cort_mdl.lh_valid_vert, lh_sub_vert, lh_sub_faces)
     rh_proj = _calc_small_to_default_vertices_proj(cort_mdl.rh_valid_vert, rh_sub_vert, rh_sub_faces)
     
-    #Combine to derive transformation between subject space and fs average space
+    # Combine to derive transformation between subject space and fs average space
     valid_avg_lh_vert = finnpy.src_rec.utils.find_valid_vertices(avg_lh_vert, cort_mdl.octa_mdl_vert)
     valid_avg_rh_vert = finnpy.src_rec.utils.find_valid_vertices(avg_rh_vert, cort_mdl.octa_mdl_vert)
     lh_proj = lh_mri_map[np.where(valid_avg_lh_vert)[0]] * lh_proj
     rh_proj = rh_mri_map[np.where(valid_avg_rh_vert)[0]] * rh_proj
     
-    #Reformat
+    # Reformat
     trans_mat = scipy.sparse.lil_matrix((lh_proj.shape[0] + rh_proj.shape[0], lh_proj.shape[1] + rh_proj.shape[1]))
     trans_mat[:lh_proj.shape[0], :lh_proj.shape[1]] += lh_proj
     trans_mat[lh_proj.shape[0]:, lh_proj.shape[1]:] += rh_proj
     trans_mat = trans_mat.tocsr()
     
-    return Subj_to_fsavg_mdl(trans_mat, valid_avg_lh_vert, valid_avg_rh_vert, cort_mdl.octa_mdl_vert, cort_mdl.octa_mdl_faces)
+    (avg_lh_vert, avg_lh_faces) = nibabel.freesurfer.read_geometry(fs_path + "subjects/fsaverage/surf/lh.white")
+    (avg_rh_vert, avg_rh_faces) = nibabel.freesurfer.read_geometry(fs_path + "subjects/fsaverage/surf/rh.white")
+    
+    return Subj_to_fsavg_mdl(trans_mat,
+                             avg_lh_vert / 1000, avg_lh_faces, valid_avg_lh_vert,
+                             avg_rh_vert / 1000, avg_rh_faces, valid_avg_rh_vert,
+                             cort_mdl.octa_mdl_vert, cort_mdl.octa_mdl_faces)
 
 def apply(subj_to_fsavg_mdl, data):
     """
-    Transforms data from subject space to fs_average space
+    Transform data from subject space to fs_average space.
     
     Parameters
     ----------
-    trans_mat : scipy.sparse.csr_matrix, shape(source_space_ch_cnt, source_space_ch_cnt)
-                Subject to fs-average transformation matrix.
+    subj_to_fsavg_mdl : finnpy.src_rec.subj_to_fsavg
+                        - trans : numpy.ndarray, shape(valid_subj_vtx_cnt, valid_subj_vtx_cnt)
+                                  Transformation matrix
+                        - lh_valid_vert : numpy.ndarray, shape(fs_avg_vtx_cnt,)
+                                          Valid/supporting vertices for left hemisphere.
+                        - rh_valid_vert : numpy.ndarray, shape(fs_avg_vtx_cnt,)
+                                          Valid/supporting vertices for right hemisphere.
     data : numpy.ndarray, shape(source_space_ch_cnt, samp_cnt)
            Source space (subject) data.
                
@@ -145,7 +162,7 @@ def apply(subj_to_fsavg_mdl, data):
 
 def _calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     """
-    Calculates projection from subject vertices to small sphere vertices.
+    Calculate projection from subject vertices to small sphere vertices.
     
     Parameters
     ----------
@@ -160,9 +177,8 @@ def _calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     -------
     proj : numpy.ndarray, shape(mri_face_cnt, valid_vtx_cnt)
            Projection from all vertices to valid vertices.
-
     """
-    #Create an adjacency graph for use below
+    # Create an adjacency graph for use below
     adj_mat = scipy.sparse.lil_matrix((np.unique(sub_faces).shape[0], np.unique(sub_faces).shape[0]))
     adjacenies = list()
     for face in sub_faces:
@@ -177,8 +193,8 @@ def _calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     adj_mat = adj_mat.tocsr()
     adj_mat += scipy.sparse.eye(adj_mat.shape[0])
     
-    #Starting from the minimal vertex set used in subject space (e.g. 4098), 
-    #expands to include all vertices in subject space.
+    # Starting from the minimal vertex set used in subject space (e.g. 4098), 
+    # expands to include all vertices in subject space.
     vert_idx = np.where(valid_vert)[0]
     proj = scipy.sparse.eye(int(np.sum(valid_vert)), format='csr')
     mult = np.zeros(sub_vert.shape[0])
@@ -205,7 +221,8 @@ def _calc_small_to_default_vertices_proj(valid_vert, sub_vert, sub_faces):
     
     return proj
 
-def _calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite):
+def _calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite, 
+                   floating_error_thresh = 1e-14):
     """
     Find the subject space points corresponding to fs avg space points.
     
@@ -221,19 +238,21 @@ def _calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite):
                 Hemisphere to compute for.
     overwrite : boolean
                 Flag whether to overwrite preexisting mri maps.
+    floating_error_thresh : float
+                Precision threshold for values indistinguishable from zero.
                
     Returns
     -------
-    sub_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
-               Vertices of the MRI model.
-    sub_faces : numpy.ndarray, shape(mri_face_cnt, 3)
-                Faces of the MRI model.
-    avg_vert : numpy.ndarray, shape(fs_avg_vtx_cnt, 3)
-               Vertices of fs-avg's sphere model.
-    mri_map : numpy.ndarray, shape(fs_avg_vtx_cnt, mri_vtx_cnt)
-              Translation from subject mri to fs-average sphere model.
+    result : tuple of (np.ndarray, np.ndarray, np.ndarray, np.ndarray)
+             - sub_vert : numpy.ndarray, shape(mri_vtx_cnt, 3)
+                          Vertices of the MRI model.
+             - sub_faces : numpy.ndarray, shape(mri_face_cnt, 3)
+                          Faces of the MRI model.
+             - avg_vert : numpy.ndarray, shape(fs_avg_vtx_cnt, 3)
+                          Vertices of fs-avg's sphere model.
+             - mri_map : numpy.ndarray, shape(fs_avg_vtx_cnt, mri_vtx_cnt)
+                          Translation from subject mri to fs-average sphere model.
     """
-    
     if (anatomy_path[-1] != "/"):
         anatomy_path += "/"
     
@@ -252,41 +271,27 @@ def _calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite):
         
     avg_neigh_faces = [neigh_faces[vertex_idx] for vertex_idx in neigh_indices] 
     
-    if ((os.path.exists(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy") == False or
-         os.path.exists(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy") == False) or overwrite):
-        #Prepare faces for the following loop
+    if ((os.path.exists(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy") is False or  # noqa: W504
+         os.path.exists(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "match_idx_" + hemisphere + ".npy") is False) or overwrite):
+        # Prepare faces for the following loop
         sub_face_params = list()
-        for sub_face in sub_faces:
-            u = sub_vert[sub_face[1], :] - sub_vert[sub_face[0], :]
-            v = sub_vert[sub_face[2], :] - sub_vert[sub_face[0], :]
-            n = np.cross(u, v)
-            
-            tmp = np.dot(n, n)
-            n_norm = np.zeros(tmp.shape)
-            n_norm[tmp != 0] = 1 / tmp[tmp != 0]
-            
-            sub_face_params.append([u, v, n, n_norm])
+        for sub_face in sub_faces:   
+            sub_face_params.append(finnpy.src_rec.utils.compute_baryzentric_params(sub_vert, sub_face))
          
-        #Check of points are within a triangle and if yes, save location
-        #For reference, see https://math.stackexchange.com/questions/544946/determine-if-projection-of-3d-point-onto-plane-is-within-a-triangle
-        #and W. Heidrich, Journal of Graphics, GPU, and Game Tools,Volume 10, Issue 3, 2005
+        # Check of points are within a triangle and if yes, save location
+        # For reference, see https://math.stackexchange.com/questions/544946/determine-if-projection-of-3d-point-onto-plane-is-within-a-triangle
+        # and W. Heidrich, Journal of Graphics, GPU, and Game Tools,Volume 10, Issue 3, 2005
         errors = np.ones((avg_vert.shape[0])) * np.iinfo(np.int32).max
-        match_idx = np.ones((avg_vert.shape[0]), dtype = int) * -1; 
-        weights = np.zeros((avg_vert.shape[0], avg_vert.shape[1])); 
+        match_idx = np.ones((avg_vert.shape[0]), dtype = int) * -1 
+        weights = np.zeros((avg_vert.shape[0], avg_vert.shape[1]))
         for (avg_vert_idx, avg_vortex) in enumerate(avg_vert):
             for sub_face_idx in avg_neigh_faces[avg_vert_idx]:
                 sub_face = sub_faces[sub_face_idx]
+                
+                (alpha, beta, gamma) = finnpy.src_rec.utils.compute_baryzentric_coordinates(avg_vortex, sub_vert, sub_face, sub_face_params[sub_face_idx])
                  
-                w = avg_vortex - sub_vert[sub_face[0], :]
-                gamma = np.dot(np.cross(sub_face_params[sub_face_idx][0], w), sub_face_params[sub_face_idx][2]) * sub_face_params[sub_face_idx][3]
-                beta = np.dot(np.cross(w, sub_face_params[sub_face_idx][1]), sub_face_params[sub_face_idx][2]) * sub_face_params[sub_face_idx][3]
-                alpha = 1 - gamma - beta
+                curr_error = (alpha > 0) * alpha + (beta > 0) * beta + (gamma > 0) * gamma - 1 + (alpha < 0) * np.abs(alpha) + (beta < 0) * np.abs(beta) + (gamma < 0) * np.abs(gamma)  
                  
-                alpha_err = (alpha < 0) * np.abs(alpha) + (alpha > 1) * (alpha - 1)
-                beta_err = (beta < 0) * np.abs(beta) + (beta > 1) * (beta - 1)
-                gamma_err = (gamma < 0) * np.abs(gamma) + (gamma > 1) * (gamma - 1)
-                 
-                curr_error = alpha_err + beta_err + gamma_err
                 if (curr_error > errors[avg_vert_idx]):
                     continue
                  
@@ -294,48 +299,17 @@ def _calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite):
                 weights[avg_vert_idx][0] = alpha; weights[avg_vert_idx][1] = beta; weights[avg_vert_idx][2] = gamma
                 match_idx[avg_vert_idx] = sub_face_idx
      
-        #For those points "outside" of faces, find the most close nearby point.
-        #For reference, https://math.stackexchange.com/questions/588871/minimum-distance-between-point-and-face
-        for bad_weights_idx in np.argwhere(errors != 0).squeeze(1):
+        # For those points "outside" of faces, find the most close nearby point.
+        # For reference, https://math.stackexchange.com/questions/588871/minimum-distance-between-point-and-face
+        for bad_weights_idx in np.argwhere(np.abs(errors) > floating_error_thresh).squeeze(1):
             
             sub_face_idx = match_idx[bad_weights_idx]
-            weight = weights[bad_weights_idx]
-            face_vortex = sub_vert[sub_faces[sub_face_idx], :]
-            avg_vortex = avg_vert[bad_weights_idx]
-             
-            is_edge = False
-            if (weight[0] >= 0 and weight[1] >= 0 and weight[2] < 0):
-                p0 = face_vortex[0, :]
-                p1 = face_vortex[1, :]
-                is_edge = True
-            if (weight[0] >= 0 and weight[1] < 0 and weight[2] >= 0):
-                p0 = face_vortex[0, :]
-                p1 = face_vortex[2, :]
-                is_edge = True
-            if (weight[0] < 0 and weight[1] >= 0 and weight[2] >= 0):
-                p0 = face_vortex[1, :]
-                p1 = face_vortex[2, :]
-                is_edge = True
-            if (weight[0] >= 0 and weight[1] < 0 and weight[2] < 0):
-                alpha = 1; beta = 0; gamma = 0
-            if (weight[0] < 0 and weight[1] >= 0 and weight[2] < 0):
-                alpha = 0; beta = 1; gamma = 0
-            if (weight[0] < 0 and weight[1] < 0 and weight[2] >= 0):
-                alpha = 0; beta = 0; gamma = 1
-             
-            if (is_edge):
-                d_vec = (p1 - p0)/np.linalg.norm(p1 - p0)
-                tmp_pnt = np.dot(d_vec, avg_vortex - p0) * d_vec + p0
-                 
-                sub_face = sub_faces[sub_face_idx]
-                w = tmp_pnt - sub_vert[sub_face[0], :]
-                gamma = np.dot(np.cross(sub_face_params[sub_face_idx][0], w), sub_face_params[sub_face_idx][2]) * sub_face_params[sub_face_idx][3]
-                beta = np.dot(np.cross(w, sub_face_params[sub_face_idx][1]), sub_face_params[sub_face_idx][2]) * sub_face_params[sub_face_idx][3]
-                alpha = 1 - gamma - beta
-             
+            proj_pt = finnpy.src_rec.utils.find_closest_pt_in_face(avg_vert[bad_weights_idx], sub_vert, sub_faces[sub_face_idx, :])
+            (alpha, beta, gamma) = finnpy.src_rec.utils.compute_baryzentric_coordinates(proj_pt, sub_vert, sub_faces[sub_face_idx, :], sub_face_params[sub_face_idx])
+            
             weights[bad_weights_idx][0] = alpha; weights[bad_weights_idx][1] = beta; weights[bad_weights_idx][2] = gamma
         
-        if (os.path.exists(anatomy_path + subj_name + "/proj/") == False):
+        if (os.path.exists(anatomy_path + subj_name + "/proj/") is False):
             os.mkdir(anatomy_path + subj_name + "/proj/")
         
         np.save(anatomy_path + subj_name + "/proj/" + "mri_subj_to_mri_fs_avg_" + "weights_" + hemisphere + ".npy", weights)
@@ -347,7 +321,6 @@ def _calc_mri_maps(anatomy_path, subj_name, fs_avg_path, hemisphere, overwrite):
     face_idx = sub_faces[match_idx, :]
     row_ind = np.repeat(np.arange(len(avg_vert)), 3)
     mri_map = scipy.sparse.csr_matrix((weights.ravel(), (row_ind, face_idx.ravel())),
-                                  shape=(len(avg_vert), len(sub_vert)))
+                                      shape=(len(avg_vert), len(sub_vert)))
     
     return (sub_vert, sub_faces, avg_vert, mri_map)
-
